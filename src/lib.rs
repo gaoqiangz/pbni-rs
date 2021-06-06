@@ -1,5 +1,5 @@
 //! # pbni-rs
-//! [![github](https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github)](https://github.com/gaoqiangz/pbni-rs)
+//! [![github](https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github)](https://github.com/gaoqiangz/pbni-rs) <br>
 //! [![crates.io](https://meritbadge.herokuapp.com/pbni-rs)](https://crates.io/crates/pbni-rs)
 //! [![docs.rs](https://docs.rs/pbni-rs/badge.svg)](https://docs.rs/pbni-rs)
 //! ![BSD-2-Clause licensed](https://img.shields.io/crates/l/pbni-rs.svg)
