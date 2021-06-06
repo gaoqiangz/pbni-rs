@@ -16,7 +16,7 @@ pbni-rs是[`PBNI`]的Rust绑定,使开发者可以使用Rust语言进行PowerBui
 | `visualobject`    | 可视对象导出                                              | `enabled`  |
 | `decimal`         | 日期类型处理,将引入[`rust_decimal`]库                      | `enabled`  |
 | `datetime`        | 日期类型处理,将引入[`chrono`]库                            | `enabled`  |
-| `vm`              | 加载虚拟机以及创建[`Session`]等功能,将引入[`libloading`]库  | `disabled`  |
+| `vm`              | 加载虚拟机以及创建`Session`等功能,将引入[`libloading`]库  | `disabled`  |
 
 [`rust_decimal`]: https://crates.io/crates/rust_decimal
 [`chrono`]: https://crates.io/crates/chrono
@@ -60,15 +60,15 @@ pbni-rs = "0.1.0"
 |`longlong`|`pblonglong`,`i64`|
 |`real`|`pbreal`,`f32`|
 |`double`|`pbdouble`,`f64`|
-|`decimal`|[`Decimal`] (需要开启`decimal`特性)|
+|`decimal`|`Decimal` (需要开启`decimal`特性)|
 |`byte`|`pbbyte`,`u8`|
 |`boolean`|`bool`|
 |`char`|`PBChar`|
 |`string`|`&PBStr`,`PBString`,`String`|
 |`blob`|`&[u8]`,`Vec<u8>`|
-|`date`|[`NaiveDate`] (需要开启`datetime`特性)|
-|`time`|[`NaiveTime`] (需要开启`datetime`特性)|
-|`datetime`|[`NaiveDateTime`] (需要开启`datetime`特性)|
+|`date`|`NaiveDate` (需要开启`datetime`特性)|
+|`time`|`NaiveTime` (需要开启`datetime`特性)|
+|`datetime`|`NaiveDateTime` (需要开启`datetime`特性)|
 |`any`|`Value`|
 |任意对象|`Object`|
 |任意数组|`Array`|
@@ -79,7 +79,7 @@ pbni-rs = "0.1.0"
 
 PowerBuilder字符编码是[UTF-16LE],而Rust字符串编码采用的是[UTF-8]编码,这使得字符串操作时可能会有一点的性能损失.如果对性能有较高要求,请使用`&PBStr`进行交互,避免发生内存拷贝和编码转换.
 
-pbni-rs提供了[`pbstr!`]宏在编译时生成`&'static PBStr`:
+pbni-rs提供了`pbstr!`宏在编译时生成`&'static PBStr`:
 
 ```rust
 let rstr: &'static str = "hell world!";
@@ -271,7 +271,7 @@ impl RustObject {
 ```
 #### 参数提取
 
-pbni-rs代码生成宏会自动提取PB参数为Rust映射的[数据类型],参数的提取顺序与PB端定义的顺序保持一致.其中有几个特殊的参数: [`Session`]/[`CallInfoRef`]/[`ArgumentsRef`],这几个参数对位置没有要求并且数量任意.
+pbni-rs代码生成宏会自动提取PB参数为Rust映射的[数据类型],参数的提取顺序与PB端定义的顺序保持一致.其中有几个特殊的参数: `Session`/`CallInfoRef`/`ArgumentsRef`,这几个参数对位置没有要求并且数量任意.
 
 [数据类型]: #数据类型映射
 
