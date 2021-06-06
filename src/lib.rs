@@ -2,6 +2,7 @@
 //! [![github](https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github)](https://github.com/gaoqiangz/pbni-rs)
 //! [![crates.io](https://meritbadge.herokuapp.com/pbni-rs)](https://crates.io/crates/pbni-rs)
 //! [![docs.rs](https://docs.rs/pbni-rs/badge.svg)](https://docs.rs/pbni-rs)
+//! ![BSD-2-Clause licensed](https://img.shields.io/crates/l/pbni-rs.svg)
 //!
 //! pbni-rs是[`PBNI`]的Rust绑定,使开发者可以使用Rust语言进行PowerBuilder扩展开发.<br>
 //! **[注意]** pbni-rs只支持PowerBuilder 10及以上版本.
