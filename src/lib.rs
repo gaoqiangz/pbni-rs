@@ -328,7 +328,6 @@
 #![allow(dead_code)]
 #![feature(extern_types)]
 #![feature(const_raw_ptr_deref)]
-#![feature(try_trait)]
 #![feature(core_intrinsics)]
 
 mod bindings;

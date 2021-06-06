@@ -1,5 +1,5 @@
 use crate::session::Session;
-use std::{borrow::Cow, ops::Deref, option::NoneError};
+use std::{borrow::Cow, ops::Deref};
 use widestring::{WideCStr, WideCString, WideChar};
 
 pub use std::{marker::PhantomData, ptr::NonNull};
@@ -331,10 +331,6 @@ impl PBXRESULT {
 
 impl From<i32> for PBXRESULT {
     fn from(v: i32) -> Self { unsafe { std::mem::transmute(v) } }
-}
-
-impl From<NoneError> for PBXRESULT {
-    fn from(_: NoneError) -> Self { PBXRESULT::E_NULL_ERROR }
 }
 
 impl<T: Default> From<PBXRESULT> for crate::Result<T> {
