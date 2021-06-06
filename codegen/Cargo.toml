@@ -1,0 +1,22 @@
+[package]
+name = "pbni-codegen"
+version = "0.1.0"
+authors = ["gaoqiangz <zhanggaoqiang@jqzms.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+proc_macro = true
+
+[dependencies]
+syn = { version = "1.0.70", features = ["full", "parsing"]}
+proc-macro2 = "1.0.26"
+quote = "1.0.9"
+
+[features]
+default = ["global_function","nonvisualobject","visualobject"]
+
+global_function = []
+nonvisualobject = []
+visualobject = []

@@ -1,0 +1,16 @@
+binop_separator = "Back"
+fn_single_line = true
+#error_on_line_overflow = true
+#error_on_unformatted = true
+force_multiline_blocks =  true
+imports_layout = "Horizontal"
+max_width = 110
+match_block_trailing_comma = true
+merge_imports = true
+overflow_delimited_expr = true
+reorder_imports = true
+reorder_modules = false
+trailing_comma = "Never"
+use_small_heuristics = "Off"
+version = "Two"
+unstable_features = true

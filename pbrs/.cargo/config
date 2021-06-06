@@ -1,0 +1,9 @@
+[build]
+# 32位目标
+target = "i686-pc-windows-msvc"
+# 编译后DLL拷贝到pbw目录下
+out-dir = "pbw"
+
+# out-dir是unstable参数
+[unstable]
+unstable-options = true

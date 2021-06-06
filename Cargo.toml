@@ -1,0 +1,71 @@
+[package]
+name = "pbni-rs"
+version = "0.1.0"
+authors = ["gaoqiangz <gaoqiangz@msn.com>"]
+edition = "2018"
+keywords = ["pb", "powerbuilder", "pbni", "ffi"]
+categories = ["api-bindings"]
+description = "PBNI for rust"
+documentation = "https://docs.rs/pbni-rs"
+repository = "https://github.com/gaoqiangz/pbni-rs"
+license = "BSD 2-Clause License"
+include = ["/build.rs", "/Cargo.toml", "/LICENSE", "/README.md", "/.cargo/config", "/cpp/**", "/src/**", "/examples/**"]
+
+[package.metadata.docs.rs]
+all-features = true
+targets = ["i686-pc-windows-msvc"]
+
+[lib]
+name = "pbni"
+
+[workspace]
+members = [
+    ".",
+    "codegen",
+    "pbrs",
+]
+
+[patch.crates-io]
+pbni-rs = { path = "." }
+pbni-codegen = { path = "codegen" }
+
+[dependencies]
+libc = "0.2.80"
+widestring = { version = "0.4.3"}
+const-utf16 = "0.2.1"
+
+# feature: global_function, nonvisualobject, visualobject
+pbni-codegen = { version = "0.1.0", optional = true}
+
+# feature: global_function, nonvisualobject, visualobject
+static_init = { version = "1.0.1", optional = true}
+
+# feature: visualobject
+winapi = { version = "0.3.9", features = ["windef"], optional = true }
+
+# feature: datetime
+chrono = { version = "0.4.19", optional = true }
+
+# feature: decimal
+rust_decimal = { version = "1.10.3", optional = true }
+
+# feature: vm
+libloading = { version = "0.7.0", optional = true }
+
+[build-dependencies]
+cc = "1.0.62"
+
+[features]
+default = ["full"]
+full = ["global_function","nonvisualobject","visualobject","datetime","decimal"]
+
+global_function = ["static_init","pbni-codegen/global_function"]
+nonvisualobject = ["static_init","pbni-codegen/nonvisualobject"]
+visualobject = ["static_init","winapi","pbni-codegen/visualobject"]
+datetime = ["chrono"]
+decimal = ["rust_decimal"]
+vm = ["libloading"]
+
+[[example]]
+name = "vm"
+required-features = ["vm"]
