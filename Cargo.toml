@@ -8,7 +8,7 @@ categories = ["api-bindings"]
 description = "PBNI for Rust"
 documentation = "https://docs.rs/pbni-rs"
 repository = "https://github.com/gaoqiangz/pbni-rs"
-license = "BSD 2-Clause License"
+license = "BSD-2-Clause"
 include = ["/build.rs", "/Cargo.toml", "/LICENSE", "/README.md", "/.cargo/config", "/cpp/**", "/src/**", "/examples/**"]
 
 [package.metadata.docs.rs]

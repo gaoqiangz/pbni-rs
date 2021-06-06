@@ -8,7 +8,7 @@ categories = ["api-bindings"]
 description = "PBNI for Rust Codegen"
 documentation = "https://docs.rs/pbni-codegen"
 repository = "https://github.com/gaoqiangz/pbni-rs"
-license = "BSD 2-Clause License"
+license = "BSD-2-Clause"
 
 [lib]
 proc_macro = true
