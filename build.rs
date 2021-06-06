@@ -1,4 +1,8 @@
 fn main() {
+    if std::env::var("DOCS_RS").is_ok() {
+        return;
+    }
+
     println!("cargo:rerun-if-changed=cpp/bindings.cpp");
 
     let mut cfg = cc::Build::new();
