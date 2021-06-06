@@ -3,8 +3,12 @@ name = "pbni-codegen"
 version = "0.1.0"
 authors = ["gaoqiangz <zhanggaoqiang@jqzms.com>"]
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+keywords = ["pb", "powerbuilder", "pbni", "ffi"]
+categories = ["api-bindings"]
+description = "PBNI for Rust Codegen"
+documentation = "https://docs.rs/pbni-codegen"
+repository = "https://github.com/gaoqiangz/pbni-rs"
+license = "BSD 2-Clause License"
 
 [lib]
 proc_macro = true
