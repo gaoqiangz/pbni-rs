@@ -14,7 +14,7 @@ pbni-rs是[`PBNI`]的Rust绑定,使开发者可以使用Rust语言进行PowerBui
 | `global_function` | 全局函数导出                                              | `enabled`  |
 | `nonvisualobject` | 不可视对象导出                                            | `enabled`  |
 | `visualobject`    | 可视对象导出                                              | `enabled`  |
-| `decimal`         | 日期类型处理,将引入[`rust_decimal`]库                      | `enabled`  |
+| `decimal`         | `Decimal`类型处理,将引入[`rust_decimal`]库                      | `enabled`  |
 | `datetime`        | 日期类型处理,将引入[`chrono`]库                            | `enabled`  |
 | `vm`              | 加载虚拟机以及创建`Session`等功能,将引入[`libloading`]库  | `disabled`  |
 
