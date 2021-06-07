@@ -63,7 +63,7 @@ pbni-rs = "0.1.0"
 3. 编译
 
 ```bash
-cargo build --target i686-pc-windows-msvc
+> cargo build --target i686-pc-windows-msvc
 ```
 
 > 你也可以在工程目录下创建`.cargo/config`文件
