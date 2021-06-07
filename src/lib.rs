@@ -82,15 +82,6 @@
 //! > rustflags = ["-C", "target-feature=+crt-static"]
 //! > ```
 //!
-//! 4. 静态链接CRT
-//!
-//! 配置工程目录下`.cargo/config`文件
-//!
-//! ```toml
-//! [target.i686-pc-windows-msvc]
-//! rustflags = ["-C", "target-feature=+crt-static"]
-//! ```
-//!
 //! # 数据类型映射
 //!
 //! |PowerBuilder|Rust|
