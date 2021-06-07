@@ -5,7 +5,7 @@
 ![BSD-2-Clause licensed](https://img.shields.io/crates/l/pbni-rs.svg)
 
 pbni-rs是[`PBNI`]的Rust绑定,使开发者可以使用Rust语言进行PowerBuilder扩展开发.<br>
-**[注意]** pbni-rs只支持PowerBuilder 10及以上版本.
+**注意** pbni-rs只支持PowerBuilder 10及以上版本.
 
 # Feature flags
 
@@ -39,7 +39,13 @@ pbni-rs是[`PBNI`]的Rust绑定,使开发者可以使用Rust语言进行PowerBui
 
 # 开始使用
 
-添加`pbni-rs`到`Cargo.toml`即可使用:
+1. 添加32位目标平台
+
+```bash
+> rustup target add i686-pc-windows-msvc
+```
+
+2. 添加`pbni-rs`到`Cargo.toml`
 
 ```toml
 [lib]
@@ -48,6 +54,33 @@ crate-type = ["cdylib"]
 [dependencies]
 pbni-rs = "0.1.0"
 ```
+
+> 注意[`crate-type`]需要为[`cdylib`]
+
+[`crate-type`]: https://doc.rust-lang.org/reference/linkage.html
+[`cdylib`]: https://rust-lang.github.io/rfcs/1510-cdylib.html
+
+3. 编译
+
+```bash
+cargo build --target i686-pc-windows-msvc
+```
+
+> 你也可以在工程目录下创建`.cargo/config`文件
+> 
+> - 配置默认编译目标,免去输入`--target i686-pc-windows-msvc`参数
+> 
+> ```toml
+> [build]
+> target = "i686-pc-windows-msvc"
+> ```
+> 
+> - 配置静态链接CRT
+> 
+> ```toml
+> [target.i686-pc-windows-msvc]
+> rustflags = ["-C", "target-feature=+crt-static"]
+> ```
 
 # 数据类型映射
 
@@ -292,7 +325,8 @@ fn bit_or(session: Session,args: ArgumentsRef,a: pblong) -> pblong {
 ```
 
 **注意** Rust端参数列表须与PB端定义的类型数量以及顺序一致,任何不匹配的情况都会在运行时触发异常. <br>
-当参数列表通过`CallInfoRef`/`ArgumentsRef`接收后,将不再匹配参数数量,因为这两个参数已经隐式表示接收了所有的参数.`CallInfoRef`/`ArgumentsRef`一般用于处理引用传递参数以及变长参数列表.
+- Rust端参数如果为非空类型(`Option`),而PB端提供的参数为NULL,那么框架自动返回NULL给PB调用端,兼容PB标准库的做法,也就是说任何参数传递为NULL那么返回值就为NULL,除非Rust端显式用`Option<T>`接收. <br>
+- 当参数列表通过`CallInfoRef`/`ArgumentsRef`接收后,将不再匹配参数数量,因为这两个参数已经隐式表示接收了所有的参数.`CallInfoRef`/`ArgumentsRef`一般用于处理引用传递参数以及变长参数列表.
 
 #### 可选参数列表匹配
 
