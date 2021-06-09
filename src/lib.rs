@@ -37,6 +37,12 @@
 //! [`C++/CLI`]: https://docs.microsoft.com/en-us/cpp/dotnet/native-and-dotnet-interoperability?view=msvc-160
 //! [Figure]: http://infocenter.sybase.com/help/topic/com.sybase.infocenter.dc37794.1250/html/pbnigref/pbni03.gif
 //!
+//! # 环境要求
+//!
+//! - rustc: 最低1.51 **(支持stable)**
+//! - toolchain: stable-x86_64-pc-windows-msvc
+//! - target: i686-pc-windows-msvc
+//!
 //! # 开始使用
 //!
 //! 1. 添加32位目标平台
@@ -360,9 +366,6 @@
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]
 #![allow(dead_code)]
-#![feature(extern_types)]
-#![feature(const_raw_ptr_deref)]
-#![feature(core_intrinsics)]
 
 mod bindings;
 #[cfg(feature = "vm")]

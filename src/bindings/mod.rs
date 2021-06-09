@@ -92,6 +92,12 @@ impl FromPBStrPtr for PBString {
     unsafe fn from_pbstr_unchecked(ptr: LPCTSTR) -> Self { PBStr::from_ptr_str(ptr).to_ucstring() }
 }
 
+pub fn type_id<T: ?Sized + 'static>() -> u64 {
+    use std::any::TypeId;
+    let tid = TypeId::of::<T>();
+    unsafe { *(&tid as *const TypeId as *const u64) }
+}
+
 macro_rules! declare_handle {
     ($name:ident, $inner:ident) => {
         #[repr(C)]

@@ -17,11 +17,14 @@ mod method;
 /// ```
 #[macro_export]
 macro_rules! pbstr {
-    ($str:expr) => {
-        $crate::__private::codegen::pbstr_from_slice(
-            $crate::__private::codegen::const_utf16::encode_null_terminated!($str)
-        )
-    };
+    ($str:expr) => {{
+        #[allow(unused_unsafe)]
+        unsafe {
+            ::core::mem::transmute::<_, &$crate::PBStr>(
+                $crate::__private::codegen::const_utf16::encode_null_terminated!($str) as &[u16]
+            )
+        }
+    }};
 }
 
 /// 构造PB字符串`PBString`,编译时生成对应编码格式
@@ -89,7 +92,6 @@ macro_rules! throw {
 pub mod __private {
     use crate::{bindings::*, *};
     use std::panic::{self, UnwindSafe};
-    use widestring::WideChar;
 
     pub use const_utf16;
     pub use value::{FromValue, FromValueOwned, ToValue};
@@ -102,10 +104,6 @@ pub mod __private {
 
     #[cfg(feature = "static_init")]
     pub use static_init::constructor;
-
-    pub const fn pbstr_from_slice(wstr: &[WideChar]) -> &PBStr {
-        unsafe { &*(wstr as *const [WideChar] as *const PBStr) }
-    }
 
     /// 函数调用,捕获Panic和返回值错误,自动转换为PB异常
     pub fn safe_invoke<F>(

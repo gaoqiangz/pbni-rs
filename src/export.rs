@@ -1,5 +1,5 @@
 use crate::{bindings::*, *};
-use std::{collections::HashMap, intrinsics::type_id};
+use std::collections::HashMap;
 
 #[cfg(feature = "global_function")]
 use crate::codegen::global_function::GlobalFunction;

@@ -2,7 +2,7 @@ use crate::{
     bindings::*, invoker::{ObjectEvent, ObjectMethod}, session::AsMethodName, value::FromValueOwned, *
 };
 use std::{
-    cell::{Cell, RefCell}, intrinsics::type_id, ops::{Deref, DerefMut}, rc::Rc
+    cell::{Cell, RefCell}, ops::{Deref, DerefMut}, rc::Rc
 };
 
 /// 对象实例的引用
