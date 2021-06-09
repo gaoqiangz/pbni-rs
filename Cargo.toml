@@ -1,6 +1,6 @@
 [package]
 name = "pbni-rs"
-version = "0.1.8"
+version = "0.1.9"
 authors = ["gaoqiangz <gaoqiangz@msn.com>"]
 edition = "2018"
 keywords = ["pb", "powerbuilder", "pbni", "ffi"]

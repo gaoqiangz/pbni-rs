@@ -37,6 +37,12 @@ pbni-rs是[`PBNI`]的Rust绑定,使开发者可以使用Rust语言进行PowerBui
 [`C++/CLI`]: https://docs.microsoft.com/en-us/cpp/dotnet/native-and-dotnet-interoperability?view=msvc-160
 [Figure]: http://infocenter.sybase.com/help/topic/com.sybase.infocenter.dc37794.1250/html/pbnigref/pbni03.gif
 
+# 环境要求
+
+- rustc: 最低1.51 **(支持stable)**
+- toolchain: stable-x86_64-pc-windows-msvc
+- target: i686-pc-windows-msvc
+
 # 开始使用
 
 1. 添加32位目标平台
