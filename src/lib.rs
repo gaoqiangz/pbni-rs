@@ -383,7 +383,7 @@ mod codegen;
 
 pub use arguments::{Arguments, ArgumentsRef};
 pub use bindings::{
-    pbbyte, pbdouble, pbint, pblong, pblonglong, pbreal, pbuint, pbulong, AsPBStr, FieldId, MethodId, PBStr, PBString, PBXRESULT
+    pbbyte, pbdouble, pbint, pblong, pblonglong, pbreal, pbuint, pbulong, AsPBStr, FieldId, MethodId, PBStr, PBString, ValueType, PBXRESULT
 };
 pub use callinfo::{CallInfo, CallInfoRef};
 pub use invoker::Invoker;

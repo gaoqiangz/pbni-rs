@@ -32,6 +32,15 @@ impl<'args> Arguments<'args> {
         unsafe { ArgumentsRef::from_ptr(self.ci.as_ref().pArgs, self.session.clone()) }
     }
 
+    /// 获取引用元素迭代器
+    pub fn iter(&self) -> ArgumentsIter {
+        let args = unsafe { ArgumentsRef::from_ptr(self.ci.as_ref().pArgs, self.session.clone()) };
+        ArgumentsIter {
+            args,
+            idx: 0
+        }
+    }
+
     /// 参数数量
     pub fn count(&self) -> pbint { self.count }
 
@@ -388,6 +397,15 @@ impl<'args> ArgumentsRef<'args> {
         }
     }
 
+    /// 获取引用元素迭代器
+    pub fn iter(&self) -> ArgumentsIter {
+        let args = unsafe { ArgumentsRef::from_ptr(self.ptr, self.session.clone()) };
+        ArgumentsIter {
+            args,
+            idx: 0
+        }
+    }
+
     /// 参数数量
     pub fn count(&self) -> pbint { self.count }
 
@@ -410,5 +428,50 @@ impl<'args> ArgumentsRef<'args> {
             return Err(PBXRESULT::E_ARRAY_INDEX_OUTOF_BOUNDS);
         }
         unsafe { Ok(Value::from_ptr(ffi::pbargs_GetAt(self.ptr, index), self.session.clone())) }
+    }
+}
+
+///参数迭代器
+pub struct ArgumentsIter<'args> {
+    args: ArgumentsRef<'args>,
+    idx: pbint
+}
+
+impl<'args> Iterator for ArgumentsIter<'args> {
+    type Item = Value<'args>;
+    fn next(&mut self) -> Option<Self::Item> {
+        let idx = self.idx;
+        self.idx += 1;
+        if idx < self.args.count() {
+            Some(self.args.get(idx))
+        } else {
+            None
+        }
+    }
+    fn size_hint(&self) -> (usize, Option<usize>) { (0, Some(self.args.count() as usize)) }
+}
+
+impl<'args> IntoIterator for Arguments<'args> {
+    type Item = Value<'args>;
+    type IntoIter = ArgumentsIter<'args>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        let args = unsafe { ArgumentsRef::from_ptr(self.ci.as_ref().pArgs, self.session.clone()) };
+        ArgumentsIter {
+            args,
+            idx: 0
+        }
+    }
+}
+
+impl<'args> IntoIterator for ArgumentsRef<'args> {
+    type Item = Value<'args>;
+    type IntoIter = ArgumentsIter<'args>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        ArgumentsIter {
+            args: self,
+            idx: 0
+        }
     }
 }
