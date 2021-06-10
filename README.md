@@ -89,6 +89,16 @@ pbni-rs = "0.1.0"
 > rustflags = ["-C", "target-feature=+crt-static"]
 > ```
 
+### 故障排查
+
+- 编译出现`_PBX_GetVersion@0`此类链接错误 <br>
+产生原因是因为你的项目代码没有引用pbni-rs,所以被编译器优化掉了pbni-rs库生成的导出符号,解决方法是项目中引入pbni-rs代码.
+```rust
+//lib.rs
+use pbni::*;
+```
+> 引入全部名称不是必须的,只要你的代码中使用了`pbni`即可
+
 # 数据类型映射
 
 |PowerBuilder|Rust|
