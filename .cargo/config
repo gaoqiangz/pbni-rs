@@ -1,0 +1,4 @@
+[build]
+# 32位目标
+# 方便运行Examples
+target = "i686-pc-windows-msvc"
