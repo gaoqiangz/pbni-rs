@@ -549,7 +549,7 @@ impl<'obj> Object<'obj> {
         if is_null == true {
             None
         } else {
-            Some(self.session.get_string_unchecked(v))
+            self.session.get_string_unchecked(v)
         }
     }
 
@@ -1869,7 +1869,7 @@ impl<'obj> Object<'obj> {
         if is_null == true {
             None
         } else {
-            Some(self.session.get_string_unchecked(v))
+            self.session.get_string_unchecked(v)
         }
     }
 

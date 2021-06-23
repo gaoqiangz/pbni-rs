@@ -232,9 +232,13 @@ impl Session {
     */
 
     #[inline]
-    pub(crate) unsafe fn get_string_unchecked<'a>(&self, pbstr: pbstring) -> &'a PBStr {
+    pub(crate) unsafe fn get_string_unchecked<'a>(&self, pbstr: pbstring) -> Option<&'a PBStr> {
         let cstr = ffi::pbsession_GetString(self.ptr, pbstr);
-        PBStr::from_ptr_str(cstr)
+        if !cstr.is_null() {
+            Some(PBStr::from_ptr_str(cstr))
+        } else {
+            None
+        }
     }
 
     /*
@@ -1094,7 +1098,7 @@ impl Session {
         if is_null == true {
             None
         } else {
-            Some(self.get_string_unchecked(v))
+            self.get_string_unchecked(v)
         }
     }
 

@@ -377,7 +377,7 @@ impl<'arr> Array<'arr> {
         if is_null == true {
             None
         } else {
-            Some(self.session.get_string_unchecked(v))
+            self.session.get_string_unchecked(v)
         }
     }
 

@@ -453,7 +453,7 @@ impl<'val> Value<'val> {
         if self.is_null() {
             None
         } else {
-            Some(self.session.get_string_unchecked(ffi::pbvalue_GetString(self.ptr)))
+            self.session.get_string_unchecked(ffi::pbvalue_GetString(self.ptr))
         }
     }
 
