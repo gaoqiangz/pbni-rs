@@ -16,11 +16,13 @@ fn main() {
 
     cfg.compile("pbx");
 
+    #[cfg(target = "cdylib")]
     build_def();
 }
 
 //生成导出符号定义文件
 //解决rust msvc 32bit dll编译符号被截断的问题
+#[cfg(target = "cdylib")]
 fn build_def() {
     use std::{fs::OpenOptions, io::Write, path::PathBuf};
 
