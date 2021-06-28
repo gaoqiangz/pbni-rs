@@ -57,10 +57,10 @@ impl ParentObject {
         }
     }
     #[method(name = "of_hello", overload = 1)]
-    fn hello(&mut self, arg: String, b: Option<String>) -> String { format!("hello {},{:?}", arg, b) }
+    fn hello(&self, arg: String, b: Option<String>) -> String { format!("hello {},{:?}", arg, b) }
     //fn of_hello2(&mut self, a: String, b: String) -> String { format!("hello {}, {}", a, b) }
     #[method(name = "of_foo")]
-    fn of_foo(&mut self, obj: &Self) -> Result<String> { Ok(format!("fooxxx {:?}", obj.foo)) }
+    fn of_foo(&self, obj: &Self) -> Result<String> { Ok(format!("fooxxx {:?}", obj.foo)) }
     #[method(name = "of_SetFoo")]
     fn of_SetFoo(&mut self, arg: &PBStr) -> bool {
         self.foo = Some(arg.to_owned());
@@ -94,7 +94,7 @@ impl ChildObject {
         }
     }
     #[method(name = "of_child_hello")]
-    fn of_hello(&mut self, arg: String) -> Result<String> { Ok(format!("child hello {}", arg)) }
+    fn of_hello(&self, arg: String) -> Result<String> { Ok(format!("child hello {}", arg)) }
 }
 
 #[global_function(name = "gf_bitor")]
