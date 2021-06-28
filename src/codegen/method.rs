@@ -2,40 +2,14 @@ use crate::{callinfo::FromCallInfo, value::ToValue, *};
 
 /// 通用函数调用的抽象工厂
 pub trait Factory<CTX, T, R> {
-    fn call(&self, ctx: &CTX, param: T) -> R;
-}
-
-/// 通用函数调用的抽象工厂(mutability)
-pub trait FactoryMut<CTX, T, R> {
-    fn call(&self, ctx: &mut CTX, param: T) -> R;
+    fn call(&self, ctx: CTX, param: T) -> R;
 }
 
 /// 通过抽象工厂接口反射调用函数
 #[doc(hidden)]
-pub fn factory_call<'ci, CTX, F, T, R>(f: F, ctx: &CTX, ci: &CallInfoRef<'ci>) -> Result<()>
+pub fn factory_call<'ci, CTX, F, T, R>(f: F, ctx: CTX, ci: &CallInfoRef<'ci>) -> Result<()>
 where
     F: Factory<CTX, T, R>,
-    T: FromCallInfo<'ci>,
-    R: ToValue
-{
-    match T::from_callinfo(ci) {
-        Ok(param) => f.call(ctx, param).to_value(&mut ci.return_value()),
-        Err(e) => {
-            //发生NULL错误说明参数接收者不支持传NULL值,此时自动转义为返回NULL
-            if e == PBXRESULT::E_NULL_ERROR {
-                ci.return_value().set_to_null()
-            } else {
-                Err(e)
-            }
-        }
-    }
-}
-
-/// 通过抽象工厂接口反射调用函数(mutability)
-#[doc(hidden)]
-pub fn factory_call_mut<'ci, CTX, F, T, R>(f: F, ctx: &mut CTX, ci: &CallInfoRef<'ci>) -> Result<()>
-where
-    F: FactoryMut<CTX, T, R>,
     T: FromCallInfo<'ci>,
     R: ToValue
 {
@@ -62,16 +36,9 @@ mod m {
             #[doc(hidden)]
             impl<CTX,FUNC,$($T),+,R> Factory<CTX,($($T,)+),R> for FUNC
             where
-                FUNC: Fn(&CTX,$($T),+) -> R
+                FUNC: Fn(CTX,$($T),+) -> R
             {
-                fn call(&self, ctx: &CTX, param: ($($T,)+)) -> R { (self)(ctx,$(param.$n),+) }
-            }
-            #[doc(hidden)]
-            impl<CTX,FUNC,$($T),+,R> FactoryMut<CTX,($($T,)+),R> for FUNC
-            where
-                FUNC: Fn(&mut CTX,$($T),+) -> R
-            {
-                fn call(&self, ctx: &mut CTX, param: ($($T,)+)) -> R { (self)(ctx,$(param.$n),+) }
+                fn call(&self, ctx: CTX, param: ($($T,)+)) -> R { (self)(ctx,$(param.$n),+) }
             }
         }
     }
@@ -79,16 +46,9 @@ mod m {
     #[doc(hidden)]
     impl<CTX,F,R> Factory<CTX,(),R> for F
     where
-        F: Fn(&CTX) -> R
+        F: Fn(CTX) -> R
     {
-        fn call(&self, ctx: &CTX, _: ()) -> R { (self)(ctx) }
-    }
-    #[doc(hidden)]
-    impl<CTX,F,R> FactoryMut<CTX,(),R> for F
-    where
-        F: Fn(&mut CTX) -> R
-    {
-        fn call(&self, ctx: &mut CTX, _: ()) -> R { (self)(ctx) }
+        fn call(&self, ctx: CTX, _: ()) -> R { (self)(ctx) }
     }
 
     factory_tuple!((0, A));

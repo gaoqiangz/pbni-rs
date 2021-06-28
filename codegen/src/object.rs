@@ -125,7 +125,6 @@ fn gen_object(
     let cls_name = cls_name.unwrap_or_else(|| ident.to_string()).to_ascii_lowercase();
     let ctor = block.ctor;
 
-    let mut method_call_ident = Vec::new();
     let mut method_ident = Vec::new();
     let mut method_name = Vec::new();
     let mut method_idx = Vec::<Index>::new();
@@ -142,11 +141,6 @@ fn gen_object(
         match item {
             Item::Method(method) => {
                 method_name.push(method.attr_args.name.unwrap_or(method.ident.to_string()));
-                method_call_ident.push(if method.mutability {
-                    Ident::new("method_factory_call_mut", method.ident.span())
-                } else {
-                    Ident::new("method_factory_call", method.ident.span())
-                });
                 method_ident.push(method.ident);
                 method_idx.push(idx.into());
                 method_idx_offset.push(overload_cc.into());
@@ -185,7 +179,7 @@ fn gen_object(
                                 #method_name,
                                 concat!(module_path!(),"::",stringify!(#ident),"::",stringify!(#method_ident)),
                                 file!(),line!(),column!(),
-                                ::std::panic::AssertUnwindSafe(||::pbni::__private::codegen::#method_call_ident(#ident::#method_ident, self, &ci))
+                                ::std::panic::AssertUnwindSafe(||::pbni::__private::codegen::method_factory_call(#ident::#method_ident, self, &ci))
                             ).map(|_|None);
                         }
                     )*
@@ -215,7 +209,7 @@ fn gen_object(
                                 #method_name,
                                 concat!(module_path!(),"::",stringify!(#ident),"::",stringify!(#method_ident)),
                                 file!(),line!(),column!(),
-                                ::std::panic::AssertUnwindSafe(||::pbni::__private::codegen::#method_call_ident(#ident::#method_ident, self, ci))
+                                ::std::panic::AssertUnwindSafe(||::pbni::__private::codegen::method_factory_call(#ident::#method_ident, self, ci))
                             ).map(|_|None);
                         }
                     )*
@@ -316,18 +310,8 @@ impl ImplBlock {
                             return Err(Error::new_spanned(item, "More then one constructor"));
                         }
                     } else if attr.path.is_ident("method") {
-                        let mutability = match m.sig.inputs.first() {
-                            Some(arg) => {
-                                match arg {
-                                    FnArg::Receiver(arg) => arg.mutability.is_some(),
-                                    _ => return Err(Error::new_spanned(ast, "Not a method"))
-                                }
-                            },
-                            None => return Err(Error::new_spanned(ast, "Not a method"))
-                        };
                         items.push(Item::Method(Method {
                             ident: m.sig.ident.clone(),
-                            mutability,
                             attr_args: MethodAttrArgs::parse(attr)?
                         }))
                     } else if attr.path.is_ident("event") {
@@ -353,7 +337,6 @@ impl ImplBlock {
 /// 方法项
 struct Method {
     ident: Ident,
-    mutability: bool,
     attr_args: MethodAttrArgs
 }
 

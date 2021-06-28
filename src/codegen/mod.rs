@@ -102,9 +102,6 @@ pub mod __private {
     #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
     pub use super::method::factory_call as method_factory_call;
 
-    #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
-    pub use super::method::factory_call_mut as method_factory_call_mut;
-
     #[cfg(feature = "static_init")]
     pub use static_init::constructor;
 
