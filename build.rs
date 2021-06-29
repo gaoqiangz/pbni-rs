@@ -48,7 +48,9 @@ fn build_def() {
     //覆盖DEF文件链接
     println!("cargo:rustc-cdylib-link-arg=/DEF:{}", file_path.display());
     //生成map文件
+    #[cfg(feature = "symbol_map")]
     println!("cargo:rustc-cdylib-link-arg=/MAP:symbol.map");
     //map文件生成导出符号表
+    #[cfg(feature = "symbol_map")]
     println!("cargo:rustc-cdylib-link-arg=/MAPINFO:EXPORTS");
 }
