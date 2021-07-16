@@ -51,7 +51,7 @@ impl CallInfo {
     }
 
     /// 获取返回值对象
-    pub(crate) fn return_value(&self) -> Value {
+    pub fn return_value(&self) -> Value {
         unsafe { Value::from_ptr(self.ci.returnValue, self.session.clone()) }
     }
 }
@@ -107,7 +107,7 @@ impl<'ci> CallInfoRef<'ci> {
     }
 
     /// 获取返回值对象
-    pub(crate) fn return_value(&self) -> Value<'ci> {
+    pub fn return_value(&self) -> Value<'ci> {
         unsafe { Value::from_ptr(self.ptr.as_ref().returnValue, self.session.clone()) }
     }
 }
