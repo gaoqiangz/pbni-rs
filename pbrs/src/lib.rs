@@ -1,3 +1,6 @@
+#![allow(unused_variables)]
+#![allow(dead_code)]
+
 use pbni::*;
 
 struct RustObject {}
@@ -45,16 +48,16 @@ impl ParentObject {
         }
     }
     #[method(overload = 1)]
-    fn of_test<'a>(&mut self, session: Session, a: &'a PBStr, b: Option<&'a PBStr>) -> &'a PBStr {
-        let invoker = session.begin_invoke_function(("MessageBox", "ISS")).unwrap();
-        invoker.arg(0).set_str("title");
-        invoker.arg(1).set_str("content");
-        invoker.invoke();
-        if let Some(b) = b {
+    fn of_test<'a>(&mut self, session: Session, a: &'a PBStr, b: Option<&'a PBStr>) -> Result<&'a PBStr> {
+        let invoker = session.begin_invoke_function(("MessageBox", "ISS"))?;
+        invoker.arg(0).set_str("title")?;
+        invoker.arg(1).set_str("content")?;
+        invoker.invoke()?;
+        Ok(if let Some(b) = b {
             b
         } else {
             a
-        }
+        })
     }
     #[method(name = "of_hello", overload = 1)]
     fn hello(&self, arg: String, b: Option<String>) -> String { format!("hello {},{:?}", arg, b) }
@@ -62,13 +65,13 @@ impl ParentObject {
     #[method(name = "of_foo")]
     fn of_foo(&self, obj: &Self) -> Result<String> { Ok(format!("fooxxx {:?}", obj.foo)) }
     #[method(name = "of_SetFoo")]
-    fn of_SetFoo(&mut self, arg: &PBStr) -> bool {
+    fn of_setfoo(&mut self, arg: &PBStr) -> bool {
         self.foo = Some(arg.to_owned());
         true
     }
     #[method(name = "of_trigger")]
     fn trigger(&mut self, arg: &PBStr) -> Result<String> {
-        self.ontest(arg);
+        self.ontest(arg)?;
         let eid = self.ctx.get_event_id(("ontest", "LS"));
         let mid = self.ctx.get_method_id("of_test");
         Ok(format!("eid: {:?}, mid: {:?}", eid, mid))
@@ -115,13 +118,13 @@ fn global_function_test(
     let c = c.to_string();
     let d = d.to_string();
     let e = e.to_string();
-    let blbStr = String::from_utf8_lossy(f).into_owned();
+    let f = String::from_utf8_lossy(f).into_owned();
 
     let mut obj = session.new_object("n_cst_pbtest")?;
-    obj.set_var_str("is_test", "我爱RUST");
+    obj.set_var_str("is_test", "我爱RUST")?;
     let is_test = obj.get_var_string("is_test");
     let invoker = obj.begin_invoke_method("of_test")?;
-    invoker.arg(0).set_str("call from rust to");
+    invoker.arg(0).set_str("call from rust to")?;
     let rv = invoker.invoke()?.get_string();
 
     Ok(())

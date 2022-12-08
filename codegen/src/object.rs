@@ -15,6 +15,7 @@ pub fn gen_nvo(args: AttributeArgs, input: TokenStream) -> Result<TokenStream> {
         impl ::pbni::NonVisualObject for #ident {
         }
         #[::pbni::__private::codegen::constructor]
+        #[allow(non_snake_case)]
         extern "C" fn #ident_reg() {
             <#ident as ::pbni::NonVisualObject>::register();
         }
