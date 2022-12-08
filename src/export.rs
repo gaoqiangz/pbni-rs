@@ -76,7 +76,7 @@ pub fn register_visualobject<T: VisualObject>() {
 mod handler {
     use super::*;
 
-    pub unsafe extern "C" fn destroy<T: UserObject>(ctx: NonNull<T>) { Box::from_raw(ctx.as_ptr()); }
+    pub unsafe extern "C" fn destroy<T: UserObject>(ctx: NonNull<T>) { drop(Box::from_raw(ctx.as_ptr())); }
     pub unsafe extern "C" fn invoke<T: UserObject>(
         mut ctx: NonNull<T>,
         session: Session,

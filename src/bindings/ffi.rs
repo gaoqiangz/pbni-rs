@@ -1,7 +1,7 @@
 use super::*;
 use std::ffi::c_void;
 
-/// VM
+// VM
 extern "C" {
     pub fn pbvm_CreateSession(
         vm: pbvm,
@@ -20,8 +20,7 @@ extern "C" {
     ) -> PBXRESULT;
 }
 
-/// pbsession
-
+// pbsession
 extern "C" {
     /*
         pbsession
@@ -1128,13 +1127,13 @@ extern "C" {
 
 }
 
-/// Arguments
+// Arguments
 extern "C" {
     pub fn pbargs_GetCount(pArgs: pbarguments) -> pbint;
     pub fn pbargs_GetAt(pArgs: pbarguments, index: pbint) -> pbvalue;
 }
 
-/// Value
+// Value
 extern "C" {
     pub fn pbvalue_GetClass(pVal: pbvalue) -> Option<pbclass>;
     pub fn pbvalue_GetType(pVal: pbvalue) -> pbuint;

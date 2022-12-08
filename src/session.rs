@@ -650,7 +650,7 @@ impl Session {
         let mut day = 0;
         let pbxr = ffi::pbsession_SplitDate(self.ptr, pbdt, &mut year, &mut month, &mut day);
         assert!(pbxr == PBXRESULT::OK);
-        NaiveDate::from_ymd(year as i32, month as u32, day as u32)
+        NaiveDate::from_ymd_opt(year as i32, month as u32, day as u32).unwrap()
     }
     #[cfg(feature = "datetime")]
     pub(crate) unsafe fn get_time_unchecked(&self, pbtm: pbtime) -> NaiveTime {
@@ -659,12 +659,13 @@ impl Session {
         let mut second = 0.0;
         let pbxr = ffi::pbsession_SplitTime(self.ptr, pbtm, &mut hour, &mut minute, &mut second);
         assert!(pbxr == PBXRESULT::OK);
-        NaiveTime::from_hms_nano(
+        NaiveTime::from_hms_nano_opt(
             hour as u32,
             minute as u32,
             second as u32,
             ((second - second.trunc()) * 1000_000_000.0) as u32
         )
+        .unwrap()
     }
     #[cfg(feature = "datetime")]
     pub(crate) unsafe fn get_datetime_unchecked(&self, pbdtt: pbdatetime) -> NaiveDateTime {
@@ -686,13 +687,14 @@ impl Session {
         );
         assert!(pbxr == PBXRESULT::OK);
         NaiveDateTime::new(
-            NaiveDate::from_ymd(year as i32, month as u32, day as u32),
-            NaiveTime::from_hms_nano(
+            NaiveDate::from_ymd_opt(year as i32, month as u32, day as u32).unwrap(),
+            NaiveTime::from_hms_nano_opt(
                 hour as u32,
                 minute as u32,
                 second as u32,
                 ((second - second.trunc()) * 1000_000_000.0) as u32
             )
+            .unwrap()
         )
     }
 
