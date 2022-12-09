@@ -1,4 +1,6 @@
-use crate::{bindings::*, *};
+use crate::{
+    pbni::{bindings::*, *}, prelude::*
+};
 use std::ptr;
 
 /// 过程调用参数列表对象的引用,此对象可以添加参数

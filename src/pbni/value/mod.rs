@@ -1,4 +1,6 @@
-use crate::{bindings::*, *};
+use crate::{
+    pbni::{bindings::*, *}, prelude::*
+};
 
 mod array;
 pub use array::Array;

@@ -19,8 +19,10 @@ proc-macro2 = "1.0.26"
 quote = "1.0.9"
 
 [features]
-default = ["global_function","nonvisualobject","visualobject"]
+default = []
 
+pbni = []
+syslib = []
 global_function = []
 nonvisualobject = []
 visualobject = []

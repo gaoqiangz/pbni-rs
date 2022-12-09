@@ -4,45 +4,6 @@ pub(crate) mod global_function;
 #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
 mod method;
 
-/// 构造PB字符串`&'static PBStr`,编译时生成对应编码格式
-///
-/// # Exmaples
-///
-/// ```
-/// static PBNI_RS: &'static PBStr = pbstr!("pbni-rs");
-///
-/// fn foo() {
-///     let pbni_rs = pbstr!("pbni-rs");
-/// }
-/// ```
-#[macro_export]
-macro_rules! pbstr {
-    ($str:expr) => {{
-        #[allow(unused_unsafe)]
-        unsafe {
-            ::core::mem::transmute::<_, &$crate::PBStr>(
-                $crate::__private::codegen::const_utf16::encode_null_terminated!($str) as &[u16]
-            )
-        }
-    }};
-}
-
-/// 构造PB字符串`PBString`,编译时生成对应编码格式
-///
-/// # Exmaples
-///
-/// ```
-/// fn foo() {
-///     let pbni_rs = pbstring!("pbni-rs");
-/// }
-/// ```
-#[macro_export]
-macro_rules! pbstring {
-    ($str:expr) => {
-        $crate::pbstr!($str).to_ucstring()
-    };
-}
-
 /// 构造PB过程调用的参数列表
 ///
 /// # Examples
@@ -56,16 +17,16 @@ macro_rules! pbstring {
 macro_rules! pbargs {
     [$($arg:expr),*] => {{
         |args| -> Result<()> {
-            use $crate::__private::codegen::ToValue;
             let mut idx = 0;
             $(
-                ToValue::to_value($arg, &mut args.get(idx))?;
+                $crate::pbni::__private::codegen::ToValue::to_value($arg, &mut args.get(idx))?;
                 idx += 1;
             )*
             Ok(())
         }
     }};
 }
+pub use pbargs;
 
 /// 抛出PB异常,包含调用处的位置信息,用法与[`format!`]相同
 ///
@@ -87,13 +48,13 @@ macro_rules! pbargs {
 macro_rules! throw {
     ($session:ident,$($arg:tt)*) => {{ $session.throw_exception(format!("{}\r\nat {} ({}:{}:{})",format_args!($($arg)*),module_path!(),file!(),line!(),column!())) }};
 }
+pub use throw;
 
 #[doc(hidden)]
 pub mod __private {
-    use crate::{bindings::*, *};
+    use crate::pbni::{bindings::*, *};
     use std::panic::{self, UnwindSafe};
 
-    pub use const_utf16;
     pub use value::{FromValue, FromValueOwned, ToValue};
 
     #[cfg(feature = "global_function")]

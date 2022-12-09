@@ -1,11 +1,12 @@
+#![allow(unused_imports)]
+
 use proc_macro::TokenStream;
-use syn::{parse_macro_input, AttributeArgs};
 
-#[cfg(feature = "global_function")]
-mod global_function;
+#[cfg(feature = "pbni")]
+mod pbni;
 
-#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
-mod object;
+#[cfg(feature = "syslib")]
+mod syslib;
 
 /// 生成全局函数
 ///
@@ -17,13 +18,10 @@ mod object;
 /// #[global_function(name = "gf_bitor")]
 /// fn bit_or(session: Session, a: pblong, b: pblong) -> pblong { a | b }
 /// ```
-#[cfg(feature = "global_function")]
+#[cfg(all(feature = "pbni", feature = "global_function"))]
 #[proc_macro_attribute]
-pub fn global_function(args: TokenStream, input: TokenStream) -> TokenStream {
-    match global_function::gen(parse_macro_input!(args as AttributeArgs), input) {
-        Ok(stream) => stream,
-        Err(e) => e.to_compile_error().into()
-    }
+pub fn pbni_global_function(args: TokenStream, input: TokenStream) -> TokenStream {
+    pbni::global_function(args, input)
 }
 
 /// 生成不可视对象
@@ -138,13 +136,10 @@ pub fn global_function(args: TokenStream, input: TokenStream) -> TokenStream {
 ///     }
 /// }
 /// ```
-#[cfg(feature = "nonvisualobject")]
+#[cfg(all(feature = "pbni", feature = "nonvisualobject"))]
 #[proc_macro_attribute]
-pub fn nonvisualobject(args: TokenStream, input: TokenStream) -> TokenStream {
-    match object::gen_nvo(parse_macro_input!(args as AttributeArgs), input) {
-        Ok(stream) => stream,
-        Err(e) => e.to_compile_error().into()
-    }
+pub fn pbni_nonvisualobject(args: TokenStream, input: TokenStream) -> TokenStream {
+    pbni::nonvisualobject(args, input)
 }
 
 /// 生成可视对象
@@ -183,13 +178,10 @@ pub fn nonvisualobject(args: TokenStream, input: TokenStream) -> TokenStream {
 ///     }
 /// }
 /// ```
-#[cfg(feature = "visualobject")]
+#[cfg(all(feature = "pbni", feature = "visualobject"))]
 #[proc_macro_attribute]
-pub fn visualobject(args: TokenStream, input: TokenStream) -> TokenStream {
-    match object::gen_vo(parse_macro_input!(args as AttributeArgs), input) {
-        Ok(stream) => stream,
-        Err(e) => e.to_compile_error().into()
-    }
+pub fn pbni_visualobject(args: TokenStream, input: TokenStream) -> TokenStream {
+    pbni::visualobject(args, input)
 }
 
 /// 标记对象的构造函数
@@ -205,9 +197,11 @@ pub fn visualobject(args: TokenStream, input: TokenStream) -> TokenStream {
 ///     }
 /// }
 /// ```
-#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+#[cfg(all(feature = "pbni", any(feature = "nonvisualobject", feature = "visualobject")))]
 #[proc_macro_attribute]
-pub fn constructor(_: TokenStream, input: TokenStream) -> TokenStream { input }
+pub fn pbni_constructor(args: TokenStream, input: TokenStream) -> TokenStream {
+    pbni::constructor(args, input)
+}
 
 /// 标记对象函数
 ///
@@ -224,9 +218,9 @@ pub fn constructor(_: TokenStream, input: TokenStream) -> TokenStream { input }
 ///     format!("hello {}!",world)
 /// }
 /// ```
-#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+#[cfg(all(feature = "pbni", any(feature = "nonvisualobject", feature = "visualobject")))]
 #[proc_macro_attribute]
-pub fn method(_: TokenStream, input: TokenStream) -> TokenStream { input }
+pub fn pbni_method(args: TokenStream, input: TokenStream) -> TokenStream { pbni::method(args, input) }
 
 /// 标记对象事件,如果方法体没有代码,则自动生成对应的调用代码
 ///
@@ -263,11 +257,6 @@ pub fn method(_: TokenStream, input: TokenStream) -> TokenStream { input }
 ///     fn on_fire(&mut self) {}
 /// }
 /// ```
-#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+#[cfg(all(feature = "pbni", any(feature = "nonvisualobject", feature = "visualobject")))]
 #[proc_macro_attribute]
-pub fn event(args: TokenStream, input: TokenStream) -> TokenStream {
-    match object::gen_event(parse_macro_input!(args as AttributeArgs), input) {
-        Ok(stream) => stream,
-        Err(e) => e.to_compile_error().into()
-    }
-}
+pub fn pbni_event(args: TokenStream, input: TokenStream) -> TokenStream { pbni::event(args, input) }

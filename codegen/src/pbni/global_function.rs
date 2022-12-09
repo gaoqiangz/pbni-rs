@@ -17,21 +17,21 @@ pub fn gen(args: AttributeArgs, input: TokenStream) -> Result<TokenStream> {
         #[doc(hidden)]
         #[allow(non_camel_case_types)]
         struct #ident_st;
-        impl ::pbni::__private::codegen::GlobalFunction for #ident_st {
-            const NAME: &'static ::pbni::PBStr = ::pbni::pbstr!(#cls_name);
-            fn invoke(ci: ::pbni::CallInfoRef) -> ::pbni::Result<()> {
-                ::pbni::__private::codegen::safe_invoke(
+        impl ::pbni::pbni::__private::codegen::GlobalFunction for #ident_st {
+            const NAME: &'static ::pbni::pbstr::PBStr = ::pbni::pbstr!(#cls_name);
+            fn invoke(ci: ::pbni::pbni::CallInfoRef) -> ::pbni::pbni::Result<()> {
+                ::pbni::pbni::__private::codegen::safe_invoke(
                     ci.session(),
                     stringify!(#name),
                     concat!(module_path!(),"::",stringify!(#ident)),
                     file!(),line!(),column!(),
-                    ||::pbni::__private::codegen::global_function_factory_call(#ident, &ci)
+                    ||::pbni::pbni::__private::codegen::global_function_factory_call(#ident, &ci)
                 )
             }
         }
-        #[::pbni::__private::codegen::constructor]
+        #[::pbni::pbni::__private::codegen::constructor]
         extern "C" fn #ident_reg() {
-            use ::pbni::__private::codegen::GlobalFunction;
+            use ::pbni::pbni::__private::codegen::GlobalFunction;
             <#ident_st as GlobalFunction>::register();
         }
     };

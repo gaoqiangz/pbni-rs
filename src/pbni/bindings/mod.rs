@@ -1,7 +1,4 @@
-use crate::session::Session;
-use std::{borrow::Cow, ops::Deref};
-use widestring::{WideCStr, WideCString, WideChar};
-
+use crate::{pbni::session::Session, pbstr::*};
 pub use std::{marker::PhantomData, ptr::NonNull};
 
 #[cfg(feature = "visualobject")]
@@ -49,47 +46,6 @@ impl From<bool> for pbboolean {
 
 impl From<pbboolean> for bool {
     fn from(b: pbboolean) -> Self { b.to_bool() }
-}
-
-pub type LPCTSTR = *const WideChar;
-pub type PBChar = WideChar;
-pub type PBStr = WideCStr;
-pub type PBString = WideCString;
-
-/// `PBStr`抽象
-pub trait AsPBStr {
-    fn as_pbstr(&self) -> Cow<'_, PBStr>;
-}
-
-impl AsPBStr for &PBStr {
-    fn as_pbstr(&self) -> Cow<'_, PBStr> { (*self).into() }
-}
-impl AsPBStr for PBString {
-    fn as_pbstr(&self) -> Cow<'_, PBStr> { self.deref().into() }
-}
-impl AsPBStr for String {
-    fn as_pbstr(&self) -> Cow<'_, PBStr> {
-        PBString::from_str(self).expect("incompatible utf-8 string").into()
-    }
-}
-impl AsPBStr for &str {
-    fn as_pbstr(&self) -> Cow<'_, PBStr> {
-        PBString::from_str(self).expect("incompatible utf-8 string").into()
-    }
-}
-impl AsPBStr for Cow<'_, PBStr> {
-    fn as_pbstr(&self) -> Cow<'_, PBStr> { self.as_ref().into() }
-}
-
-pub trait FromPBStrPtr {
-    unsafe fn from_pbstr_unchecked(ptr: LPCTSTR) -> Self;
-}
-
-impl FromPBStrPtr for String {
-    unsafe fn from_pbstr_unchecked(ptr: LPCTSTR) -> Self { PBStr::from_ptr_str(ptr).to_string_lossy() }
-}
-impl FromPBStrPtr for PBString {
-    unsafe fn from_pbstr_unchecked(ptr: LPCTSTR) -> Self { PBStr::from_ptr_str(ptr).to_ucstring() }
 }
 
 pub fn type_id<T: ?Sized + 'static>() -> u64 {
@@ -339,7 +295,7 @@ impl From<i32> for PBXRESULT {
     fn from(v: i32) -> Self { unsafe { std::mem::transmute(v) } }
 }
 
-impl<T: Default> From<PBXRESULT> for crate::Result<T> {
+impl<T: Default> From<PBXRESULT> for crate::pbni::Result<T> {
     fn from(pbxr: PBXRESULT) -> Self {
         if pbxr == PBXRESULT::OK {
             Ok(Default::default())
@@ -349,8 +305,8 @@ impl<T: Default> From<PBXRESULT> for crate::Result<T> {
     }
 }
 
-impl<T> From<crate::Result<T>> for PBXRESULT {
-    fn from(pbxr: crate::Result<T>) -> Self {
+impl<T> From<crate::pbni::Result<T>> for PBXRESULT {
+    fn from(pbxr: crate::pbni::Result<T>) -> Self {
         if let Err(e) = pbxr {
             e
         } else {

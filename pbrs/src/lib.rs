@@ -1,7 +1,7 @@
 #![allow(unused_variables)]
 #![allow(dead_code)]
 
-use pbni::*;
+use pbni::{pbni::*, prelude::*};
 
 struct RustObject {}
 

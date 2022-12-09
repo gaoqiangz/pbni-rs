@@ -1,4 +1,6 @@
-use crate::{bindings::*, callinfo::FromCallInfo, value::ToValue, *};
+use crate::{
+    pbni::{bindings::*, callinfo::FromCallInfo, value::ToValue, *}, pbstr::*
+};
 
 /// 全局函数抽象
 #[cfg(feature = "global_function")]

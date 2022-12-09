@@ -1,5 +1,7 @@
 use crate::{
-    bindings::*, invoker::{ObjectEvent, ObjectMethod}, session::AsMethodName, value::FromValueOwned, *
+    pbni::{
+        bindings::*, invoker::{ObjectEvent, ObjectMethod}, session::AsMethodName, value::FromValueOwned, *
+    }, prelude::*
 };
 use std::{
     cell::{Cell, RefCell}, ops::{Deref, DerefMut}, rc::Rc

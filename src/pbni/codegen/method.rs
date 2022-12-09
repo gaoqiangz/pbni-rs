@@ -1,4 +1,4 @@
-use crate::{callinfo::FromCallInfo, value::ToValue, *};
+use crate::pbni::{callinfo::FromCallInfo, value::ToValue, *};
 
 /// 通用函数调用的抽象工厂
 pub trait Factory<CTX, T, R> {

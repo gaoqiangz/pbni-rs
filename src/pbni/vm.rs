@@ -1,4 +1,4 @@
-use crate::{bindings::*, session::OwnedSession, *};
+use crate::pbni::{bindings::*, session::OwnedSession, *};
 use libloading::Library;
 use std::{borrow::Cow, ffi::OsStr};
 

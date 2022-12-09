@@ -378,56 +378,23 @@
 #![allow(non_upper_case_globals)]
 #![allow(dead_code)]
 
-mod bindings;
-#[cfg(feature = "vm")]
-mod vm;
-mod session;
-mod callinfo;
-mod value;
-mod object;
-mod invoker;
-mod arguments;
-#[cfg(any(feature = "global_function", feature = "nonvisualobject", feature = "visualobject"))]
-mod export;
-#[doc(hidden)]
-mod codegen;
+//#[macro_use]
+pub mod pbstr;
 
-pub use arguments::{Arguments, ArgumentsRef};
-pub use bindings::{
-    pbbyte, pbdouble, pbint, pblong, pblonglong, pbreal, pbuint, pbulong, AsPBStr, FieldId, MethodId, PBStr, PBString, ValueType, PBXRESULT
-};
-pub use callinfo::{CallInfo, CallInfoRef};
-pub use invoker::Invoker;
-pub use object::{ContextObject, Object, SharedObject};
-pub use session::{LocalFrame, OwnedSession, Session};
-pub use value::{Array, OwnedValue, Value};
+#[cfg(feature = "pbni")]
+pub mod pbni;
 
-#[cfg(feature = "vm")]
-pub use vm::VM;
+#[cfg(feature = "syslib")]
+pub mod syslib;
 
-#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
-pub use object::UserObject;
+pub mod prelude {
+    #[cfg(feature = "datetime")]
+    #[doc(no_inline)]
+    pub use chrono::{Datelike, NaiveDate, NaiveDateTime, NaiveTime, Timelike};
 
-#[cfg(feature = "nonvisualobject")]
-pub use object::NonVisualObject;
+    #[cfg(feature = "decimal")]
+    #[doc(no_inline)]
+    pub use rust_decimal::prelude::*;
 
-#[cfg(feature = "visualobject")]
-pub use object::VisualObject;
-
-#[cfg(feature = "datetime")]
-#[doc(no_inline)]
-pub use chrono::{Datelike, NaiveDate, NaiveDateTime, NaiveTime, Timelike};
-
-#[cfg(feature = "decimal")]
-#[doc(no_inline)]
-pub use rust_decimal::prelude::*;
-
-#[cfg(any(feature = "global_function", feature = "nonvisualobject", feature = "visualobject"))]
-pub use pbni_codegen::*;
-
-#[doc(hidden)]
-pub mod __private {
-    pub use crate::codegen::__private as codegen;
+    pub use crate::pbstr::{pbstr, pbstring, AsPBStr, FromPBStrPtr, PBChar, PBStr, PBString};
 }
-
-pub type Result<T> = ::std::result::Result<T, PBXRESULT>;

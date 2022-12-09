@@ -1,8 +1,10 @@
-use crate::{bindings::*, *};
+use crate::{
+    pbni::{bindings::*, *}, pbstr::*
+};
 use std::collections::HashMap;
 
 #[cfg(feature = "global_function")]
-use crate::codegen::global_function::GlobalFunction;
+use crate::pbni::codegen::global_function::GlobalFunction;
 
 #[cfg(feature = "global_function")]
 #[static_init::dynamic]
