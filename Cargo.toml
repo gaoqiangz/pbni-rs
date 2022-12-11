@@ -38,11 +38,11 @@ const-utf16 = "0.2.1"
 # feature: global_function, nonvisualobject, visualobject
 pbni-codegen = { version = "0.1.0", optional = true}
 
-# feature: global_function, nonvisualobject, visualobject
+# feature: pbni
 static_init = { version = "1.0.1", optional = true}
 
-# feature: visualobject
-winapi = { version = "0.3.9", features = ["windef","corecrt"], optional = true }
+# feature: syslib, visualobject
+winapi = { version = "0.3.9", features = ["windef","corecrt","psapi"], optional = true }
 
 # feature: datetime
 chrono = { version = "0.4.19", optional = true }
@@ -50,7 +50,7 @@ chrono = { version = "0.4.19", optional = true }
 # feature: decimal
 rust_decimal = { version = "1.10.3", optional = true }
 
-# feature: vm
+# feature: syslib, vm
 libloading = { version = "0.7.0", optional = true }
 
 [build-dependencies]
@@ -63,11 +63,11 @@ bindgen = { version = "0.60.1", optional = true }
 default = ["full","pbni","syslib"]
 full = ["global_function","nonvisualobject","visualobject","datetime","decimal"]
 
-pbni = ["pbni-codegen/pbni"]
-syslib = ["bindgen","libloading","pbni-codegen/syslib"]
-global_function = ["static_init","pbni-codegen/global_function"]
-nonvisualobject = ["static_init","pbni-codegen/nonvisualobject"]
-visualobject = ["static_init","winapi","pbni-codegen/visualobject"]
+pbni = ["static_init","pbni-codegen/pbni"]
+syslib = ["bindgen","libloading","winapi","pbni-codegen/syslib"]
+global_function = ["pbni-codegen/global_function"]
+nonvisualobject = ["pbni-codegen/nonvisualobject"]
+visualobject = ["winapi","pbni-codegen/visualobject"]
 datetime = ["chrono"]
 decimal = ["rust_decimal"]
 vm = ["libloading"]

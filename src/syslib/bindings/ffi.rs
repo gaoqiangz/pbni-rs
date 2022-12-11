@@ -1,7 +1,7 @@
 #![allow(non_camel_case_types)]
 #![allow(dead_code)]
 
-use super::*;
+use super::{library::*, *};
 pub use winapi::{
     shared::{
         minwindef::{
@@ -11,7 +11,6 @@ pub use winapi::{
 };
 
 pub type LOGFONT = LOGFONTW;
-
 #[repr(C)]
 pub struct IUnknown__bindgen_vtable(::std::os::raw::c_void);
 #[repr(C)]
@@ -48,13 +47,6 @@ pub struct stg_anchorS {
     pub pNext: *mut stg_anchorS
 }
 pub type ppbstg_anchor = *mut stg_anchorS;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct tag_os_stackgrowblock {
-    pub stackframe: *mut ::std::os::raw::c_void,
-    pub stackframe_subpool: pbstg_subpool
-}
-pub type pos_stackgrowblock = *mut tag_os_stackgrowblock;
 #[repr(C, packed)]
 #[derive(Copy, Clone)]
 pub struct sh_dbg_node {
@@ -833,30 +825,6 @@ pub type SH_DEC = _tagSH_DEC;
 pub type PSH_DEC = *mut _tagSH_DEC;
 #[repr(C, packed)]
 #[derive(Copy, Clone)]
-pub struct OLD_IDEC {
-    pub attr: ::std::os::raw::c_short,
-    pub id: ::std::os::raw::c_short,
-    pub sl: [::std::os::raw::c_ushort; 4usize],
-    pub msd: ::std::os::raw::c_short,
-    pub dummy: ::std::os::raw::c_short
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct OLD_LDEC {
-    pub lattr: ::std::os::raw::c_short,
-    pub lid: ::std::os::raw::c_short,
-    pub lsl: [::std::os::raw::c_ulong; 2usize],
-    pub lmsd: ::std::os::raw::c_short,
-    pub ldummy: ::std::os::raw::c_short
-}
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub union OLD_DEC {
-    pub dc: OLD_IDEC,
-    pub ls: OLD_LDEC
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
 pub struct SH_TIME {
     pub tm_msec: ::std::os::raw::c_long,
     pub tm_year: SHORT,
@@ -1321,7 +1289,6 @@ pub mod ob_inconsistency_type {
     pub const OB_INCONSISTENT_VERSION: Type = 1;
     pub const OB_INCONSISTENT_COMPILE: Type = 2;
 }
-pub use self::ob_inconsistency_type::Type as OB_INCONSISTENCY_TYPE;
 pub type POB_INCONSISTENCY_TYPE = *mut ob_inconsistency_type::Type;
 pub type OS_CALLC_FUNC = ::std::option::Option<unsafe extern "C" fn()>;
 #[repr(C)]
@@ -1436,44 +1403,6 @@ pub struct cm_this {
     pub global_preprocessor_symbols: *mut shlist,
     pub ppcsthis: *mut ::std::os::raw::c_void,
     pub ppcs_debug_symbol_used: BOOL
-}
-pub type PCM_THIS = *mut cm_this;
-pub mod cm_rebuild_type {
-    pub type Type = ::std::os::raw::c_int;
-    pub const CM_REBUILD_INCREMENTAL: Type = 0;
-    pub const CM_REBUILD_FULL: Type = 1;
-    pub const CM_REBUILD_MIGRATE: Type = 2;
-}
-pub use self::cm_rebuild_type::Type as CM_REBUILD_TYPE;
-pub mod cm_rebuild_category {
-    pub type Type = ::std::os::raw::c_int;
-    pub const REBUILD_COMPILE_LIST: Type = 0;
-    pub const REBUILD_CREATE_TYPES: Type = 1;
-    pub const REBUILD_OBJECT_STAGE1: Type = 2;
-    pub const REBUILD_OBJECT_STAGE2: Type = 3;
-    pub const REBUILD_OBJECT_REGENERATE: Type = 4;
-    pub const REBUILD_COMPLETE: Type = 5;
-    pub const REBUILD_LIB_READONLY: Type = 6;
-}
-pub use self::cm_rebuild_category::Type as CM_REBUILD_STAGE;
-pub mod cm_rebuild_status {
-    pub type Type = ::std::os::raw::c_int;
-    pub const REBUILD_NO_MESSAGES: Type = 0;
-    pub const REBUILD_MESSAGES: Type = 1;
-    pub const REBUILD_ERRORS: Type = 2;
-}
-pub type PCM_REBUILD_STATUS = *mut cm_rebuild_status::Type;
-pub type PCM_REBUILD = *mut cm_rebuild;
-pub type CM_REBUILD_CALLBACK = ::std::option::Option<unsafe extern "C" fn(arg1: PCM_REBUILD) -> BOOL>;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct cm_rebuild {
-    pub pGlobals: *mut ::std::os::raw::c_void,
-    pub hParent: UINT,
-    pub fnCallback: CM_REBUILD_CALLBACK,
-    pub rebuildStage: CM_REBUILD_STAGE,
-    pub lpszStageArgument: LPTSTR,
-    pub lpszLibraryName: LPTSTR
 }
 #[repr(C, packed)]
 #[derive(Copy, Clone)]
@@ -2179,1399 +2108,6 @@ pub mod OT_TYPE_CHECK_ERROR {
     pub const OT_TYPCHECK_MIXED_GROUPING: Type = 3;
     pub const OT_TYPCHECK_UNDECLARED: Type = 4;
 }
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct _IPB_String {
-    pub _address: u8
-}
-pub type IPB_String = _IPB_String;
-pub mod DWPortDataFormat {
-    pub type Type = ::std::os::raw::c_int;
-    pub const DW_XML: Type = 0;
-    pub const DW_PDF: Type = 1;
-    pub const DW_XHTML: Type = 2;
-}
-#[repr(C)]
-pub struct IDW_DataTemplateList__bindgen_vtable(::std::os::raw::c_void);
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct IDW_DataTemplateList {
-    pub vtable_: *const IDW_DataTemplateList__bindgen_vtable
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct fillBrushInfo {
-    pub brushmode: SHORT,
-    pub color: ::std::os::raw::c_long,
-    pub transparency: SHORT,
-    pub gradientcolor: ::std::os::raw::c_long,
-    pub gradienttransparency: SHORT,
-    pub gradientangle: SHORT,
-    pub gradientrepetitionmode: SHORT,
-    pub gradientrepetitioncount: ::std::os::raw::c_long,
-    pub gradientrepetitionlength: ::std::os::raw::c_long,
-    pub gradientfocus: SHORT,
-    pub gradientscale: SHORT,
-    pub gradientspread: SHORT,
-    pub picturefile: LPTSTR,
-    pub picturemode: SHORT,
-    pub picturescalex: SHORT,
-    pub picturescaley: SHORT,
-    pub pictureclipleft: SHORT,
-    pub pictureclipright: SHORT,
-    pub picturecliptop: SHORT,
-    pub pictureclipbottom: SHORT,
-    pub pictureblur: SHORT,
-    pub picturetransparency: SHORT,
-    pub pIA: *mut ::std::os::raw::c_void
-}
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct _IPB_XMLDOMDocument {
-    pub _address: u8
-}
-pub type IPB_XMLDOMDocument = _IPB_XMLDOMDocument;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINKATT {
-    pub lInkColor: DWORD,
-    pub lInkHeight: ::std::os::raw::c_long,
-    pub lInkWidth: ::std::os::raw::c_long,
-    pub iPenTip: ::std::os::raw::c_ushort,
-    pub iTransparency: ::std::os::raw::c_ushort,
-    pub iRasterOperation: ::std::os::raw::c_ushort,
-    pub inkFlags: ::std::os::raw::c_ushort
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWEDITINKEDIT {
-    pub strFactoid: LPTSTR,
-    pub lRecogTimeout: ::std::os::raw::c_long,
-    pub iInkMode: ::std::os::raw::c_short,
-    pub iStatus: ::std::os::raw::c_short,
-    pub iZoomFactor: ::std::os::raw::c_short,
-    pub inkedFlags: ::std::os::raw::c_ushort
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DDCALENDARPROPS {
-    pub lTextColor: ::std::os::raw::c_long,
-    pub lTitleTextColor: ::std::os::raw::c_long,
-    pub lTrailingTextColor: ::std::os::raw::c_long,
-    pub lBackColor: ::std::os::raw::c_long,
-    pub lTitleBackColor: ::std::os::raw::c_long,
-    pub uFlags: ::std::os::raw::c_ushort,
-    pub uFiller: ::std::os::raw::c_ushort
-}
-pub mod DWTYPES {
-    pub type Type = ::std::os::raw::c_int;
-    pub const DWBITMAP: Type = 0;
-    pub const DWCOL: Type = 1;
-    pub const DWCOMPUTE: Type = 2;
-    pub const DWOVAL: Type = 3;
-    pub const DWLINE: Type = 4;
-    pub const DWRECT: Type = 5;
-    pub const DWRRECT: Type = 6;
-    pub const DWTEXT: Type = 7;
-    pub const DWTBLOB: Type = 8;
-    pub const DWGRAPH: Type = 9;
-    pub const DWCROSSTAB: Type = 10;
-    pub const DWREPORT: Type = 11;
-    pub const DWOLE: Type = 12;
-    pub const DWBUTTON: Type = 13;
-    pub const DWGROUPBOX: Type = 14;
-    pub const DWINKPIC: Type = 15;
-    pub const DWWPF: Type = 16;
-    pub const DWNULL: Type = 17;
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWOLER {
-    pub prog: *mut ::std::os::raw::c_void,
-    pub hWnd: HWND,
-    pub hWndClient: HWND,
-    pub activeOle: *mut ::std::os::raw::c_void,
-    pub pControl: *mut ::std::os::raw::c_void,
-    pub sharedMenuCount: ::std::os::raw::c_long,
-    pub pSharedMenu: *mut ::std::os::raw::c_void,
-    pub bMDI: ::std::os::raw::c_short,
-    pub rect: RECT
-}
-pub type PDWOLER = *mut DWOLER;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWOPTIONS {
-    pub timer_interval: ::std::os::raw::c_long,
-    pub bkinfo: fillBrushInfo,
-    pub rows_per_detail: ::std::os::raw::c_long,
-    pub pointer: LPTSTR,
-    pub mapmode: ::std::os::raw::c_short,
-    pub processing: ::std::os::raw::c_short,
-    pub print: DWOPTIONS__bindgen_ty_1,
-    pub lpOleClientClass: LPTSTR,
-    pub lpOleClientName: LPTSTR,
-    pub label: DWOPTIONS__bindgen_ty_2,
-    pub iGridLines: ::std::os::raw::c_short,
-    pub iRowResize: ::std::os::raw::c_short,
-    pub bGridColMove: BOOL,
-    pub bSelectedMouse: BOOL,
-    pub bHTMLDW: BOOL,
-    pub bExprGenerateCss: LPTSTR,
-    pub bExprNoWrap: LPTSTR,
-    pub lExprBorder: LPTSTR,
-    pub lExprCellSpacing: LPTSTR,
-    pub lExprCellPadding: LPTSTR,
-    pub lpszStyleSheet: LPTSTR,
-    pub lExprWidth: LPTSTR,
-    pub bExprGenerateJavaScript: LPTSTR,
-    pub bExprClientEvents: LPTSTR,
-    pub bExprClientValidation: LPTSTR,
-    pub bExprClientComputedFields: LPTSTR,
-    pub bExprClientFormatting: LPTSTR,
-    pub bExprClientScriptable: LPTSTR,
-    pub bExprFirstOnPage: LPTSTR,
-    pub lExprPageSize: LPTSTR,
-    pub sExprSelfLink: LPTSTR,
-    pub lpszSelfLinkArgs: LPTSTR,
-    pub bExprEncodeSelfLinkArgs: LPTSTR,
-    pub sExprObjectName: LPTSTR,
-    pub sExprBrowser: LPTSTR,
-    pub sExprHTMLVersion: LPTSTR,
-    pub sExprResourceBase: LPTSTR,
-    pub sExprCommonJSFile: LPTSTR,
-    pub sExprDateJSFile: LPTSTR,
-    pub sExprNumberJSFile: LPTSTR,
-    pub sExprStringJSFile: LPTSTR,
-    pub sExprUserJSFile: LPTSTR,
-    pub bExprNetscapeLayers: LPTSTR,
-    pub lExprTabIndexBase: LPTSTR,
-    pub iPagingMethod: SHORT,
-    pub bExprGenerateDDDWFrames: LPTSTR,
-    pub sExprXHTMLBrowser: LPTSTR,
-    pub sExprCSSResourceBase: LPTSTR,
-    pub sExprCSSPublishPath: LPTSTR,
-    pub bExprCSSSessionSpecific: LPTSTR,
-    pub sExprXMLResourceBase: LPTSTR,
-    pub sExprXMLPublishPath: LPTSTR,
-    pub bExprXMLInline: LPTSTR,
-    pub sExprXSLTResourceBase: LPTSTR,
-    pub sExprXSLTPublishPath: LPTSTR,
-    pub sExprJSResourceBase: LPTSTR,
-    pub sExprJSPublishPath: LPTSTR,
-    pub pIDWExportDataTemplateList: *mut IDW_DataTemplateList,
-    pub pIDWImportDataTemplateList: *mut IDW_DataTemplateList,
-    pub bImportXMLTrace: BOOL,
-    pub sImportXMLTraceFile: LPTSTR,
-    pub pRTEDetailText: LPTSTR,
-    pub pRTEHeaderText: LPTSTR,
-    pub pRTEFooterText: LPTSTR,
-    pub pRTEComputes: *mut ::std::os::raw::c_void,
-    pub pRTEColumns: *mut ::std::os::raw::c_void,
-    pub bRTEHeaderFooter: BOOL,
-    pub bRTELineBreak: BOOL,
-    pub bRTEReturnsVisible: BOOL,
-    pub bRTESpacesVisible: BOOL,
-    pub bRTETabsVisible: BOOL,
-    pub bRTEInputFieldsVisible: BOOL,
-    pub bRTEPictureFrame: BOOL,
-    pub bRTEInputFieldNamesVisible: BOOL,
-    pub bRTEPopMenu: BOOL,
-    pub bRTEToolBar: BOOL,
-    pub bRTETabBar: BOOL,
-    pub bRTERulerBar: BOOL,
-    pub bRTEReadOnly: BOOL,
-    pub iRTEUnit: ::std::os::raw::c_short,
-    pub lRTEInputFieldBackColor: ::std::os::raw::c_long,
-    pub lRTEBackColor: ::std::os::raw::c_long,
-    pub pRTEInitialFile: LPTSTR,
-    pub bHideGrayLine: BOOL,
-    pub bShowBackcolorOnXp: BOOL,
-    pub viewport3d: DWOPTIONS__bindgen_ty_3
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWOPTIONS__bindgen_ty_1 {
-    pub szDocument: [TCHAR; 32usize],
-    pub szPrinterName: [TCHAR; 64usize],
-    pub orientation: ::std::os::raw::c_long,
-    pub left: ::std::os::raw::c_long,
-    pub right: ::std::os::raw::c_long,
-    pub top: ::std::os::raw::c_long,
-    pub bottom: ::std::os::raw::c_long,
-    pub scolumns_width: ::std::os::raw::c_long,
-    pub scolumns: ::std::os::raw::c_short,
-    pub psize: ::std::os::raw::c_short,
-    pub psource: ::std::os::raw::c_short,
-    pub bCanUseDefaultPrinter: BOOL,
-    pub bPrompt: BOOL,
-    pub bPrintButtons: BOOL,
-    pub bPrintPreviewButtons: BOOL,
-    pub bOverridePrintJob: BOOL,
-    pub bClipTextOnPrint: BOOL,
-    pub bPrintCollate: BOOL,
-    pub bPrintPreviewShowsOutline: BOOL,
-    pub bPrintShowsBackground: BOOL,
-    pub bPrintPreviewShowsBackground: BOOL
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWOPTIONS__bindgen_ty_2 {
-    pub name: LPTSTR,
-    pub width: ::std::os::raw::c_short,
-    pub height: ::std::os::raw::c_short,
-    pub rows: ::std::os::raw::c_short,
-    pub rows_spacing: ::std::os::raw::c_short,
-    pub columns: ::std::os::raw::c_short,
-    pub columns_spacing: ::std::os::raw::c_short,
-    pub bTopDown: BOOL,
-    pub bSheet: BOOL,
-    pub gType: DWTYPES::Type,
-    pub ellipse_height: ::std::os::raw::c_short,
-    pub ellipse_width: ::std::os::raw::c_short
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWOPTIONS__bindgen_ty_3 {
-    pub camera_distance: ::std::os::raw::c_long,
-    pub camera_elevation: ::std::os::raw::c_long,
-    pub camera_rotation: ::std::os::raw::c_long,
-    pub animation_duration: ::std::os::raw::c_long,
-    pub animation_transitions: ::std::os::raw::c_long,
-    pub current_page_on_click: ::std::os::raw::c_long,
-    pub pages_width: ::std::os::raw::c_long,
-    pub pages_height: ::std::os::raw::c_long,
-    pub perspective: ::std::os::raw::c_long,
-    pub quality: ::std::os::raw::c_long,
-    pub orthogonal: ::std::os::raw::c_long,
-    pub refresh_on_mouseover: ::std::os::raw::c_long,
-    pub expr_pages_total_visible: LPTSTR,
-    pub expr_pages_focal: LPTSTR,
-    pub expr_reflection: LPTSTR,
-    pub expr_rotation_x: LPTSTR,
-    pub expr_rotation_y: LPTSTR,
-    pub expr_rotation_z: LPTSTR,
-    pub expr_scaling_width: LPTSTR,
-    pub expr_scaling_height: LPTSTR,
-    pub expr_translation_x: LPTSTR,
-    pub expr_translation_y: LPTSTR,
-    pub expr_translation_z: LPTSTR,
-    pub expr_transparency: LPTSTR
-}
-pub type PDWOPTIONS = *mut DWOPTIONS;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub union editUnion {
-    pub dddw_displaycol: LPTSTR,
-    pub spin_range: LPTSTR
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct EXTCOLEDIT {
-    pub name: LPTSTR,
-    pub style: ::std::os::raw::c_long,
-    pub values: LPTSTR,
-    pub dddw_name: LPTSTR,
-    pub u: editUnion,
-    pub dddw_datacol: LPTSTR,
-    pub edit_format: LPTSTR,
-    pub style_name: [TCHAR; 31usize],
-    pub edit_bFocusRect: BOOL,
-    pub dddw_pwidth: ::std::os::raw::c_short,
-    pub limit: ::std::os::raw::c_short,
-    pub accelerator: TCHAR,
-    pub type_: ::std::os::raw::c_short,
-    pub dddw_lines: ::std::os::raw::c_short,
-    pub inkatt: DWINKATT,
-    pub inkedit: DWEDITINKEDIT,
-    pub ddcal_props: DDCALENDARPROPS
-}
-pub type PEXTCOLEDIT = *mut EXTCOLEDIT;
-pub type PPDWXEDT = *mut tagEditStyle;
-pub type PB_EDITSTYLECALLBACK = ::std::option::Option<unsafe extern "C" fn(arg1: PPDWXEDT) -> BOOL>;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct tagEditStyle {
-    pub pbThis: LPTSTR,
-    pub sa: ppbstg_anchor,
-    pub subpool: pbstg_subpool,
-    pub caller_id: ::std::os::raw::c_long,
-    pub hWndDW: HWND,
-    pub szAppName: LPTSTR,
-    pub table_name: LPTSTR,
-    pub column_name: LPTSTR,
-    pub edit_style_info: PEXTCOLEDIT,
-    pub new_edit_style_info: PEXTCOLEDIT,
-    pub pInitCallBackProc: PB_EDITSTYLECALLBACK,
-    pub pCallBackProc: PB_EDITSTYLECALLBACK,
-    pub pExtension: *mut ::std::os::raw::c_void,
-    pub pUserData: *mut ::std::os::raw::c_void,
-    pub pvFormatBlock: *mut ::std::os::raw::c_void,
-    pub lpObjectName: LPTSTR,
-    pub workname: [TCHAR; 31usize],
-    pub edtFlags: ::std::os::raw::c_uchar
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub union runArgs {
-    pub text: LPTSTR,
-    pub number: *mut f64,
-    pub dec: PSH_DEC,
-    pub dt: PSH_TIME,
-    pub textlist: *mut LPTSTR,
-    pub numberlist: *mut *mut f64,
-    pub decimallist: *mut PSH_DEC,
-    pub dtlist: *mut PSH_TIME
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWRETRIEVEARG {
-    pub type_: ::std::os::raw::c_uchar,
-    pub listcount: ::std::os::raw::c_short,
-    pub u: runArgs
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWRETRIEVEARGS {
-    pub argcount: ::std::os::raw::c_short,
-    pub args: [DWRETRIEVEARG; 1usize]
-}
-pub type PDWRETRIEVEARGS = *mut DWRETRIEVEARGS;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWBARGENT {
-    pub name: [TCHAR; 129usize],
-    pub type_: ::std::os::raw::c_uchar,
-    pub value: [TCHAR; 100usize]
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWBTBLARG {
-    pub maxCount: ::std::os::raw::c_short,
-    pub argCount: ::std::os::raw::c_short,
-    pub args: [DWBARGENT; 1usize]
-}
-pub type PDWBTBLARG = *mut DWBTBLARG;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWBNESTENT {
-    pub nestExpr: LPTSTR
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWBNESTARG {
-    pub argCount: ::std::os::raw::c_short,
-    pub args: [DWBNESTENT; 1usize]
-}
-pub type PDWBNESTARG = *mut DWBNESTARG;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOEFFECTS {
-    pub transparency: LPTSTR,
-    pub blur: LPTSTR
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOTOOLTIP {
-    pub enabled: LPTSTR,
-    pub tip: LPTSTR,
-    pub title: LPTSTR,
-    pub isBubble: LPTSTR,
-    pub textcolor: LPTSTR,
-    pub backcolor: LPTSTR,
-    pub icon: LPTSTR,
-    pub maxwidth: LPTSTR,
-    pub transparency: LPTSTR,
-    pub delayvisible: LPTSTR,
-    pub delayinitial: LPTSTR,
-    pub hasclosebutton: LPTSTR,
-    pub position: LPTSTR
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWFILLBRUSH {
-    pub color: LPTSTR,
-    pub transparency: LPTSTR,
-    pub gradientcolor: LPTSTR,
-    pub gradienttransparency: LPTSTR,
-    pub gradientangle: LPTSTR,
-    pub brushmode: LPTSTR,
-    pub gradientrepetitionmode: LPTSTR,
-    pub gradientrepetitioncount: LPTSTR,
-    pub gradientrepetitionlength: LPTSTR,
-    pub gradientfocus: LPTSTR,
-    pub gradientscale: LPTSTR,
-    pub gradientspread: LPTSTR
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOBK {
-    pub mode: LPTSTR,
-    pub fillBrush: DWFILLBRUSH
-}
-pub type PDWINFOBK = *mut DWINFOBK;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOBR {
-    pub color: LPTSTR,
-    pub hatch: LPTSTR
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOFONT {
-    pub height: LPTSTR,
-    pub width: LPTSTR,
-    pub weight: LPTSTR,
-    pub italic: LPTSTR,
-    pub underline: LPTSTR,
-    pub strikeout: LPTSTR,
-    pub charset: LPTSTR,
-    pub pitch: LPTSTR,
-    pub family: LPTSTR,
-    pub face: LPTSTR,
-    pub orientation: LPTSTR,
-    pub escapement: LPTSTR
-}
-pub type PDWINFOFONT = *mut DWINFOFONT;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOPEN {
-    pub style: LPTSTR,
-    pub width: LPTSTR,
-    pub color: LPTSTR
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOSORTKEY {
-    pub keyExpr: LPTSTR,
-    pub keySeq: ::std::os::raw::c_uchar
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOTBLSORT {
-    pub keyCount: ::std::os::raw::c_short,
-    pub keys: [DWINFOSORTKEY; 1usize]
-}
-pub type PDWINFOTBLSORT = *mut DWINFOTBLSORT;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOREGION {
-    pub gobs: ::std::os::raw::c_long,
-    pub height: ::std::os::raw::c_long,
-    pub type_: ::std::os::raw::c_short,
-    pub level: ::std::os::raw::c_short,
-    pub item_count: ::std::os::raw::c_short,
-    pub items: *mut LPTSTR,
-    pub pointer: LPTSTR,
-    pub fillBrush: DWFILLBRUSH,
-    pub pSort: PDWINFOTBLSORT,
-    pub newpage: BOOL,
-    pub resetpagecount: BOOL,
-    pub bHeightAuto: BOOL,
-    pub bSuppressHeader: BOOL
-}
-pub type PDWINFOREGION = *mut DWINFOREGION;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOBITMAP {
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub name: LPTSTR,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub effects: DWINFOEFFECTS,
-    pub tooltip: DWINFOTOOLTIP,
-    pub transparentcolor: LPTSTR,
-    pub invert: LPTSTR,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub border: LPTSTR,
-    pub htmlLinkExpr: LPTSTR,
-    pub htmlLinkTargetExpr: LPTSTR,
-    pub htmlLinkArgs: LPTSTR,
-    pub htmlAppendedExpr: LPTSTR,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHideSnake: BOOL,
-    pub AccessibleDescription: LPTSTR,
-    pub AccessibleName: LPTSTR,
-    pub AccessibleRole: ::std::os::raw::c_long,
-    pub bOriginalSize: BOOL,
-    pub tabseq: ::std::os::raw::c_short,
-    pub enabled: LPTSTR,
-    pub bFocusRect: BOOL
-}
-pub type PDWINFOBITMAP = *mut DWINFOBITMAP;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOBLOB {
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub tooltip: DWINFOTOOLTIP,
-    pub table: LPTSTR,
-    pub keyClause: LPTSTR,
-    pub column: LPTSTR,
-    pub template_file: LPTSTR,
-    pub oleclass: LPTSTR,
-    pub clientname: LPTSTR,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub border: LPTSTR,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHideSnake: BOOL,
-    pub AccessibleDescription: LPTSTR,
-    pub AccessibleName: LPTSTR,
-    pub AccessibleRole: ::std::os::raw::c_long,
-    pub fileType: ::std::os::raw::c_long,
-    pub bHeightAuto: BOOL,
-    pub tabseq: ::std::os::raw::c_short,
-    pub enabled: LPTSTR,
-    pub bFocusRect: BOOL,
-    pub bRichAutoSelect: BOOL,
-    pub bRichDisplayOnly: BOOL,
-    pub bRichVScrollBar: BOOL
-}
-pub type PDWINFOBLOB = *mut DWINFOBLOB;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOBUTTON {
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub font: DWINFOFONT,
-    pub effects: DWINFOEFFECTS,
-    pub bk: DWINFOBK,
-    pub tooltip: DWINFOTOOLTIP,
-    pub color: LPTSTR,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub t: LPTSTR,
-    pub accent: LPTSTR,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub filename: LPTSTR,
-    pub action: LPTSTR,
-    pub vTextAlign: LPTSTR,
-    pub hTextAlign: LPTSTR,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bHeightAuto: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHideSnake: BOOL,
-    pub bDefaultPicture: BOOL,
-    pub bSuppressEventProcessing: BOOL,
-    pub bEnabled: BOOL,
-    pub bOriginalSize: BOOL,
-    pub AccessibleDescription: LPTSTR,
-    pub AccessibleName: LPTSTR,
-    pub AccessibleRole: ::std::os::raw::c_long,
-    pub tabseq: ::std::os::raw::c_short,
-    pub enabled: LPTSTR
-}
-pub type PDWINFOBUTTON = *mut DWINFOBUTTON;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOCOL {
-    pub visible: LPTSTR,
-    pub username: LPTSTR,
-    pub format: LPTSTR,
-    pub font: DWINFOFONT,
-    pub effects: DWINFOEFFECTS,
-    pub bk: DWINFOBK,
-    pub tooltip: DWINFOTOOLTIP,
-    pub color: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub alignment: LPTSTR,
-    pub accent: LPTSTR,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub htmlLinkExpr: LPTSTR,
-    pub htmlLinkTargetExpr: LPTSTR,
-    pub htmlLinkArgs: LPTSTR,
-    pub htmlValueIs: LPTSTR,
-    pub htmlAppendedExpr: LPTSTR,
-    pub editstyle: ::std::os::raw::c_long,
-    pub editname: LPTSTR,
-    pub dddw_name: LPTSTR,
-    pub u: editUnion,
-    pub dddw_datacol: LPTSTR,
-    pub edit_format: LPTSTR,
-    pub protect: LPTSTR,
-    pub row_in_detail: ::std::os::raw::c_long,
-    pub dddw_pwidth: ::std::os::raw::c_short,
-    pub editlimit: ::std::os::raw::c_short,
-    pub ci: ::std::os::raw::c_short,
-    pub tabseq: ::std::os::raw::c_short,
-    pub dddw_lines: ::std::os::raw::c_short,
-    pub bitmapname: BOOL,
-    pub edit_bfocusrect: BOOL,
-    pub accelerator: TCHAR,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bHeightAuto: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHideSnake: BOOL,
-    pub colFlags: ::std::os::raw::c_uchar,
-    pub AccessibleDescription: LPTSTR,
-    pub AccessibleName: LPTSTR,
-    pub AccessibleRole: ::std::os::raw::c_long,
-    pub inkatt: DWINKATT,
-    pub inkedit: DWEDITINKEDIT,
-    pub ddcal_props: DDCALENDARPROPS,
-    pub sWidthAuto: ::std::os::raw::c_short
-}
-pub type PDWINFOCOL = *mut DWINFOCOL;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOTCOL {
-    pub username: LPTSTR,
-    pub dbname: LPTSTR,
-    pub pattern: LPTSTR,
-    pub validation_msg: LPTSTR,
-    pub values: LPTSTR,
-    pub compute: LPTSTR,
-    pub initial: LPTSTR,
-    pub length: ::std::os::raw::c_long,
-    pub ci: ::std::os::raw::c_short,
-    pub type_: ::std::os::raw::c_short,
-    pub key: BOOL,
-    pub update: BOOL,
-    pub bCriteriaDialog: BOOL,
-    pub bIdentity: BOOL,
-    pub updatewhereclause: BOOL,
-    pub decimals: ::std::os::raw::c_uchar,
-    pub bBinaryHex: BOOL
-}
-pub type PDWINFOTCOL = *mut DWINFOTCOL;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOCOMPUTE {
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub font: DWINFOFONT,
-    pub effects: DWINFOEFFECTS,
-    pub bk: DWINFOBK,
-    pub tooltip: DWINFOTOOLTIP,
-    pub color: LPTSTR,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub dispsyn: LPTSTR,
-    pub exprsyn: LPTSTR,
-    pub alignment: LPTSTR,
-    pub accent: LPTSTR,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub htmlLinkExpr: LPTSTR,
-    pub htmlLinkTargetExpr: LPTSTR,
-    pub htmlLinkArgs: LPTSTR,
-    pub htmlValueIs: LPTSTR,
-    pub htmlAppendedExpr: LPTSTR,
-    pub iDataType: ::std::os::raw::c_short,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bHeightAuto: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHideSnake: BOOL,
-    pub bCrosstabRepeat: BOOL,
-    pub AccessibleDescription: LPTSTR,
-    pub AccessibleName: LPTSTR,
-    pub AccessibleRole: ::std::os::raw::c_long,
-    pub tabseq: ::std::os::raw::c_short,
-    pub enabled: LPTSTR,
-    pub bFocusRect: BOOL,
-    pub sWidthAuto: ::std::os::raw::c_short
-}
-pub type PDWINFOCOMPUTE = *mut DWINFOCOMPUTE;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOCROSSTAB {
-    pub columns: LPTSTR,
-    pub rows: LPTSTR,
-    pub values: LPTSTR,
-    pub source_names: *mut ::std::os::raw::c_void,
-    pub RowCount: ::std::os::raw::c_long,
-    pub ctFlags: ::std::os::raw::c_uchar,
-    pub AccessibleDescription: LPTSTR,
-    pub AccessibleName: LPTSTR,
-    pub AccessibleRole: ::std::os::raw::c_long
-}
-pub type PDWINFOCROSSTAB = *mut DWINFOCROSSTAB;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct COLEXPR {
-    pub bMatch: BOOL,
-    pub oldLevel: ::std::os::raw::c_short,
-    pub newLevel: ::std::os::raw::c_short
-}
-pub type PCOLEXPR = *mut COLEXPR;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct CROSSMODEL {
-    pub prog: *mut ::std::os::raw::c_void,
-    pub numOldRows: ::std::os::raw::c_short,
-    pub numOldCols: ::std::os::raw::c_short,
-    pub numOldVals: ::std::os::raw::c_short,
-    pub bColChanged: BOOL,
-    pub bValChanged: BOOL,
-    pub bRowChanged: BOOL,
-    pub pColExpr: PCOLEXPR,
-    pub newColumns: *mut ::std::os::raw::c_void,
-    pub newRows: *mut ::std::os::raw::c_void,
-    pub newValues: *mut ::std::os::raw::c_void
-}
-pub type PCROSSMODEL = *mut CROSSMODEL;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOGRAPHDISP {
-    pub font: DWINFOFONT,
-    pub bkcolor: LPTSTR,
-    pub textcolor: LPTSTR,
-    pub align: LPTSTR,
-    pub format: LPTSTR,
-    pub autosize: LPTSTR,
-    pub dsplexpr: LPTSTR
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOGRAPHAXIS {
-    pub autoscale: LPTSTR,
-    pub dsplnlabels: LPTSTR,
-    pub droplines: LPTSTR,
-    pub frame: LPTSTR,
-    pub label: LPTSTR,
-    pub majordiv: LPTSTR,
-    pub majorgrid: LPTSTR,
-    pub majortic: LPTSTR,
-    pub maxval: LPTSTR,
-    pub minval: LPTSTR,
-    pub maxvaldatetime: LPTSTR,
-    pub minvaldatetime: LPTSTR,
-    pub minordiv: LPTSTR,
-    pub minorgrid: LPTSTR,
-    pub minortic: LPTSTR,
-    pub originline: LPTSTR,
-    pub primaryline: LPTSTR,
-    pub roundto: LPTSTR,
-    pub roundtounit: LPTSTR,
-    pub scaletype: LPTSTR,
-    pub scalevalue: LPTSTR,
-    pub secondaryline: LPTSTR,
-    pub shadebackedge: LPTSTR,
-    pub dispattr: DWINFOGRAPHDISP,
-    pub labeldispattr: DWINFOGRAPHDISP
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOGRAPH {
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub grtype: LPTSTR,
-    pub new3drendering: LPTSTR,
-    pub color: LPTSTR,
-    pub backcolor: LPTSTR,
-    pub shadecolor: LPTSTR,
-    pub perspective: LPTSTR,
-    pub rotation: LPTSTR,
-    pub title: LPTSTR,
-    pub tooltip: DWINFOTOOLTIP,
-    pub titledisp: DWINFOGRAPHDISP,
-    pub piedisp: DWINFOGRAPHDISP,
-    pub ax_series: DWINFOGRAPHAXIS,
-    pub ax_category: DWINFOGRAPHAXIS,
-    pub ax_values: DWINFOGRAPHAXIS,
-    pub series: LPTSTR,
-    pub seriessort: LPTSTR,
-    pub category: LPTSTR,
-    pub categorysort: LPTSTR,
-    pub values: LPTSTR,
-    pub spacing: LPTSTR,
-    pub depth: LPTSTR,
-    pub elevation: LPTSTR,
-    pub overlappercent: LPTSTR,
-    pub border: LPTSTR,
-    pub legendType: LPTSTR,
-    pub plotnulldata: LPTSTR,
-    pub legenddisp: DWINFOGRAPHDISP,
-    pub range: ::std::os::raw::c_short,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bSizeToDisplay: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHideSnake: BOOL,
-    pub iSeriesType: ::std::os::raw::c_short,
-    pub iCategoryType: ::std::os::raw::c_short,
-    pub iValuesType: ::std::os::raw::c_short,
-    pub AccessibleDescription: LPTSTR,
-    pub AccessibleName: LPTSTR,
-    pub AccessibleRole: ::std::os::raw::c_long,
-    pub tabseq: ::std::os::raw::c_short,
-    pub enabled: LPTSTR,
-    pub bFocusRect: BOOL
-}
-pub type PDWINFOGRAPH = *mut DWINFOGRAPH;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOGROUPBOX {
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub font: DWINFOFONT,
-    pub effects: DWINFOEFFECTS,
-    pub bk: DWINFOBK,
-    pub tooltip: DWINFOTOOLTIP,
-    pub color: LPTSTR,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub t: LPTSTR,
-    pub accent: LPTSTR,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bHeightAuto: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHideSnake: BOOL,
-    pub bRTOL: BOOL,
-    pub AccessibleDescription: LPTSTR,
-    pub AccessibleName: LPTSTR,
-    pub AccessibleRole: ::std::os::raw::c_long
-}
-pub type PDWINFOGROUPBOX = *mut DWINFOGROUPBOX;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOLINE {
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub pen: DWINFOPEN,
-    pub bk: DWINFOBK,
-    pub tooltip: DWINFOTOOLTIP,
-    pub x1: LPTSTR,
-    pub y1: LPTSTR,
-    pub x2: LPTSTR,
-    pub y2: LPTSTR,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHideSnake: BOOL
-}
-pub type PDWINFOLINE = *mut DWINFOLINE;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOOLE {
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub tooltip: DWINFOTOOLTIP,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub border: LPTSTR,
-    pub target: LPTSTR,
-    pub summary: LPTSTR,
-    pub pBinary: *mut ::std::os::raw::c_void,
-    pub clientname: LPTSTR,
-    pub pOleExtra: *mut ::std::os::raw::c_void,
-    pub type_: ::std::os::raw::c_short,
-    pub activation: INT,
-    pub displaytype: INT,
-    pub contentsallowed: INT,
-    pub linkupdateoptions: INT,
-    pub row: INT,
-    pub isdragtarget: BOOL,
-    pub bOleInsert: BOOL,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHideSnake: BOOL,
-    pub bSizeToDisplay: BOOL,
-    pub AccessibleDescription: LPTSTR,
-    pub AccessibleName: LPTSTR,
-    pub AccessibleRole: ::std::os::raw::c_long,
-    pub tabseq: ::std::os::raw::c_short,
-    pub enabled: LPTSTR,
-    pub bFocusRect: BOOL
-}
-pub type PDWINFOOLE = *mut DWINFOOLE;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOINKPIC {
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub tooltip: DWINFOTOOLTIP,
-    pub table: LPTSTR,
-    pub keyClause: LPTSTR,
-    pub column: LPTSTR,
-    pub bkcolumnName: LPTSTR,
-    pub inkpic_autoerase: BOOL,
-    pub inkpic_bkcolor: ::std::os::raw::c_long,
-    pub inkpic_collectionmode: ::std::os::raw::c_short,
-    pub inkpic_dynrender: BOOL,
-    pub inkpic_editmode: ::std::os::raw::c_short,
-    pub inkpic_enabled: BOOL,
-    pub inkpic_erasermode: ::std::os::raw::c_short,
-    pub inkpic_eraserwidth: ::std::os::raw::c_long,
-    pub inkpic_highcontrastink: BOOL,
-    pub inkpic_inkenabled: BOOL,
-    pub inkpic_marginx: ::std::os::raw::c_long,
-    pub inkpic_marginy: ::std::os::raw::c_long,
-    pub inkpic_pointer: LPTSTR,
-    pub inkpic_picsizemode: ::std::os::raw::c_short,
-    pub ink_antialiased: BOOL,
-    pub ink_ignorepressure: BOOL,
-    pub ink_inkcolor: ::std::os::raw::c_long,
-    pub ink_inkheight: ::std::os::raw::c_long,
-    pub ink_inkwidth: ::std::os::raw::c_long,
-    pub ink_pentip: ::std::os::raw::c_short,
-    pub ink_transparency: ::std::os::raw::c_short,
-    pub ink_fittocurve: LPTSTR,
-    pub ink_rasteroperation: LPTSTR,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub border: LPTSTR,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHideSnake: BOOL,
-    pub AccessibleDescription: LPTSTR,
-    pub AccessibleName: LPTSTR,
-    pub AccessibleRole: ::std::os::raw::c_long,
-    pub row_in_detail: ::std::os::raw::c_short
-}
-pub type PDWINFOINKPIC = *mut DWINFOINKPIC;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOOVAL {
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub pen: DWINFOPEN,
-    pub brush: DWINFOBR,
-    pub bk: DWINFOBK,
-    pub tooltip: DWINFOTOOLTIP,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHideSnake: BOOL
-}
-pub type PDWINFOOVAL = *mut DWINFOOVAL;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFORECT {
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub pen: DWINFOPEN,
-    pub brush: DWINFOBR,
-    pub bk: DWINFOBK,
-    pub tooltip: DWINFOTOOLTIP,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHideSnake: BOOL
-}
-pub type PDWINFORECT = *mut DWINFORECT;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFORRECT {
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub pen: DWINFOPEN,
-    pub brush: DWINFOBR,
-    pub bk: DWINFOBK,
-    pub tooltip: DWINFOTOOLTIP,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub ellipse_width: LPTSTR,
-    pub ellipse_height: LPTSTR,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHeightAuto: BOOL,
-    pub bHideSnake: BOOL
-}
-pub type PDWINFORRECT = *mut DWINFORRECT;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOREPORT {
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub tooltip: DWINFOTOOLTIP,
-    pub criteria: LPTSTR,
-    pub dataobject: LPTSTR,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub border: LPTSTR,
-    pub nestArgs: PDWBNESTARG,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHeightAuto: BOOL,
-    pub bHideSnake: BOOL,
-    pub bNewPage: BOOL,
-    pub bShowBackground: BOOL,
-    pub bTrailFooter: BOOL,
-    pub AccessibleDescription: LPTSTR,
-    pub AccessibleName: LPTSTR,
-    pub AccessibleRole: ::std::os::raw::c_long,
-    pub tabseq: ::std::os::raw::c_short,
-    pub enabled: LPTSTR,
-    pub bFocusRect: BOOL
-}
-pub type PDWINFOREPORT = *mut DWINFOREPORT;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct infoCrossData {
-    pub numLevels: ::std::os::raw::c_short,
-    pub filler: ::std::os::raw::c_short,
-    pub pData: [LPTSTR; 1usize]
-}
-pub type pinfoCrossData = *mut infoCrossData;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct webServiceMetadataStrings {
-    pub m_assembly: LPTSTR,
-    pub m_namespace: LPTSTR,
-    pub m_classname: LPTSTR,
-    pub m_method: LPTSTR,
-    pub m_methoddefinition: LPTSTR,
-    pub m_resultset: LPTSTR,
-    pub m_structurename: LPTSTR,
-    pub m_inputparms: LPTSTR,
-    pub m_WSDL: LPTSTR,
-    pub m_resultsetparm: ::std::os::raw::c_long
-}
-pub type PDWWSMETA = *mut webServiceMetadataStrings;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOUPDATEARG {
-    pub spArgName: LPTSTR,
-    pub spColName: LPTSTR,
-    pub spExpression: LPTSTR,
-    pub ordinal: ::std::os::raw::c_short,
-    pub spColId: ::std::os::raw::c_short,
-    pub spMatch: ::std::os::raw::c_short,
-    pub spInOut: ::std::os::raw::c_short,
-    pub bOriginalValue: BOOL
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOUPDATE {
-    pub type_: ::std::os::raw::c_short,
-    pub spName: LPTSTR,
-    pub ws_MetaData: PDWWSMETA,
-    pub argCount: ::std::os::raw::c_short,
-    pub filler: ::std::os::raw::c_short,
-    pub spArg: [DWINFOUPDATEARG; 1usize]
-}
-pub type PDWINFOUPDATE = *mut DWINFOUPDATE;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOTABLE {
-    pub sort: PDWINFOTBLSORT,
-    pub rargs: PDWBTBLARG,
-    pub updttbl: LPTSTR,
-    pub exprSyn: LPTSTR,
-    pub select: LPTSTR,
-    pub nl: LPTSTR,
-    pub savedata: LPTSTR,
-    pub numCols: ::std::os::raw::c_short,
-    pub type_: ::std::os::raw::c_short,
-    pub update_where: ::std::os::raw::c_short,
-    pub update_keyinplace: BOOL,
-    pub updateable: BOOL,
-    pub bRetrieveAsreq: BOOL,
-    pub bRetrieveMem: BOOL,
-    pub pCrossData: pinfoCrossData,
-    pub pUpdateInsert: PDWINFOUPDATE,
-    pub pUpdateDelete: PDWINFOUPDATE,
-    pub pUpdateUpdate: PDWINFOUPDATE,
-    pub m_assembly: LPTSTR,
-    pub m_namespace: LPTSTR,
-    pub m_classname: LPTSTR,
-    pub m_directory: LPTSTR,
-    pub m_method: LPTSTR,
-    pub m_methoddefinition: LPTSTR,
-    pub m_structurename: LPTSTR,
-    pub m_inputparms: LPTSTR,
-    pub m_WSDL: LPTSTR,
-    pub m_resultsetparm: INT
-}
-pub type PDWINFOTABLE = *mut DWINFOTABLE;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOTEXT {
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub font: DWINFOFONT,
-    pub effects: DWINFOEFFECTS,
-    pub bk: DWINFOBK,
-    pub tooltip: DWINFOTOOLTIP,
-    pub color: LPTSTR,
-    pub align: LPTSTR,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub t: LPTSTR,
-    pub accent: LPTSTR,
-    pub tag: LPTSTR,
-    pub pointer: LPTSTR,
-    pub htmlLinkExpr: LPTSTR,
-    pub htmlLinkTargetExpr: LPTSTR,
-    pub htmlLinkArgs: LPTSTR,
-    pub htmlValueIs: LPTSTR,
-    pub htmlAppendedExpr: LPTSTR,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bHeightAuto: BOOL,
-    pub bSlideLeft: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHideSnake: BOOL,
-    pub AccessibleDescription: LPTSTR,
-    pub AccessibleName: LPTSTR,
-    pub AccessibleRole: ::std::os::raw::c_long,
-    pub tabseq: ::std::os::raw::c_short,
-    pub enabled: LPTSTR,
-    pub bFocusRect: BOOL
-}
-pub type PDWINFOTEXT = *mut DWINFOTEXT;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFOWPF {
-    pub tooltip: DWINFOTOOLTIP,
-    pub visible: LPTSTR,
-    pub obj_name: LPTSTR,
-    pub x: LPTSTR,
-    pub y: LPTSTR,
-    pub width: LPTSTR,
-    pub height: LPTSTR,
-    pub xaml: LPTSTR,
-    pub contentProperty: LPTSTR,
-    pub itemsProperty: LPTSTR,
-    pub table: LPTSTR,
-    pub keyClause: LPTSTR,
-    pub column: LPTSTR,
-    pub AccessibleDescription: LPTSTR,
-    pub AccessibleName: LPTSTR,
-    pub AccessibleRole: ::std::os::raw::c_long,
-    pub pointer: LPTSTR,
-    pub bResizeable: BOOL,
-    pub bMoveable: BOOL,
-    pub bSlideUpAllAbove: BOOL,
-    pub bSlideUpDirectlyAbove: BOOL,
-    pub bHideSnake: BOOL,
-    pub ci: ::std::os::raw::c_short,
-    pub tabseq: ::std::os::raw::c_short,
-    pub enabled: LPTSTR,
-    pub bFocusRect: BOOL
-}
-pub type PDWINFOWPF = *mut DWINFOWPF;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct gentreeLevelStruct {
-    pub ExpandTreeNodeIconName: LPTSTR,
-    pub CollapseTreeNodeIconName: LPTSTR,
-    pub ExpandTreeNodeIconTransColor: ::std::os::raw::c_long,
-    pub CollapseTreeNodeIconTransColor: ::std::os::raw::c_long,
-    pub pNext: *mut gentreeLevelStruct,
-    pub pPrev: *mut gentreeLevelStruct,
-    pub ExpandTreeNodeIconName_expr: LPTSTR,
-    pub CollapseTreeNodeIconName_expr: LPTSTR,
-    pub ExpandTreeNodeIconTransColor_expr: LPTSTR,
-    pub CollapseTreeNodeIconTransColor_expr: LPTSTR
-}
-pub type pgen_treeLevel = *mut gentreeLevelStruct;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct gen_treeInfo {
-    pub MaxLevel: ::std::os::raw::c_long,
-    pub bShowLines: BOOL,
-    pub bConnectLeafNodes: BOOL,
-    pub Indent: ::std::os::raw::c_long,
-    pub bShowTreeNodeIcon: BOOL,
-    pub TreeLevels: pgen_treeLevel,
-    pub pLastLevel: pgen_treeLevel,
-    pub lDefaultExpandToLevel: ::std::os::raw::c_long,
-    pub StateIconAlignMode: SHORT,
-    pub bSelectNodeByMouse: BOOL,
-    pub bRtoLLayout: BOOL
-}
-pub type pgen_treeInfo = *mut gen_treeInfo;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWINFO {
-    pub prog: *mut ::std::os::raw::c_void,
-    pub sa: ppbstg_anchor,
-    pub subpool: pbstg_subpool,
-    pub stglist: *mut ::std::os::raw::c_void,
-    pub rgnlist: *mut ::std::os::raw::c_void,
-    pub currentGob: ::std::os::raw::c_long,
-    pub curCol: ::std::os::raw::c_short,
-    pub pTree: pgen_treeInfo
-}
-pub type PDWINFO = *mut DWINFO;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWEXPRCOL {
-    pub coltype: ::std::os::raw::c_uchar,
-    pub bColUsed: ::std::os::raw::c_uchar,
-    pub colname: LPTSTR,
-    pub colid: ::std::os::raw::c_long,
-    pub collen: ::std::os::raw::c_long
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWEXPRTEST {
-    pub sa: ppbstg_anchor,
-    pub subpool: pbstg_subpool,
-    pub obthis: *mut ::std::os::raw::c_void,
-    pub syntax: LPTSTR,
-    pub collen: ::std::os::raw::c_long,
-    pub numCols: ::std::os::raw::c_short,
-    pub numLevels: ::std::os::raw::c_short,
-    pub coltype: ::std::os::raw::c_uchar,
-    pub names: *mut ::std::os::raw::c_void,
-    pub pGobRunHash: *mut ::std::os::raw::c_void,
-    pub pGobPaintHash: *mut ::std::os::raw::c_void,
-    pub pArgRun: *mut ::std::os::raw::c_void,
-    pub pArgPaint: *mut ::std::os::raw::c_void,
-    pub errmsg: [TCHAR; 256usize],
-    pub pWebUserFunctionCallBack: *mut ::std::os::raw::c_void,
-    pub cols: [DWEXPRCOL; 1usize]
-}
-pub type PDWEXPRTEST = *mut DWEXPRTEST;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWCOLEXT {
-    pub pExtInfo: *mut ::std::os::raw::c_void,
-    pub bBold: BOOL
-}
-pub type PDWCOLEXT = *mut DWCOLEXT;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWDATAEXT {
-    pub prog: *mut ::std::os::raw::c_void,
-    pub pModel: PCROSSMODEL,
-    pub hdrFont: PDWINFOFONT,
-    pub hdrBk: PDWINFOBK,
-    pub hdrColor: LPTSTR,
-    pub hdrBorder: LPTSTR,
-    pub hdrHeight: ::std::os::raw::c_long,
-    pub dataFont: PDWINFOFONT,
-    pub dataBk: PDWINFOBK,
-    pub dataColor: LPTSTR,
-    pub dataHeight: ::std::os::raw::c_long,
-    pub dataBorder: LPTSTR
-}
-pub type PDWDATAEXT = *mut DWDATAEXT;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWDATACOL {
-    pub name: [TCHAR; 512usize],
-    pub alias: [TCHAR; 512usize],
-    pub dwname: [TCHAR; 512usize],
-    pub coltype: ::std::os::raw::c_uchar,
-    pub collen: ::std::os::raw::c_long,
-    pub lpHeader: LPTSTR,
-    pub decimals: ::std::os::raw::c_short,
-    pub width: ::std::os::raw::c_long,
-    pub expression: LPTSTR,
-    pub pColExt: PDWCOLEXT,
-    pub key: BOOL
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DWDATATABLE {
-    pub pDataExt: PDWDATAEXT,
-    pub numCols: ::std::os::raw::c_short,
-    pub m_assembly: LPTSTR,
-    pub m_namespace: LPTSTR,
-    pub m_classname: LPTSTR,
-    pub m_method: LPTSTR,
-    pub m_methoddefinition: LPTSTR,
-    pub m_structurename: LPTSTR,
-    pub m_inputparms: LPTSTR,
-    pub m_WSDL: LPTSTR,
-    pub m_resultsetparm: INT,
-    pub cols: [DWDATACOL; 1usize]
-}
-pub type PDWDATATABLE = *mut DWDATATABLE;
 pub type PDBI_COMMAND = *mut DBI_Command;
 pub type DBI_FUNC =
     ::std::option::Option<unsafe extern "C" fn(arg1: PDBI_COMMAND) -> *mut ::std::os::raw::c_void>;
@@ -3580,147 +2116,6 @@ pub type DBI_FUNC =
 pub struct CPB_DBI_Connection {
     _unused: [u8; 0]
 }
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct CPB_DBI_TableSchema {
-    _unused: [u8; 0]
-}
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DBI_PrimKy {
-    pub cName: [TCHAR; 129usize],
-    pub iNumberOfColumns: INT,
-    pub iColumns: [INT; 32usize],
-    pub lpParentTable: *mut DBI_Table,
-    pub szCreator: [TCHAR; 129usize],
-    pub bClustered: ::std::os::raw::c_uchar,
-    pub filler: [TCHAR; 31usize]
-}
-pub type PDBI_PRIMARY_KEY = *mut DBI_PrimKy;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DBI_ForeignKyOptions {
-    pub wOptionCount: WORD,
-    pub lpTitle: LPTSTR,
-    pub lpOptions: LPTSTR,
-    pub DefOptionNumber: WORD
-}
-pub type PDBI_FOREIGNKYOPTIONS = *mut DBI_ForeignKyOptions;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DBI_Table {
-    pub cTableName: [TCHAR; 129usize],
-    pub ObjId: ::std::os::raw::c_long,
-    pub lpszOwner: LPTSTR,
-    pub iOwnerId: INT,
-    pub lpszComments: LPTSTR,
-    pub iNumberOfColumns: INT,
-    pub iNumberOfKeys: INT,
-    pub fTableFont: [LOGFONT; 3usize],
-    pub pTableColumnList: *mut shlist,
-    pub pTableIndexList: *mut shlist,
-    pub lpszOldTableName: LPTSTR,
-    pub pTableInfo: *mut ::std::os::raw::c_void,
-    pub pPrimaryKy: PDBI_PRIMARY_KEY,
-    pub pForeignKyList: *mut shlist,
-    pub filler2: [TCHAR; 130usize],
-    pub bView: BOOL,
-    pub bSystem: BOOL,
-    pub bUniqueKeyConstraint: BOOL,
-    pub bHaveDict: BOOL,
-    pub bAlias: BOOL,
-    pub bTempTable: BOOL,
-    pub bProxy: BOOL,
-    pub bCISProxy: BOOL,
-    pub lpUserData1: *mut ::std::os::raw::c_void,
-    pub lpszQualifier: LPTSTR,
-    pub lpszWebMethod: LPTSTR,
-    pub lpszBaseObject: LPTSTR,
-    pub lTimeout: ::std::os::raw::c_long,
-    pub pTriggerList: *mut shlist,
-    pub filler: [TCHAR; 32usize]
-}
-pub type DBI_TBLPTR = *mut DBI_Table;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct Col_ExtractSeq {
-    pub lpszColumnName: LPTSTR,
-    pub szTableName: [TCHAR; 129usize],
-    pub szOwnerName: [TCHAR; 129usize],
-    pub bAsc: BOOL,
-    pub szAliasName: [TCHAR; 129usize],
-    pub bComputed: BOOL,
-    pub szDBName: [TCHAR; 129usize],
-    pub filler: [TCHAR; 31usize]
-}
-pub type PCOL_EXTRACT_SEQ = *mut Col_ExtractSeq;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DBI_Ident {
-    pub szColumnName: [TCHAR; 129usize],
-    pub szTableName: [TCHAR; 129usize],
-    pub szOwnerName: [TCHAR; 129usize],
-    pub lpIdentPtr: LPTSTR,
-    pub bTable: BOOL,
-    pub bCompute: BOOL,
-    pub szDBName: [TCHAR; 129usize]
-}
-pub type PDBI_IDENT = *mut DBI_Ident;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DBI_Proc {
-    pub cProcName: [TCHAR; 256usize],
-    pub ObjId: ::std::os::raw::c_long,
-    pub lpszOwner: LPTSTR,
-    pub iOwnerId: INT,
-    pub iNumber: INT,
-    pub bSystem: BOOL,
-    pub iReturnValuePBType: UINT,
-    pub bHasReturnValue: BOOL,
-    pub lpszalias: LPTSTR,
-    pub iDbId: INT,
-    pub bTrigger: BOOL,
-    pub lpParentTable: *mut DBI_Table,
-    pub pText: LPTSTR,
-    pub bArray: BOOL,
-    pub filler: [TCHAR; 36usize]
-}
-pub type DBI_PROCPTR = *mut DBI_Proc;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DBI_Event {
-    pub cEventName: [TCHAR; 256usize],
-    pub ObjId: ::std::os::raw::c_long,
-    pub lpszOwner: LPTSTR,
-    pub cEnabled: TCHAR,
-    pub cLocation: TCHAR,
-    pub cEventType: [TCHAR; 30usize],
-    pub pAction: LPTSTR,
-    pub pExtAction: LPTSTR,
-    pub pCondition: LPTSTR,
-    pub pRemarks: LPTSTR,
-    pub pGenSyntax: LPTSTR,
-    pub pScheduleList: *mut shlist,
-    pub filler: [TCHAR; 8usize]
-}
-pub type DBI_EVENTPTR = *mut DBI_Event;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DBI_Outer {
-    pub lpFirstJoin: LPTSTR,
-    pub lpSecondJoin: LPTSTR,
-    pub lpOperator: LPTSTR,
-    pub lpOuterJoin: LPTSTR,
-    pub lpBuffer: LPTSTR,
-    pub lBufferSize: ::std::os::raw::c_long,
-    pub lpFirstTable: LPTSTR,
-    pub lpSecondTable: LPTSTR,
-    pub lpFirstAlias: LPTSTR,
-    pub lpSecondAlias: LPTSTR,
-    pub iVersionNumber: ::std::os::raw::c_int,
-    pub filler: [TCHAR; 54usize]
-}
-pub type PDBI_OUTER = *mut DBI_Outer;
 #[repr(C, packed)]
 #[derive(Copy, Clone)]
 pub struct DBI_Bind {
@@ -3736,19 +2131,6 @@ pub struct DBI_Bind {
     pub filler: [TCHAR; 32usize]
 }
 pub type PDBI_BIND = *mut DBI_Bind;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct CacheEntry {
-    pub lpszSqlStatement: LPTSTR,
-    pub pDescribeList: *mut shlist,
-    pub pInputBindList: *mut shlist,
-    pub lpCursor: LPVOID,
-    pub cHits: ULONG,
-    pub lParam1: ULONG,
-    pub wParam1: WPARAM,
-    pub filler: [TCHAR; 2usize]
-}
-pub type pCacheEntry = *mut CacheEntry;
 #[repr(C, packed)]
 #[derive(Copy, Clone)]
 pub struct CacheList {
@@ -3867,48 +2249,6 @@ pub struct DBI_Command {
 }
 #[repr(C, packed)]
 #[derive(Copy, Clone)]
-pub struct DBI_ParmBlk {
-    pub lpKey: LPTSTR,
-    pub lpValue: LPTSTR,
-    pub lValue: ::std::os::raw::c_long,
-    pub filler: [TCHAR; 32usize]
-}
-pub type PDBI_PARMBLK = *mut DBI_ParmBlk;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct DBI_Signon {
-    pub pOldCommandBlk: PDBI_COMMAND,
-    pub lpszDbms: LPTSTR,
-    pub lpszServerName: LPTSTR,
-    pub lpszLogId: LPTSTR,
-    pub lpszLogPassword: LPTSTR,
-    pub lpszDatabaseName: LPTSTR,
-    pub lpszUserId: LPTSTR,
-    pub lpszUserPassword: LPTSTR,
-    pub lpszAppName: LPTSTR,
-    pub nConnectStep: ::std::os::raw::c_short,
-    pub hParentWnd: HWND,
-    pub lpszLock: LPTSTR,
-    pub lpszDbParm: LPTSTR,
-    pub stgThis: ppbstg_anchor,
-    pub bReadOnly: ::std::os::raw::c_uchar,
-    pub bNoPBCatalog: ::std::os::raw::c_uchar,
-    pub filler: [TCHAR; 63usize]
-}
-pub type PDBI_SIGNON = *mut DBI_Signon;
-pub type DBI_DLGPROC =
-    ::std::option::Option<unsafe extern "C" fn(arg1: HWND, arg2: UINT, arg3: WPARAM, arg4: LPARAM) -> BOOL>;
-pub mod DBI_PROCFILTER {
-    pub type Type = ::std::os::raw::c_int;
-    pub const DBI_PROCINFO_ALL: Type = 0;
-    pub const DBI_PROCINFO_RESULTSET: Type = 1;
-    pub const DBI_PROCINFO_NO_RESULTSET: Type = 2;
-}
-pub type EXPLODESTAR_FUNC = ::std::option::Option<
-    unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: PCOL_EXTRACT_SEQ, arg3: *mut shlist, arg4: *mut shlist)
->;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
 pub struct rtdb_statement {
     pub bBindSelectBuffer: SHORT,
     pub risc_padding: SHORT,
@@ -3984,7 +2324,7 @@ pub mod ob_error_return {
 pub use self::ob_error_return::Type as OB_ERROR_RETURN;
 extern crate libloading;
 pub struct Api {
-    __library: ::libloading::Library,
+    __library: PBLibrary,
     pub pbstg_begin: unsafe extern "C" fn(buffer: USHORT) -> ppbstg_anchor,
     pub pbstg_begin_allocflags: unsafe extern "C" fn(buffer: USHORT, lAllocFlags: UINT) -> ppbstg_anchor,
     pub pbstg_begin_nofast: unsafe extern "C" fn(buffer: USHORT) -> ppbstg_anchor,
@@ -3992,10 +2332,6 @@ pub struct Api {
     pub pbstg_free_pool: unsafe extern "C" fn(pthis: ppbstg_anchor, subPool: pbstg_subpool),
     pub pbstg_new_pool: unsafe extern "C" fn(pthis: ppbstg_anchor) -> pbstg_subpool,
     pub pbstg_new_pool_nofast: unsafe extern "C" fn(pthis: ppbstg_anchor) -> pbstg_subpool,
-    pub pbstg_new_pool_with_size:
-        unsafe extern "C" fn(pthis: ppbstg_anchor, page_size: USHORT) -> pbstg_subpool,
-    pub pbstg_new_pool_with_size_nofast:
-        unsafe extern "C" fn(pthis: ppbstg_anchor, page_size: USHORT) -> pbstg_subpool,
     pub pbstg_set_pool_name:
         unsafe extern "C" fn(pthis: ppbstg_anchor, subPool: pbstg_subpool, lpstrName: LPTSTR),
     pub pbstg_set_poolpagesize: unsafe extern "C" fn(pthis: ppbstg_anchor, pagesize: ULONG) -> BOOL,
@@ -4005,7 +2341,6 @@ pub struct Api {
         lpFile: LPTSTR
     ) -> ::std::os::raw::c_short,
     pub pbstg_stat: unsafe extern "C" fn(pthis: ppbstg_anchor, stat: *mut pbstg_statistics),
-    pub pbstg_shrink: unsafe extern "C" fn(pThis: ppbstg_anchor),
     pub pbstg_nextGeneration: unsafe extern "C" fn() -> ::std::os::raw::c_long,
     pub pbstg_dumpLeaks: unsafe extern "C" fn(generation: ::std::os::raw::c_long),
     pub pbstg_dumpHeap: unsafe extern "C" fn(),
@@ -4077,7 +2412,6 @@ pub struct Api {
     pub pbstg_dde_get_handle: unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> GLOBALHANDLE,
     pub pbstg_dde_lock: unsafe extern "C" fn(arg1: GLOBALHANDLE) -> *mut ::std::os::raw::c_void,
     pub pbstg_dde_unlock: unsafe extern "C" fn(arg1: GLOBALHANDLE),
-    pub pbstg_dde_strdup: unsafe extern "C" fn(string: LPTSTR) -> LPTSTR,
     pub pbstg_huge_memcmp: unsafe extern "C" fn(
         v1: *mut ::std::os::raw::c_void,
         v2: *mut ::std::os::raw::c_void,
@@ -4103,41 +2437,6 @@ pub struct Api {
     pub pbstg_huge_strlen: unsafe extern "C" fn(s: *mut TCHAR) -> ULONG,
     pub pbstg_huge_strncpy: unsafe extern "C" fn(s: *mut TCHAR, s2: *mut TCHAR, count: ULONG) -> *mut TCHAR,
     pub pbstg_huge_strstr: unsafe extern "C" fn(s: *mut TCHAR, s2: *mut TCHAR) -> *mut TCHAR,
-    pub OS_UtilGetProfInt: unsafe extern "C" fn(lpSection: LPCTSTR, lpKey: LPCTSTR, nDefault: INT) -> INT,
-    pub OS_UtilGetProfStr: unsafe extern "C" fn(
-        lpSection: LPCTSTR,
-        lpKey: LPCTSTR,
-        lpDefault: LPCTSTR,
-        lpReturnedStr: LPTSTR,
-        nSize: INT
-    ) -> INT,
-    pub OS_UtilPutProfStr: unsafe extern "C" fn(pSection: LPCTSTR, pKey: LPCTSTR, pValue: LPCTSTR) -> INT,
-    pub OS_NetworkGetProfInt: unsafe extern "C" fn(lpSection: LPTSTR, lpKey: LPTSTR, nDefault: INT) -> INT,
-    pub OS_NetworkGetProfStr: unsafe extern "C" fn(
-        lpSection: LPTSTR,
-        lpKey: LPTSTR,
-        lpDefault: LPTSTR,
-        lpReturnedStr: LPTSTR,
-        nSize: INT
-    ) -> INT,
-    pub OS_NetworkPutProfStr: unsafe extern "C" fn(pSection: LPTSTR, pKey: LPTSTR, pValue: LPTSTR) -> INT,
-    pub OS_NetworkSharedProfileAccessible: unsafe extern "C" fn() -> INT,
-    pub OS_UtilGetInitPath: unsafe extern "C" fn(pBuff: LPTSTR, nBuffLen: INT, pName: LPTSTR) -> LPTSTR,
-    pub OS_UtilPutInitPath: unsafe extern "C" fn(pBuff: LPTSTR) -> BOOL,
-    pub UtilIniFile:
-        unsafe extern "C" fn(lpszFileNameBuf: LPTSTR, cbFileNameBufSize: WORD, bCheck: BOOL) -> LPTSTR,
-    pub FDCC_Get_Registry_Entry:
-        unsafe extern "C" fn(pEntryname: LPTSTR, pValue: LPTSTR, nBuffLen: INT, pToolName: LPTSTR) -> DWORD,
-    pub FDCC_Get_CSIDL_Path: unsafe extern "C" fn(
-        CSIDL_Value: INT,
-        pPath: LPTSTR,
-        nBuffLen: INT,
-        bWithSuffix: BOOL,
-        bCreate: BOOL
-    ) -> DWORD,
-    pub FDCC_Create_Registry_Entry: unsafe extern "C" fn(pEntryName: LPTSTR, pValue: LPTSTR) -> BOOL,
-    pub FDCC_Get_Install_Location: unsafe extern "C" fn(pValue: LPTSTR, nBuffLen: INT, iSuffix: INT) -> DWORD,
-    pub FDCC_New_INI_Installed: unsafe extern "C" fn(pNewIniFileName: LPTSTR) -> BOOL,
     pub pbstg_unicodestrdup:
         unsafe extern "C" fn(sa: ppbstg_anchor, pwsz: LPCWSTR, subpool: pbstg_subpool) -> LPWSTR,
     pub pbstg_unicodestr_build: unsafe extern "C" fn(
@@ -4162,27 +2461,8 @@ pub struct Api {
     pub pbstg_printabletostr: unsafe extern "C" fn(dest: LPTSTR, source: LPCSTR) -> LPTSTR,
     pub pbstg_printabletostrdup:
         unsafe extern "C" fn(pthis: ppbstg_anchor, pasz: LPCSTR, subpool: pbstg_subpool) -> LPTSTR,
-    pub PBUNI_memchr: unsafe extern "C" fn(lpszString: LPTSTR, cToFind: TCHAR, ulLength: ULONG) -> LPTSTR,
     pub pbstg_lchrcmp: unsafe extern "C" fn(c1: TCHAR, c2: TCHAR) -> INT,
     pub pbstg_lchrcmpi: unsafe extern "C" fn(c1: TCHAR, c2: TCHAR) -> INT,
-    pub os_vabuild_start:
-        unsafe extern "C" fn(stgthis: ppbstg_anchor, pStackFrame: pos_stackgrowblock, subpool: pbstg_subpool),
-    pub os_vabuild_ptrarg: unsafe extern "C" fn(
-        stgthis: ppbstg_anchor,
-        pStackFrame: pos_stackgrowblock,
-        argument: *mut ::std::os::raw::c_void
-    ),
-    pub os_vabuild_end: unsafe extern "C" fn(
-        stgthis: ppbstg_anchor,
-        pStackFrame: pos_stackgrowblock,
-        frame_len: *mut UINT
-    ) -> *mut ::std::os::raw::c_void,
-    pub os_vabuild_add: unsafe extern "C" fn(
-        stgthis: ppbstg_anchor,
-        pStackFrame: pos_stackgrowblock,
-        size: UINT,
-        arg: *mut ::std::os::raw::c_void
-    ),
     pub sh_dbg_console_init: unsafe extern "C" fn(),
     pub sh_dbg_console_out: unsafe extern "C" fn(string: LPTSTR),
     pub sh_dbg_console_lock: unsafe extern "C" fn(),
@@ -4209,7 +2489,6 @@ pub struct Api {
     pub sh_dbg_query: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT,
     pub sh_dbg_is_hdr_on: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS) -> INT,
     pub sh_dbg_is_indent_on: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS) -> INT,
-    pub osAssert: unsafe extern "C" fn(arg1: LPTSTR, arg2: LPTSTR, arg3: ::std::os::raw::c_int),
     pub shlist_delete: unsafe extern "C" fn(self_: *mut shlist),
     pub shlist_deleteFree: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
     pub shlist_get_next: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
@@ -4284,11 +2563,9 @@ pub struct Api {
     ) -> *mut ::std::os::raw::c_void,
     pub ob_set_session_icontext:
         unsafe extern "C" fn(obthis: POB_THIS, pNewContext: *mut ::std::os::raw::c_void),
-    pub ob_set_main_obthis: unsafe extern "C" fn(obthis: POB_THIS) -> BOOL,
     pub rt_move_thread: unsafe extern "C" fn(rtthis: POB_THIS) -> BOOL,
     pub rt_clear_thread: unsafe extern "C" fn(),
     pub rt_get_current_this: unsafe extern "C" fn() -> POB_THIS,
-    pub rt_set_current_this: unsafe extern "C" fn(arg1: POB_THIS) -> BOOL,
     pub rt_add_task: unsafe extern "C" fn(rtthis: POB_THIS) -> BOOL,
     pub rt_free_task: unsafe extern "C" fn() -> BOOL,
     pub rt_get_current_task_info: unsafe extern "C" fn(info_pos: INT) -> *mut ::std::os::raw::c_void,
@@ -4323,19 +2600,9 @@ pub struct Api {
         arg1: *mut shhash,
         arg2: *mut ::std::os::raw::c_void
     ) -> *mut ::std::os::raw::c_void,
-    pub shhash_search_arg: unsafe extern "C" fn(
-        arg1: *mut shhash,
-        arg2: *mut ::std::os::raw::c_void,
-        arg3: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void,
     pub shhash_search_unique: unsafe extern "C" fn(
         pThis: *mut shhash,
         key: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void,
-    pub shhash_search_unique_arg: unsafe extern "C" fn(
-        pThis: *mut shhash,
-        key: *mut ::std::os::raw::c_void,
-        arg: *mut ::std::os::raw::c_void
     ) -> *mut ::std::os::raw::c_void,
     pub shhash_searchNext: unsafe extern "C" fn(
         arg1: *mut shhash,
@@ -4350,13 +2617,6 @@ pub struct Api {
         data: *mut ::std::os::raw::c_void,
         trav_func: PASCALFAR_INT_PROC
     ) -> BOOL,
-    pub obAllocDebug: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        addr: *mut ::std::os::raw::c_void,
-        len: ULONG,
-        subpool: OB_SUBPOOL
-    ) -> *mut ::std::os::raw::c_void,
-    pub obFreeDebug: unsafe extern "C" fn(obthis: POB_THIS, addr: *mut ::std::os::raw::c_void),
     pub ob_add_const_data: unsafe extern "C" fn(
         obthis: POB_THIS,
         conpool: POB_CONPOOL,
@@ -4365,9 +2625,6 @@ pub struct Api {
         nitems: UINT,
         len: ULONG
     ) -> OB_CONST_REF,
-    pub parse_stringvalue_hash: unsafe extern "C" fn(data: *mut ::std::os::raw::c_void) -> LPTSTR,
-    pub obconpool_stringvalue_del:
-        unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void, arg2: *mut ::std::os::raw::c_void) -> BOOL,
     pub ob_looksym_keyfunc: unsafe extern "C" fn(
         pDataNode: *mut ::std::os::raw::c_void,
         tobthis: *mut ::std::os::raw::c_void
@@ -4410,11 +2667,6 @@ pub struct Api {
         freeData: BOOL,
         initFn: PNARRAY_INIT_FN
     ) -> *mut tag_OB_NARRAY,
-    pub ob_narray_dynamic_item_init_callback: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        dynArray: *mut tag_OB_DYNARRAY,
-        item: *mut ::std::os::raw::c_void
-    ) -> BOOL,
     pub ob_set_arraydef: unsafe extern "C" fn(
         obthis: POB_THIS,
         arraydef: POB_ARRAYDEF,
@@ -4496,7 +2748,6 @@ pub struct Api {
     pub shSetDecFractions: unsafe extern "C" fn(d: PSH_DEC, n: SHORT),
     pub shSetDecNegative: unsafe extern "C" fn(d: PSH_DEC, n: BOOL),
     pub shDecSetOverflow: unsafe extern "C" fn(dec: PSH_DEC, neg: BOOL) -> BOOL,
-    pub ConvertOldDecToString: unsafe extern "C" fn(s: LPTSTR, pAddress: *mut OLD_DEC) -> LPTSTR,
     pub shdtDayName: unsafe extern "C" fn(w_day: ::std::os::raw::c_short, lpName: LPTSTR) -> BOOL,
     pub shdtDayOfWeek: unsafe extern "C" fn(t: PSH_TIME) -> ::std::os::raw::c_int,
     pub shdtBuildTime: unsafe extern "C" fn(
@@ -4601,9 +2852,6 @@ pub struct Api {
     pub ob_get_no_fields: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> ULONG,
     pub ob_get_parent_obinst: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> OB_INST_ID,
     pub ob_get_first_user_field: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> ULONG,
-    pub ob_group_is_normalized_window: unsafe extern "C" fn(obthis: POB_THIS, obInst: OB_INST_ID) -> BOOL,
-    pub ob_group_set_normalized_window:
-        unsafe extern "C" fn(obthis: POB_THIS, obInst: OB_INST_ID, bValue: BOOL),
     pub ob_get_field_type:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> OB_CLASS_ID,
     pub ob_get_int_field: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> INT,
@@ -4707,7 +2955,6 @@ pub struct Api {
         no_items: UINT,
         bCreateNewLoader: BOOL
     ) -> INT,
-    pub ob_add_liblist: unsafe extern "C" fn(obthis: POB_THIS, lib_list: *mut LPTSTR, no_items: UINT) -> INT,
     pub ob_get_liblist: unsafe extern "C" fn(obthis: POB_THIS, no_items: *mut UINT) -> *mut LPTSTR,
     pub ob_set_default_appl:
         unsafe extern "C" fn(obthis: POB_THIS, lib_name: LPTSTR, appl_group_name: LPTSTR),
@@ -4742,7 +2989,6 @@ pub struct Api {
         bSaveNormalize: BOOL
     ) -> INT,
     pub ob_load_group_source: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> INT,
-    pub ob_reload_group_source: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> INT,
     pub ob_rename_group:
         unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, new_name: LPTSTR) -> INT,
     pub ob_move_group:
@@ -4895,7 +3141,6 @@ pub struct Api {
     pub ob_is_inh_from_user_class: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL,
     pub ob_get_sec_class_ancestor:
         unsafe extern "C" fn(obthis: POB_THIS, sec_class: OB_CLASS_HNDL) -> OB_CLASS_HNDL,
-    pub obIsClassAutoinstantiate: unsafe extern "C" fn(obThis: POB_THIS, obClassHndl: OB_CLASS_HNDL) -> BOOL,
     pub ob_is_class_enum: unsafe extern "C" fn(obThis: POB_THIS, obClassHndl: OB_CLASS_HNDL) -> BOOL,
     pub ob_new_event: unsafe extern "C" fn(
         obthis: POB_THIS,
@@ -5229,7 +3474,6 @@ pub struct Api {
     ) -> POB_FUNCCALL_INFO,
     pub ob_del_funccall_info: unsafe extern "C" fn(obthis: POB_THIS, funccall_info: POB_FUNCCALL_INFO),
     pub ob_link_project: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> INT,
-    pub ob_get_runtime_group_hndl: unsafe extern "C" fn(obthis: POB_THIS) -> OB_GROUP_HNDL,
     pub ob_check_for_locked_menu: unsafe extern "C" fn(obthis: POB_THIS),
     pub ob_create_obinst: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_INST_ID,
     pub ob_instantiate_child_object: unsafe extern "C" fn(
@@ -5263,21 +3507,6 @@ pub struct Api {
         pNumPBD: *mut ULONG,
         ppErrorMessage: *mut LPTSTR
     ) -> INT,
-    pub CreatePBITypeDef: unsafe extern "C" fn(
-        pName: *mut PBIString,
-        pLibraryList: *mut PBIString,
-        ppTypeDef: *mut *mut PBITypeDef
-    ) -> HRESULT,
-    pub CreatePBIClassDef: unsafe extern "C" fn(
-        pName: *mut PBIString,
-        pLibraryList: *mut PBIString,
-        ppClassDef: *mut *mut PBIClassDef
-    ) -> HRESULT,
-    pub CreatePBIScriptDef: unsafe extern "C" fn(
-        pName: *mut PBIString,
-        pLibraryList: *mut PBIString,
-        ppScriptDef: *mut *mut PBIScriptDef
-    ) -> HRESULT,
     pub ob_create_interface_in_library: unsafe extern "C" fn(
         pClassArray: *mut PPBIClassDef,
         ulNumClasses: ULONG,
@@ -5349,58 +3578,15 @@ pub struct Api {
         fileName: LPTSTR,
         lineNo: UINT
     ),
-    pub ob_insert_local_inst_ref_dbg: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        obinst: OB_INST_ID,
-        ref_addr: *mut ::std::os::raw::c_void,
-        fileName: LPTSTR,
-        lineNo: UINT
-    ),
     pub ob_open_typedef_group: unsafe extern "C" fn(
         obThis: POB_THIS,
         lpszLibraryName: LPTSTR,
         lpszGroupName: LPTSTR,
         bCreateIfNotFound: BOOL
     ) -> INT,
-    pub ob_load_pspp_dlls: unsafe extern "C" fn(obThis: POB_THIS) -> INT,
     pub ob_save_dll_to_pbd: unsafe extern "C" fn(argc: ::std::os::raw::c_int, argv: *mut LPTSTR) -> INT,
     pub ob_convert_pbx_to_native_groups:
         unsafe extern "C" fn(obthis: POB_THIS, pbl_name: LPCTSTR, dll_name: LPCTSTR) -> INT,
-    pub ObPsppCreateControl: unsafe extern "C" fn(
-        visualObject: *mut ::std::os::raw::c_void,
-        dwExStyle: DWORD,
-        lpWindowName: LPCTSTR,
-        dwStyle: DWORD,
-        x: INT,
-        y: INT,
-        nWidth: INT,
-        nHeight: INT,
-        hWndParent: HWND,
-        hInstance: HINSTANCE
-    ) -> HWND,
-    pub ObPsppGetEventID: unsafe extern "C" fn(
-        visualObj: *mut ::std::os::raw::c_void,
-        hWnd: HWND,
-        iMsg: UINT,
-        wParam: WPARAM,
-        lParam: LPARAM
-    ) -> INT,
-    pub DrawPsppObject: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        hDC: HDC,
-        x: ::std::os::raw::c_int,
-        y: ::std::os::raw::c_int,
-        width: ::std::os::raw::c_int,
-        height: ::std::os::raw::c_int,
-        group_id: OB_GROUP_ID,
-        class_id: OB_CLASS_ID,
-        objectName: LPCTSTR,
-        tag: LPCTSTR,
-        backColor: DWORD,
-        enabled: BOOL,
-        visible: BOOL,
-        borderStyle: DWORD
-    ),
     pub ob_share_typedef_group: unsafe extern "C" fn(destObThis: POB_THIS, srcObThis: POB_THIS) -> INT,
     pub ob_unshare_typedef_group: unsafe extern "C" fn(obThis: POB_THIS) -> INT,
     pub ob_cm_evaluate_expression:
@@ -5425,7 +3611,6 @@ pub struct Api {
     pub ob_shared_refpkt:
         unsafe extern "C" fn(obthis: POB_THIS, destination: POB_DATA, group: POB_GROUP, var_id: OB_SYM_ID),
     pub ob_convert_chararray_to_string: unsafe extern "C" fn(obthis: POB_THIS, data: POB_DATA) -> BOOL,
-    pub obJagResultsetNotify: unsafe extern "C" fn(obthis: *mut ::std::os::raw::c_void) -> HRESULT,
     pub ob_class_delete_and_withinclass:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, class_id: OB_CLASS_ID),
     pub ob_find_orphan_class: unsafe extern "C" fn(
@@ -5441,84 +3626,6 @@ pub struct Api {
     pub ob_rebuild_instance_image: unsafe extern "C" fn(obThis: POB_THIS, class_hndl: OB_CLASS_HNDL),
     pub ob_build_compile_list:
         unsafe extern "C" fn(obthis: POB_THIS, no_items: *mut UINT) -> POB_COMPILE_LIST,
-    pub os_openlib: unsafe extern "C" fn(libname: LPTSTR, error: *mut INT, newlib: *mut BOOL) -> HINSTANCE,
-    pub os_get_funcptr: unsafe extern "C" fn(funcname: LPTSTR, libhndl: HINSTANCE) -> OS_CALLC_FUNC,
-    pub os_callc: unsafe extern "C" fn(
-        func_ptr: OS_CALLC_FUNC,
-        stack_frame: *mut ::std::os::raw::c_void,
-        frame_len: ::std::os::raw::c_ushort,
-        ret_buffer: *mut ::std::os::raw::c_void,
-        ret_length: ::std::os::raw::c_ushort,
-        bIsFloatingPoint: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub os_closelib: unsafe extern "C" fn(libhndl: HINSTANCE),
-    pub cm_init_script_compiler: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        stgthis: ppbstg_anchor,
-        pbThis: *mut ::std::os::raw::c_void,
-        pSignonProc: *mut ::std::os::raw::c_void,
-        pSignoffProc: *mut ::std::os::raw::c_void,
-        cmFlags: UINT
-    ) -> PCM_THIS,
-    pub cm_enable_debug_symbol: unsafe extern "C" fn(cmthis: PCM_THIS),
-    pub cm_disable_debug_symbol: unsafe extern "C" fn(cmthis: PCM_THIS),
-    pub cm_set_compiler_context: unsafe extern "C" fn(cmthis: PCM_THIS, obthis: POB_THIS),
-    pub cm_terminate: unsafe extern "C" fn(cmthis: PCM_THIS),
-    pub cm_compile_script:
-        unsafe extern "C" fn(cmthis: PCM_THIS, classhndl: OB_CLASS_HNDL, source: LPTSTR) -> INT,
-    pub cm_free_error_list: unsafe extern "C" fn(cmthis: PCM_THIS),
-    pub cm_get_error_list: unsafe extern "C" fn(cmthis: PCM_THIS) -> *mut shlist,
-    pub cm_keep_error_list: unsafe extern "C" fn(cmthis: PCM_THIS) -> *mut shlist,
-    pub cm_combine_error_list: unsafe extern "C" fn(cmthis: PCM_THIS, theList: *mut shlist, bInsert: BOOL),
-    pub cm_compile_namespace_block: unsafe extern "C" fn(cmthis: PCM_THIS, class_hndl: OB_CLASS_HNDL),
-    pub cm_group_compile: unsafe extern "C" fn(cmthis: PCM_THIS, grouphndl: OB_GROUP_HNDL) -> INT,
-    pub cm_is_word_reserved: unsafe extern "C" fn(cmthis: PCM_THIS, name: LPTSTR) -> BOOL,
-    pub cm_stream_compile: unsafe extern "C" fn(grouphndl: OB_GROUP_HNDL, source: LPTSTR) -> INT,
-    pub cm_src_block_compile: unsafe extern "C" fn(
-        cmthis: PCM_THIS,
-        grouphndl: OB_GROUP_HNDL,
-        source_blocks: *mut LPTSTR,
-        srcloc: *mut ::std::os::raw::c_void,
-        no_blocks: UINT,
-        compile_type: CM_COMPILE_TYPE::Type
-    ) -> INT,
-    pub cm_describe_statement: unsafe extern "C" fn(
-        cmthis: PCM_THIS,
-        grouphandle: ::std::os::raw::c_long,
-        varname: LPTSTR,
-        no_items: *mut UINT,
-        class_id: OB_CLASS_ID
-    ) -> LPTSTR,
-    pub cm_compiler_error: unsafe extern "C" fn(cm_this: PCM_THIS, iMessageID: INT, ...) -> INT,
-    pub cm_compiler_error_ln:
-        unsafe extern "C" fn(cmthis: PCM_THIS, iLineNumber: UINT, iMessageID: INT, ...) -> INT,
-    pub cm_get_curr_this: unsafe extern "C" fn() -> PCM_THIS,
-    pub cm_rebuild_application: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        rebuildType: CM_REBUILD_TYPE,
-        cmRebuild: PCM_REBUILD,
-        rebuildStatus: PCM_REBUILD_STATUS
-    ) -> BOOL,
-    pub cm_rebuild_from_compile_list: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        rebuildType: CM_REBUILD_TYPE,
-        cmRebuild: PCM_REBUILD,
-        rebuildStatus: PCM_REBUILD_STATUS,
-        pCompileList: POB_COMPILE_LIST,
-        iNumberOfItems: UINT,
-        inconsistency: OB_INCONSISTENCY_TYPE
-    ) -> BOOL,
-    pub cm_regen_datawindow:
-        unsafe extern "C" fn(obthis: POB_THIS, lpszLibraryName: LPTSTR, lpszDWName: LPTSTR) -> BOOL,
-    pub cm_read_alias_table: unsafe extern "C" fn(cmthis: PCM_THIS) -> INT,
-    pub cm_find_alias: unsafe extern "C" fn(cmthis: PCM_THIS, pKey: LPTSTR, pCurrentName: LPTSTR) -> LPTSTR,
-    pub cm_add_alias_entry: unsafe extern "C" fn(cmthis: PCM_THIS, pKey: LPTSTR, pName: LPTSTR) -> INT,
-    pub cm_remove_alias_entry: unsafe extern "C" fn(cmthis: PCM_THIS, pKey: LPTSTR) -> INT,
-    pub cm_write_alias_table: unsafe extern "C" fn(cmthis: PCM_THIS) -> INT,
-    pub cm_add_global_var: unsafe extern "C" fn(obthis: POB_THIS, var_name: LPTSTR, type_name: LPTSTR) -> INT,
-    pub cm_import_pb_extension:
-        unsafe extern "C" fn(obthis: POB_THIS, pbl_name: LPCTSTR, dll_name: LPCTSTR) -> INT,
-    pub cm_convert_pbl_to_unicode: unsafe extern "C" fn(obthis: POB_THIS, lpszLibraryName: LPTSTR) -> BOOL,
     pub ot_get_next_evaled_arg: unsafe extern "C" fn(obthis: POB_THIS) -> POB_DATA,
     pub ot_get_next_evaled_arg_no_convert: unsafe extern "C" fn(obthis: POB_THIS) -> POB_DATA,
     pub ot_get_next_lvalue_arg:
@@ -5820,9 +3927,6 @@ pub struct Api {
         unsafe extern "C" fn(obthis: POB_THIS, classHndl1: OB_CLASS_HNDL, classHndl2: OB_CLASS_HNDL) -> BOOL,
     pub ot_assign_global_var_obinst:
         unsafe extern "C" fn(obthis: POB_THIS, szName: LPTSTR, obInst: OB_INST_ID) -> INT,
-    pub ot_clear_array_data:
-        unsafe extern "C" fn(obthis: POB_THIS, array: *mut ::std::os::raw::c_void, bArrayShrink: BOOL),
-    pub ob_get_local_session: unsafe extern "C" fn(obthis: POB_THIS) -> POB_ILOCAL_SESSION,
     pub ob_class_indirect:
         unsafe extern "C" fn(obthis: POB_THIS, group: *mut POB_GROUP, class_id: POB_CLASS_ID) -> INT,
     pub ob_add_external_class_ref: unsafe extern "C" fn(
@@ -5976,18 +4080,6 @@ pub struct Api {
         error: POB_PROTOREF_ERROR,
         bound_exact_match: BOOL
     ) -> OB_MODULE_ID,
-    pub ob_lookup_routine_by_signature: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        pGroup: *mut POB_GROUP,
-        classId: POB_CLASS_ID,
-        lpstrRoutineName: LPTSTR,
-        lpstrSignature: LPTSTR,
-        pVtableId: POB_VTABLE_ID,
-        ppProtoGroup: *mut POB_GROUP,
-        ppPrototype: *mut POB_PROTOTYPE,
-        pError: POB_PROTOREF_ERROR,
-        bLookupPublicOnly: BOOL
-    ) -> HRESULT,
     pub ob_proto_error_upgrade: unsafe extern "C" fn(
         obthis: POB_THIS,
         currerror: OB_PROTOREF_ERROR::Type,
@@ -6012,30 +4104,6 @@ pub struct Api {
         delete_proto_no_args: UINT,
         filter_userprotos: BOOL
     ) -> INT,
-    pub ob_type_proto_add: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        group: POB_GROUP,
-        class_id: OB_CLASS_ID,
-        name: LPTSTR,
-        rout_type: OB_ROUT_TYPE::Type,
-        type_: OB_CLASS_ID,
-        mod_id: OB_MODULE_ID,
-        no_args: UINT,
-        args: POB_PROTO_ARG,
-        func_type: OB_FUNC_TYPE,
-        dllname: LPTSTR,
-        aliasname: LPTSTR,
-        sys_func_id: OB_VTABLE_ID,
-        proto_style: OB_FUNCPROTO_STYLE::Type,
-        member_access: OB_MEMBER_ACCESS::Type,
-        is_obsolete: BOOL,
-        is_local_decl: BOOL,
-        token_id: OB_EVT_TOKEN_ID,
-        is_external_event: BOOL,
-        throws_list: POB_CLASS_ID,
-        no_throws: UINT,
-        error: *mut INT
-    ) -> OB_PROTO_ID,
     pub ob_get_type_proto_names: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
@@ -6116,37 +4184,6 @@ pub struct Api {
         args: POB_PROTO_ARG,
         no_args: UINT
     ) -> OB_PROTO_OVERLOAD_ERROR,
-    pub ob_create_proto_throws_list: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        class_hndl: OB_CLASS_HNDL,
-        no_throws: UINT,
-        throws_type_names: *mut LPTSTR,
-        throws_list: *mut POB_CLASS_ID
-    ) -> INT,
-    pub ob_create_proto_args: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        class_hndl: OB_CLASS_HNDL,
-        result_name: LPTSTR,
-        no_args: UINT,
-        arg_pass_style: POB_PROTOARG_TYPE,
-        arg_type_names: *mut LPTSTR,
-        arg_names: *mut LPTSTR,
-        arg_grouping: POB_GROUPTYPE,
-        result_type: POB_CLASS_ID,
-        args: *mut POB_PROTO_ARG
-    ) -> INT,
-    pub ob_proto_overload_search_src: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        class_hndl: OB_CLASS_HNDL,
-        name: LPTSTR,
-        rout_type: OB_ROUT_TYPE::Type,
-        result_type: LPTSTR,
-        no_args: UINT,
-        arg_pass_style: POB_PROTOARG_TYPE,
-        arg_type_names: *mut LPTSTR,
-        arg_grouping: POB_GROUPTYPE,
-        error: POB_PROTO_OVERLOAD_ERROR
-    ) -> INT,
     pub ob_event_module_name: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
@@ -6314,13 +4351,6 @@ pub struct Api {
         group2: POB_GROUP,
         class_id2: OB_CLASS_ID
     ) -> INT,
-    pub ob_find_type_ancestor_assign: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        group1: POB_GROUP,
-        class_id1: OB_CLASS_ID,
-        group2: POB_GROUP,
-        class_id2: OB_CLASS_ID
-    ) -> INT,
     pub ob_find_common_ancestor: unsafe extern "C" fn(
         obthis: POB_THIS,
         group1: POB_GROUP,
@@ -6332,17 +4362,7 @@ pub struct Api {
         unsafe extern "C" fn(obthis: POB_THIS, group: *mut POB_GROUP, class_id: OB_CLASS_ID) -> OB_CLASS_ID,
     pub ob_get_runtime_class:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID) -> POB_RUNTIME_CLASS,
-    pub ob_get_pspp_class_name:
-        unsafe extern "C" fn(obthis: POB_THIS, group_id: OB_GROUP_ID, class_id: OB_CLASS_ID) -> LPCTSTR,
     pub ob_get_func_vtable_entry: unsafe extern "C" fn(obinst: OB_INST_ID, offset: ULONG) -> OB_FUNC_FUNC,
-    pub ob_find_method: unsafe extern "C" fn(
-        pLocalSession: POB_ILOCAL_SESSION,
-        pObject: POB_OBJECT,
-        lpstrMethodName: LPTSTR,
-        ppProtoGroup: *mut POB_GROUP,
-        ppPrototype: *mut POB_PROTOTYPE,
-        bLookupPublicOnly: BOOL
-    ) -> HRESULT,
     pub ob_rout_declare: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
@@ -6418,19 +4438,6 @@ pub struct Api {
     pub ob_convert_vars_to_const: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP) -> INT,
     pub ob_clear_group_objects: unsafe extern "C" fn(obthis: POB_THIS, pGroup: POB_GROUP) -> BOOL,
     pub ob_init_group_objects: unsafe extern "C" fn(obthis: POB_THIS, pGroup: POB_GROUP),
-    pub getCultureValueStr: unsafe extern "C" fn(
-        formatStr: LPTSTR,
-        name: LPTSTR,
-        defaultValue: LPTSTR,
-        outValue: LPTSTR,
-        outSize: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_long,
-    pub getCultureValueInt: unsafe extern "C" fn(
-        formatStr: LPTSTR,
-        name: LPTSTR,
-        defaultValue: ::std::os::raw::c_int,
-        outValue: *mut ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_long,
     pub shformatDateTimeWeb: unsafe extern "C" fn(
         pResult: LPTSTR,
         maxLen: ::std::os::raw::c_int,
@@ -6562,10 +4569,7 @@ pub struct Api {
         unsafe extern "C" fn(out: LPTSTR, in_: LPTSTR, paramPeriodChar: TCHAR, paramCommaChar: TCHAR),
     pub shNormalizeRealbyLocaleWeb:
         unsafe extern "C" fn(out: LPTSTR, in_: LPTSTR, paramPeriodChar: TCHAR, paramCommaChar: TCHAR),
-    pub pbshr_intl: unsafe extern "C" fn(),
     pub shIsValidRealNoLocale: unsafe extern "C" fn(n: LPTSTR) -> BOOL,
-    pub shGetRegProfileStringValue:
-        unsafe extern "C" fn(lpRegProfileStruct: LPREGPROFILESTRUCT) -> ::std::os::raw::c_long,
     pub ob_add_glbsym_var: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
@@ -6648,23 +4652,6 @@ pub struct Api {
         error_struct: PRT_ERROR_STRUCT,
         exceptionClassName: LPTSTR
     ) -> INT,
-    pub rt_build_exception_using_error:
-        unsafe extern "C" fn(obthis: POB_THIS, pError: PRT_ERROR_STRUCT, className: LPTSTR) -> OB_INST_ID,
-    pub rt_handle_uncaught_exception: unsafe extern "C" fn(obthis: POB_THIS),
-    pub rt_populate_error_struct: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        error_struct: PRT_ERROR_STRUCT,
-        message: LPTSTR,
-        iMessageID: INT
-    ),
-    pub rt_populate_error_from_stack: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        error_struct: PRT_ERROR_STRUCT,
-        message: LPTSTR,
-        iMessageID: INT
-    ),
-    pub rt_call_error_callback:
-        unsafe extern "C" fn(rtthis: POB_THIS, error_struct: PRT_ERROR_STRUCT, bAllowHalt: BOOL) -> BOOL,
     pub rt_normalize_error_id: unsafe extern "C" fn(obthis: POB_THIS, iMessageID: INT) -> INT,
     pub ot_handle_exception: unsafe extern "C" fn(
         rtthis: POB_THIS,
@@ -6708,8 +4695,6 @@ pub struct Api {
         obRoutineId: OB_VTABLE_ID,
         pRoutineProtoInfo: PRT_ROUTINE_PROTO_INFO
     ) -> INT,
-    pub rtRoutineProtoInfoFree:
-        unsafe extern "C" fn(obThis: POB_THIS, pRoutineProtoInfo: PRT_ROUTINE_PROTO_INFO),
     pub rtInitializeInfoForCall:
         unsafe extern "C" fn(obThis: POB_THIS, pRoutineProtoInfo: PRT_ROUTINE_PROTO_INFO) -> INT,
     pub rtCleanupInfoAfterCall:
@@ -6734,23 +4719,6 @@ pub struct Api {
     pub rtDataCopy:
         unsafe extern "C" fn(pobThis: POB_THIS, pobdDest: POB_DATA, pobdSrc: POB_DATA, AddReference: BOOL),
     pub rt_hit_level_0: unsafe extern "C" fn(obthis: POB_THIS),
-    pub rt_StartJaguarDebug: unsafe extern "C" fn(obthis: POB_THIS, hwnd: HWND) -> HRESULT,
-    pub rt_StopJaguarDebug: unsafe extern "C" fn(obthis: POB_THIS) -> HRESULT,
-    pub rt_JagBreakpointHit:
-        unsafe extern "C" fn(obthis: POB_THIS, instance_id: ULONG, breakpointID: ULONG) -> HRESULT,
-    pub rt_JaguarGetCurrentContext: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        instance_id: *mut ULONG,
-        breakpointID: *mut PRT_BREAKPOINT
-    ) -> HRESULT,
-    pub obPsppNormalBody: unsafe extern "C" fn(
-        obThis: POB_THIS,
-        numArgs: UINT,
-        pGroup: POB_GROUP,
-        class_id: OB_CLASS_ID,
-        parent_class_id: OB_CLASS_ID,
-        protId: UINT
-    ) -> INT,
     pub ob_create_object: unsafe extern "C" fn(
         obthis: POB_THIS,
         destination: POB_DATA,
@@ -6857,12 +4825,6 @@ pub struct Api {
         ppSrcLastEdit: *mut POB_SRC_LAST_EDIT,
         pNoSrcLastEdit: *mut UINT
     ) -> *mut LPTSTR,
-    pub obUpdateSrcLastEdit: unsafe extern "C" fn(
-        obThis: POB_THIS,
-        pGroup: POB_GROUP,
-        pSrcLastEdit: POB_SRC_LAST_EDIT,
-        NoSrcLastEdit: UINT
-    ),
     pub ob_get_var: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: *mut POB_GROUP,
@@ -6977,14 +4939,6 @@ pub struct Api {
         grouping2: OB_GROUPTYPE,
         ancestor_flag: *mut UINT
     ) -> OT_TYPE_CHECK_ERROR::Type,
-    pub ot_strict_type_check: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        group1: POB_GROUP,
-        type1: OB_CLASS_ID,
-        group2: POB_GROUP,
-        type2: OB_CLASS_ID
-    ) -> INT,
-    pub ot_generateVarInfo: unsafe extern "C" fn(obthis: POB_THIS, obClassHndl: OB_CLASS_HNDL) -> USHORT,
     pub ot_type_loc: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> OT_TYPE_LOC::Type,
     pub ot_init_data_node: unsafe extern "C" fn(
         obthis: POB_THIS,
@@ -7076,14 +5030,6 @@ pub struct Api {
         item_index: ULONG,
         bTriggerFieldUpdate: BOOL
     ) -> POT_REF_PAK,
-    pub ot_build_flditemupdate_refpak: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        lvalue_data: POB_DATA,
-        group_id: OB_GROUP_ID,
-        rtinst: POB_RUNTIME_INST,
-        field_id: UINT,
-        item_index: ULONG
-    ) -> POT_REF_PAK,
     pub ot_add_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
     pub ot_sub_any:
@@ -7152,1393 +5098,6 @@ pub struct Api {
     pub ot_bytearray_to_binary:
         unsafe extern "C" fn(rtThis: POB_THIS, array_inst: POB_ARRAY_INST) -> PSH_BINARY,
     pub ot_any_to_binary: unsafe extern "C" fn(rtThis: POB_THIS, obData: POB_DATA) -> PSH_BINARY,
-    pub dwCompile: unsafe extern "C" fn(
-        syntax: LPTSTR,
-        errmsg: LPTSTR,
-        obthis: *mut ::std::os::raw::c_void,
-        dbtran: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void,
-    pub dwCreateWindow: unsafe extern "C" fn(
-        arg1: LPTSTR,
-        arg2: LPTSTR,
-        arg3: DWORD,
-        arg4: ::std::os::raw::c_int,
-        arg5: ::std::os::raw::c_int,
-        arg6: ::std::os::raw::c_int,
-        arg7: ::std::os::raw::c_int,
-        arg8: HWND,
-        arg9: HMENU,
-        arg10: HANDLE,
-        arg11: LPTSTR
-    ) -> HWND,
-    pub dwCreateWindowEx: unsafe extern "C" fn(
-        arg1: DWORD,
-        arg2: LPTSTR,
-        arg3: LPTSTR,
-        arg4: DWORD,
-        arg5: ::std::os::raw::c_int,
-        arg6: ::std::os::raw::c_int,
-        arg7: ::std::os::raw::c_int,
-        arg8: ::std::os::raw::c_int,
-        arg9: HWND,
-        arg10: HMENU,
-        arg11: HANDLE,
-        arg12: LPTSTR
-    ) -> HWND,
-    pub dwCrosstabDLG: unsafe extern "C" fn(hWnd: HWND) -> BOOL,
-    pub dwDescribe: unsafe extern "C" fn(hWnd: HWND, syntax: LPTSTR) -> LPTSTR,
-    pub dwFree: unsafe extern "C" fn(prog: *mut ::std::os::raw::c_void) -> BOOL,
-    pub dwSetDataStoreHWndBehavior: unsafe extern "C" fn(bUseHWnd: BOOL) -> BOOL,
-    pub dwLoadData: unsafe extern "C" fn(pFileName: LPOLESTR, hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwLoadDataProg: unsafe extern "C" fn(
-        pFileName: LPOLESTR,
-        pProg: *mut ::std::os::raw::c_void
-    ) -> ::std::os::raw::c_short,
-    pub dwLoadDataCrosstab: unsafe extern "C" fn(pFileName: LPTSTR, hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwLoadDataStorage: unsafe extern "C" fn(
-        pStg: *mut ::std::os::raw::c_void,
-        given_pDW: *mut ::std::os::raw::c_void,
-        bInDWSync: BOOL
-    ) -> ::std::os::raw::c_short,
-    pub dwLoadDataOle: unsafe extern "C" fn(pFileName: LPOLESTR, pDW: *mut ::std::os::raw::c_void),
-    pub dwLoadDW:
-        unsafe extern "C" fn(pDW: *mut ::std::os::raw::c_void, name: LPTSTR) -> *mut ::std::os::raw::c_void,
-    pub dwLoadFile: unsafe extern "C" fn(
-        pFileName: LPOLESTR,
-        obthis: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void,
-    pub dwLoadLibrary: unsafe extern "C" fn(
-        files: *mut LPTSTR,
-        filecount: UINT,
-        entry: LPTSTR,
-        obthis: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void,
-    pub dwLoadMemory: unsafe extern "C" fn(data: *mut ::std::os::raw::c_void) -> *mut ::std::os::raw::c_void,
-    pub dwLoadStorage: unsafe extern "C" fn(
-        pStg: *mut ::std::os::raw::c_void,
-        obthis: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void,
-    pub dwModify: unsafe extern "C" fn(hWnd: HWND, syntax: LPTSTR) -> LPTSTR,
-    pub dwSaveData: unsafe extern "C" fn(pFileName: LPOLESTR, hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwSaveDataStorage:
-        unsafe extern "C" fn(pStg: *mut ::std::os::raw::c_void, hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwSaveDataCopy: unsafe extern "C" fn(
-        pOutFileName: LPOLESTR,
-        pInFileName: LPOLESTR,
-        sa: *mut ::std::os::raw::c_void,
-        subpool: pbstg_subpool
-    ) -> ::std::os::raw::c_short,
-    pub dwSaveDataCopyStorage: unsafe extern "C" fn(
-        pOutStg: *mut ::std::os::raw::c_void,
-        pInStg: *mut ::std::os::raw::c_void,
-        sa: *mut ::std::os::raw::c_void,
-        subpool: pbstg_subpool
-    ) -> ::std::os::raw::c_short,
-    pub dwSaveFile: unsafe extern "C" fn(
-        pFileName: LPOLESTR,
-        pSyn: LPTSTR,
-        pProg: *mut ::std::os::raw::c_void,
-        pData: *mut ::std::os::raw::c_void,
-        flags: ::std::os::raw::c_uint
-    ) -> ::std::os::raw::c_short,
-    pub dwSaveLibrary: unsafe extern "C" fn(
-        prog: *mut ::std::os::raw::c_void,
-        file: LPTSTR,
-        entry: LPTSTR
-    ) -> ::std::os::raw::c_short,
-    pub dwSaveOle: unsafe extern "C" fn(pFileName: LPOLESTR, hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwSaveObjects: unsafe extern "C" fn(pFileName: LPOLESTR, hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwSaveStorage: unsafe extern "C" fn(
-        pStg: *mut ::std::os::raw::c_void,
-        pSyn: LPTSTR,
-        pProg: *mut ::std::os::raw::c_void,
-        pData: *mut ::std::os::raw::c_void,
-        flags: ::std::os::raw::c_uint
-    ) -> ::std::os::raw::c_short,
-    pub dwFileSaveStorage: unsafe extern "C" fn(
-        hWnd: HWND,
-        pStorage: *mut ::std::os::raw::c_void,
-        bInDWSync: BOOL
-    ) -> ::std::os::raw::c_long,
-    pub dwSaveStorageStg: unsafe extern "C" fn(
-        pStg: *mut ::std::os::raw::c_void,
-        pSyn: LPTSTR,
-        pProg: *mut ::std::os::raw::c_void,
-        pData: *mut ::std::os::raw::c_void,
-        flags: ::std::os::raw::c_uint
-    ) -> ::std::os::raw::c_short,
-    pub dwSaveOleStg: unsafe extern "C" fn(
-        pStorage: *mut ::std::os::raw::c_void,
-        pDW: *mut ::std::os::raw::c_void
-    ) -> ::std::os::raw::c_short,
-    pub dwSaveObjectsStg: unsafe extern "C" fn(
-        pStorage: *mut ::std::os::raw::c_void,
-        pDW: *mut ::std::os::raw::c_void
-    ) -> ::std::os::raw::c_short,
-    pub dwSaveDataStg: unsafe extern "C" fn(
-        pStorage: *mut ::std::os::raw::c_void,
-        hWnd: HWND,
-        bInDWSync: BOOL
-    ) -> ::std::os::raw::c_short,
-    pub dwLoadFileBlob: unsafe extern "C" fn(
-        pBlob: *mut ::std::os::raw::c_void,
-        obthis: *mut ::std::os::raw::c_void,
-        ulLen: ULONG,
-        pStg: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void,
-    pub dwStgFree: unsafe extern "C" fn(hWnd: HWND, s: *mut ::std::os::raw::c_void),
-    pub dwGetMessageText: unsafe extern "C" fn(hWnd: HWND) -> LPTSTR,
-    pub dwGetExceedPageMessage:
-        unsafe extern "C" fn(hWnd: HWND, sa: ppbstg_anchor, subpool: pbstg_subpool) -> LPTSTR,
-    pub DW_PluginStart: unsafe extern "C" fn(
-        hInst: HINSTANCE,
-        pAppName: LPTSTR,
-        pLibListEntries: *mut LPTSTR,
-        iLibListEntries: INT,
-        bWindow: BOOL,
-        iWidth: INT,
-        iHeight: INT,
-        iExeType: INT,
-        obShare: *mut ::std::os::raw::c_void,
-        hParent: HWND,
-        pObjectName: LPTSTR,
-        pCommandLine: LPTSTR,
-        stgThis: *mut ppbstg_anchor,
-        obThis: *mut ::std::os::raw::c_void,
-        obInst: *mut ::std::os::raw::c_void,
-        hWnd: *mut HWND,
-        context: *mut ::std::os::raw::c_void
-    ) -> ::std::os::raw::c_long,
-    pub DW_PluginStop: unsafe extern "C" fn(
-        pobThis: *mut ::std::os::raw::c_void,
-        pstgThis: *mut ppbstg_anchor,
-        pobInst: *mut ::std::os::raw::c_void,
-        phWnd: *mut HWND
-    ) -> ::std::os::raw::c_long,
-    pub dwSyntaxGen: unsafe extern "C" fn(
-        sa: ppbstg_anchor,
-        db: *mut ::std::os::raw::c_void,
-        selectSyn: LPTSTR,
-        tableName: LPTSTR,
-        keys: LPTSTR,
-        args: PDWBTBLARG
-    ) -> LPTSTR,
-    pub dwSyntaxGenForm: unsafe extern "C" fn(
-        sa: ppbstg_anchor,
-        db: *mut ::std::os::raw::c_void,
-        selectSyn: LPTSTR,
-        tableName: LPTSTR,
-        keys: LPTSTR,
-        args: PDWBTBLARG
-    ) -> LPTSTR,
-    pub dwSyntaxFree: unsafe extern "C" fn(sa: ppbstg_anchor, progSyn: LPTSTR),
-    pub dwGenDataListSyntax:
-        unsafe extern "C" fn(sa: ppbstg_anchor, dtable: PDWDATATABLE, sp: LPTSTR, arg: PDWBTBLARG) -> LPTSTR,
-    pub dwGenDataFormSyntax:
-        unsafe extern "C" fn(sa: ppbstg_anchor, dtable: PDWDATATABLE, sp: LPTSTR, arg: PDWBTBLARG) -> LPTSTR,
-    pub dwSyntaxFromSQL: unsafe extern "C" fn(
-        sa: ppbstg_anchor,
-        subpool: pbstg_subpool,
-        db: *mut ::std::os::raw::c_void,
-        selectSyn: LPTSTR,
-        args: PDWBTBLARG,
-        style: LPTSTR,
-        errmsg: LPTSTR
-    ) -> LPTSTR,
-    pub dwSyntaxFromDesc: unsafe extern "C" fn(
-        sa: ppbstg_anchor,
-        subpool: pbstg_subpool,
-        dtable: PDWDATATABLE,
-        sp: LPTSTR,
-        args: PDWBTBLARG,
-        style: LPTSTR,
-        errmsg: LPTSTR
-    ) -> LPTSTR,
-    pub dwClearOriginalValues: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_long,
-    pub dwRowsDiscard: unsafe extern "C" fn(
-        hWnd: HWND,
-        lStartRow: ::std::os::raw::c_long,
-        lEndRow: ::std::os::raw::c_long,
-        queue: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwRowsMove: unsafe extern "C" fn(
-        hWndFrom: HWND,
-        lStartRow: ::std::os::raw::c_long,
-        lEndRow: ::std::os::raw::c_long,
-        queueFrom: ::std::os::raw::c_short,
-        hWndTo: HWND,
-        lInsertRow: ::std::os::raw::c_long,
-        queueTo: ::std::os::raw::c_short,
-        iFlags: UINT
-    ) -> ::std::os::raw::c_short,
-    pub dwCreateObjectStorage: unsafe extern "C" fn(
-        hWnd: HWND,
-        obInst: *mut ::std::os::raw::c_void,
-        obThis: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void,
-    pub dwDefaultArgs: unsafe extern "C" fn(
-        sa: ppbstg_anchor,
-        selectSyn: LPTSTR,
-        db: *mut ::std::os::raw::c_void,
-        arg: PDWBTBLARG,
-        rc: *mut ::std::os::raw::c_short
-    ) -> LPTSTR,
-    pub dwDefaultArgsFree: unsafe extern "C" fn(sa: ppbstg_anchor, syn: LPTSTR),
-    pub dwCrosstabDef: unsafe extern "C" fn(
-        prog: *mut ::std::os::raw::c_void,
-        pData: *mut *mut ::std::os::raw::c_void
-    ) -> HWND,
-    pub dwCrosstabDefDynamic: unsafe extern "C" fn(
-        pMainStg: *mut ::std::os::raw::c_void,
-        pvData: *mut *mut ::std::os::raw::c_void
-    ) -> HWND,
-    pub dwCrosstabModifyDynamic: unsafe extern "C" fn(
-        pMainStg: *mut ::std::os::raw::c_void,
-        pvData: *mut *mut ::std::os::raw::c_void,
-        pModel: PCROSSMODEL,
-        baseTbl: *mut ::std::os::raw::c_void
-    ) -> HWND,
-    pub dwCrosstabModifyStatic: unsafe extern "C" fn(
-        pMainStg: *mut ::std::os::raw::c_void,
-        pvData: *mut *mut ::std::os::raw::c_void,
-        pModel: PCROSSMODEL,
-        baseTbl: *mut ::std::os::raw::c_void
-    ) -> HWND,
-    pub dwCrosstabBuildModel: unsafe extern "C" fn(
-        prog: *mut ::std::os::raw::c_void,
-        columns: LPTSTR,
-        rows: LPTSTR,
-        values: LPTSTR,
-        baseTbl: *mut ::std::os::raw::c_void,
-        runProg: *mut ::std::os::raw::c_void
-    ) -> PCROSSMODEL,
-    pub dwInfoBegin: unsafe extern "C" fn(prog: *mut ::std::os::raw::c_void, ia: PDWINFO),
-    pub dwInfoBitmap: unsafe extern "C" fn(ia: PDWINFO, lbk: ::std::os::raw::c_long, bk: PDWINFOBITMAP),
-    pub dwInfoBlob: unsafe extern "C" fn(ia: PDWINFO, lblob: ::std::os::raw::c_long, bm: PDWINFOBLOB),
-    pub dwInfoInkpic: unsafe extern "C" fn(ia: PDWINFO, lblob: ::std::os::raw::c_long, bm: PDWINFOINKPIC),
-    pub dwInfoButton: unsafe extern "C" fn(ia: PDWINFO, lblob: ::std::os::raw::c_long, bt: PDWINFOBUTTON),
-    pub dwInfoColumn: unsafe extern "C" fn(ia: PDWINFO, lc: ::std::os::raw::c_long, c: PDWINFOCOL),
-    pub dwInfoCompute: unsafe extern "C" fn(ia: PDWINFO, lc: ::std::os::raw::c_long, c: PDWINFOCOMPUTE),
-    pub dwInfoCrosstab: unsafe extern "C" fn(ia: PDWINFO, lc: ::std::os::raw::c_long, c: PDWINFOCROSSTAB),
-    pub dwInfoWpf: unsafe extern "C" fn(ia: PDWINFO, lblob: ::std::os::raw::c_long, w: PDWINFOWPF),
-    pub dwInfoDataWindow: unsafe extern "C" fn(ia: PDWINFO, dwo: PDWOPTIONS),
-    pub dwInfoEnd: unsafe extern "C" fn(ia: PDWINFO),
-    pub dwInfoFunctions: unsafe extern "C" fn(
-        arg1: ppbstg_anchor,
-        hWnd: HWND,
-        level: ::std::os::raw::c_short,
-        iNumFuncs: *mut INT,
-        pFuncs: *mut shlist
-    ),
-    pub dwInfoGetFirstColumn: unsafe extern "C" fn(ia: PDWINFO, c: PDWINFOTCOL) -> BOOL,
-    pub dwInfoGetNextColumn: unsafe extern "C" fn(ia: PDWINFO, c: PDWINFOTCOL) -> BOOL,
-    pub dwInfoGetDWWidth: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_long,
-    pub dwInfoGetFirstObject: unsafe extern "C" fn(ia: PDWINFO) -> ::std::os::raw::c_long,
-    pub dwInfoGetNextObject: unsafe extern "C" fn(ia: PDWINFO) -> ::std::os::raw::c_long,
-    pub dwInfoGetObjectType:
-        unsafe extern "C" fn(ia: PDWINFO, obj: ::std::os::raw::c_long) -> ::std::os::raw::c_short,
-    pub dwInfoGraph: unsafe extern "C" fn(ia: PDWINFO, lgraph: ::std::os::raw::c_long, g: PDWINFOGRAPH),
-    pub dwInfoGroupBox: unsafe extern "C" fn(ia: PDWINFO, lgraph: ::std::os::raw::c_long, g: PDWINFOGROUPBOX),
-    pub dwInfoLine: unsafe extern "C" fn(ia: PDWINFO, lline: ::std::os::raw::c_long, l: PDWINFOLINE),
-    pub dwInfoOle: unsafe extern "C" fn(ia: PDWINFO, lole: ::std::os::raw::c_long, o: PDWINFOOLE),
-    pub dwInfoOval: unsafe extern "C" fn(ia: PDWINFO, loval: ::std::os::raw::c_long, o: PDWINFOOVAL),
-    pub dwInfoProcessType: unsafe extern "C" fn(prog: *mut ::std::os::raw::c_void) -> ::std::os::raw::c_short,
-    pub dwInfoRect: unsafe extern "C" fn(ia: PDWINFO, lrect: ::std::os::raw::c_long, r: PDWINFORECT),
-    pub dwInfoRegionFirst: unsafe extern "C" fn(ia: PDWINFO, r: PDWINFOREGION) -> BOOL,
-    pub dwInfoRegionNext: unsafe extern "C" fn(ia: PDWINFO, r: PDWINFOREGION) -> BOOL,
-    pub dwInfoReport: unsafe extern "C" fn(ia: PDWINFO, lrect: ::std::os::raw::c_long, r: PDWINFOREPORT),
-    pub dwInfoResourceNames: unsafe extern "C" fn(
-        sa: ppbstg_anchor,
-        subpool: pbstg_subpool,
-        lpLibrary: LPTSTR,
-        lpEntry: LPTSTR
-    ) -> *mut ::std::os::raw::c_void,
-    pub dwInfoRoundRect: unsafe extern "C" fn(ia: PDWINFO, lrect: ::std::os::raw::c_long, r: PDWINFORRECT),
-    pub dwInfoSparse: unsafe extern "C" fn(ia: PDWINFO) -> LPTSTR,
-    pub dwInfoTable: unsafe extern "C" fn(ia: PDWINFO, t: PDWINFOTABLE),
-    pub dwInfoTableExtract:
-        unsafe extern "C" fn(prog: *mut ::std::os::raw::c_void) -> *mut ::std::os::raw::c_void,
-    pub dwInfoText: unsafe extern "C" fn(ia: PDWINFO, ltext: ::std::os::raw::c_long, t: PDWINFOTEXT),
-    pub dwInfoVerifyCompute: unsafe extern "C" fn(gx: PDWEXPRTEST) -> ::std::os::raw::c_short,
-    pub dwInfoVerifyFilter: unsafe extern "C" fn(gx: PDWEXPRTEST) -> ::std::os::raw::c_short,
-    pub dwInfoVerifyStmt: unsafe extern "C" fn(gx: PDWEXPRTEST) -> *mut ::std::os::raw::c_void,
-    pub dwInfoVerifyString: unsafe extern "C" fn(gx: PDWEXPRTEST) -> ::std::os::raw::c_short,
-    pub dwInfoParseStmt: unsafe extern "C" fn(gx: PDWEXPRTEST) -> *mut ::std::os::raw::c_void,
-    pub dwInfoSetPSRFileName: unsafe extern "C" fn(
-        prog: *mut ::std::os::raw::c_void,
-        szFileName: LPOLESTR,
-        iLen: ::std::os::raw::c_short
-    ),
-    pub dwClientToObject: unsafe extern "C" fn(
-        hWnd: HWND,
-        lpName: LPTSTR,
-        p: *mut POINT,
-        ri: ::std::os::raw::c_long
-    ) -> ::std::os::raw::c_short,
-    pub dwDBCancel: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwDeleteCrosstabSourceList:
-        unsafe extern "C" fn(prog: *mut ::std::os::raw::c_void, source_names: *mut ::std::os::raw::c_void),
-    pub dwDragObjectCreate: unsafe extern "C" fn(
-        hWnd: HWND,
-        x: ::std::os::raw::c_int,
-        y: ::std::os::raw::c_int,
-        pdwo: *mut *mut ::std::os::raw::c_void,
-        row: *mut ::std::os::raw::c_long
-    ) -> ::std::os::raw::c_short,
-    pub dwDragObjectDestroy:
-        unsafe extern "C" fn(hWnd: HWND, dwo: *mut ::std::os::raw::c_void) -> ::std::os::raw::c_short,
-    pub dwExprDialog: unsafe extern "C" fn(
-        hWnd: HWND,
-        hWndOwner: HWND,
-        pTitle: LPTSTR,
-        pExpr: *mut LPTSTR,
-        bAllowNULL: BOOL
-    ) -> ::std::os::raw::c_short,
-    pub dwValidationExprDialog: unsafe extern "C" fn(
-        hWnd: HWND,
-        hWndOwner: HWND,
-        pTitle: LPTSTR,
-        pExpr: *mut LPTSTR,
-        bAllowNULL: BOOL
-    ) -> ::std::os::raw::c_short,
-    pub dwExprValidate: unsafe extern "C" fn(hWnd: HWND, fexpr: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwFind: unsafe extern "C" fn(
-        hWnd: HWND,
-        fexpr: LPTSTR,
-        srow: ::std::os::raw::c_long,
-        erow: ::std::os::raw::c_long
-    ) -> ::std::os::raw::c_long,
-    pub dwFindGroupChange: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        level: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_long,
-    pub dwFindRequired: unsafe extern "C" fn(
-        hWnd: HWND,
-        queue: ::std::os::raw::c_short,
-        rrow: *mut ::std::os::raw::c_long,
-        col: *mut ::std::os::raw::c_short,
-        lpName: LPTSTR,
-        bUpdate: BOOL
-    ) -> ::std::os::raw::c_short,
-    pub dwFitColumn: unsafe extern "C" fn(
-        hWnd: HWND,
-        col: ::std::os::raw::c_short,
-        lCount: ::std::os::raw::c_long,
-        bPrinter: BOOL,
-        lpszSeparator: LPTSTR
-    ) -> ::std::os::raw::c_short,
-    pub dwGenTableName: unsafe extern "C" fn(
-        sa: ppbstg_anchor,
-        subpool: pbstg_subpool,
-        bText: BOOL,
-        row: ::std::os::raw::c_int,
-        rows_per_detail: ::std::os::raw::c_int,
-        col: *mut ::std::os::raw::c_void,
-        tableCount: ::std::os::raw::c_short,
-        bCrosstab: BOOL,
-        ci: ::std::os::raw::c_short
-    ) -> LPTSTR,
-    pub dwGenXTableName: unsafe extern "C" fn(
-        sa: ppbstg_anchor,
-        subpool: pbstg_subpool,
-        bText: BOOL,
-        row: ::std::os::raw::c_int,
-        rows_per_detail: ::std::os::raw::c_int,
-        pcol: *mut ::std::os::raw::c_void,
-        bCrosstab: BOOL,
-        ci: ::std::os::raw::c_short
-    ) -> LPTSTR,
-    pub dwGetBandUnderMouse: unsafe extern "C" fn(hWnd: HWND, name: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwGetRowColUnderPoint: unsafe extern "C" fn(
-        hWnd: HWND,
-        x: ::std::os::raw::c_int,
-        y: ::std::os::raw::c_int,
-        hrow: *mut ::std::os::raw::c_long,
-        hcol: *mut ::std::os::raw::c_short
-    ) -> BOOL,
-    pub dwIsPointOutsideEditCol:
-        unsafe extern "C" fn(hWnd: HWND, x: ::std::os::raw::c_int, y: ::std::os::raw::c_int) -> BOOL,
-    pub dwGetColumnFormat: unsafe extern "C" fn(
-        hWnd: HWND,
-        col: ::std::os::raw::c_short,
-        v: LPTSTR,
-        maxsize: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwGetColumnFormatLength:
-        unsafe extern "C" fn(hWnd: HWND, col: ::std::os::raw::c_short) -> ::std::os::raw::c_short,
-    pub dwGetColumnNumber: unsafe extern "C" fn(hWnd: HWND, colname: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwGetColumnType:
-        unsafe extern "C" fn(hWnd: HWND, col: ::std::os::raw::c_short) -> ::std::os::raw::c_short,
-    pub dwGetColumnValidation: unsafe extern "C" fn(
-        hWnd: HWND,
-        col: ::std::os::raw::c_short,
-        v: LPTSTR,
-        maxsize: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwGetColumnValidationLength:
-        unsafe extern "C" fn(hWnd: HWND, col: ::std::os::raw::c_short) -> ::std::os::raw::c_short,
-    pub dwGetColumnValue: unsafe extern "C" fn(
-        hWnd: HWND,
-        col: ::std::os::raw::c_short,
-        v: LPTSTR,
-        maxsize: ::std::os::raw::c_short,
-        item: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwGetColumnValueLength: unsafe extern "C" fn(
-        hWnd: HWND,
-        col: ::std::os::raw::c_short,
-        item: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwGetCurrentCol:
-        unsafe extern "C" fn(hWnd: HWND, bName: ::std::os::raw::c_short) -> ::std::os::raw::c_long,
-    pub dwGetCurrentRowCol: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: *mut ::std::os::raw::c_long,
-        col: *mut ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwGetCurrentText: unsafe extern "C" fn(hWnd: HWND, v: LPTSTR, maxsize: ULONG) -> ULONG,
-    pub dwGetCurrentTextLength: unsafe extern "C" fn(hWnd: HWND) -> ULONG,
-    pub dwGetDBvendor: unsafe extern "C" fn(
-        hWnd: HWND,
-        v: LPTSTR,
-        maxsize: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwGetDBvendorLength: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwGetDBlogid: unsafe extern "C" fn(
-        hWnd: HWND,
-        v: LPTSTR,
-        maxsize: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwGetDBlogidLength: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwGetDBlogpass: unsafe extern "C" fn(
-        hWnd: HWND,
-        v: LPTSTR,
-        maxsize: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwGetDBlogpassLength: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwGetDBserver: unsafe extern "C" fn(
-        hWnd: HWND,
-        v: LPTSTR,
-        maxsize: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwGetDBserverLength: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwGetDBdatabase: unsafe extern "C" fn(
-        hWnd: HWND,
-        v: LPTSTR,
-        maxsize: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwGetDBdatabaseLength: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwGetDBuserid: unsafe extern "C" fn(
-        hWnd: HWND,
-        v: LPTSTR,
-        maxsize: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwGetDBuseridLength: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwGetDBdatabasepass: unsafe extern "C" fn(
-        hWnd: HWND,
-        v: LPTSTR,
-        maxsize: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwGetDBdatabasepassLength: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwGetDBparm: unsafe extern "C" fn(
-        hWnd: HWND,
-        v: LPTSTR,
-        maxsize: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwGetDBparmLength: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwGetDBError: unsafe extern "C" fn(
-        hWnd: HWND,
-        errtext: LPTSTR,
-        maxsize: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_long,
-    pub dwGetDBErrorLength: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwGetItemDateTime: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        v: PSH_TIME,
-        queue: ::std::os::raw::c_short,
-        original: BOOL
-    ) -> ::std::os::raw::c_short,
-    pub dwGetItemDecimal: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        v: PSH_DEC,
-        queue: ::std::os::raw::c_short,
-        orig: BOOL
-    ) -> ::std::os::raw::c_short,
-    pub dwGetItemDouble: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        v: *mut f64,
-        queue: ::std::os::raw::c_short,
-        original: BOOL
-    ) -> ::std::os::raw::c_short,
-    pub dwGetItemLength: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        queue: ::std::os::raw::c_short,
-        original: BOOL
-    ) -> ::std::os::raw::c_short,
-    pub dwGetItemLengthLong: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        queue: ::std::os::raw::c_short,
-        original: BOOL
-    ) -> ::std::os::raw::c_long,
-    pub dwGetItemStatus: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        queue: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwGetItemLengthAndString: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        v: *mut LPTSTR,
-        lMaxsize: ::std::os::raw::c_long,
-        queue: ::std::os::raw::c_short,
-        original: BOOL,
-        lLength: *mut ::std::os::raw::c_long,
-        sa: ppbstg_anchor,
-        pool: pbstg_subpool
-    ) -> ::std::os::raw::c_short,
-    pub dwGetItemString: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        v: LPTSTR,
-        maxsize: ::std::os::raw::c_short,
-        queue: ::std::os::raw::c_short,
-        original: BOOL
-    ) -> ::std::os::raw::c_short,
-    pub dwGetItemStringLong: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        v: LPTSTR,
-        maxsize: ::std::os::raw::c_long,
-        queue: ::std::os::raw::c_short,
-        original: BOOL
-    ) -> ::std::os::raw::c_short,
-    pub dwGetItemType:
-        unsafe extern "C" fn(hWnd: HWND, col: ::std::os::raw::c_short) -> ::std::os::raw::c_short,
-    pub dwGetNextModifiedRow: unsafe extern "C" fn(
-        hWnd: HWND,
-        startrow: ::std::os::raw::c_long,
-        q: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_long,
-    pub dwGetNotifyArgs: unsafe extern "C" fn(
-        hWnd: HWND,
-        given_DW: *mut ::std::os::raw::c_void
-    ) -> *mut *mut ::std::os::raw::c_void,
-    pub dwGetObjectUnderMouse: unsafe extern "C" fn(hWnd: HWND, name: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwGroupCalc: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwOleActivateItem: unsafe extern "C" fn(
-        hWnd: HWND,
-        ri: ::std::os::raw::c_long,
-        ci: ::std::os::raw::c_short,
-        iVerb: WORD
-    ) -> ::std::os::raw::c_short,
-    pub dwOleGetControlInfo: unsafe extern "C" fn(hWnd: HWND) -> PDWOLER,
-    pub dwOleDeactivate:
-        unsafe extern "C" fn(hWnd: HWND, bFromPostMessage: BOOL, lParamForPost: LPARAM) -> BOOL,
-    pub dwOleIPactivate: unsafe extern "C" fn(hWnd: HWND, bActive: BOOL),
-    pub dwOleIPResize: unsafe extern "C" fn(hWnd: HWND),
-    pub dwOleReset: unsafe extern "C" fn(hWnd: HWND, bDestroy: BOOL),
-    pub dwGetProgram: unsafe extern "C" fn(hWnd: HWND) -> *mut ::std::os::raw::c_void,
-    pub dwPosition: unsafe extern "C" fn(
-        hWnd: HWND,
-        gobname: LPTSTR,
-        bandname: LPTSTR,
-        bFront: BOOL
-    ) -> ::std::os::raw::c_short,
-    pub dwQryDialog: unsafe extern "C" fn(
-        hWnd: HWND,
-        sql: LPTSTR,
-        gx: PDWEXPRTEST,
-        pCriteria: LPTSTR,
-        args: PDWBTBLARG
-    ) -> LPTSTR,
-    pub dwCanChangeQryMode: unsafe extern "C" fn(hWnd: HWND, given_DW: *mut ::std::os::raw::c_void) -> BOOL,
-    pub dwResetColumnValues:
-        unsafe extern "C" fn(hWnd: HWND, col: ::std::os::raw::c_short) -> ::std::os::raw::c_short,
-    pub dwResetTrans: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwRetrieve:
-        unsafe extern "C" fn(hWnd: HWND, args: PDWRETRIEVEARGS, bRepaint: BOOL) -> ::std::os::raw::c_long,
-    pub dwSendMessage: unsafe extern "C" fn(
-        hWnd: HWND,
-        iMessage: ::std::os::raw::c_uint,
-        wParam: WPARAM,
-        lParam: LPARAM
-    ) -> ::std::os::raw::c_long,
-    pub dwSetColumnFormat:
-        unsafe extern "C" fn(hWnd: HWND, col: ::std::os::raw::c_short, m: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwSetColumnValidation:
-        unsafe extern "C" fn(hWnd: HWND, col: ::std::os::raw::c_short, m: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwSetColumnValue: unsafe extern "C" fn(
-        hWnd: HWND,
-        col: ::std::os::raw::c_short,
-        m: LPTSTR,
-        item: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwSetCurrentRowCol: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwSetCurrentText: unsafe extern "C" fn(hWnd: HWND, v: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwSetDBvendor: unsafe extern "C" fn(hWnd: HWND, v: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwSetDBlogid: unsafe extern "C" fn(hWnd: HWND, v: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwSetDBlogpass: unsafe extern "C" fn(hWnd: HWND, v: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwSetDBserver: unsafe extern "C" fn(hWnd: HWND, v: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwSetDBdatabase: unsafe extern "C" fn(hWnd: HWND, v: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwSetDBuserid: unsafe extern "C" fn(hWnd: HWND, v: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwSetDBdatabasepass: unsafe extern "C" fn(hWnd: HWND, v: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwSetDBparm: unsafe extern "C" fn(hWnd: HWND, v: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwSetDetailHeight: unsafe extern "C" fn(
-        hWnd: HWND,
-        lStartRow: ::std::os::raw::c_long,
-        lEndRow: ::std::os::raw::c_long,
-        lHeight: ::std::os::raw::c_long
-    ) -> ::std::os::raw::c_short,
-    pub dwSetHTMLAction: unsafe extern "C" fn(
-        hWnd: HWND,
-        lpstrAction: LPTSTR,
-        lpstrContext: LPTSTR
-    ) -> ::std::os::raw::c_short,
-    pub dwSetEventFlags: unsafe extern "C" fn(
-        hWnd: HWND,
-        evtF1: ULONG,
-        evtF2: ULONG,
-        given_DW: *mut ::std::os::raw::c_void
-    ) -> ::std::os::raw::c_short,
-    pub dwSetItemDateTime: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        v: PSH_TIME
-    ) -> ::std::os::raw::c_short,
-    pub dwSetItemDecimal: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        v: *mut ::std::os::raw::c_void
-    ) -> ::std::os::raw::c_short,
-    pub dwSetItemDouble: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        v: *mut f64
-    ) -> ::std::os::raw::c_short,
-    pub dwSetItemLong: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        v: *mut ::std::os::raw::c_long
-    ) -> ::std::os::raw::c_short,
-    pub dwSetItemReal: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        v: *mut f32
-    ) -> ::std::os::raw::c_short,
-    pub dwSetItemStatus: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        queue: ::std::os::raw::c_short,
-        status: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwSetItemString: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        v: LPTSTR
-    ) -> ::std::os::raw::c_short,
-    pub dwSetItemULong: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short,
-        v: *mut ::std::os::raw::c_ulong
-    ) -> ::std::os::raw::c_short,
-    pub dwSetItemNull: unsafe extern "C" fn(
-        hWnd: HWND,
-        row: ::std::os::raw::c_long,
-        col: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_short,
-    pub dwSetLibrary: unsafe extern "C" fn(
-        pDW: *mut ::std::os::raw::c_void,
-        files: *mut LPTSTR,
-        filecount: UINT
-    ) -> ::std::os::raw::c_short,
-    pub dwSetRC: unsafe extern "C" fn(
-        hWnd: HWND,
-        rc: ::std::os::raw::c_long,
-        given_DW: *mut ::std::os::raw::c_void
-    ) -> ::std::os::raw::c_short,
-    pub dwSetTrans:
-        unsafe extern "C" fn(hWnd: HWND, trans: *mut ::std::os::raw::c_void) -> ::std::os::raw::c_short,
-    pub dwShareData: unsafe extern "C" fn(dw_primary: HWND, dw_secondary: HWND) -> ::std::os::raw::c_short,
-    pub dwShareDataOff: unsafe extern "C" fn(hWndOff: HWND) -> ::std::os::raw::c_short,
-    pub dwSQLGetSyntax: unsafe extern "C" fn(hWnd: HWND) -> LPTSTR,
-    pub dwSQLSetSyntax: unsafe extern "C" fn(hWnd: HWND, syn: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwStorageDump: unsafe extern "C" fn(hWnd: HWND, lpFile: LPTSTR) -> ::std::os::raw::c_short,
-    pub dwStyleChange:
-        unsafe extern "C" fn(hWnd: HWND, lStyle: ::std::os::raw::c_long) -> ::std::os::raw::c_short,
-    pub dwUpdateSQLGetRow: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_long,
-    pub dwUpdateSQLGetQ: unsafe extern "C" fn(hWnd: HWND) -> ::std::os::raw::c_short,
-    pub dwGenerateHTMLForm: unsafe extern "C" fn(
-        hWnd: HWND,
-        lpszSyntax: *mut LPTSTR,
-        lpszStyle: *mut LPTSTR,
-        lpszAction: LPTSTR,
-        startRow: ::std::os::raw::c_long,
-        endRow: ::std::os::raw::c_long,
-        startCol: ::std::os::raw::c_short,
-        endCol: ::std::os::raw::c_short,
-        queue: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_long,
-    pub dwSaveAsAscii: unsafe extern "C" fn(
-        hWnd: HWND,
-        lpszSyntax: LPTSTR,
-        lpszSeparator: LPTSTR,
-        lpszQuote: LPTSTR,
-        lpszLineFeed: LPTSTR,
-        bRetainNewLineChar: BOOL
-    ) -> ::std::os::raw::c_long,
-    pub dwBuildXHTMLTemplate: unsafe extern "C" fn(
-        hWnd: HWND,
-        ppITemplate: *mut *mut IPB_XMLDOMDocument,
-        ppIStyle: *mut *mut IPB_XMLDOMDocument
-    ) -> ::std::os::raw::c_long,
-    pub dwSetFullState: unsafe extern "C" fn(
-        hWnd: HWND,
-        pBlob: *mut ::std::os::raw::c_void,
-        obthis: *mut ::std::os::raw::c_void,
-        ulLen: ULONG,
-        ppStgOpen: *mut *mut ::std::os::raw::c_void,
-        ppProg: *mut *mut ::std::os::raw::c_void
-    ) -> ::std::os::raw::c_long,
-    pub dwGetFullState: unsafe extern "C" fn(
-        hWnd: HWND,
-        ppBlob: *mut *mut ::std::os::raw::c_void,
-        pRowCount: *mut ::std::os::raw::c_long
-    ) -> ::std::os::raw::c_long,
-    pub dwGetChanges: unsafe extern "C" fn(
-        hWnd: HWND,
-        ppBlob: *mut *mut ::std::os::raw::c_void,
-        pCookie: *mut ::std::os::raw::c_void,
-        pRowCount: *mut ::std::os::raw::c_long
-    ) -> ::std::os::raw::c_long,
-    pub dwSetChanges: unsafe extern "C" fn(
-        hWnd: HWND,
-        pBlob: *mut ::std::os::raw::c_void,
-        ulLen: ULONG,
-        CR: ::std::os::raw::c_short
-    ) -> ::std::os::raw::c_long,
-    pub dwGetStateStatus:
-        unsafe extern "C" fn(hWnd: HWND, ppBlob: *mut *mut ::std::os::raw::c_void) -> ::std::os::raw::c_long,
-    pub dwSetBlobStorageNULL: unsafe extern "C" fn(hWnd: HWND),
-    pub dwFreeBlob:
-        unsafe extern "C" fn(hWnd: HWND, pBlob: *mut ::std::os::raw::c_void) -> ::std::os::raw::c_long,
-    pub dwSetWebLoadCallback:
-        unsafe extern "C" fn(hWnd: HWND, pCallback: *mut ::std::os::raw::c_void) -> ::std::os::raw::c_long,
-    pub dwPaintDC: unsafe extern "C" fn(hWnd: HWND, hDC: HDC, pRect: LPRECT) -> ::std::os::raw::c_long,
-    pub DS_SetNotifyFunc: unsafe extern "C" fn(
-        Given_pDW: *mut ::std::os::raw::c_void,
-        GivenFunction: *mut ::std::os::raw::c_void
-    ) -> ::std::os::raw::c_long,
-    pub dwPrintObject: unsafe extern "C" fn(
-        given_pDW: *mut ::std::os::raw::c_void,
-        Show_Cancel_DialogBox: BOOL,
-        Print_Job_DC: HDC
-    ) -> ::std::os::raw::c_long,
-    pub dwGraphSaveAsPdf: unsafe extern "C" fn(
-        pdw: *mut ::std::os::raw::c_void,
-        lpszGraphName: LPTSTR,
-        lpszFileNamePdf: LPTSTR
-    ) -> ::std::os::raw::c_long,
-    pub dwGetPsrDataVersion: unsafe extern "C" fn(szFileName: LPOLESTR) -> ::std::os::raw::c_long,
-    pub dwSetTransparency: unsafe extern "C" fn(hWnd: HWND, nTransparency: INT),
-    pub dwGenNameExhaustive: unsafe extern "C" fn(
-        sa: ppbstg_anchor,
-        name_hash: *mut shhash,
-        subpool: pbstg_subpool,
-        lpszGivenName: LPTSTR,
-        bText: BOOL
-    ) -> LPTSTR,
-    pub DS_Destroy: unsafe extern "C" fn(givenDW: *mut ::std::os::raw::c_void),
-    pub dwXMLGetDefaultEncoding: unsafe extern "C" fn(ppEncoding: *mut *mut IPB_String) -> HRESULT,
-    pub PBGetDBIProc: unsafe extern "C" fn(arg1: LPTSTR, arg2: HINSTANCE) -> DBI_FUNC,
-    pub DBI_DatabaseLoad: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut *mut shlist) -> HRESULT,
-    pub DBI_TableLoad:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: *mut *mut shlist) -> HRESULT,
-    pub DBI_TableExplode: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: DBI_TBLPTR, arg3: BOOL) -> HRESULT,
-    pub DBI_DeleteDir: unsafe extern "C" fn(arg1: ppbstg_anchor, arg2: *mut shlist) -> HRESULT,
-    pub DBI_DeleteTable: unsafe extern "C" fn(arg1: ppbstg_anchor, arg2: DBI_TBLPTR) -> HRESULT,
-    pub DBI_ComboList: unsafe extern "C" fn(arg1: ::std::os::raw::c_int, arg2: HWND),
-    pub DBI_FindComboString:
-        unsafe extern "C" fn(arg1: ::std::os::raw::c_int, arg2: ::std::os::raw::c_int, arg3: HWND) -> HRESULT,
-    pub DBI_MatchCombo: unsafe extern "C" fn(
-        arg1: ::std::os::raw::c_int,
-        arg2: HWND,
-        arg3: *mut ::std::os::raw::c_int
-    ) -> HRESULT,
-    pub DBI_MatchString: unsafe extern "C" fn(
-        arg1: ::std::os::raw::c_int,
-        lpszValue: LPTSTR,
-        arg2: *mut ::std::os::raw::c_int
-    ) -> HRESULT,
-    pub DBI_AttrInfo: unsafe extern "C" fn(arg1: PDBI_COMMAND),
-    pub DBI_Command_Tran: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR) -> HRESULT,
-    pub DBI_Step: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR) -> HRESULT,
-    pub DBI_Commit: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_Connect: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: LPTSTR,
-        arg3: LPTSTR,
-        arg4: LPTSTR,
-        arg5: LPTSTR
-    ) -> HRESULT,
-    pub DBI_DummyConnect: unsafe extern "C" fn(
-        arg1: ppbstg_anchor,
-        arg2: DWORD,
-        arg3: LPTSTR,
-        arg4: LPTSTR,
-        arg5: *mut PDBI_COMMAND
-    ) -> HRESULT,
-    pub DBI_DialogConnect:
-        unsafe extern "C" fn(arg1: PDBI_SIGNON, arg2: DWORD, arg3: *mut PDBI_COMMAND) -> HRESULT,
-    pub DBI_LogIn: unsafe extern "C" fn(
-        arg1: ppbstg_anchor,
-        arg2: LPTSTR,
-        arg3: LPTSTR,
-        arg4: LPTSTR,
-        arg5: LPTSTR,
-        arg6: LPTSTR,
-        arg7: DWORD,
-        arg8: *mut PDBI_COMMAND
-    ) -> HRESULT,
-    pub DBI_SetLogIn: unsafe extern "C" fn(
-        arg1: ppbstg_anchor,
-        arg2: LPTSTR,
-        arg3: LPTSTR,
-        arg4: ::std::os::raw::c_long,
-        arg5: ::std::os::raw::c_long,
-        arg6: *mut PDBI_COMMAND
-    ) -> HRESULT,
-    pub DBI_LogInAdoConnection: unsafe extern "C" fn(
-        arg1: ppbstg_anchor,
-        arg2: LPTSTR,
-        arg3: LPTSTR,
-        arg4: ::std::os::raw::c_long,
-        arg5: DWORD,
-        arg6: *mut PDBI_COMMAND
-    ) -> HRESULT,
-    pub DBI_SetConnect: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: LPTSTR,
-        arg3: LPTSTR,
-        arg4: LPTSTR,
-        arg5: LPTSTR
-    ) -> HRESULT,
-    pub DBI_DatabaseInfo: unsafe extern "C" fn(arg1: PDBI_COMMAND),
-    pub DBI_Describe: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: INT, arg3: *mut *mut shlist) -> HRESULT,
-    pub DBI_Disconnect: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_ErrorSQL: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> BOOL,
-    pub DBI_Execute: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: BOOL, arg3: LPTSTR) -> HRESULT,
-    pub DBI_FetchNext: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut *mut shlist) -> HRESULT,
-    pub DBI_Prepare: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: INT) -> HRESULT,
-    pub DBI_PrepareWithParms:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: *mut shlist, arg4: LPTSTR) -> HRESULT,
-    pub DBI_RollBack: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_TerminateSQL: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_Rows: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut ::std::os::raw::c_long) -> HRESULT,
-    pub DBI_GetPBTypeString: unsafe extern "C" fn(arg1: PDBI_COMMAND),
-    pub DBI_DescribeExtra:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: *mut *mut shlist) -> HRESULT,
-    pub DBI_DateString: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: *mut LPTSTR) -> HRESULT,
-    pub DBI_DecimalString: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR) -> HRESULT,
-    pub DBI_DoubleString: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR) -> HRESULT,
-    pub DBI_Numeri_tstring: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: LPTSTR,
-        arg3: SHORT,
-        arg4: TCHAR,
-        arg5: BOOL,
-        arg6: BOOL
-    ) -> HRESULT,
-    pub DBI_CursorConnect: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut PDBI_COMMAND) -> HRESULT,
-    pub DBI_GetSelectItems: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut INT) -> HRESULT,
-    pub DBI_GetSelectInfo: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: PDBI_BIND, arg3: INT) -> HRESULT,
-    pub DBI_BindSelectBuffer: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: PDBI_BIND, arg3: INT) -> HRESULT,
-    pub DBI_RuntimeFetchNext: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_MPowerFetchNext: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_StartTran: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_UniqueKey:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: LPTSTR, arg4: *mut LPTSTR) -> HRESULT,
-    pub DBI_ParseFrom: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: LPTSTR,
-        arg3: *mut *mut shlist,
-        arg4: *mut BOOL
-    ) -> HRESULT,
-    pub DBI_ParseColList: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: LPTSTR,
-        arg3: *mut shlist,
-        arg4: BOOL,
-        arg5: *mut *mut shlist,
-        pExplodeStarFunc: EXPLODESTAR_FUNC,
-        bColAlias: *mut BOOL
-    ) -> HRESULT,
-    pub DBI_DoubleTheQuotes:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: *mut LPTSTR) -> HRESULT,
-    pub DBI_FreeMem: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut ::std::os::raw::c_void) -> HRESULT,
-    pub DBI_FreePrepList: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut shlist) -> HRESULT,
-    pub DBI_FreeColBlkList: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut shlist) -> HRESULT,
-    pub DBI_DialogBoxCenter: unsafe extern "C" fn(arg1: HWND) -> HRESULT,
-    pub DBI_CleanUpColumnList: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_Cancel: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_ProcInfo: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: *mut *mut shlist,
-        arg3: DBI_PROCFILTER::Type
-    ) -> HRESULT,
-    pub DBI_ProcText:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: DBI_PROCPTR, arg3: *mut LPTSTR) -> HRESULT,
-    pub DBI_EventText: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: DBI_EVENTPTR) -> HRESULT,
-    pub DBI_ProcDescribe:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: DBI_PROCPTR, arg3: *mut *mut shlist) -> HRESULT,
-    pub DBI_DeleteProcDir: unsafe extern "C" fn(arg1: ppbstg_anchor, arg2: *mut shlist) -> HRESULT,
-    pub DBI_ProcPrepare: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: INT) -> HRESULT,
-    pub DBI_Parse: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR) -> HRESULT,
-    pub DBI_OuterJoinSyntax:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: PDBI_OUTER, arg3: *mut LPTSTR) -> HRESULT,
-    pub DBI_RuntimeExecute: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: LPTSTR,
-        arg3: ::std::os::raw::c_long,
-        arg4: LPTSTR
-    ) -> HRESULT,
-    pub DBI_FormatHash: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_ValidHash: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_FreeValidHash: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut *mut shhash) -> HRESULT,
-    pub DBI_EditStyleHash: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_EditUpdate: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut shlist, arg3: HWND) -> HRESULT,
-    pub DBI_EditStyleInfo: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: PPDWXEDT, arg3: LPTSTR) -> HRESULT,
-    pub DBI_LoadString: unsafe extern "C" fn(arg1: INT) -> LPTSTR,
-    pub DBI_DynamicBind: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_GetNextResultSet: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_ViewText:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: LPTSTR, arg4: *mut LPTSTR) -> HRESULT,
-    pub DBI_ExecPlan: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: *mut LPTSTR) -> HRESULT,
-    pub DBI_GetTimestamp: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut LPTSTR) -> HRESULT,
-    pub DBI_DoCompare: unsafe extern "C" fn(arg1: LPTSTR, arg2: LPTSTR) -> BOOL,
-    pub DBI_DoCompareFirst: unsafe extern "C" fn(arg1: LPTSTR, arg2: LPTSTR) -> BOOL,
-    pub DBI_DoCompareFirstWithSkip: unsafe extern "C" fn(arg1: LPTSTR, arg2: LPTSTR) -> BOOL,
-    pub DBI_ReadBlob: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: ppbstg_anchor,
-        arg3: pbstg_subpool,
-        arg4: LPTSTR,
-        arg5: LPTSTR,
-        arg6: LPTSTR,
-        arg7: *mut *mut ::std::os::raw::c_void
-    ) -> HRESULT,
-    pub DBI_WriteBlob: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: ppbstg_anchor,
-        arg3: pbstg_subpool,
-        arg4: LPTSTR,
-        arg5: LPTSTR,
-        arg6: LPTSTR,
-        arg7: *mut ::std::os::raw::c_void
-    ) -> HRESULT,
-    pub DBI_FillBlanks: unsafe extern "C" fn(arg1: LPTSTR, arg2: ::std::os::raw::c_int) -> HRESULT,
-    pub DBI_DeleteSyntaxList: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_ParseParms: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut *mut shlist) -> HRESULT,
-    pub DBI_ParseKeyWords: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: *mut BOOL) -> HRESULT,
-    pub DBI_FreeParmList: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut *mut shlist) -> HRESULT,
-    pub DBI_GetParm: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: *mut shlist,
-        arg3: LPTSTR,
-        arg4: *mut PDBI_PARMBLK
-    ) -> HRESULT,
-    pub DBI_FetchFirst: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_FetchPrev: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_FetchRandom: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_FetchRelative: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_FetchLast: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> HRESULT,
-    pub DBI_NewDBParm: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR) -> HRESULT,
-    pub DBI_ReplaceDbParm: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: LPTSTR) -> HRESULT,
-    pub DBI_DelimitReservedWord: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: LPTSTR,
-        arg3: LPTSTR,
-        arg4: ::std::os::raw::c_long
-    ) -> HRESULT,
-    pub DBI_DescribeInput: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR) -> HRESULT,
-    pub DBI_DescribeOutput: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR) -> HRESULT,
-    pub DBI_DWCursorConnect: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut PDBI_COMMAND) -> HRESULT,
-    pub DBI_ParseColSubset: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: LPTSTR,
-        arg3: *mut shlist,
-        arg4: ::std::os::raw::c_long,
-        arg5: BOOL,
-        arg6: *mut *mut shlist
-    ) -> HRESULT,
-    pub DBI_ParseBasicSelect:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: *mut LPTSTR) -> HRESULT,
-    pub DBI_CreatePrimaryKeySyntax: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: PDBI_PRIMARY_KEY,
-        arg3: HWND,
-        arg4: *mut ::std::os::raw::c_long
-    ) -> HRESULT,
-    pub DBI_CreateNoLogPKeySyntax: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: PDBI_PRIMARY_KEY,
-        arg3: LPTSTR,
-        arg4: HWND,
-        arg5: ::std::os::raw::c_long
-    ) -> HRESULT,
-    pub DBI_AlterPrimaryKeySyntax: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: PDBI_PRIMARY_KEY,
-        arg3: PDBI_PRIMARY_KEY,
-        arg4: HWND,
-        arg5: *mut ::std::os::raw::c_long
-    ) -> HRESULT,
-    pub DBI_CreateForeignKeySyntax: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: *mut shlist,
-        arg3: *mut ::std::os::raw::c_long
-    ) -> HRESULT,
-    pub DBI_AlterForeignKeySyntax: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: *mut shlist,
-        arg3: *mut shlist,
-        arg4: HWND,
-        arg5: *mut ::std::os::raw::c_long
-    ) -> HRESULT,
-    pub DBI_GetForeignKYOptions:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: PDBI_FOREIGNKYOPTIONS) -> HRESULT,
-    pub DBI_LibraryName: unsafe extern "C" fn(
-        arg1: ppbstg_anchor,
-        arg2: DWORD,
-        arg3: LPTSTR,
-        arg4: LPTSTR,
-        arg5: LPTSTR
-    ) -> HRESULT,
-    pub DBI_LookForKeyWord: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: LPTSTR,
-        arg3: LPTSTR,
-        arg4: *mut BOOL,
-        arg5: *mut ::std::os::raw::c_long,
-        arg6: *mut ::std::os::raw::c_long
-    ) -> HRESULT,
-    pub DBI_ParseIdentifier: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: PDBI_IDENT,
-        arg3: *mut LPTSTR,
-        pPrepareTblList: *mut shlist
-    ) -> HRESULT,
-    pub DBI_GetColumnExpression:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: SHORT, arg4: *mut LPTSTR) -> HRESULT,
-    pub DBI_ParseWhere: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: LPTSTR,
-        arg3: ::std::os::raw::c_long,
-        arg4: *mut *mut shlist,
-        arg5: *mut ::std::os::raw::c_long,
-        arg6: *mut INT
-    ) -> HRESULT,
-    pub DBI_FreeWhereList: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut shlist) -> HRESULT,
-    pub DBI_PrimaryKeyReferences: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: LPTSTR,
-        arg3: LPTSTR,
-        arg4: LPTSTR,
-        arg5: *mut *mut shlist
-    ) -> HRESULT,
-    pub DBI_PBToSQL: unsafe extern "C" fn(
-        arg1: LPTSTR,
-        arg2: ppbstg_anchor,
-        arg3: pbstg_subpool,
-        arg4: PDBI_COMMAND,
-        arg5: *mut LPTSTR
-    ) -> HRESULT,
-    pub DBI_PBToArgs: unsafe extern "C" fn(
-        arg1: LPTSTR,
-        arg2: ppbstg_anchor,
-        arg3: pbstg_subpool,
-        arg4: *mut PDWBTBLARG
-    ) -> HRESULT,
-    pub DBI_ReleaseInputParms: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut *mut shlist) -> HRESULT,
-    pub DBI_SynText: unsafe extern "C" fn(arg1: PDBI_COMMAND),
-    pub DBI_PBC_DialogBox: unsafe extern "C" fn(
-        arg1: HINSTANCE,
-        arg2: INT,
-        arg3: HWND,
-        arg4: DBI_DLGPROC,
-        arg5: *mut INT
-    ) -> HRESULT,
-    pub DBI_PBC_DialogBoxParam: unsafe extern "C" fn(
-        arg1: HINSTANCE,
-        arg2: INT,
-        arg3: HWND,
-        arg4: DBI_DLGPROC,
-        arg5: LPARAM,
-        arg6: *mut INT
-    ) -> HRESULT,
-    pub DBI_PBC_ShowWindow: unsafe extern "C" fn(arg1: HWND, arg2: INT) -> HRESULT,
-    pub DBI_DBHandle:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: WORD, arg3: *mut ::std::os::raw::c_long) -> HRESULT,
-    pub DBI_GetAdoConnection:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: *mut ::std::os::raw::c_long) -> HRESULT,
-    pub DBI_SearchReplace: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: LPTSTR,
-        arg3: LPTSTR,
-        arg4: LPTSTR,
-        arg5: LPTSTR,
-        arg6: *mut LPTSTR
-    ) -> HRESULT,
-    pub DBI_CtrlChars2Text:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: *mut LPTSTR) -> HRESULT,
-    pub DBI_Text2CtrlChars:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: LPTSTR, arg3: *mut LPTSTR) -> HRESULT,
-    pub DBI_SQLCacheBegin:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: UINT, arg3: *mut pCacheList) -> HRESULT,
-    pub DBI_SQLCacheEnd: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: pCacheList) -> HRESULT,
-    pub DBI_SQLCacheFlushEntries: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: pCacheList) -> HRESULT,
-    pub DBI_SQLCacheRegisterSQLStatement: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: LPTSTR,
-        arg3: *mut ::std::os::raw::c_void,
-        arg4: *mut pCacheEntry
-    ) -> HRESULT,
-    pub DBI_SQLCacheRegisterDescribe:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: pCacheEntry, arg3: *mut shlist) -> HRESULT,
-    pub DBI_SQLCacheRequestSqlStatement: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: pCacheList,
-        arg3: LPTSTR,
-        arg4: *mut pCacheEntry
-    ) -> HRESULT,
-    pub DBI_SQLCacheRequestDescribe:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: pCacheEntry) -> *mut shlist,
-    pub DBI_SQLCacheMakeSQLStatementAvailable:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: pCacheEntry, arg3: pCacheList) -> HRESULT,
-    pub DBI_SQLCacheSetCacheSize:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: pCacheList, arg3: LPTSTR) -> HRESULT,
-    pub DBI_SQLCacheDiscardEntry:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: pCacheEntry, arg3: BOOL) -> HRESULT,
-    pub DBI_SQLCacheConnectSetup: unsafe extern "C" fn(pDB: PDBI_COMMAND) -> HRESULT,
-    pub DBI_SQLCacheConnectDrop: unsafe extern "C" fn(pDB: PDBI_COMMAND) -> HRESULT,
-    pub DBI_SQLCacheSetSelectCacheSize: unsafe extern "C" fn(pDB: PDBI_COMMAND) -> HRESULT,
-    pub DBI_SQLCacheStatistics: unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: BOOL) -> LPTSTR,
-    pub DBI_GetIdentityValue: unsafe extern "C" fn(
-        arg1: PDBI_COMMAND,
-        arg2: *mut ::std::os::raw::c_void,
-        arg3: ::std::os::raw::c_long,
-        arg4: ::std::os::raw::c_long,
-        arg5: LPTSTR,
-        arg6: LPTSTR,
-        arg7: SHORT,
-        arg8: *mut BOOL
-    ) -> HRESULT,
-    pub DBI_FormatWindowsEOL: unsafe extern "C" fn(arg1: ppbstg_anchor, arg2: LPTSTR) -> LPTSTR,
-    pub DBI_RegisterVendor: unsafe extern "C" fn(arg1: LPTSTR, arg2: LPTSTR) -> HRESULT,
-    pub DBI_UnRegisterVendor: unsafe extern "C" fn(arg1: LPTSTR) -> HRESULT,
-    pub DBI_IsCache: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> BOOL,
-    pub DBI_IsConnInServerTrans: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> BOOL,
-    pub DBI_IsConnFromServer: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> BOOL,
-    pub DBI_ConvertHexStringToBlob:
-        unsafe extern "C" fn(arg1: LPTSTR, arg2: LPBYTE, arg3: *mut ::std::os::raw::c_long) -> HRESULT,
-    pub CreateDBIConnect: unsafe extern "C" fn(arg1: PDBI_COMMAND) -> *mut CPB_DBI_Connection,
-    pub CreateDBITableSchema:
-        unsafe extern "C" fn(arg1: PDBI_COMMAND, arg2: DBI_TBLPTR) -> *mut CPB_DBI_TableSchema,
-    pub rtdb_close: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        target_object: POB_RUNTIME_INST,
-        cursor_statement_block: PRTDB_STATEMENT
-    ) -> INT,
-    pub rtdb_commit: unsafe extern "C" fn(obthis: POB_THIS, transaction_object: POB_RUNTIME_INST) -> INT,
-    pub rtdb_delete: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        no_inputs: UINT,
-        input_expr_array: POB_DATA,
-        transaction_object: POB_RUNTIME_INST
-    ) -> INT,
-    pub rtdb_deletewithcurs: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        no_inputs: UINT,
-        input_expr_array: POB_DATA,
-        target_object: POB_RUNTIME_INST,
-        cursor_statement_block: PRTDB_STATEMENT
-    ) -> INT,
-    pub rtdb_describe: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        sqlsa_object: POB_RUNTIME_INST,
-        sqlda_object: POB_RUNTIME_INST
-    ) -> INT,
-    pub rtdb_execute: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        no_inputs: UINT,
-        input_expr_array: POB_DATA,
-        transaction_object: POB_RUNTIME_INST,
-        procedure_statement_block: PRTDB_STATEMENT
-    ) -> INT,
-    pub rtdb_executedyn: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        no_inputs: UINT,
-        input_expr_array: POB_DATA,
-        sqlsa_object: POB_RUNTIME_INST
-    ) -> INT,
-    pub rtdb_executeimmed: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        syntax_string: LPTSTR,
-        transaction_object: POB_RUNTIME_INST
-    ) -> INT,
-    pub rtdb_execdynproc: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        no_inputs: UINT,
-        input_expr_array: POB_DATA,
-        sqlsa_object: POB_RUNTIME_INST,
-        procedure_statement_block: PRTDB_STATEMENT
-    ) -> INT,
-    pub rtdb_execdynwithdesc: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        sqlsa_object: POB_RUNTIME_INST,
-        sqlda_object: POB_RUNTIME_INST,
-        procedure_statement_block: PRTDB_STATEMENT
-    ) -> INT,
-    pub rtdb_fetch: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        no_outputs: UINT,
-        output_expr_array: POB_DATA,
-        target_object: POB_RUNTIME_INST,
-        cursor_statement_block: PRTDB_STATEMENT
-    ) -> INT,
-    pub rtdb_fetchwithdesc: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        sqlsa_object: POB_RUNTIME_INST,
-        sqlda_object: POB_RUNTIME_INST,
-        cursor_statement_block: PRTDB_STATEMENT
-    ) -> INT,
-    pub rtdb_insert: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        no_inputs: UINT,
-        input_expr_array: POB_DATA,
-        transaction_object: POB_RUNTIME_INST
-    ) -> INT,
-    pub rtdb_open: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        no_inputs: UINT,
-        input_expr_array: POB_DATA,
-        transaction_object: POB_RUNTIME_INST,
-        cursor_statement_block: PRTDB_STATEMENT
-    ) -> INT,
-    pub rtdb_opendyn: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        no_inputs: UINT,
-        input_expr_array: POB_DATA,
-        sqlsa_object: POB_RUNTIME_INST,
-        cursor_statement_block: PRTDB_STATEMENT
-    ) -> INT,
-    pub rtdb_opendynwithdesc: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        sqlsa_object: POB_RUNTIME_INST,
-        sqlda_object: POB_RUNTIME_INST,
-        cursor_statement_block: PRTDB_STATEMENT
-    ) -> INT,
-    pub rtdb_prepare: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        sqlsa_object: POB_RUNTIME_INST,
-        syntax_string: LPTSTR,
-        transaction_object: POB_RUNTIME_INST
-    ) -> INT,
-    pub rtdb_rollback: unsafe extern "C" fn(obthis: POB_THIS, transaction_object: POB_RUNTIME_INST) -> INT,
-    pub rtdb_select: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        no_inputs: UINT,
-        no_outputs: UINT,
-        input_expr_array: POB_DATA,
-        output_expr_array: POB_DATA,
-        transaction_object: POB_RUNTIME_INST
-    ) -> INT,
-    pub rtdb_selectblob: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        no_inputs: UINT,
-        no_outputs: UINT,
-        input_expr_array: POB_DATA,
-        output_expr_array: POB_DATA,
-        transaction_object: POB_RUNTIME_INST
-    ) -> INT,
-    pub rtdb_start: unsafe extern "C" fn(obthis: POB_THIS, transaction_object: POB_RUNTIME_INST) -> INT,
-    pub rtdb_stop: unsafe extern "C" fn(obthis: POB_THIS, transaction_object: POB_RUNTIME_INST) -> INT,
-    pub rtdb_update: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        no_inputs: UINT,
-        input_expr_array: POB_DATA,
-        transaction_object: POB_RUNTIME_INST
-    ) -> INT,
-    pub rtdb_updatewithcurs: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        no_inputs: UINT,
-        input_expr_array: POB_DATA,
-        target_object: POB_RUNTIME_INST,
-        cursor_statement_block: PRTDB_STATEMENT
-    ) -> INT,
-    pub rtdb_updateblob: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        statement_offset: OB_CONST_REF,
-        no_inputs: UINT,
-        input_expr_array: POB_DATA,
-        transaction_object: POB_RUNTIME_INST,
-        blob_var: POB_DATA
-    ) -> INT,
-    pub rtdb_trans_pool_login: unsafe extern "C" fn(
-        pThis: POB_THIS,
-        lpszDBMS: LPTSTR,
-        lpszServerName: LPTSTR,
-        lpszLogId: LPTSTR,
-        lpszLogPassWord: LPTSTR,
-        lpszDbParm: LPTSTR,
-        lpszDatabase: LPTSTR,
-        lpszUserID: LPTSTR,
-        lpszDBPass: LPTSTR,
-        lpszLock: LPTSTR,
-        pTransactionObject: POB_RUNTIME_INST,
-        pbCalledLogIn: *mut BOOL
-    ) -> PDBI_COMMAND,
-    pub rtdb_trans_pool_disconnect: unsafe extern "C" fn(pThis: POB_THIS, pCommandBlock: PDBI_COMMAND),
     pub ob_set_curr_rtinst_and_return: unsafe extern "C" fn(obthis: POB_THIS, new_rtinst: POB_RUNTIME_INST),
     pub ob_unset_curr_rtinst_and_return: unsafe extern "C" fn(obthis: POB_THIS),
     pub ob_open_trace:
@@ -8547,38 +5106,11 @@ pub struct Api {
     pub ob_begin_trace: unsafe extern "C" fn(obthis: POB_THIS, message: LPTSTR) -> OB_ERROR_RETURN,
     pub ob_end_trace: unsafe extern "C" fn(obthis: POB_THIS) -> OB_ERROR_RETURN,
     pub ob_enable_event_trace: unsafe extern "C" fn(obthis: POB_THIS, event: OB_TRACEID) -> OB_ERROR_RETURN,
-    pub ob_disable_event_trace: unsafe extern "C" fn(obthis: POB_THIS, event: OB_TRACEID) -> OB_ERROR_RETURN,
-    pub otcg_string_cat: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        string1: LPTSTR,
-        string1_null: BOOL,
-        string2: LPTSTR,
-        string2_null: BOOL
-    ) -> INT,
-    pub otcg_binary_cat: unsafe extern "C" fn(
-        obthis: POB_THIS,
-        binary1: PSH_BINARY,
-        binary1_null: BOOL,
-        binary2: PSH_BINARY,
-        binary2_null: BOOL
-    ) -> INT,
-    pub otcg_add_object_argument_reference: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA),
-    pub otcg_embedded_group:
-        unsafe extern "C" fn(obthis: POB_THIS, curr_group: POB_GROUP, class_id: OB_CLASS_ID) -> POB_GROUP
+    pub ob_disable_event_trace: unsafe extern "C" fn(obthis: POB_THIS, event: OB_TRACEID) -> OB_ERROR_RETURN
 }
 impl Api {
-    pub unsafe fn new<P>(path: P) -> Result<Self, ::libloading::Error>
-    where
-        P: AsRef<::std::ffi::OsStr>
-    {
-        let library = ::libloading::Library::new(path)?;
-        Self::from_library(library)
-    }
-    pub unsafe fn from_library<L>(library: L) -> Result<Self, ::libloading::Error>
-    where
-        L: Into<::libloading::Library>
-    {
-        let __library = library.into();
+    pub unsafe fn load() -> Result<Self, PBLibraryError> {
+        let __library = PBLibrary::load()?;
         let pbstg_begin = __library.get(b"pbstg_begin\0").map(|sym| *sym)?;
         let pbstg_begin_allocflags = __library.get(b"pbstg_begin_allocflags\0").map(|sym| *sym)?;
         let pbstg_begin_nofast = __library.get(b"pbstg_begin_nofast\0").map(|sym| *sym)?;
@@ -8586,21 +5118,17 @@ impl Api {
         let pbstg_free_pool = __library.get(b"pbstg_free_pool\0").map(|sym| *sym)?;
         let pbstg_new_pool = __library.get(b"pbstg_new_pool\0").map(|sym| *sym)?;
         let pbstg_new_pool_nofast = __library.get(b"pbstg_new_pool_nofast\0").map(|sym| *sym)?;
-        let pbstg_new_pool_with_size = __library.get(b"pbstg_new_pool_with_size\0").map(|sym| *sym)?;
-        let pbstg_new_pool_with_size_nofast =
-            __library.get(b"pbstg_new_pool_with_size_nofast\0").map(|sym| *sym)?;
         let pbstg_set_pool_name = __library.get(b"pbstg_set_pool_name\0").map(|sym| *sym)?;
         let pbstg_set_poolpagesize = __library.get(b"pbstg_set_poolpagesize\0").map(|sym| *sym)?;
         let pbstg_write_debug = __library.get(b"pbstg_write_debug\0").map(|sym| *sym)?;
         let pbstg_stat = __library.get(b"pbstg_stat\0").map(|sym| *sym)?;
-        let pbstg_shrink = __library.get(b"pbstg_shrink\0").map(|sym| *sym)?;
         let pbstg_nextGeneration = __library.get(b"pbstg_nextGeneration\0").map(|sym| *sym)?;
         let pbstg_dumpLeaks = __library.get(b"pbstg_dumpLeaks\0").map(|sym| *sym)?;
         let pbstg_dumpHeap = __library.get(b"pbstg_dumpHeap\0").map(|sym| *sym)?;
-        let pbstg_alloc = __library.get(b"pbstg_alloc\0").map(|sym| *sym)?;
-        let pbstg_free = __library.get(b"pbstg_free\0").map(|sym| *sym)?;
-        let pbstg_realloc = __library.get(b"pbstg_realloc\0").map(|sym| *sym)?;
-        let pbstg_size = __library.get(b"pbstg_size\0").map(|sym| *sym)?;
+        let pbstg_alloc = __library.get(b"pbstg_alc\0").map(|sym| *sym)?;
+        let pbstg_free = __library.get(b"pbstg_fee\0").map(|sym| *sym)?;
+        let pbstg_realloc = __library.get(b"pbstg_realc\0").map(|sym| *sym)?;
+        let pbstg_size = __library.get(b"pbstg_sz\0").map(|sym| *sym)?;
         let pbstg_fast_strlen = __library.get(b"pbstg_fast_strlen\0").map(|sym| *sym)?;
         let pbstg_ansitoupper = __library.get(b"pbstg_ansitoupper\0").map(|sym| *sym)?;
         let pbstg_ansitolower = __library.get(b"pbstg_ansitolower\0").map(|sym| *sym)?;
@@ -8628,7 +5156,6 @@ impl Api {
         let pbstg_dde_get_handle = __library.get(b"pbstg_dde_get_handle\0").map(|sym| *sym)?;
         let pbstg_dde_lock = __library.get(b"pbstg_dde_lock\0").map(|sym| *sym)?;
         let pbstg_dde_unlock = __library.get(b"pbstg_dde_unlock\0").map(|sym| *sym)?;
-        let pbstg_dde_strdup = __library.get(b"pbstg_dde_strdup\0").map(|sym| *sym)?;
         let pbstg_huge_memcmp = __library.get(b"pbstg_huge_memcmp\0").map(|sym| *sym)?;
         let pbstg_huge_memcpy = __library.get(b"pbstg_huge_memcpy\0").map(|sym| *sym)?;
         let pbstg_huge_memmove = __library.get(b"pbstg_huge_memmove\0").map(|sym| *sym)?;
@@ -8638,22 +5165,6 @@ impl Api {
         let pbstg_huge_strlen = __library.get(b"pbstg_huge_strlen\0").map(|sym| *sym)?;
         let pbstg_huge_strncpy = __library.get(b"pbstg_huge_strncpy\0").map(|sym| *sym)?;
         let pbstg_huge_strstr = __library.get(b"pbstg_huge_strstr\0").map(|sym| *sym)?;
-        let OS_UtilGetProfInt = __library.get(b"OS_UtilGetProfInt\0").map(|sym| *sym)?;
-        let OS_UtilGetProfStr = __library.get(b"OS_UtilGetProfStr\0").map(|sym| *sym)?;
-        let OS_UtilPutProfStr = __library.get(b"OS_UtilPutProfStr\0").map(|sym| *sym)?;
-        let OS_NetworkGetProfInt = __library.get(b"OS_NetworkGetProfInt\0").map(|sym| *sym)?;
-        let OS_NetworkGetProfStr = __library.get(b"OS_NetworkGetProfStr\0").map(|sym| *sym)?;
-        let OS_NetworkPutProfStr = __library.get(b"OS_NetworkPutProfStr\0").map(|sym| *sym)?;
-        let OS_NetworkSharedProfileAccessible =
-            __library.get(b"OS_NetworkSharedProfileAccessible\0").map(|sym| *sym)?;
-        let OS_UtilGetInitPath = __library.get(b"OS_UtilGetInitPath\0").map(|sym| *sym)?;
-        let OS_UtilPutInitPath = __library.get(b"OS_UtilPutInitPath\0").map(|sym| *sym)?;
-        let UtilIniFile = __library.get(b"UtilIniFile\0").map(|sym| *sym)?;
-        let FDCC_Get_Registry_Entry = __library.get(b"FDCC_Get_Registry_Entry\0").map(|sym| *sym)?;
-        let FDCC_Get_CSIDL_Path = __library.get(b"FDCC_Get_CSIDL_Path\0").map(|sym| *sym)?;
-        let FDCC_Create_Registry_Entry = __library.get(b"FDCC_Create_Registry_Entry\0").map(|sym| *sym)?;
-        let FDCC_Get_Install_Location = __library.get(b"FDCC_Get_Install_Location\0").map(|sym| *sym)?;
-        let FDCC_New_INI_Installed = __library.get(b"FDCC_New_INI_Installed\0").map(|sym| *sym)?;
         let pbstg_unicodestrdup = __library.get(b"pbstg_unicodestrdup\0").map(|sym| *sym)?;
         let pbstg_unicodestr_build = __library.get(b"pbstg_unicodestr_build\0").map(|sym| *sym)?;
         let pbstg_strtounicodedup = __library.get(b"pbstg_strtounicodedup\0").map(|sym| *sym)?;
@@ -8664,13 +5175,8 @@ impl Api {
         let pbstg_strtoprintabledup = __library.get(b"pbstg_strtoprintabledup\0").map(|sym| *sym)?;
         let pbstg_printabletostr = __library.get(b"pbstg_printabletostr\0").map(|sym| *sym)?;
         let pbstg_printabletostrdup = __library.get(b"pbstg_printabletostrdup\0").map(|sym| *sym)?;
-        let PBUNI_memchr = __library.get(b"PBUNI_memchr\0").map(|sym| *sym)?;
         let pbstg_lchrcmp = __library.get(b"pbstg_lchrcmp\0").map(|sym| *sym)?;
         let pbstg_lchrcmpi = __library.get(b"pbstg_lchrcmpi\0").map(|sym| *sym)?;
-        let os_vabuild_start = __library.get(b"os_vabuild_start\0").map(|sym| *sym)?;
-        let os_vabuild_ptrarg = __library.get(b"os_vabuild_ptrarg\0").map(|sym| *sym)?;
-        let os_vabuild_end = __library.get(b"os_vabuild_end\0").map(|sym| *sym)?;
-        let os_vabuild_add = __library.get(b"os_vabuild_add\0").map(|sym| *sym)?;
         let sh_dbg_console_init = __library.get(b"sh_dbg_console_init\0").map(|sym| *sym)?;
         let sh_dbg_console_out = __library.get(b"sh_dbg_console_out\0").map(|sym| *sym)?;
         let sh_dbg_console_lock = __library.get(b"sh_dbg_console_lock\0").map(|sym| *sym)?;
@@ -8687,7 +5193,7 @@ impl Api {
         let sh_dbg_header = __library.get(b"sh_dbg_header\0").map(|sym| *sym)?;
         let sh_dbg_indent = __library.get(b"sh_dbg_indent\0").map(|sym| *sym)?;
         let sh_dbg_set_this = __library.get(b"sh_dbg_set_this\0").map(|sym| *sym)?;
-        let sh_dbg_out = __library.get(b"sh_dbg_out\0").map(|sym| *sym)?;
+        let sh_dbg_out = __library.get(b"_sh_dbg_out\0").map(|sym| *sym)?;
         let sh_dbg_start_indent = __library.get(b"sh_dbg_start_indent\0").map(|sym| *sym)?;
         let sh_dbg_end_indent = __library.get(b"sh_dbg_end_indent\0").map(|sym| *sym)?;
         let sh_dbg_enter = __library.get(b"sh_dbg_enter\0").map(|sym| *sym)?;
@@ -8697,7 +5203,6 @@ impl Api {
         let sh_dbg_query = __library.get(b"sh_dbg_query\0").map(|sym| *sym)?;
         let sh_dbg_is_hdr_on = __library.get(b"sh_dbg_is_hdr_on\0").map(|sym| *sym)?;
         let sh_dbg_is_indent_on = __library.get(b"sh_dbg_is_indent_on\0").map(|sym| *sym)?;
-        let osAssert = __library.get(b"osAssert\0").map(|sym| *sym)?;
         let shlist_delete = __library.get(b"shlist_delete\0").map(|sym| *sym)?;
         let shlist_deleteFree = __library.get(b"shlist_deleteFree\0").map(|sym| *sym)?;
         let shlist_get_next = __library.get(b"shlist_get_next\0").map(|sym| *sym)?;
@@ -8728,11 +5233,9 @@ impl Api {
         let sh_grwblk_delete = __library.get(b"sh_grwblk_delete\0").map(|sym| *sym)?;
         let sh_grwblk_close = __library.get(b"sh_grwblk_close\0").map(|sym| *sym)?;
         let ob_set_session_icontext = __library.get(b"ob_set_session_icontext\0").map(|sym| *sym)?;
-        let ob_set_main_obthis = __library.get(b"ob_set_main_obthis\0").map(|sym| *sym)?;
         let rt_move_thread = __library.get(b"rt_move_thread\0").map(|sym| *sym)?;
         let rt_clear_thread = __library.get(b"rt_clear_thread\0").map(|sym| *sym)?;
         let rt_get_current_this = __library.get(b"rt_get_current_this\0").map(|sym| *sym)?;
-        let rt_set_current_this = __library.get(b"rt_set_current_this\0").map(|sym| *sym)?;
         let rt_add_task = __library.get(b"rt_add_task\0").map(|sym| *sym)?;
         let rt_free_task = __library.get(b"rt_free_task\0").map(|sym| *sym)?;
         let rt_get_current_task_info = __library.get(b"rt_get_current_task_info\0").map(|sym| *sym)?;
@@ -8747,19 +5250,13 @@ impl Api {
         let shhash_get_next = __library.get(b"shhash_get_next\0").map(|sym| *sym)?;
         let shhash_insert = __library.get(b"shhash_insert\0").map(|sym| *sym)?;
         let shhash_search = __library.get(b"shhash_search\0").map(|sym| *sym)?;
-        let shhash_search_arg = __library.get(b"shhash_search_arg\0").map(|sym| *sym)?;
         let shhash_search_unique = __library.get(b"shhash_search_unique\0").map(|sym| *sym)?;
-        let shhash_search_unique_arg = __library.get(b"shhash_search_unique_arg\0").map(|sym| *sym)?;
         let shhash_searchNext = __library.get(b"shhash_searchNext\0").map(|sym| *sym)?;
         let shhash_searchSlot = __library.get(b"shhash_searchSlot\0").map(|sym| *sym)?;
         let shhash_remove = __library.get(b"shhash_remove\0").map(|sym| *sym)?;
         let shhash_statistics = __library.get(b"shhash_statistics\0").map(|sym| *sym)?;
         let shhash_traversal = __library.get(b"shhash_traversal\0").map(|sym| *sym)?;
-        let obAllocDebug = __library.get(b"obAllocDebug\0").map(|sym| *sym)?;
-        let obFreeDebug = __library.get(b"obFreeDebug\0").map(|sym| *sym)?;
         let ob_add_const_data = __library.get(b"ob_add_const_data\0").map(|sym| *sym)?;
-        let parse_stringvalue_hash = __library.get(b"parse_stringvalue_hash\0").map(|sym| *sym)?;
-        let obconpool_stringvalue_del = __library.get(b"obconpool_stringvalue_del\0").map(|sym| *sym)?;
         let ob_looksym_keyfunc = __library.get(b"ob_looksym_keyfunc\0").map(|sym| *sym)?;
         let ob_looksym_reference = __library.get(b"ob_looksym_reference\0").map(|sym| *sym)?;
         let ob_looksym_delete = __library.get(b"ob_looksym_delete\0").map(|sym| *sym)?;
@@ -8767,8 +5264,6 @@ impl Api {
         let ob_dynarray_grow = __library.get(b"ob_dynarray_grow\0").map(|sym| *sym)?;
         let ob_narray_create_static = __library.get(b"ob_narray_create_static\0").map(|sym| *sym)?;
         let ob_narray_create_dynamic = __library.get(b"ob_narray_create_dynamic\0").map(|sym| *sym)?;
-        let ob_narray_dynamic_item_init_callback =
-            __library.get(b"ob_narray_dynamic_item_init_callback\0").map(|sym| *sym)?;
         let ob_set_arraydef = __library.get(b"ob_set_arraydef\0").map(|sym| *sym)?;
         let ob_get_array_len = __library.get(b"ob_get_array_len\0").map(|sym| *sym)?;
         let ob_array_item_init_callback = __library.get(b"ob_array_item_init_callback\0").map(|sym| *sym)?;
@@ -8816,7 +5311,6 @@ impl Api {
         let shSetDecFractions = __library.get(b"shSetDecFractions\0").map(|sym| *sym)?;
         let shSetDecNegative = __library.get(b"shSetDecNegative\0").map(|sym| *sym)?;
         let shDecSetOverflow = __library.get(b"shDecSetOverflow\0").map(|sym| *sym)?;
-        let ConvertOldDecToString = __library.get(b"ConvertOldDecToString\0").map(|sym| *sym)?;
         let shdtDayName = __library.get(b"shdtDayName\0").map(|sym| *sym)?;
         let shdtDayOfWeek = __library.get(b"shdtDayOfWeek\0").map(|sym| *sym)?;
         let shdtBuildTime = __library.get(b"shdtBuildTime\0").map(|sym| *sym)?;
@@ -8872,10 +5366,6 @@ impl Api {
         let ob_get_no_fields = __library.get(b"ob_get_no_fields\0").map(|sym| *sym)?;
         let ob_get_parent_obinst = __library.get(b"ob_get_parent_obinst\0").map(|sym| *sym)?;
         let ob_get_first_user_field = __library.get(b"ob_get_first_user_field\0").map(|sym| *sym)?;
-        let ob_group_is_normalized_window =
-            __library.get(b"ob_group_is_normalized_window\0").map(|sym| *sym)?;
-        let ob_group_set_normalized_window =
-            __library.get(b"ob_group_set_normalized_window\0").map(|sym| *sym)?;
         let ob_get_field_type = __library.get(b"ob_get_field_type\0").map(|sym| *sym)?;
         let ob_get_int_field = __library.get(b"ob_get_int_field\0").map(|sym| *sym)?;
         let ob_get_uint_field = __library.get(b"ob_get_uint_field\0").map(|sym| *sym)?;
@@ -8916,7 +5406,6 @@ impl Api {
         let ob_is_descendent_locked = __library.get(b"ob_is_descendent_locked\0").map(|sym| *sym)?;
         let ob_validate_liblist = __library.get(b"ob_validate_liblist\0").map(|sym| *sym)?;
         let ob_set_liblist = __library.get(b"ob_set_liblist\0").map(|sym| *sym)?;
-        let ob_add_liblist = __library.get(b"ob_add_liblist\0").map(|sym| *sym)?;
         let ob_get_liblist = __library.get(b"ob_get_liblist\0").map(|sym| *sym)?;
         let ob_set_default_appl = __library.get(b"ob_set_default_appl\0").map(|sym| *sym)?;
         let ob_load_appl_group = __library.get(b"ob_load_appl_group\0").map(|sym| *sym)?;
@@ -8928,7 +5417,6 @@ impl Api {
         let ob_group_save = __library.get(b"ob_group_save\0").map(|sym| *sym)?;
         let ob_group_save_win = __library.get(b"ob_group_save_win\0").map(|sym| *sym)?;
         let ob_load_group_source = __library.get(b"ob_load_group_source\0").map(|sym| *sym)?;
-        let ob_reload_group_source = __library.get(b"ob_reload_group_source\0").map(|sym| *sym)?;
         let ob_rename_group = __library.get(b"ob_rename_group\0").map(|sym| *sym)?;
         let ob_move_group = __library.get(b"ob_move_group\0").map(|sym| *sym)?;
         let ob_move_group_with_name = __library.get(b"ob_move_group_with_name\0").map(|sym| *sym)?;
@@ -8989,7 +5477,6 @@ impl Api {
         let ob_is_class_descendant = __library.get(b"ob_is_class_descendant\0").map(|sym| *sym)?;
         let ob_is_inh_from_user_class = __library.get(b"ob_is_inh_from_user_class\0").map(|sym| *sym)?;
         let ob_get_sec_class_ancestor = __library.get(b"ob_get_sec_class_ancestor\0").map(|sym| *sym)?;
-        let obIsClassAutoinstantiate = __library.get(b"obIsClassAutoinstantiate\0").map(|sym| *sym)?;
         let ob_is_class_enum = __library.get(b"ob_is_class_enum\0").map(|sym| *sym)?;
         let ob_new_event = __library.get(b"ob_new_event\0").map(|sym| *sym)?;
         let ob_update_event = __library.get(b"ob_update_event\0").map(|sym| *sym)?;
@@ -9082,7 +5569,6 @@ impl Api {
         let ob_func_search = __library.get(b"ob_func_search\0").map(|sym| *sym)?;
         let ob_del_funccall_info = __library.get(b"ob_del_funccall_info\0").map(|sym| *sym)?;
         let ob_link_project = __library.get(b"ob_link_project\0").map(|sym| *sym)?;
-        let ob_get_runtime_group_hndl = __library.get(b"ob_get_runtime_group_hndl\0").map(|sym| *sym)?;
         let ob_check_for_locked_menu = __library.get(b"ob_check_for_locked_menu\0").map(|sym| *sym)?;
         let ob_create_obinst = __library.get(b"ob_create_obinst\0").map(|sym| *sym)?;
         let ob_instantiate_child_object = __library.get(b"ob_instantiate_child_object\0").map(|sym| *sym)?;
@@ -9094,9 +5580,6 @@ impl Api {
         let ob_create_library = __library.get(b"ob_create_library\0").map(|sym| *sym)?;
         let ob_create_consolidated_library =
             __library.get(b"ob_create_consolidated_library\0").map(|sym| *sym)?;
-        let CreatePBITypeDef = __library.get(b"CreatePBITypeDef\0").map(|sym| *sym)?;
-        let CreatePBIClassDef = __library.get(b"CreatePBIClassDef\0").map(|sym| *sym)?;
-        let CreatePBIScriptDef = __library.get(b"CreatePBIScriptDef\0").map(|sym| *sym)?;
         let ob_create_interface_in_library =
             __library.get(b"ob_create_interface_in_library\0").map(|sym| *sym)?;
         let ob_create_interface_class = __library.get(b"ob_create_interface_class\0").map(|sym| *sym)?;
@@ -9117,16 +5600,10 @@ impl Api {
         let ob_free_hierarchy_list = __library.get(b"ob_free_hierarchy_list\0").map(|sym| *sym)?;
         let ob_clear_instance_ref = __library.get(b"ob_clear_instance_ref\0").map(|sym| *sym)?;
         let ob_insert_inst_ref_dbg = __library.get(b"ob_insert_inst_ref_dbg\0").map(|sym| *sym)?;
-        let ob_insert_local_inst_ref_dbg =
-            __library.get(b"ob_insert_local_inst_ref_dbg\0").map(|sym| *sym)?;
         let ob_open_typedef_group = __library.get(b"ob_open_typedef_group\0").map(|sym| *sym)?;
-        let ob_load_pspp_dlls = __library.get(b"ob_load_pspp_dlls\0").map(|sym| *sym)?;
         let ob_save_dll_to_pbd = __library.get(b"ob_save_dll_to_pbd\0").map(|sym| *sym)?;
         let ob_convert_pbx_to_native_groups =
             __library.get(b"ob_convert_pbx_to_native_groups\0").map(|sym| *sym)?;
-        let ObPsppCreateControl = __library.get(b"ObPsppCreateControl\0").map(|sym| *sym)?;
-        let ObPsppGetEventID = __library.get(b"ObPsppGetEventID\0").map(|sym| *sym)?;
-        let DrawPsppObject = __library.get(b"DrawPsppObject\0").map(|sym| *sym)?;
         let ob_share_typedef_group = __library.get(b"ob_share_typedef_group\0").map(|sym| *sym)?;
         let ob_unshare_typedef_group = __library.get(b"ob_unshare_typedef_group\0").map(|sym| *sym)?;
         let ob_cm_evaluate_expression = __library.get(b"ob_cm_evaluate_expression\0").map(|sym| *sym)?;
@@ -9140,7 +5617,6 @@ impl Api {
         let ob_shared_refpkt = __library.get(b"ob_shared_refpkt\0").map(|sym| *sym)?;
         let ob_convert_chararray_to_string =
             __library.get(b"ob_convert_chararray_to_string\0").map(|sym| *sym)?;
-        let obJagResultsetNotify = __library.get(b"obJagResultsetNotify\0").map(|sym| *sym)?;
         let ob_class_delete_and_withinclass =
             __library.get(b"ob_class_delete_and_withinclass\0").map(|sym| *sym)?;
         let ob_find_orphan_class = __library.get(b"ob_find_orphan_class\0").map(|sym| *sym)?;
@@ -9149,41 +5625,6 @@ impl Api {
             __library.get(b"ob_is_ancestor_class_modified\0").map(|sym| *sym)?;
         let ob_rebuild_instance_image = __library.get(b"ob_rebuild_instance_image\0").map(|sym| *sym)?;
         let ob_build_compile_list = __library.get(b"ob_build_compile_list\0").map(|sym| *sym)?;
-        let os_openlib = __library.get(b"os_openlib\0").map(|sym| *sym)?;
-        let os_get_funcptr = __library.get(b"os_get_funcptr\0").map(|sym| *sym)?;
-        let os_callc = __library.get(b"os_callc\0").map(|sym| *sym)?;
-        let os_closelib = __library.get(b"os_closelib\0").map(|sym| *sym)?;
-        let cm_init_script_compiler = __library.get(b"cm_init_script_compiler\0").map(|sym| *sym)?;
-        let cm_enable_debug_symbol = __library.get(b"cm_enable_debug_symbol\0").map(|sym| *sym)?;
-        let cm_disable_debug_symbol = __library.get(b"cm_disable_debug_symbol\0").map(|sym| *sym)?;
-        let cm_set_compiler_context = __library.get(b"cm_set_compiler_context\0").map(|sym| *sym)?;
-        let cm_terminate = __library.get(b"cm_terminate\0").map(|sym| *sym)?;
-        let cm_compile_script = __library.get(b"cm_compile_script\0").map(|sym| *sym)?;
-        let cm_free_error_list = __library.get(b"cm_free_error_list\0").map(|sym| *sym)?;
-        let cm_get_error_list = __library.get(b"cm_get_error_list\0").map(|sym| *sym)?;
-        let cm_keep_error_list = __library.get(b"cm_keep_error_list\0").map(|sym| *sym)?;
-        let cm_combine_error_list = __library.get(b"cm_combine_error_list\0").map(|sym| *sym)?;
-        let cm_compile_namespace_block = __library.get(b"cm_compile_namespace_block\0").map(|sym| *sym)?;
-        let cm_group_compile = __library.get(b"cm_group_compile\0").map(|sym| *sym)?;
-        let cm_is_word_reserved = __library.get(b"cm_is_word_reserved\0").map(|sym| *sym)?;
-        let cm_stream_compile = __library.get(b"cm_stream_compile\0").map(|sym| *sym)?;
-        let cm_src_block_compile = __library.get(b"cm_src_block_compile\0").map(|sym| *sym)?;
-        let cm_describe_statement = __library.get(b"cm_describe_statement\0").map(|sym| *sym)?;
-        let cm_compiler_error = __library.get(b"cm_compiler_error\0").map(|sym| *sym)?;
-        let cm_compiler_error_ln = __library.get(b"cm_compiler_error_ln\0").map(|sym| *sym)?;
-        let cm_get_curr_this = __library.get(b"cm_get_curr_this\0").map(|sym| *sym)?;
-        let cm_rebuild_application = __library.get(b"cm_rebuild_application\0").map(|sym| *sym)?;
-        let cm_rebuild_from_compile_list =
-            __library.get(b"cm_rebuild_from_compile_list\0").map(|sym| *sym)?;
-        let cm_regen_datawindow = __library.get(b"cm_regen_datawindow\0").map(|sym| *sym)?;
-        let cm_read_alias_table = __library.get(b"cm_read_alias_table\0").map(|sym| *sym)?;
-        let cm_find_alias = __library.get(b"cm_find_alias\0").map(|sym| *sym)?;
-        let cm_add_alias_entry = __library.get(b"cm_add_alias_entry\0").map(|sym| *sym)?;
-        let cm_remove_alias_entry = __library.get(b"cm_remove_alias_entry\0").map(|sym| *sym)?;
-        let cm_write_alias_table = __library.get(b"cm_write_alias_table\0").map(|sym| *sym)?;
-        let cm_add_global_var = __library.get(b"cm_add_global_var\0").map(|sym| *sym)?;
-        let cm_import_pb_extension = __library.get(b"cm_import_pb_extension\0").map(|sym| *sym)?;
-        let cm_convert_pbl_to_unicode = __library.get(b"cm_convert_pbl_to_unicode\0").map(|sym| *sym)?;
         let ot_get_next_evaled_arg = __library.get(b"ot_get_next_evaled_arg\0").map(|sym| *sym)?;
         let ot_get_next_evaled_arg_no_convert =
             __library.get(b"ot_get_next_evaled_arg_no_convert\0").map(|sym| *sym)?;
@@ -9300,8 +5741,6 @@ impl Api {
         let ot_rand = __library.get(b"ot_rand\0").map(|sym| *sym)?;
         let ot_class_compare = __library.get(b"ot_class_compare\0").map(|sym| *sym)?;
         let ot_assign_global_var_obinst = __library.get(b"ot_assign_global_var_obinst\0").map(|sym| *sym)?;
-        let ot_clear_array_data = __library.get(b"ot_clear_array_data\0").map(|sym| *sym)?;
-        let ob_get_local_session = __library.get(b"ob_get_local_session\0").map(|sym| *sym)?;
         let ob_class_indirect = __library.get(b"ob_class_indirect\0").map(|sym| *sym)?;
         let ob_add_external_class_ref = __library.get(b"ob_add_external_class_ref\0").map(|sym| *sym)?;
         let ob_get_local_class = __library.get(b"ob_get_local_class\0").map(|sym| *sym)?;
@@ -9330,13 +5769,10 @@ impl Api {
         let ob_fetch_routine = __library.get(b"ob_fetch_routine\0").map(|sym| *sym)?;
         let ob_type_proto_decl = __library.get(b"ob_type_proto_decl\0").map(|sym| *sym)?;
         let ob_type_proto_ref = __library.get(b"ob_type_proto_ref\0").map(|sym| *sym)?;
-        let ob_lookup_routine_by_signature =
-            __library.get(b"ob_lookup_routine_by_signature\0").map(|sym| *sym)?;
         let ob_proto_error_upgrade = __library.get(b"ob_proto_error_upgrade\0").map(|sym| *sym)?;
         let ob_get_proto_access_type = __library.get(b"ob_get_proto_access_type\0").map(|sym| *sym)?;
         let ob_type_process_protos = __library.get(b"ob_type_process_protos\0").map(|sym| *sym)?;
         let ob_type_reprocess_protos = __library.get(b"ob_type_reprocess_protos\0").map(|sym| *sym)?;
-        let ob_type_proto_add = __library.get(b"ob_type_proto_add\0").map(|sym| *sym)?;
         let ob_get_type_proto_names = __library.get(b"ob_get_type_proto_names\0").map(|sym| *sym)?;
         let ob_declare_external_event_type =
             __library.get(b"ob_declare_external_event_type\0").map(|sym| *sym)?;
@@ -9352,10 +5788,6 @@ impl Api {
             __library.get(b"ob_prototype_match_for_event\0").map(|sym| *sym)?;
         let ob_prototype_search = __library.get(b"ob_prototype_search\0").map(|sym| *sym)?;
         let ob_proto_overload_search = __library.get(b"ob_proto_overload_search\0").map(|sym| *sym)?;
-        let ob_create_proto_throws_list = __library.get(b"ob_create_proto_throws_list\0").map(|sym| *sym)?;
-        let ob_create_proto_args = __library.get(b"ob_create_proto_args\0").map(|sym| *sym)?;
-        let ob_proto_overload_search_src =
-            __library.get(b"ob_proto_overload_search_src\0").map(|sym| *sym)?;
         let ob_event_module_name = __library.get(b"ob_event_module_name\0").map(|sym| *sym)?;
         let ob_find_first_event = __library.get(b"ob_find_first_event\0").map(|sym| *sym)?;
         let ob_type_event_script_srch = __library.get(b"ob_type_event_script_srch\0").map(|sym| *sym)?;
@@ -9385,15 +5817,11 @@ impl Api {
         let ob_is_an_ancestor = __library.get(b"ob_is_an_ancestor\0").map(|sym| *sym)?;
         let ob_is_an_ancestor_excl = __library.get(b"ob_is_an_ancestor_excl\0").map(|sym| *sym)?;
         let ob_find_type_ancestor = __library.get(b"ob_find_type_ancestor\0").map(|sym| *sym)?;
-        let ob_find_type_ancestor_assign =
-            __library.get(b"ob_find_type_ancestor_assign\0").map(|sym| *sym)?;
         let ob_find_common_ancestor = __library.get(b"ob_find_common_ancestor\0").map(|sym| *sym)?;
         let ob_get_ancestor_system_class =
             __library.get(b"ob_get_ancestor_system_class\0").map(|sym| *sym)?;
         let ob_get_runtime_class = __library.get(b"ob_get_runtime_class\0").map(|sym| *sym)?;
-        let ob_get_pspp_class_name = __library.get(b"ob_get_pspp_class_name\0").map(|sym| *sym)?;
         let ob_get_func_vtable_entry = __library.get(b"ob_get_func_vtable_entry\0").map(|sym| *sym)?;
-        let ob_find_method = __library.get(b"ob_find_method\0").map(|sym| *sym)?;
         let ob_rout_declare = __library.get(b"ob_rout_declare\0").map(|sym| *sym)?;
         let ob_open_routine = __library.get(b"ob_open_routine\0").map(|sym| *sym)?;
         let ob_close_routine = __library.get(b"ob_close_routine\0").map(|sym| *sym)?;
@@ -9408,8 +5836,6 @@ impl Api {
         let ob_convert_vars_to_const = __library.get(b"ob_convert_vars_to_const\0").map(|sym| *sym)?;
         let ob_clear_group_objects = __library.get(b"ob_clear_group_objects\0").map(|sym| *sym)?;
         let ob_init_group_objects = __library.get(b"ob_init_group_objects\0").map(|sym| *sym)?;
-        let getCultureValueStr = __library.get(b"getCultureValueStr\0").map(|sym| *sym)?;
-        let getCultureValueInt = __library.get(b"getCultureValueInt\0").map(|sym| *sym)?;
         let shformatDateTimeWeb = __library.get(b"shformatDateTimeWeb\0").map(|sym| *sym)?;
         let shformatDateTime = __library.get(b"shformatDateTime\0").map(|sym| *sym)?;
         let shformatDecimal = __library.get(b"shformatDecimal\0").map(|sym| *sym)?;
@@ -9437,9 +5863,7 @@ impl Api {
         let shIsValidRealWeb = __library.get(b"shIsValidRealWeb\0").map(|sym| *sym)?;
         let shNormalizeRealWeb = __library.get(b"shNormalizeRealWeb\0").map(|sym| *sym)?;
         let shNormalizeRealbyLocaleWeb = __library.get(b"shNormalizeRealbyLocaleWeb\0").map(|sym| *sym)?;
-        let pbshr_intl = __library.get(b"pbshr_intl\0").map(|sym| *sym)?;
         let shIsValidRealNoLocale = __library.get(b"shIsValidRealNoLocale\0").map(|sym| *sym)?;
-        let shGetRegProfileStringValue = __library.get(b"shGetRegProfileStringValue\0").map(|sym| *sym)?;
         let ob_add_glbsym_var = __library.get(b"ob_add_glbsym_var\0").map(|sym| *sym)?;
         let ob_add_glbsym_class = __library.get(b"ob_add_glbsym_class\0").map(|sym| *sym)?;
         let ob_add_glbsym_func = __library.get(b"ob_add_glbsym_func\0").map(|sym| *sym)?;
@@ -9463,14 +5887,6 @@ impl Api {
         let rt_error = __library.get(b"rt_error\0").map(|sym| *sym)?;
         let rt_free_error_struct = __library.get(b"rt_free_error_struct\0").map(|sym| *sym)?;
         let rt_error_using_struct = __library.get(b"rt_error_using_struct\0").map(|sym| *sym)?;
-        let rt_build_exception_using_error =
-            __library.get(b"rt_build_exception_using_error\0").map(|sym| *sym)?;
-        let rt_handle_uncaught_exception =
-            __library.get(b"rt_handle_uncaught_exception\0").map(|sym| *sym)?;
-        let rt_populate_error_struct = __library.get(b"rt_populate_error_struct\0").map(|sym| *sym)?;
-        let rt_populate_error_from_stack =
-            __library.get(b"rt_populate_error_from_stack\0").map(|sym| *sym)?;
-        let rt_call_error_callback = __library.get(b"rt_call_error_callback\0").map(|sym| *sym)?;
         let rt_normalize_error_id = __library.get(b"rt_normalize_error_id\0").map(|sym| *sym)?;
         let ot_handle_exception = __library.get(b"ot_handle_exception\0").map(|sym| *sym)?;
         let ob_dbg_pop_call_stack_ntimes =
@@ -9484,7 +5900,6 @@ impl Api {
         let rtRoutineExecByName = __library.get(b"rtRoutineExecByName\0").map(|sym| *sym)?;
         let rtRoutineExecPosted = __library.get(b"rtRoutineExecPosted\0").map(|sym| *sym)?;
         let rtRoutineInfo = __library.get(b"rtRoutineInfo\0").map(|sym| *sym)?;
-        let rtRoutineProtoInfoFree = __library.get(b"rtRoutineProtoInfoFree\0").map(|sym| *sym)?;
         let rtInitializeInfoForCall = __library.get(b"rtInitializeInfoForCall\0").map(|sym| *sym)?;
         let rtCleanupInfoAfterCall = __library.get(b"rtCleanupInfoAfterCall\0").map(|sym| *sym)?;
         let rtRoutineCount = __library.get(b"rtRoutineCount\0").map(|sym| *sym)?;
@@ -9494,11 +5909,6 @@ impl Api {
         let rtDataFree = __library.get(b"rtDataFree\0").map(|sym| *sym)?;
         let rtDataCopy = __library.get(b"rtDataCopy\0").map(|sym| *sym)?;
         let rt_hit_level_0 = __library.get(b"rt_hit_level_0\0").map(|sym| *sym)?;
-        let rt_StartJaguarDebug = __library.get(b"rt_StartJaguarDebug\0").map(|sym| *sym)?;
-        let rt_StopJaguarDebug = __library.get(b"rt_StopJaguarDebug\0").map(|sym| *sym)?;
-        let rt_JagBreakpointHit = __library.get(b"rt_JagBreakpointHit\0").map(|sym| *sym)?;
-        let rt_JaguarGetCurrentContext = __library.get(b"rt_JaguarGetCurrentContext\0").map(|sym| *sym)?;
-        let obPsppNormalBody = __library.get(b"obPsppNormalBody\0").map(|sym| *sym)?;
         let ob_create_object = __library.get(b"ob_create_object\0").map(|sym| *sym)?;
         let ob_create_object_using = __library.get(b"ob_create_object_using\0").map(|sym| *sym)?;
         let ob_copy_rtinst = __library.get(b"ob_copy_rtinst\0").map(|sym| *sym)?;
@@ -9530,7 +5940,6 @@ impl Api {
         let ob_get_qualified_name_with_namespace =
             __library.get(b"ob_get_qualified_name_with_namespace\0").map(|sym| *sym)?;
         let ob_get_source_from_group = __library.get(b"ob_get_source_from_group\0").map(|sym| *sym)?;
-        let obUpdateSrcLastEdit = __library.get(b"obUpdateSrcLastEdit\0").map(|sym| *sym)?;
         let ob_get_var = __library.get(b"ob_get_var\0").map(|sym| *sym)?;
         let ob_init_var_data = __library.get(b"ob_init_var_data\0").map(|sym| *sym)?;
         let ob_global_indirect = __library.get(b"ob_global_indirect\0").map(|sym| *sym)?;
@@ -9550,8 +5959,6 @@ impl Api {
         let ot_get_dll_funcptr_by_name = __library.get(b"ot_get_dll_funcptr_by_name\0").map(|sym| *sym)?;
         let ot_post_call = __library.get(b"ot_post_call\0").map(|sym| *sym)?;
         let ot_check_types = __library.get(b"ot_check_types\0").map(|sym| *sym)?;
-        let ot_strict_type_check = __library.get(b"ot_strict_type_check\0").map(|sym| *sym)?;
-        let ot_generateVarInfo = __library.get(b"ot_generateVarInfo\0").map(|sym| *sym)?;
         let ot_type_loc = __library.get(b"ot_type_loc\0").map(|sym| *sym)?;
         let ot_init_data_node = __library.get(b"ot_init_data_node\0").map(|sym| *sym)?;
         let ot_set_lvalue = __library.get(b"ot_set_lvalue\0").map(|sym| *sym)?;
@@ -9583,8 +5990,6 @@ impl Api {
         let ot_convert_array_to_object = __library.get(b"ot_convert_array_to_object\0").map(|sym| *sym)?;
         let ot_build_simple_refpak = __library.get(b"ot_build_simple_refpak\0").map(|sym| *sym)?;
         let ot_build_field_refpak = __library.get(b"ot_build_field_refpak\0").map(|sym| *sym)?;
-        let ot_build_flditemupdate_refpak =
-            __library.get(b"ot_build_flditemupdate_refpak\0").map(|sym| *sym)?;
         let ot_add_any = __library.get(b"ot_add_any\0").map(|sym| *sym)?;
         let ot_sub_any = __library.get(b"ot_sub_any\0").map(|sym| *sym)?;
         let ot_mul_any = __library.get(b"ot_mul_any\0").map(|sym| *sym)?;
@@ -9617,414 +6022,6 @@ impl Api {
         let ot_string_to_binary = __library.get(b"ot_string_to_binary\0").map(|sym| *sym)?;
         let ot_bytearray_to_binary = __library.get(b"ot_bytearray_to_binary\0").map(|sym| *sym)?;
         let ot_any_to_binary = __library.get(b"ot_any_to_binary\0").map(|sym| *sym)?;
-        let dwCompile = __library.get(b"dwCompile\0").map(|sym| *sym)?;
-        let dwCreateWindow = __library.get(b"dwCreateWindow\0").map(|sym| *sym)?;
-        let dwCreateWindowEx = __library.get(b"dwCreateWindowEx\0").map(|sym| *sym)?;
-        let dwCrosstabDLG = __library.get(b"dwCrosstabDLG\0").map(|sym| *sym)?;
-        let dwDescribe = __library.get(b"dwDescribe\0").map(|sym| *sym)?;
-        let dwFree = __library.get(b"dwFree\0").map(|sym| *sym)?;
-        let dwSetDataStoreHWndBehavior = __library.get(b"dwSetDataStoreHWndBehavior\0").map(|sym| *sym)?;
-        let dwLoadData = __library.get(b"dwLoadData\0").map(|sym| *sym)?;
-        let dwLoadDataProg = __library.get(b"dwLoadDataProg\0").map(|sym| *sym)?;
-        let dwLoadDataCrosstab = __library.get(b"dwLoadDataCrosstab\0").map(|sym| *sym)?;
-        let dwLoadDataStorage = __library.get(b"dwLoadDataStorage\0").map(|sym| *sym)?;
-        let dwLoadDataOle = __library.get(b"dwLoadDataOle\0").map(|sym| *sym)?;
-        let dwLoadDW = __library.get(b"dwLoadDW\0").map(|sym| *sym)?;
-        let dwLoadFile = __library.get(b"dwLoadFile\0").map(|sym| *sym)?;
-        let dwLoadLibrary = __library.get(b"dwLoadLibrary\0").map(|sym| *sym)?;
-        let dwLoadMemory = __library.get(b"dwLoadMemory\0").map(|sym| *sym)?;
-        let dwLoadStorage = __library.get(b"dwLoadStorage\0").map(|sym| *sym)?;
-        let dwModify = __library.get(b"dwModify\0").map(|sym| *sym)?;
-        let dwSaveData = __library.get(b"dwSaveData\0").map(|sym| *sym)?;
-        let dwSaveDataStorage = __library.get(b"dwSaveDataStorage\0").map(|sym| *sym)?;
-        let dwSaveDataCopy = __library.get(b"dwSaveDataCopy\0").map(|sym| *sym)?;
-        let dwSaveDataCopyStorage = __library.get(b"dwSaveDataCopyStorage\0").map(|sym| *sym)?;
-        let dwSaveFile = __library.get(b"dwSaveFile\0").map(|sym| *sym)?;
-        let dwSaveLibrary = __library.get(b"dwSaveLibrary\0").map(|sym| *sym)?;
-        let dwSaveOle = __library.get(b"dwSaveOle\0").map(|sym| *sym)?;
-        let dwSaveObjects = __library.get(b"dwSaveObjects\0").map(|sym| *sym)?;
-        let dwSaveStorage = __library.get(b"dwSaveStorage\0").map(|sym| *sym)?;
-        let dwFileSaveStorage = __library.get(b"dwFileSaveStorage\0").map(|sym| *sym)?;
-        let dwSaveStorageStg = __library.get(b"dwSaveStorageStg\0").map(|sym| *sym)?;
-        let dwSaveOleStg = __library.get(b"dwSaveOleStg\0").map(|sym| *sym)?;
-        let dwSaveObjectsStg = __library.get(b"dwSaveObjectsStg\0").map(|sym| *sym)?;
-        let dwSaveDataStg = __library.get(b"dwSaveDataStg\0").map(|sym| *sym)?;
-        let dwLoadFileBlob = __library.get(b"dwLoadFileBlob\0").map(|sym| *sym)?;
-        let dwStgFree = __library.get(b"dwStgFree\0").map(|sym| *sym)?;
-        let dwGetMessageText = __library.get(b"dwGetMessageText\0").map(|sym| *sym)?;
-        let dwGetExceedPageMessage = __library.get(b"dwGetExceedPageMessage\0").map(|sym| *sym)?;
-        let DW_PluginStart = __library.get(b"DW_PluginStart\0").map(|sym| *sym)?;
-        let DW_PluginStop = __library.get(b"DW_PluginStop\0").map(|sym| *sym)?;
-        let dwSyntaxGen = __library.get(b"dwSyntaxGen\0").map(|sym| *sym)?;
-        let dwSyntaxGenForm = __library.get(b"dwSyntaxGenForm\0").map(|sym| *sym)?;
-        let dwSyntaxFree = __library.get(b"dwSyntaxFree\0").map(|sym| *sym)?;
-        let dwGenDataListSyntax = __library.get(b"dwGenDataListSyntax\0").map(|sym| *sym)?;
-        let dwGenDataFormSyntax = __library.get(b"dwGenDataFormSyntax\0").map(|sym| *sym)?;
-        let dwSyntaxFromSQL = __library.get(b"dwSyntaxFromSQL\0").map(|sym| *sym)?;
-        let dwSyntaxFromDesc = __library.get(b"dwSyntaxFromDesc\0").map(|sym| *sym)?;
-        let dwClearOriginalValues = __library.get(b"dwClearOriginalValues\0").map(|sym| *sym)?;
-        let dwRowsDiscard = __library.get(b"dwRowsDiscard\0").map(|sym| *sym)?;
-        let dwRowsMove = __library.get(b"dwRowsMove\0").map(|sym| *sym)?;
-        let dwCreateObjectStorage = __library.get(b"dwCreateObjectStorage\0").map(|sym| *sym)?;
-        let dwDefaultArgs = __library.get(b"dwDefaultArgs\0").map(|sym| *sym)?;
-        let dwDefaultArgsFree = __library.get(b"dwDefaultArgsFree\0").map(|sym| *sym)?;
-        let dwCrosstabDef = __library.get(b"dwCrosstabDef\0").map(|sym| *sym)?;
-        let dwCrosstabDefDynamic = __library.get(b"dwCrosstabDefDynamic\0").map(|sym| *sym)?;
-        let dwCrosstabModifyDynamic = __library.get(b"dwCrosstabModifyDynamic\0").map(|sym| *sym)?;
-        let dwCrosstabModifyStatic = __library.get(b"dwCrosstabModifyStatic\0").map(|sym| *sym)?;
-        let dwCrosstabBuildModel = __library.get(b"dwCrosstabBuildModel\0").map(|sym| *sym)?;
-        let dwInfoBegin = __library.get(b"dwInfoBegin\0").map(|sym| *sym)?;
-        let dwInfoBitmap = __library.get(b"dwInfoBitmap\0").map(|sym| *sym)?;
-        let dwInfoBlob = __library.get(b"dwInfoBlob\0").map(|sym| *sym)?;
-        let dwInfoInkpic = __library.get(b"dwInfoInkpic\0").map(|sym| *sym)?;
-        let dwInfoButton = __library.get(b"dwInfoButton\0").map(|sym| *sym)?;
-        let dwInfoColumn = __library.get(b"dwInfoColumn\0").map(|sym| *sym)?;
-        let dwInfoCompute = __library.get(b"dwInfoCompute\0").map(|sym| *sym)?;
-        let dwInfoCrosstab = __library.get(b"dwInfoCrosstab\0").map(|sym| *sym)?;
-        let dwInfoWpf = __library.get(b"dwInfoWpf\0").map(|sym| *sym)?;
-        let dwInfoDataWindow = __library.get(b"dwInfoDataWindow\0").map(|sym| *sym)?;
-        let dwInfoEnd = __library.get(b"dwInfoEnd\0").map(|sym| *sym)?;
-        let dwInfoFunctions = __library.get(b"dwInfoFunctions\0").map(|sym| *sym)?;
-        let dwInfoGetFirstColumn = __library.get(b"dwInfoGetFirstColumn\0").map(|sym| *sym)?;
-        let dwInfoGetNextColumn = __library.get(b"dwInfoGetNextColumn\0").map(|sym| *sym)?;
-        let dwInfoGetDWWidth = __library.get(b"dwInfoGetDWWidth\0").map(|sym| *sym)?;
-        let dwInfoGetFirstObject = __library.get(b"dwInfoGetFirstObject\0").map(|sym| *sym)?;
-        let dwInfoGetNextObject = __library.get(b"dwInfoGetNextObject\0").map(|sym| *sym)?;
-        let dwInfoGetObjectType = __library.get(b"dwInfoGetObjectType\0").map(|sym| *sym)?;
-        let dwInfoGraph = __library.get(b"dwInfoGraph\0").map(|sym| *sym)?;
-        let dwInfoGroupBox = __library.get(b"dwInfoGroupBox\0").map(|sym| *sym)?;
-        let dwInfoLine = __library.get(b"dwInfoLine\0").map(|sym| *sym)?;
-        let dwInfoOle = __library.get(b"dwInfoOle\0").map(|sym| *sym)?;
-        let dwInfoOval = __library.get(b"dwInfoOval\0").map(|sym| *sym)?;
-        let dwInfoProcessType = __library.get(b"dwInfoProcessType\0").map(|sym| *sym)?;
-        let dwInfoRect = __library.get(b"dwInfoRect\0").map(|sym| *sym)?;
-        let dwInfoRegionFirst = __library.get(b"dwInfoRegionFirst\0").map(|sym| *sym)?;
-        let dwInfoRegionNext = __library.get(b"dwInfoRegionNext\0").map(|sym| *sym)?;
-        let dwInfoReport = __library.get(b"dwInfoReport\0").map(|sym| *sym)?;
-        let dwInfoResourceNames = __library.get(b"dwInfoResourceNames\0").map(|sym| *sym)?;
-        let dwInfoRoundRect = __library.get(b"dwInfoRoundRect\0").map(|sym| *sym)?;
-        let dwInfoSparse = __library.get(b"dwInfoSparse\0").map(|sym| *sym)?;
-        let dwInfoTable = __library.get(b"dwInfoTable\0").map(|sym| *sym)?;
-        let dwInfoTableExtract = __library.get(b"dwInfoTableExtract\0").map(|sym| *sym)?;
-        let dwInfoText = __library.get(b"dwInfoText\0").map(|sym| *sym)?;
-        let dwInfoVerifyCompute = __library.get(b"dwInfoVerifyCompute\0").map(|sym| *sym)?;
-        let dwInfoVerifyFilter = __library.get(b"dwInfoVerifyFilter\0").map(|sym| *sym)?;
-        let dwInfoVerifyStmt = __library.get(b"dwInfoVerifyStmt\0").map(|sym| *sym)?;
-        let dwInfoVerifyString = __library.get(b"dwInfoVerifyString\0").map(|sym| *sym)?;
-        let dwInfoParseStmt = __library.get(b"dwInfoParseStmt\0").map(|sym| *sym)?;
-        let dwInfoSetPSRFileName = __library.get(b"dwInfoSetPSRFileName\0").map(|sym| *sym)?;
-        let dwClientToObject = __library.get(b"dwClientToObject\0").map(|sym| *sym)?;
-        let dwDBCancel = __library.get(b"dwDBCancel\0").map(|sym| *sym)?;
-        let dwDeleteCrosstabSourceList = __library.get(b"dwDeleteCrosstabSourceList\0").map(|sym| *sym)?;
-        let dwDragObjectCreate = __library.get(b"dwDragObjectCreate\0").map(|sym| *sym)?;
-        let dwDragObjectDestroy = __library.get(b"dwDragObjectDestroy\0").map(|sym| *sym)?;
-        let dwExprDialog = __library.get(b"dwExprDialog\0").map(|sym| *sym)?;
-        let dwValidationExprDialog = __library.get(b"dwValidationExprDialog\0").map(|sym| *sym)?;
-        let dwExprValidate = __library.get(b"dwExprValidate\0").map(|sym| *sym)?;
-        let dwFind = __library.get(b"dwFind\0").map(|sym| *sym)?;
-        let dwFindGroupChange = __library.get(b"dwFindGroupChange\0").map(|sym| *sym)?;
-        let dwFindRequired = __library.get(b"dwFindRequired\0").map(|sym| *sym)?;
-        let dwFitColumn = __library.get(b"dwFitColumn\0").map(|sym| *sym)?;
-        let dwGenTableName = __library.get(b"dwGenTableName\0").map(|sym| *sym)?;
-        let dwGenXTableName = __library.get(b"dwGenXTableName\0").map(|sym| *sym)?;
-        let dwGetBandUnderMouse = __library.get(b"dwGetBandUnderMouse\0").map(|sym| *sym)?;
-        let dwGetRowColUnderPoint = __library.get(b"dwGetRowColUnderPoint\0").map(|sym| *sym)?;
-        let dwIsPointOutsideEditCol = __library.get(b"dwIsPointOutsideEditCol\0").map(|sym| *sym)?;
-        let dwGetColumnFormat = __library.get(b"dwGetColumnFormat\0").map(|sym| *sym)?;
-        let dwGetColumnFormatLength = __library.get(b"dwGetColumnFormatLength\0").map(|sym| *sym)?;
-        let dwGetColumnNumber = __library.get(b"dwGetColumnNumber\0").map(|sym| *sym)?;
-        let dwGetColumnType = __library.get(b"dwGetColumnType\0").map(|sym| *sym)?;
-        let dwGetColumnValidation = __library.get(b"dwGetColumnValidation\0").map(|sym| *sym)?;
-        let dwGetColumnValidationLength = __library.get(b"dwGetColumnValidationLength\0").map(|sym| *sym)?;
-        let dwGetColumnValue = __library.get(b"dwGetColumnValue\0").map(|sym| *sym)?;
-        let dwGetColumnValueLength = __library.get(b"dwGetColumnValueLength\0").map(|sym| *sym)?;
-        let dwGetCurrentCol = __library.get(b"dwGetCurrentCol\0").map(|sym| *sym)?;
-        let dwGetCurrentRowCol = __library.get(b"dwGetCurrentRowCol\0").map(|sym| *sym)?;
-        let dwGetCurrentText = __library.get(b"dwGetCurrentText\0").map(|sym| *sym)?;
-        let dwGetCurrentTextLength = __library.get(b"dwGetCurrentTextLength\0").map(|sym| *sym)?;
-        let dwGetDBvendor = __library.get(b"dwGetDBvendor\0").map(|sym| *sym)?;
-        let dwGetDBvendorLength = __library.get(b"dwGetDBvendorLength\0").map(|sym| *sym)?;
-        let dwGetDBlogid = __library.get(b"dwGetDBlogid\0").map(|sym| *sym)?;
-        let dwGetDBlogidLength = __library.get(b"dwGetDBlogidLength\0").map(|sym| *sym)?;
-        let dwGetDBlogpass = __library.get(b"dwGetDBlogpass\0").map(|sym| *sym)?;
-        let dwGetDBlogpassLength = __library.get(b"dwGetDBlogpassLength\0").map(|sym| *sym)?;
-        let dwGetDBserver = __library.get(b"dwGetDBserver\0").map(|sym| *sym)?;
-        let dwGetDBserverLength = __library.get(b"dwGetDBserverLength\0").map(|sym| *sym)?;
-        let dwGetDBdatabase = __library.get(b"dwGetDBdatabase\0").map(|sym| *sym)?;
-        let dwGetDBdatabaseLength = __library.get(b"dwGetDBdatabaseLength\0").map(|sym| *sym)?;
-        let dwGetDBuserid = __library.get(b"dwGetDBuserid\0").map(|sym| *sym)?;
-        let dwGetDBuseridLength = __library.get(b"dwGetDBuseridLength\0").map(|sym| *sym)?;
-        let dwGetDBdatabasepass = __library.get(b"dwGetDBdatabasepass\0").map(|sym| *sym)?;
-        let dwGetDBdatabasepassLength = __library.get(b"dwGetDBdatabasepassLength\0").map(|sym| *sym)?;
-        let dwGetDBparm = __library.get(b"dwGetDBparm\0").map(|sym| *sym)?;
-        let dwGetDBparmLength = __library.get(b"dwGetDBparmLength\0").map(|sym| *sym)?;
-        let dwGetDBError = __library.get(b"dwGetDBError\0").map(|sym| *sym)?;
-        let dwGetDBErrorLength = __library.get(b"dwGetDBErrorLength\0").map(|sym| *sym)?;
-        let dwGetItemDateTime = __library.get(b"dwGetItemDateTime\0").map(|sym| *sym)?;
-        let dwGetItemDecimal = __library.get(b"dwGetItemDecimal\0").map(|sym| *sym)?;
-        let dwGetItemDouble = __library.get(b"dwGetItemDouble\0").map(|sym| *sym)?;
-        let dwGetItemLength = __library.get(b"dwGetItemLength\0").map(|sym| *sym)?;
-        let dwGetItemLengthLong = __library.get(b"dwGetItemLengthLong\0").map(|sym| *sym)?;
-        let dwGetItemStatus = __library.get(b"dwGetItemStatus\0").map(|sym| *sym)?;
-        let dwGetItemLengthAndString = __library.get(b"dwGetItemLengthAndString\0").map(|sym| *sym)?;
-        let dwGetItemString = __library.get(b"dwGetItemString\0").map(|sym| *sym)?;
-        let dwGetItemStringLong = __library.get(b"dwGetItemStringLong\0").map(|sym| *sym)?;
-        let dwGetItemType = __library.get(b"dwGetItemType\0").map(|sym| *sym)?;
-        let dwGetNextModifiedRow = __library.get(b"dwGetNextModifiedRow\0").map(|sym| *sym)?;
-        let dwGetNotifyArgs = __library.get(b"dwGetNotifyArgs\0").map(|sym| *sym)?;
-        let dwGetObjectUnderMouse = __library.get(b"dwGetObjectUnderMouse\0").map(|sym| *sym)?;
-        let dwGroupCalc = __library.get(b"dwGroupCalc\0").map(|sym| *sym)?;
-        let dwOleActivateItem = __library.get(b"dwOleActivateItem\0").map(|sym| *sym)?;
-        let dwOleGetControlInfo = __library.get(b"dwOleGetControlInfo\0").map(|sym| *sym)?;
-        let dwOleDeactivate = __library.get(b"dwOleDeactivate\0").map(|sym| *sym)?;
-        let dwOleIPactivate = __library.get(b"dwOleIPactivate\0").map(|sym| *sym)?;
-        let dwOleIPResize = __library.get(b"dwOleIPResize\0").map(|sym| *sym)?;
-        let dwOleReset = __library.get(b"dwOleReset\0").map(|sym| *sym)?;
-        let dwGetProgram = __library.get(b"dwGetProgram\0").map(|sym| *sym)?;
-        let dwPosition = __library.get(b"dwPosition\0").map(|sym| *sym)?;
-        let dwQryDialog = __library.get(b"dwQryDialog\0").map(|sym| *sym)?;
-        let dwCanChangeQryMode = __library.get(b"dwCanChangeQryMode\0").map(|sym| *sym)?;
-        let dwResetColumnValues = __library.get(b"dwResetColumnValues\0").map(|sym| *sym)?;
-        let dwResetTrans = __library.get(b"dwResetTrans\0").map(|sym| *sym)?;
-        let dwRetrieve = __library.get(b"dwRetrieve\0").map(|sym| *sym)?;
-        let dwSendMessage = __library.get(b"dwSendMessage\0").map(|sym| *sym)?;
-        let dwSetColumnFormat = __library.get(b"dwSetColumnFormat\0").map(|sym| *sym)?;
-        let dwSetColumnValidation = __library.get(b"dwSetColumnValidation\0").map(|sym| *sym)?;
-        let dwSetColumnValue = __library.get(b"dwSetColumnValue\0").map(|sym| *sym)?;
-        let dwSetCurrentRowCol = __library.get(b"dwSetCurrentRowCol\0").map(|sym| *sym)?;
-        let dwSetCurrentText = __library.get(b"dwSetCurrentText\0").map(|sym| *sym)?;
-        let dwSetDBvendor = __library.get(b"dwSetDBvendor\0").map(|sym| *sym)?;
-        let dwSetDBlogid = __library.get(b"dwSetDBlogid\0").map(|sym| *sym)?;
-        let dwSetDBlogpass = __library.get(b"dwSetDBlogpass\0").map(|sym| *sym)?;
-        let dwSetDBserver = __library.get(b"dwSetDBserver\0").map(|sym| *sym)?;
-        let dwSetDBdatabase = __library.get(b"dwSetDBdatabase\0").map(|sym| *sym)?;
-        let dwSetDBuserid = __library.get(b"dwSetDBuserid\0").map(|sym| *sym)?;
-        let dwSetDBdatabasepass = __library.get(b"dwSetDBdatabasepass\0").map(|sym| *sym)?;
-        let dwSetDBparm = __library.get(b"dwSetDBparm\0").map(|sym| *sym)?;
-        let dwSetDetailHeight = __library.get(b"dwSetDetailHeight\0").map(|sym| *sym)?;
-        let dwSetHTMLAction = __library.get(b"dwSetHTMLAction\0").map(|sym| *sym)?;
-        let dwSetEventFlags = __library.get(b"dwSetEventFlags\0").map(|sym| *sym)?;
-        let dwSetItemDateTime = __library.get(b"dwSetItemDateTime\0").map(|sym| *sym)?;
-        let dwSetItemDecimal = __library.get(b"dwSetItemDecimal\0").map(|sym| *sym)?;
-        let dwSetItemDouble = __library.get(b"dwSetItemDouble\0").map(|sym| *sym)?;
-        let dwSetItemLong = __library.get(b"dwSetItemLong\0").map(|sym| *sym)?;
-        let dwSetItemReal = __library.get(b"dwSetItemReal\0").map(|sym| *sym)?;
-        let dwSetItemStatus = __library.get(b"dwSetItemStatus\0").map(|sym| *sym)?;
-        let dwSetItemString = __library.get(b"dwSetItemString\0").map(|sym| *sym)?;
-        let dwSetItemULong = __library.get(b"dwSetItemULong\0").map(|sym| *sym)?;
-        let dwSetItemNull = __library.get(b"dwSetItemNull\0").map(|sym| *sym)?;
-        let dwSetLibrary = __library.get(b"dwSetLibrary\0").map(|sym| *sym)?;
-        let dwSetRC = __library.get(b"dwSetRC\0").map(|sym| *sym)?;
-        let dwSetTrans = __library.get(b"dwSetTrans\0").map(|sym| *sym)?;
-        let dwShareData = __library.get(b"dwShareData\0").map(|sym| *sym)?;
-        let dwShareDataOff = __library.get(b"dwShareDataOff\0").map(|sym| *sym)?;
-        let dwSQLGetSyntax = __library.get(b"dwSQLGetSyntax\0").map(|sym| *sym)?;
-        let dwSQLSetSyntax = __library.get(b"dwSQLSetSyntax\0").map(|sym| *sym)?;
-        let dwStorageDump = __library.get(b"dwStorageDump\0").map(|sym| *sym)?;
-        let dwStyleChange = __library.get(b"dwStyleChange\0").map(|sym| *sym)?;
-        let dwUpdateSQLGetRow = __library.get(b"dwUpdateSQLGetRow\0").map(|sym| *sym)?;
-        let dwUpdateSQLGetQ = __library.get(b"dwUpdateSQLGetQ\0").map(|sym| *sym)?;
-        let dwGenerateHTMLForm = __library.get(b"dwGenerateHTMLForm\0").map(|sym| *sym)?;
-        let dwSaveAsAscii = __library.get(b"dwSaveAsAscii\0").map(|sym| *sym)?;
-        let dwBuildXHTMLTemplate = __library.get(b"dwBuildXHTMLTemplate\0").map(|sym| *sym)?;
-        let dwSetFullState = __library.get(b"dwSetFullState\0").map(|sym| *sym)?;
-        let dwGetFullState = __library.get(b"dwGetFullState\0").map(|sym| *sym)?;
-        let dwGetChanges = __library.get(b"dwGetChanges\0").map(|sym| *sym)?;
-        let dwSetChanges = __library.get(b"dwSetChanges\0").map(|sym| *sym)?;
-        let dwGetStateStatus = __library.get(b"dwGetStateStatus\0").map(|sym| *sym)?;
-        let dwSetBlobStorageNULL = __library.get(b"dwSetBlobStorageNULL\0").map(|sym| *sym)?;
-        let dwFreeBlob = __library.get(b"dwFreeBlob\0").map(|sym| *sym)?;
-        let dwSetWebLoadCallback = __library.get(b"dwSetWebLoadCallback\0").map(|sym| *sym)?;
-        let dwPaintDC = __library.get(b"dwPaintDC\0").map(|sym| *sym)?;
-        let DS_SetNotifyFunc = __library.get(b"DS_SetNotifyFunc\0").map(|sym| *sym)?;
-        let dwPrintObject = __library.get(b"dwPrintObject\0").map(|sym| *sym)?;
-        let dwGraphSaveAsPdf = __library.get(b"dwGraphSaveAsPdf\0").map(|sym| *sym)?;
-        let dwGetPsrDataVersion = __library.get(b"dwGetPsrDataVersion\0").map(|sym| *sym)?;
-        let dwSetTransparency = __library.get(b"dwSetTransparency\0").map(|sym| *sym)?;
-        let dwGenNameExhaustive = __library.get(b"dwGenNameExhaustive\0").map(|sym| *sym)?;
-        let DS_Destroy = __library.get(b"DS_Destroy\0").map(|sym| *sym)?;
-        let dwXMLGetDefaultEncoding = __library.get(b"dwXMLGetDefaultEncoding\0").map(|sym| *sym)?;
-        let PBGetDBIProc = __library.get(b"PBGetDBIProc\0").map(|sym| *sym)?;
-        let DBI_DatabaseLoad = __library.get(b"DBI_DatabaseLoad\0").map(|sym| *sym)?;
-        let DBI_TableLoad = __library.get(b"DBI_TableLoad\0").map(|sym| *sym)?;
-        let DBI_TableExplode = __library.get(b"DBI_TableExplode\0").map(|sym| *sym)?;
-        let DBI_DeleteDir = __library.get(b"DBI_DeleteDir\0").map(|sym| *sym)?;
-        let DBI_DeleteTable = __library.get(b"DBI_DeleteTable\0").map(|sym| *sym)?;
-        let DBI_ComboList = __library.get(b"DBI_ComboList\0").map(|sym| *sym)?;
-        let DBI_FindComboString = __library.get(b"DBI_FindComboString\0").map(|sym| *sym)?;
-        let DBI_MatchCombo = __library.get(b"DBI_MatchCombo\0").map(|sym| *sym)?;
-        let DBI_MatchString = __library.get(b"DBI_MatchString\0").map(|sym| *sym)?;
-        let DBI_AttrInfo = __library.get(b"DBI_AttrInfo\0").map(|sym| *sym)?;
-        let DBI_Command_Tran = __library.get(b"DBI_Command_Tran\0").map(|sym| *sym)?;
-        let DBI_Step = __library.get(b"DBI_Step\0").map(|sym| *sym)?;
-        let DBI_Commit = __library.get(b"DBI_Commit\0").map(|sym| *sym)?;
-        let DBI_Connect = __library.get(b"DBI_Connect\0").map(|sym| *sym)?;
-        let DBI_DummyConnect = __library.get(b"DBI_DummyConnect\0").map(|sym| *sym)?;
-        let DBI_DialogConnect = __library.get(b"DBI_DialogConnect\0").map(|sym| *sym)?;
-        let DBI_LogIn = __library.get(b"DBI_LogIn\0").map(|sym| *sym)?;
-        let DBI_SetLogIn = __library.get(b"DBI_SetLogIn\0").map(|sym| *sym)?;
-        let DBI_LogInAdoConnection = __library.get(b"DBI_LogInAdoConnection\0").map(|sym| *sym)?;
-        let DBI_SetConnect = __library.get(b"DBI_SetConnect\0").map(|sym| *sym)?;
-        let DBI_DatabaseInfo = __library.get(b"DBI_DatabaseInfo\0").map(|sym| *sym)?;
-        let DBI_Describe = __library.get(b"DBI_Describe\0").map(|sym| *sym)?;
-        let DBI_Disconnect = __library.get(b"DBI_Disconnect\0").map(|sym| *sym)?;
-        let DBI_ErrorSQL = __library.get(b"DBI_ErrorSQL\0").map(|sym| *sym)?;
-        let DBI_Execute = __library.get(b"DBI_Execute\0").map(|sym| *sym)?;
-        let DBI_FetchNext = __library.get(b"DBI_FetchNext\0").map(|sym| *sym)?;
-        let DBI_Prepare = __library.get(b"DBI_Prepare\0").map(|sym| *sym)?;
-        let DBI_PrepareWithParms = __library.get(b"DBI_PrepareWithParms\0").map(|sym| *sym)?;
-        let DBI_RollBack = __library.get(b"DBI_RollBack\0").map(|sym| *sym)?;
-        let DBI_TerminateSQL = __library.get(b"DBI_TerminateSQL\0").map(|sym| *sym)?;
-        let DBI_Rows = __library.get(b"DBI_Rows\0").map(|sym| *sym)?;
-        let DBI_GetPBTypeString = __library.get(b"DBI_GetPBTypeString\0").map(|sym| *sym)?;
-        let DBI_DescribeExtra = __library.get(b"DBI_DescribeExtra\0").map(|sym| *sym)?;
-        let DBI_DateString = __library.get(b"DBI_DateString\0").map(|sym| *sym)?;
-        let DBI_DecimalString = __library.get(b"DBI_DecimalString\0").map(|sym| *sym)?;
-        let DBI_DoubleString = __library.get(b"DBI_DoubleString\0").map(|sym| *sym)?;
-        let DBI_Numeri_tstring = __library.get(b"DBI_Numeri_tstring\0").map(|sym| *sym)?;
-        let DBI_CursorConnect = __library.get(b"DBI_CursorConnect\0").map(|sym| *sym)?;
-        let DBI_GetSelectItems = __library.get(b"DBI_GetSelectItems\0").map(|sym| *sym)?;
-        let DBI_GetSelectInfo = __library.get(b"DBI_GetSelectInfo\0").map(|sym| *sym)?;
-        let DBI_BindSelectBuffer = __library.get(b"DBI_BindSelectBuffer\0").map(|sym| *sym)?;
-        let DBI_RuntimeFetchNext = __library.get(b"DBI_RuntimeFetchNext\0").map(|sym| *sym)?;
-        let DBI_MPowerFetchNext = __library.get(b"DBI_MPowerFetchNext\0").map(|sym| *sym)?;
-        let DBI_StartTran = __library.get(b"DBI_StartTran\0").map(|sym| *sym)?;
-        let DBI_UniqueKey = __library.get(b"DBI_UniqueKey\0").map(|sym| *sym)?;
-        let DBI_ParseFrom = __library.get(b"DBI_ParseFrom\0").map(|sym| *sym)?;
-        let DBI_ParseColList = __library.get(b"DBI_ParseColList\0").map(|sym| *sym)?;
-        let DBI_DoubleTheQuotes = __library.get(b"DBI_DoubleTheQuotes\0").map(|sym| *sym)?;
-        let DBI_FreeMem = __library.get(b"DBI_FreeMem\0").map(|sym| *sym)?;
-        let DBI_FreePrepList = __library.get(b"DBI_FreePrepList\0").map(|sym| *sym)?;
-        let DBI_FreeColBlkList = __library.get(b"DBI_FreeColBlkList\0").map(|sym| *sym)?;
-        let DBI_DialogBoxCenter = __library.get(b"DBI_DialogBoxCenter\0").map(|sym| *sym)?;
-        let DBI_CleanUpColumnList = __library.get(b"DBI_CleanUpColumnList\0").map(|sym| *sym)?;
-        let DBI_Cancel = __library.get(b"DBI_Cancel\0").map(|sym| *sym)?;
-        let DBI_ProcInfo = __library.get(b"DBI_ProcInfo\0").map(|sym| *sym)?;
-        let DBI_ProcText = __library.get(b"DBI_ProcText\0").map(|sym| *sym)?;
-        let DBI_EventText = __library.get(b"DBI_EventText\0").map(|sym| *sym)?;
-        let DBI_ProcDescribe = __library.get(b"DBI_ProcDescribe\0").map(|sym| *sym)?;
-        let DBI_DeleteProcDir = __library.get(b"DBI_DeleteProcDir\0").map(|sym| *sym)?;
-        let DBI_ProcPrepare = __library.get(b"DBI_ProcPrepare\0").map(|sym| *sym)?;
-        let DBI_Parse = __library.get(b"DBI_Parse\0").map(|sym| *sym)?;
-        let DBI_OuterJoinSyntax = __library.get(b"DBI_OuterJoinSyntax\0").map(|sym| *sym)?;
-        let DBI_RuntimeExecute = __library.get(b"DBI_RuntimeExecute\0").map(|sym| *sym)?;
-        let DBI_FormatHash = __library.get(b"DBI_FormatHash\0").map(|sym| *sym)?;
-        let DBI_ValidHash = __library.get(b"DBI_ValidHash\0").map(|sym| *sym)?;
-        let DBI_FreeValidHash = __library.get(b"DBI_FreeValidHash\0").map(|sym| *sym)?;
-        let DBI_EditStyleHash = __library.get(b"DBI_EditStyleHash\0").map(|sym| *sym)?;
-        let DBI_EditUpdate = __library.get(b"DBI_EditUpdate\0").map(|sym| *sym)?;
-        let DBI_EditStyleInfo = __library.get(b"DBI_EditStyleInfo\0").map(|sym| *sym)?;
-        let DBI_LoadString = __library.get(b"DBI_LoadString\0").map(|sym| *sym)?;
-        let DBI_DynamicBind = __library.get(b"DBI_DynamicBind\0").map(|sym| *sym)?;
-        let DBI_GetNextResultSet = __library.get(b"DBI_GetNextResultSet\0").map(|sym| *sym)?;
-        let DBI_ViewText = __library.get(b"DBI_ViewText\0").map(|sym| *sym)?;
-        let DBI_ExecPlan = __library.get(b"DBI_ExecPlan\0").map(|sym| *sym)?;
-        let DBI_GetTimestamp = __library.get(b"DBI_GetTimestamp\0").map(|sym| *sym)?;
-        let DBI_DoCompare = __library.get(b"DBI_DoCompare\0").map(|sym| *sym)?;
-        let DBI_DoCompareFirst = __library.get(b"DBI_DoCompareFirst\0").map(|sym| *sym)?;
-        let DBI_DoCompareFirstWithSkip = __library.get(b"DBI_DoCompareFirstWithSkip\0").map(|sym| *sym)?;
-        let DBI_ReadBlob = __library.get(b"DBI_ReadBlob\0").map(|sym| *sym)?;
-        let DBI_WriteBlob = __library.get(b"DBI_WriteBlob\0").map(|sym| *sym)?;
-        let DBI_FillBlanks = __library.get(b"DBI_FillBlanks\0").map(|sym| *sym)?;
-        let DBI_DeleteSyntaxList = __library.get(b"DBI_DeleteSyntaxList\0").map(|sym| *sym)?;
-        let DBI_ParseParms = __library.get(b"DBI_ParseParms\0").map(|sym| *sym)?;
-        let DBI_ParseKeyWords = __library.get(b"DBI_ParseKeyWords\0").map(|sym| *sym)?;
-        let DBI_FreeParmList = __library.get(b"DBI_FreeParmList\0").map(|sym| *sym)?;
-        let DBI_GetParm = __library.get(b"DBI_GetParm\0").map(|sym| *sym)?;
-        let DBI_FetchFirst = __library.get(b"DBI_FetchFirst\0").map(|sym| *sym)?;
-        let DBI_FetchPrev = __library.get(b"DBI_FetchPrev\0").map(|sym| *sym)?;
-        let DBI_FetchRandom = __library.get(b"DBI_FetchRandom\0").map(|sym| *sym)?;
-        let DBI_FetchRelative = __library.get(b"DBI_FetchRelative\0").map(|sym| *sym)?;
-        let DBI_FetchLast = __library.get(b"DBI_FetchLast\0").map(|sym| *sym)?;
-        let DBI_NewDBParm = __library.get(b"DBI_NewDBParm\0").map(|sym| *sym)?;
-        let DBI_ReplaceDbParm = __library.get(b"DBI_ReplaceDbParm\0").map(|sym| *sym)?;
-        let DBI_DelimitReservedWord = __library.get(b"DBI_DelimitReservedWord\0").map(|sym| *sym)?;
-        let DBI_DescribeInput = __library.get(b"DBI_DescribeInput\0").map(|sym| *sym)?;
-        let DBI_DescribeOutput = __library.get(b"DBI_DescribeOutput\0").map(|sym| *sym)?;
-        let DBI_DWCursorConnect = __library.get(b"DBI_DWCursorConnect\0").map(|sym| *sym)?;
-        let DBI_ParseColSubset = __library.get(b"DBI_ParseColSubset\0").map(|sym| *sym)?;
-        let DBI_ParseBasicSelect = __library.get(b"DBI_ParseBasicSelect\0").map(|sym| *sym)?;
-        let DBI_CreatePrimaryKeySyntax = __library.get(b"DBI_CreatePrimaryKeySyntax\0").map(|sym| *sym)?;
-        let DBI_CreateNoLogPKeySyntax = __library.get(b"DBI_CreateNoLogPKeySyntax\0").map(|sym| *sym)?;
-        let DBI_AlterPrimaryKeySyntax = __library.get(b"DBI_AlterPrimaryKeySyntax\0").map(|sym| *sym)?;
-        let DBI_CreateForeignKeySyntax = __library.get(b"DBI_CreateForeignKeySyntax\0").map(|sym| *sym)?;
-        let DBI_AlterForeignKeySyntax = __library.get(b"DBI_AlterForeignKeySyntax\0").map(|sym| *sym)?;
-        let DBI_GetForeignKYOptions = __library.get(b"DBI_GetForeignKYOptions\0").map(|sym| *sym)?;
-        let DBI_LibraryName = __library.get(b"DBI_LibraryName\0").map(|sym| *sym)?;
-        let DBI_LookForKeyWord = __library.get(b"DBI_LookForKeyWord\0").map(|sym| *sym)?;
-        let DBI_ParseIdentifier = __library.get(b"DBI_ParseIdentifier\0").map(|sym| *sym)?;
-        let DBI_GetColumnExpression = __library.get(b"DBI_GetColumnExpression\0").map(|sym| *sym)?;
-        let DBI_ParseWhere = __library.get(b"DBI_ParseWhere\0").map(|sym| *sym)?;
-        let DBI_FreeWhereList = __library.get(b"DBI_FreeWhereList\0").map(|sym| *sym)?;
-        let DBI_PrimaryKeyReferences = __library.get(b"DBI_PrimaryKeyReferences\0").map(|sym| *sym)?;
-        let DBI_PBToSQL = __library.get(b"DBI_PBToSQL\0").map(|sym| *sym)?;
-        let DBI_PBToArgs = __library.get(b"DBI_PBToArgs\0").map(|sym| *sym)?;
-        let DBI_ReleaseInputParms = __library.get(b"DBI_ReleaseInputParms\0").map(|sym| *sym)?;
-        let DBI_SynText = __library.get(b"DBI_SynText\0").map(|sym| *sym)?;
-        let DBI_PBC_DialogBox = __library.get(b"DBI_PBC_DialogBox\0").map(|sym| *sym)?;
-        let DBI_PBC_DialogBoxParam = __library.get(b"DBI_PBC_DialogBoxParam\0").map(|sym| *sym)?;
-        let DBI_PBC_ShowWindow = __library.get(b"DBI_PBC_ShowWindow\0").map(|sym| *sym)?;
-        let DBI_DBHandle = __library.get(b"DBI_DBHandle\0").map(|sym| *sym)?;
-        let DBI_GetAdoConnection = __library.get(b"DBI_GetAdoConnection\0").map(|sym| *sym)?;
-        let DBI_SearchReplace = __library.get(b"DBI_SearchReplace\0").map(|sym| *sym)?;
-        let DBI_CtrlChars2Text = __library.get(b"DBI_CtrlChars2Text\0").map(|sym| *sym)?;
-        let DBI_Text2CtrlChars = __library.get(b"DBI_Text2CtrlChars\0").map(|sym| *sym)?;
-        let DBI_SQLCacheBegin = __library.get(b"DBI_SQLCacheBegin\0").map(|sym| *sym)?;
-        let DBI_SQLCacheEnd = __library.get(b"DBI_SQLCacheEnd\0").map(|sym| *sym)?;
-        let DBI_SQLCacheFlushEntries = __library.get(b"DBI_SQLCacheFlushEntries\0").map(|sym| *sym)?;
-        let DBI_SQLCacheRegisterSQLStatement =
-            __library.get(b"DBI_SQLCacheRegisterSQLStatement\0").map(|sym| *sym)?;
-        let DBI_SQLCacheRegisterDescribe =
-            __library.get(b"DBI_SQLCacheRegisterDescribe\0").map(|sym| *sym)?;
-        let DBI_SQLCacheRequestSqlStatement =
-            __library.get(b"DBI_SQLCacheRequestSqlStatement\0").map(|sym| *sym)?;
-        let DBI_SQLCacheRequestDescribe = __library.get(b"DBI_SQLCacheRequestDescribe\0").map(|sym| *sym)?;
-        let DBI_SQLCacheMakeSQLStatementAvailable =
-            __library.get(b"DBI_SQLCacheMakeSQLStatementAvailable\0").map(|sym| *sym)?;
-        let DBI_SQLCacheSetCacheSize = __library.get(b"DBI_SQLCacheSetCacheSize\0").map(|sym| *sym)?;
-        let DBI_SQLCacheDiscardEntry = __library.get(b"DBI_SQLCacheDiscardEntry\0").map(|sym| *sym)?;
-        let DBI_SQLCacheConnectSetup = __library.get(b"DBI_SQLCacheConnectSetup\0").map(|sym| *sym)?;
-        let DBI_SQLCacheConnectDrop = __library.get(b"DBI_SQLCacheConnectDrop\0").map(|sym| *sym)?;
-        let DBI_SQLCacheSetSelectCacheSize =
-            __library.get(b"DBI_SQLCacheSetSelectCacheSize\0").map(|sym| *sym)?;
-        let DBI_SQLCacheStatistics = __library.get(b"DBI_SQLCacheStatistics\0").map(|sym| *sym)?;
-        let DBI_GetIdentityValue = __library.get(b"DBI_GetIdentityValue\0").map(|sym| *sym)?;
-        let DBI_FormatWindowsEOL = __library.get(b"DBI_FormatWindowsEOL\0").map(|sym| *sym)?;
-        let DBI_RegisterVendor = __library.get(b"DBI_RegisterVendor\0").map(|sym| *sym)?;
-        let DBI_UnRegisterVendor = __library.get(b"DBI_UnRegisterVendor\0").map(|sym| *sym)?;
-        let DBI_IsCache = __library.get(b"DBI_IsCache\0").map(|sym| *sym)?;
-        let DBI_IsConnInServerTrans = __library.get(b"DBI_IsConnInServerTrans\0").map(|sym| *sym)?;
-        let DBI_IsConnFromServer = __library.get(b"DBI_IsConnFromServer\0").map(|sym| *sym)?;
-        let DBI_ConvertHexStringToBlob = __library.get(b"DBI_ConvertHexStringToBlob\0").map(|sym| *sym)?;
-        let CreateDBIConnect = __library.get(b"CreateDBIConnect\0").map(|sym| *sym)?;
-        let CreateDBITableSchema = __library.get(b"CreateDBITableSchema\0").map(|sym| *sym)?;
-        let rtdb_close = __library.get(b"rtdb_close\0").map(|sym| *sym)?;
-        let rtdb_commit = __library.get(b"rtdb_commit\0").map(|sym| *sym)?;
-        let rtdb_delete = __library.get(b"rtdb_delete\0").map(|sym| *sym)?;
-        let rtdb_deletewithcurs = __library.get(b"rtdb_deletewithcurs\0").map(|sym| *sym)?;
-        let rtdb_describe = __library.get(b"rtdb_describe\0").map(|sym| *sym)?;
-        let rtdb_execute = __library.get(b"rtdb_execute\0").map(|sym| *sym)?;
-        let rtdb_executedyn = __library.get(b"rtdb_executedyn\0").map(|sym| *sym)?;
-        let rtdb_executeimmed = __library.get(b"rtdb_executeimmed\0").map(|sym| *sym)?;
-        let rtdb_execdynproc = __library.get(b"rtdb_execdynproc\0").map(|sym| *sym)?;
-        let rtdb_execdynwithdesc = __library.get(b"rtdb_execdynwithdesc\0").map(|sym| *sym)?;
-        let rtdb_fetch = __library.get(b"rtdb_fetch\0").map(|sym| *sym)?;
-        let rtdb_fetchwithdesc = __library.get(b"rtdb_fetchwithdesc\0").map(|sym| *sym)?;
-        let rtdb_insert = __library.get(b"rtdb_insert\0").map(|sym| *sym)?;
-        let rtdb_open = __library.get(b"rtdb_open\0").map(|sym| *sym)?;
-        let rtdb_opendyn = __library.get(b"rtdb_opendyn\0").map(|sym| *sym)?;
-        let rtdb_opendynwithdesc = __library.get(b"rtdb_opendynwithdesc\0").map(|sym| *sym)?;
-        let rtdb_prepare = __library.get(b"rtdb_prepare\0").map(|sym| *sym)?;
-        let rtdb_rollback = __library.get(b"rtdb_rollback\0").map(|sym| *sym)?;
-        let rtdb_select = __library.get(b"rtdb_select\0").map(|sym| *sym)?;
-        let rtdb_selectblob = __library.get(b"rtdb_selectblob\0").map(|sym| *sym)?;
-        let rtdb_start = __library.get(b"rtdb_start\0").map(|sym| *sym)?;
-        let rtdb_stop = __library.get(b"rtdb_stop\0").map(|sym| *sym)?;
-        let rtdb_update = __library.get(b"rtdb_update\0").map(|sym| *sym)?;
-        let rtdb_updatewithcurs = __library.get(b"rtdb_updatewithcurs\0").map(|sym| *sym)?;
-        let rtdb_updateblob = __library.get(b"rtdb_updateblob\0").map(|sym| *sym)?;
-        let rtdb_trans_pool_login = __library.get(b"rtdb_trans_pool_login\0").map(|sym| *sym)?;
-        let rtdb_trans_pool_disconnect = __library.get(b"rtdb_trans_pool_disconnect\0").map(|sym| *sym)?;
         let ob_set_curr_rtinst_and_return =
             __library.get(b"ob_set_curr_rtinst_and_return\0").map(|sym| *sym)?;
         let ob_unset_curr_rtinst_and_return =
@@ -10035,11 +6032,6 @@ impl Api {
         let ob_end_trace = __library.get(b"ob_end_trace\0").map(|sym| *sym)?;
         let ob_enable_event_trace = __library.get(b"ob_enable_event_trace\0").map(|sym| *sym)?;
         let ob_disable_event_trace = __library.get(b"ob_disable_event_trace\0").map(|sym| *sym)?;
-        let otcg_string_cat = __library.get(b"otcg_string_cat\0").map(|sym| *sym)?;
-        let otcg_binary_cat = __library.get(b"otcg_binary_cat\0").map(|sym| *sym)?;
-        let otcg_add_object_argument_reference =
-            __library.get(b"otcg_add_object_argument_reference\0").map(|sym| *sym)?;
-        let otcg_embedded_group = __library.get(b"otcg_embedded_group\0").map(|sym| *sym)?;
         Ok(Api {
             __library,
             pbstg_begin,
@@ -10049,13 +6041,10 @@ impl Api {
             pbstg_free_pool,
             pbstg_new_pool,
             pbstg_new_pool_nofast,
-            pbstg_new_pool_with_size,
-            pbstg_new_pool_with_size_nofast,
             pbstg_set_pool_name,
             pbstg_set_poolpagesize,
             pbstg_write_debug,
             pbstg_stat,
-            pbstg_shrink,
             pbstg_nextGeneration,
             pbstg_dumpLeaks,
             pbstg_dumpHeap,
@@ -10090,7 +6079,6 @@ impl Api {
             pbstg_dde_get_handle,
             pbstg_dde_lock,
             pbstg_dde_unlock,
-            pbstg_dde_strdup,
             pbstg_huge_memcmp,
             pbstg_huge_memcpy,
             pbstg_huge_memmove,
@@ -10100,21 +6088,6 @@ impl Api {
             pbstg_huge_strlen,
             pbstg_huge_strncpy,
             pbstg_huge_strstr,
-            OS_UtilGetProfInt,
-            OS_UtilGetProfStr,
-            OS_UtilPutProfStr,
-            OS_NetworkGetProfInt,
-            OS_NetworkGetProfStr,
-            OS_NetworkPutProfStr,
-            OS_NetworkSharedProfileAccessible,
-            OS_UtilGetInitPath,
-            OS_UtilPutInitPath,
-            UtilIniFile,
-            FDCC_Get_Registry_Entry,
-            FDCC_Get_CSIDL_Path,
-            FDCC_Create_Registry_Entry,
-            FDCC_Get_Install_Location,
-            FDCC_New_INI_Installed,
             pbstg_unicodestrdup,
             pbstg_unicodestr_build,
             pbstg_strtounicodedup,
@@ -10125,13 +6098,8 @@ impl Api {
             pbstg_strtoprintabledup,
             pbstg_printabletostr,
             pbstg_printabletostrdup,
-            PBUNI_memchr,
             pbstg_lchrcmp,
             pbstg_lchrcmpi,
-            os_vabuild_start,
-            os_vabuild_ptrarg,
-            os_vabuild_end,
-            os_vabuild_add,
             sh_dbg_console_init,
             sh_dbg_console_out,
             sh_dbg_console_lock,
@@ -10158,7 +6126,6 @@ impl Api {
             sh_dbg_query,
             sh_dbg_is_hdr_on,
             sh_dbg_is_indent_on,
-            osAssert,
             shlist_delete,
             shlist_deleteFree,
             shlist_get_next,
@@ -10189,11 +6156,9 @@ impl Api {
             sh_grwblk_delete,
             sh_grwblk_close,
             ob_set_session_icontext,
-            ob_set_main_obthis,
             rt_move_thread,
             rt_clear_thread,
             rt_get_current_this,
-            rt_set_current_this,
             rt_add_task,
             rt_free_task,
             rt_get_current_task_info,
@@ -10208,19 +6173,13 @@ impl Api {
             shhash_get_next,
             shhash_insert,
             shhash_search,
-            shhash_search_arg,
             shhash_search_unique,
-            shhash_search_unique_arg,
             shhash_searchNext,
             shhash_searchSlot,
             shhash_remove,
             shhash_statistics,
             shhash_traversal,
-            obAllocDebug,
-            obFreeDebug,
             ob_add_const_data,
-            parse_stringvalue_hash,
-            obconpool_stringvalue_del,
             ob_looksym_keyfunc,
             ob_looksym_reference,
             ob_looksym_delete,
@@ -10228,7 +6187,6 @@ impl Api {
             ob_dynarray_grow,
             ob_narray_create_static,
             ob_narray_create_dynamic,
-            ob_narray_dynamic_item_init_callback,
             ob_set_arraydef,
             ob_get_array_len,
             ob_array_item_init_callback,
@@ -10275,7 +6233,6 @@ impl Api {
             shSetDecFractions,
             shSetDecNegative,
             shDecSetOverflow,
-            ConvertOldDecToString,
             shdtDayName,
             shdtDayOfWeek,
             shdtBuildTime,
@@ -10331,8 +6288,6 @@ impl Api {
             ob_get_no_fields,
             ob_get_parent_obinst,
             ob_get_first_user_field,
-            ob_group_is_normalized_window,
-            ob_group_set_normalized_window,
             ob_get_field_type,
             ob_get_int_field,
             ob_get_uint_field,
@@ -10371,7 +6326,6 @@ impl Api {
             ob_is_descendent_locked,
             ob_validate_liblist,
             ob_set_liblist,
-            ob_add_liblist,
             ob_get_liblist,
             ob_set_default_appl,
             ob_load_appl_group,
@@ -10383,7 +6337,6 @@ impl Api {
             ob_group_save,
             ob_group_save_win,
             ob_load_group_source,
-            ob_reload_group_source,
             ob_rename_group,
             ob_move_group,
             ob_move_group_with_name,
@@ -10441,7 +6394,6 @@ impl Api {
             ob_is_class_descendant,
             ob_is_inh_from_user_class,
             ob_get_sec_class_ancestor,
-            obIsClassAutoinstantiate,
             ob_is_class_enum,
             ob_new_event,
             ob_update_event,
@@ -10523,7 +6475,6 @@ impl Api {
             ob_func_search,
             ob_del_funccall_info,
             ob_link_project,
-            ob_get_runtime_group_hndl,
             ob_check_for_locked_menu,
             ob_create_obinst,
             ob_instantiate_child_object,
@@ -10533,9 +6484,6 @@ impl Api {
             ob_create_executable,
             ob_create_library,
             ob_create_consolidated_library,
-            CreatePBITypeDef,
-            CreatePBIClassDef,
-            CreatePBIScriptDef,
             ob_create_interface_in_library,
             ob_create_interface_class,
             ob_init_executable,
@@ -10553,14 +6501,9 @@ impl Api {
             ob_free_hierarchy_list,
             ob_clear_instance_ref,
             ob_insert_inst_ref_dbg,
-            ob_insert_local_inst_ref_dbg,
             ob_open_typedef_group,
-            ob_load_pspp_dlls,
             ob_save_dll_to_pbd,
             ob_convert_pbx_to_native_groups,
-            ObPsppCreateControl,
-            ObPsppGetEventID,
-            DrawPsppObject,
             ob_share_typedef_group,
             ob_unshare_typedef_group,
             ob_cm_evaluate_expression,
@@ -10573,47 +6516,12 @@ impl Api {
             ob_shared_lv,
             ob_shared_refpkt,
             ob_convert_chararray_to_string,
-            obJagResultsetNotify,
             ob_class_delete_and_withinclass,
             ob_find_orphan_class,
             ob_nuke_orphan_class,
             ob_is_ancestor_class_modified,
             ob_rebuild_instance_image,
             ob_build_compile_list,
-            os_openlib,
-            os_get_funcptr,
-            os_callc,
-            os_closelib,
-            cm_init_script_compiler,
-            cm_enable_debug_symbol,
-            cm_disable_debug_symbol,
-            cm_set_compiler_context,
-            cm_terminate,
-            cm_compile_script,
-            cm_free_error_list,
-            cm_get_error_list,
-            cm_keep_error_list,
-            cm_combine_error_list,
-            cm_compile_namespace_block,
-            cm_group_compile,
-            cm_is_word_reserved,
-            cm_stream_compile,
-            cm_src_block_compile,
-            cm_describe_statement,
-            cm_compiler_error,
-            cm_compiler_error_ln,
-            cm_get_curr_this,
-            cm_rebuild_application,
-            cm_rebuild_from_compile_list,
-            cm_regen_datawindow,
-            cm_read_alias_table,
-            cm_find_alias,
-            cm_add_alias_entry,
-            cm_remove_alias_entry,
-            cm_write_alias_table,
-            cm_add_global_var,
-            cm_import_pb_extension,
-            cm_convert_pbl_to_unicode,
             ot_get_next_evaled_arg,
             ot_get_next_evaled_arg_no_convert,
             ot_get_next_lvalue_arg,
@@ -10729,8 +6637,6 @@ impl Api {
             ot_rand,
             ot_class_compare,
             ot_assign_global_var_obinst,
-            ot_clear_array_data,
-            ob_get_local_session,
             ob_class_indirect,
             ob_add_external_class_ref,
             ob_get_local_class,
@@ -10756,12 +6662,10 @@ impl Api {
             ob_fetch_routine,
             ob_type_proto_decl,
             ob_type_proto_ref,
-            ob_lookup_routine_by_signature,
             ob_proto_error_upgrade,
             ob_get_proto_access_type,
             ob_type_process_protos,
             ob_type_reprocess_protos,
-            ob_type_proto_add,
             ob_get_type_proto_names,
             ob_declare_external_event_type,
             ob_get_type_proto_names_for_ide,
@@ -10774,9 +6678,6 @@ impl Api {
             ob_prototype_match_for_event,
             ob_prototype_search,
             ob_proto_overload_search,
-            ob_create_proto_throws_list,
-            ob_create_proto_args,
-            ob_proto_overload_search_src,
             ob_event_module_name,
             ob_find_first_event,
             ob_type_event_script_srch,
@@ -10804,13 +6705,10 @@ impl Api {
             ob_is_an_ancestor,
             ob_is_an_ancestor_excl,
             ob_find_type_ancestor,
-            ob_find_type_ancestor_assign,
             ob_find_common_ancestor,
             ob_get_ancestor_system_class,
             ob_get_runtime_class,
-            ob_get_pspp_class_name,
             ob_get_func_vtable_entry,
-            ob_find_method,
             ob_rout_declare,
             ob_open_routine,
             ob_close_routine,
@@ -10825,8 +6723,6 @@ impl Api {
             ob_convert_vars_to_const,
             ob_clear_group_objects,
             ob_init_group_objects,
-            getCultureValueStr,
-            getCultureValueInt,
             shformatDateTimeWeb,
             shformatDateTime,
             shformatDecimal,
@@ -10853,9 +6749,7 @@ impl Api {
             shIsValidRealWeb,
             shNormalizeRealWeb,
             shNormalizeRealbyLocaleWeb,
-            pbshr_intl,
             shIsValidRealNoLocale,
-            shGetRegProfileStringValue,
             ob_add_glbsym_var,
             ob_add_glbsym_class,
             ob_add_glbsym_func,
@@ -10878,11 +6772,6 @@ impl Api {
             rt_error,
             rt_free_error_struct,
             rt_error_using_struct,
-            rt_build_exception_using_error,
-            rt_handle_uncaught_exception,
-            rt_populate_error_struct,
-            rt_populate_error_from_stack,
-            rt_call_error_callback,
             rt_normalize_error_id,
             ot_handle_exception,
             ob_dbg_pop_call_stack_ntimes,
@@ -10893,7 +6782,6 @@ impl Api {
             rtRoutineExecByName,
             rtRoutineExecPosted,
             rtRoutineInfo,
-            rtRoutineProtoInfoFree,
             rtInitializeInfoForCall,
             rtCleanupInfoAfterCall,
             rtRoutineCount,
@@ -10903,11 +6791,6 @@ impl Api {
             rtDataFree,
             rtDataCopy,
             rt_hit_level_0,
-            rt_StartJaguarDebug,
-            rt_StopJaguarDebug,
-            rt_JagBreakpointHit,
-            rt_JaguarGetCurrentContext,
-            obPsppNormalBody,
             ob_create_object,
             ob_create_object_using,
             ob_copy_rtinst,
@@ -10935,7 +6818,6 @@ impl Api {
             ob_copy_group_shrsym_data,
             ob_get_qualified_name_with_namespace,
             ob_get_source_from_group,
-            obUpdateSrcLastEdit,
             ob_get_var,
             ob_init_var_data,
             ob_global_indirect,
@@ -10955,8 +6837,6 @@ impl Api {
             ot_get_dll_funcptr_by_name,
             ot_post_call,
             ot_check_types,
-            ot_strict_type_check,
-            ot_generateVarInfo,
             ot_type_loc,
             ot_init_data_node,
             ot_set_lvalue,
@@ -10981,7 +6861,6 @@ impl Api {
             ot_convert_array_to_object,
             ot_build_simple_refpak,
             ot_build_field_refpak,
-            ot_build_flditemupdate_refpak,
             ot_add_any,
             ot_sub_any,
             ot_mul_any,
@@ -11014,409 +6893,6 @@ impl Api {
             ot_string_to_binary,
             ot_bytearray_to_binary,
             ot_any_to_binary,
-            dwCompile,
-            dwCreateWindow,
-            dwCreateWindowEx,
-            dwCrosstabDLG,
-            dwDescribe,
-            dwFree,
-            dwSetDataStoreHWndBehavior,
-            dwLoadData,
-            dwLoadDataProg,
-            dwLoadDataCrosstab,
-            dwLoadDataStorage,
-            dwLoadDataOle,
-            dwLoadDW,
-            dwLoadFile,
-            dwLoadLibrary,
-            dwLoadMemory,
-            dwLoadStorage,
-            dwModify,
-            dwSaveData,
-            dwSaveDataStorage,
-            dwSaveDataCopy,
-            dwSaveDataCopyStorage,
-            dwSaveFile,
-            dwSaveLibrary,
-            dwSaveOle,
-            dwSaveObjects,
-            dwSaveStorage,
-            dwFileSaveStorage,
-            dwSaveStorageStg,
-            dwSaveOleStg,
-            dwSaveObjectsStg,
-            dwSaveDataStg,
-            dwLoadFileBlob,
-            dwStgFree,
-            dwGetMessageText,
-            dwGetExceedPageMessage,
-            DW_PluginStart,
-            DW_PluginStop,
-            dwSyntaxGen,
-            dwSyntaxGenForm,
-            dwSyntaxFree,
-            dwGenDataListSyntax,
-            dwGenDataFormSyntax,
-            dwSyntaxFromSQL,
-            dwSyntaxFromDesc,
-            dwClearOriginalValues,
-            dwRowsDiscard,
-            dwRowsMove,
-            dwCreateObjectStorage,
-            dwDefaultArgs,
-            dwDefaultArgsFree,
-            dwCrosstabDef,
-            dwCrosstabDefDynamic,
-            dwCrosstabModifyDynamic,
-            dwCrosstabModifyStatic,
-            dwCrosstabBuildModel,
-            dwInfoBegin,
-            dwInfoBitmap,
-            dwInfoBlob,
-            dwInfoInkpic,
-            dwInfoButton,
-            dwInfoColumn,
-            dwInfoCompute,
-            dwInfoCrosstab,
-            dwInfoWpf,
-            dwInfoDataWindow,
-            dwInfoEnd,
-            dwInfoFunctions,
-            dwInfoGetFirstColumn,
-            dwInfoGetNextColumn,
-            dwInfoGetDWWidth,
-            dwInfoGetFirstObject,
-            dwInfoGetNextObject,
-            dwInfoGetObjectType,
-            dwInfoGraph,
-            dwInfoGroupBox,
-            dwInfoLine,
-            dwInfoOle,
-            dwInfoOval,
-            dwInfoProcessType,
-            dwInfoRect,
-            dwInfoRegionFirst,
-            dwInfoRegionNext,
-            dwInfoReport,
-            dwInfoResourceNames,
-            dwInfoRoundRect,
-            dwInfoSparse,
-            dwInfoTable,
-            dwInfoTableExtract,
-            dwInfoText,
-            dwInfoVerifyCompute,
-            dwInfoVerifyFilter,
-            dwInfoVerifyStmt,
-            dwInfoVerifyString,
-            dwInfoParseStmt,
-            dwInfoSetPSRFileName,
-            dwClientToObject,
-            dwDBCancel,
-            dwDeleteCrosstabSourceList,
-            dwDragObjectCreate,
-            dwDragObjectDestroy,
-            dwExprDialog,
-            dwValidationExprDialog,
-            dwExprValidate,
-            dwFind,
-            dwFindGroupChange,
-            dwFindRequired,
-            dwFitColumn,
-            dwGenTableName,
-            dwGenXTableName,
-            dwGetBandUnderMouse,
-            dwGetRowColUnderPoint,
-            dwIsPointOutsideEditCol,
-            dwGetColumnFormat,
-            dwGetColumnFormatLength,
-            dwGetColumnNumber,
-            dwGetColumnType,
-            dwGetColumnValidation,
-            dwGetColumnValidationLength,
-            dwGetColumnValue,
-            dwGetColumnValueLength,
-            dwGetCurrentCol,
-            dwGetCurrentRowCol,
-            dwGetCurrentText,
-            dwGetCurrentTextLength,
-            dwGetDBvendor,
-            dwGetDBvendorLength,
-            dwGetDBlogid,
-            dwGetDBlogidLength,
-            dwGetDBlogpass,
-            dwGetDBlogpassLength,
-            dwGetDBserver,
-            dwGetDBserverLength,
-            dwGetDBdatabase,
-            dwGetDBdatabaseLength,
-            dwGetDBuserid,
-            dwGetDBuseridLength,
-            dwGetDBdatabasepass,
-            dwGetDBdatabasepassLength,
-            dwGetDBparm,
-            dwGetDBparmLength,
-            dwGetDBError,
-            dwGetDBErrorLength,
-            dwGetItemDateTime,
-            dwGetItemDecimal,
-            dwGetItemDouble,
-            dwGetItemLength,
-            dwGetItemLengthLong,
-            dwGetItemStatus,
-            dwGetItemLengthAndString,
-            dwGetItemString,
-            dwGetItemStringLong,
-            dwGetItemType,
-            dwGetNextModifiedRow,
-            dwGetNotifyArgs,
-            dwGetObjectUnderMouse,
-            dwGroupCalc,
-            dwOleActivateItem,
-            dwOleGetControlInfo,
-            dwOleDeactivate,
-            dwOleIPactivate,
-            dwOleIPResize,
-            dwOleReset,
-            dwGetProgram,
-            dwPosition,
-            dwQryDialog,
-            dwCanChangeQryMode,
-            dwResetColumnValues,
-            dwResetTrans,
-            dwRetrieve,
-            dwSendMessage,
-            dwSetColumnFormat,
-            dwSetColumnValidation,
-            dwSetColumnValue,
-            dwSetCurrentRowCol,
-            dwSetCurrentText,
-            dwSetDBvendor,
-            dwSetDBlogid,
-            dwSetDBlogpass,
-            dwSetDBserver,
-            dwSetDBdatabase,
-            dwSetDBuserid,
-            dwSetDBdatabasepass,
-            dwSetDBparm,
-            dwSetDetailHeight,
-            dwSetHTMLAction,
-            dwSetEventFlags,
-            dwSetItemDateTime,
-            dwSetItemDecimal,
-            dwSetItemDouble,
-            dwSetItemLong,
-            dwSetItemReal,
-            dwSetItemStatus,
-            dwSetItemString,
-            dwSetItemULong,
-            dwSetItemNull,
-            dwSetLibrary,
-            dwSetRC,
-            dwSetTrans,
-            dwShareData,
-            dwShareDataOff,
-            dwSQLGetSyntax,
-            dwSQLSetSyntax,
-            dwStorageDump,
-            dwStyleChange,
-            dwUpdateSQLGetRow,
-            dwUpdateSQLGetQ,
-            dwGenerateHTMLForm,
-            dwSaveAsAscii,
-            dwBuildXHTMLTemplate,
-            dwSetFullState,
-            dwGetFullState,
-            dwGetChanges,
-            dwSetChanges,
-            dwGetStateStatus,
-            dwSetBlobStorageNULL,
-            dwFreeBlob,
-            dwSetWebLoadCallback,
-            dwPaintDC,
-            DS_SetNotifyFunc,
-            dwPrintObject,
-            dwGraphSaveAsPdf,
-            dwGetPsrDataVersion,
-            dwSetTransparency,
-            dwGenNameExhaustive,
-            DS_Destroy,
-            dwXMLGetDefaultEncoding,
-            PBGetDBIProc,
-            DBI_DatabaseLoad,
-            DBI_TableLoad,
-            DBI_TableExplode,
-            DBI_DeleteDir,
-            DBI_DeleteTable,
-            DBI_ComboList,
-            DBI_FindComboString,
-            DBI_MatchCombo,
-            DBI_MatchString,
-            DBI_AttrInfo,
-            DBI_Command_Tran,
-            DBI_Step,
-            DBI_Commit,
-            DBI_Connect,
-            DBI_DummyConnect,
-            DBI_DialogConnect,
-            DBI_LogIn,
-            DBI_SetLogIn,
-            DBI_LogInAdoConnection,
-            DBI_SetConnect,
-            DBI_DatabaseInfo,
-            DBI_Describe,
-            DBI_Disconnect,
-            DBI_ErrorSQL,
-            DBI_Execute,
-            DBI_FetchNext,
-            DBI_Prepare,
-            DBI_PrepareWithParms,
-            DBI_RollBack,
-            DBI_TerminateSQL,
-            DBI_Rows,
-            DBI_GetPBTypeString,
-            DBI_DescribeExtra,
-            DBI_DateString,
-            DBI_DecimalString,
-            DBI_DoubleString,
-            DBI_Numeri_tstring,
-            DBI_CursorConnect,
-            DBI_GetSelectItems,
-            DBI_GetSelectInfo,
-            DBI_BindSelectBuffer,
-            DBI_RuntimeFetchNext,
-            DBI_MPowerFetchNext,
-            DBI_StartTran,
-            DBI_UniqueKey,
-            DBI_ParseFrom,
-            DBI_ParseColList,
-            DBI_DoubleTheQuotes,
-            DBI_FreeMem,
-            DBI_FreePrepList,
-            DBI_FreeColBlkList,
-            DBI_DialogBoxCenter,
-            DBI_CleanUpColumnList,
-            DBI_Cancel,
-            DBI_ProcInfo,
-            DBI_ProcText,
-            DBI_EventText,
-            DBI_ProcDescribe,
-            DBI_DeleteProcDir,
-            DBI_ProcPrepare,
-            DBI_Parse,
-            DBI_OuterJoinSyntax,
-            DBI_RuntimeExecute,
-            DBI_FormatHash,
-            DBI_ValidHash,
-            DBI_FreeValidHash,
-            DBI_EditStyleHash,
-            DBI_EditUpdate,
-            DBI_EditStyleInfo,
-            DBI_LoadString,
-            DBI_DynamicBind,
-            DBI_GetNextResultSet,
-            DBI_ViewText,
-            DBI_ExecPlan,
-            DBI_GetTimestamp,
-            DBI_DoCompare,
-            DBI_DoCompareFirst,
-            DBI_DoCompareFirstWithSkip,
-            DBI_ReadBlob,
-            DBI_WriteBlob,
-            DBI_FillBlanks,
-            DBI_DeleteSyntaxList,
-            DBI_ParseParms,
-            DBI_ParseKeyWords,
-            DBI_FreeParmList,
-            DBI_GetParm,
-            DBI_FetchFirst,
-            DBI_FetchPrev,
-            DBI_FetchRandom,
-            DBI_FetchRelative,
-            DBI_FetchLast,
-            DBI_NewDBParm,
-            DBI_ReplaceDbParm,
-            DBI_DelimitReservedWord,
-            DBI_DescribeInput,
-            DBI_DescribeOutput,
-            DBI_DWCursorConnect,
-            DBI_ParseColSubset,
-            DBI_ParseBasicSelect,
-            DBI_CreatePrimaryKeySyntax,
-            DBI_CreateNoLogPKeySyntax,
-            DBI_AlterPrimaryKeySyntax,
-            DBI_CreateForeignKeySyntax,
-            DBI_AlterForeignKeySyntax,
-            DBI_GetForeignKYOptions,
-            DBI_LibraryName,
-            DBI_LookForKeyWord,
-            DBI_ParseIdentifier,
-            DBI_GetColumnExpression,
-            DBI_ParseWhere,
-            DBI_FreeWhereList,
-            DBI_PrimaryKeyReferences,
-            DBI_PBToSQL,
-            DBI_PBToArgs,
-            DBI_ReleaseInputParms,
-            DBI_SynText,
-            DBI_PBC_DialogBox,
-            DBI_PBC_DialogBoxParam,
-            DBI_PBC_ShowWindow,
-            DBI_DBHandle,
-            DBI_GetAdoConnection,
-            DBI_SearchReplace,
-            DBI_CtrlChars2Text,
-            DBI_Text2CtrlChars,
-            DBI_SQLCacheBegin,
-            DBI_SQLCacheEnd,
-            DBI_SQLCacheFlushEntries,
-            DBI_SQLCacheRegisterSQLStatement,
-            DBI_SQLCacheRegisterDescribe,
-            DBI_SQLCacheRequestSqlStatement,
-            DBI_SQLCacheRequestDescribe,
-            DBI_SQLCacheMakeSQLStatementAvailable,
-            DBI_SQLCacheSetCacheSize,
-            DBI_SQLCacheDiscardEntry,
-            DBI_SQLCacheConnectSetup,
-            DBI_SQLCacheConnectDrop,
-            DBI_SQLCacheSetSelectCacheSize,
-            DBI_SQLCacheStatistics,
-            DBI_GetIdentityValue,
-            DBI_FormatWindowsEOL,
-            DBI_RegisterVendor,
-            DBI_UnRegisterVendor,
-            DBI_IsCache,
-            DBI_IsConnInServerTrans,
-            DBI_IsConnFromServer,
-            DBI_ConvertHexStringToBlob,
-            CreateDBIConnect,
-            CreateDBITableSchema,
-            rtdb_close,
-            rtdb_commit,
-            rtdb_delete,
-            rtdb_deletewithcurs,
-            rtdb_describe,
-            rtdb_execute,
-            rtdb_executedyn,
-            rtdb_executeimmed,
-            rtdb_execdynproc,
-            rtdb_execdynwithdesc,
-            rtdb_fetch,
-            rtdb_fetchwithdesc,
-            rtdb_insert,
-            rtdb_open,
-            rtdb_opendyn,
-            rtdb_opendynwithdesc,
-            rtdb_prepare,
-            rtdb_rollback,
-            rtdb_select,
-            rtdb_selectblob,
-            rtdb_start,
-            rtdb_stop,
-            rtdb_update,
-            rtdb_updatewithcurs,
-            rtdb_updateblob,
-            rtdb_trans_pool_login,
-            rtdb_trans_pool_disconnect,
             ob_set_curr_rtinst_and_return,
             ob_unset_curr_rtinst_and_return,
             ob_open_trace,
@@ -11424,11 +6900,5886 @@ impl Api {
             ob_begin_trace,
             ob_end_trace,
             ob_enable_event_trace,
-            ob_disable_event_trace,
-            otcg_string_cat,
-            otcg_binary_cat,
-            otcg_add_object_argument_reference,
-            otcg_embedded_group
+            ob_disable_event_trace
         })
+    }
+    pub unsafe fn pbstg_begin(&self, buffer: USHORT) -> ppbstg_anchor { (self.pbstg_begin)(buffer) }
+    pub unsafe fn pbstg_begin_allocflags(&self, buffer: USHORT, lAllocFlags: UINT) -> ppbstg_anchor {
+        (self.pbstg_begin_allocflags)(buffer, lAllocFlags)
+    }
+    pub unsafe fn pbstg_begin_nofast(&self, buffer: USHORT) -> ppbstg_anchor {
+        (self.pbstg_begin_nofast)(buffer)
+    }
+    pub unsafe fn pbstg_end(&self, pthis: ppbstg_anchor) -> () { (self.pbstg_end)(pthis) }
+    pub unsafe fn pbstg_free_pool(&self, pthis: ppbstg_anchor, subPool: pbstg_subpool) -> () {
+        (self.pbstg_free_pool)(pthis, subPool)
+    }
+    pub unsafe fn pbstg_new_pool(&self, pthis: ppbstg_anchor) -> pbstg_subpool {
+        (self.pbstg_new_pool)(pthis)
+    }
+    pub unsafe fn pbstg_new_pool_nofast(&self, pthis: ppbstg_anchor) -> pbstg_subpool {
+        (self.pbstg_new_pool_nofast)(pthis)
+    }
+    pub unsafe fn pbstg_set_pool_name(
+        &self,
+        pthis: ppbstg_anchor,
+        subPool: pbstg_subpool,
+        lpstrName: LPTSTR
+    ) -> () {
+        (self.pbstg_set_pool_name)(pthis, subPool, lpstrName)
+    }
+    pub unsafe fn pbstg_set_poolpagesize(&self, pthis: ppbstg_anchor, pagesize: ULONG) -> BOOL {
+        (self.pbstg_set_poolpagesize)(pthis, pagesize)
+    }
+    pub unsafe fn pbstg_write_debug(
+        &self,
+        pthis: ppbstg_anchor,
+        subpool: pbstg_subpool,
+        lpFile: LPTSTR
+    ) -> ::std::os::raw::c_short {
+        (self.pbstg_write_debug)(pthis, subpool, lpFile)
+    }
+    pub unsafe fn pbstg_stat(&self, pthis: ppbstg_anchor, stat: *mut pbstg_statistics) -> () {
+        (self.pbstg_stat)(pthis, stat)
+    }
+    pub unsafe fn pbstg_nextGeneration(&self) -> ::std::os::raw::c_long { (self.pbstg_nextGeneration)() }
+    pub unsafe fn pbstg_dumpLeaks(&self, generation: ::std::os::raw::c_long) -> () {
+        (self.pbstg_dumpLeaks)(generation)
+    }
+    pub unsafe fn pbstg_dumpHeap(&self) -> () { (self.pbstg_dumpHeap)() }
+    pub unsafe fn pbstg_alloc(
+        &self,
+        pthis: ppbstg_anchor,
+        iNumberOfBytes: ULONG,
+        subPool: pbstg_subpool
+    ) -> *mut ::std::os::raw::c_void {
+        (self.pbstg_alloc)(pthis, iNumberOfBytes, subPool)
+    }
+    pub unsafe fn pbstg_free(&self, pthis: ppbstg_anchor, stg: *mut ::std::os::raw::c_void) -> () {
+        (self.pbstg_free)(pthis, stg)
+    }
+    pub unsafe fn pbstg_realloc(
+        &self,
+        pthis: ppbstg_anchor,
+        pOldStorage: *mut ::std::os::raw::c_void,
+        iLength: ULONG,
+        subPool: pbstg_subpool
+    ) -> *mut ::std::os::raw::c_void {
+        (self.pbstg_realloc)(pthis, pOldStorage, iLength, subPool)
+    }
+    pub unsafe fn pbstg_size(&self, pthis: ppbstg_anchor, pStg: *mut ::std::os::raw::c_void) -> ULONG {
+        (self.pbstg_size)(pthis, pStg)
+    }
+    pub unsafe fn pbstg_fast_strlen(&self, s: LPTSTR) -> ULONG { (self.pbstg_fast_strlen)(s) }
+    pub unsafe fn pbstg_ansitoupper(&self, c: ::std::os::raw::c_int) -> ::std::os::raw::c_int {
+        (self.pbstg_ansitoupper)(c)
+    }
+    pub unsafe fn pbstg_ansitolower(&self, c: ::std::os::raw::c_int) -> ::std::os::raw::c_int {
+        (self.pbstg_ansitolower)(c)
+    }
+    pub unsafe fn pbstg_strdup(
+        &self,
+        pthis: ppbstg_anchor,
+        string: LPCTSTR,
+        subpool: pbstg_subpool
+    ) -> LPTSTR {
+        (self.pbstg_strdup)(pthis, string, subpool)
+    }
+    pub unsafe fn pbstg_strdup_malloc(&self, lpstrString: LPTSTR) -> LPTSTR {
+        (self.pbstg_strdup_malloc)(lpstrString)
+    }
+    pub unsafe fn pbstg_str_build(
+        &self,
+        sa: ppbstg_anchor,
+        subpool: pbstg_subpool,
+        syn: *mut LPTSTR,
+        synLen: *mut ::std::os::raw::c_long,
+        synOff: *mut ::std::os::raw::c_long,
+        string: LPTSTR
+    ) -> () {
+        (self.pbstg_str_build)(sa, subpool, syn, synLen, synOff, string)
+    }
+    pub unsafe fn pbstg_str_build_char(
+        &self,
+        sa: ppbstg_anchor,
+        subpool: pbstg_subpool,
+        syn: *mut LPTSTR,
+        synLen: *mut ::std::os::raw::c_long,
+        synOff: *mut ::std::os::raw::c_long,
+        c: TCHAR
+    ) -> () {
+        (self.pbstg_str_build_char)(sa, subpool, syn, synLen, synOff, c)
+    }
+    pub unsafe fn pbstg_str_build_huge(
+        &self,
+        sa: ppbstg_anchor,
+        subpool: pbstg_subpool,
+        syn: *mut LPTSTR,
+        synLen: *mut ::std::os::raw::c_long,
+        synOff: *mut ::std::os::raw::c_long,
+        string: *mut TCHAR
+    ) -> () {
+        (self.pbstg_str_build_huge)(sa, subpool, syn, synLen, synOff, string)
+    }
+    pub unsafe fn pbstg_str_remove_char(&self, string: LPTSTR, c: TCHAR) -> LPTSTR {
+        (self.pbstg_str_remove_char)(string, c)
+    }
+    pub unsafe fn pbstg_str_trim_left(&self, string: LPTSTR, IncludeAllSpaceTypes: BOOL) -> LPTSTR {
+        (self.pbstg_str_trim_left)(string, IncludeAllSpaceTypes)
+    }
+    pub unsafe fn pbstg_str_trim_right(&self, string: LPTSTR, IncludeAllSpaceTypes: BOOL) -> LPTSTR {
+        (self.pbstg_str_trim_right)(string, IncludeAllSpaceTypes)
+    }
+    pub unsafe fn pbstg_str_trim(&self, string: LPTSTR, IncludeAllSpaceTypes: BOOL) -> LPTSTR {
+        (self.pbstg_str_trim)(string, IncludeAllSpaceTypes)
+    }
+    pub unsafe fn pbstg_str_wordcap(&self, s: LPTSTR) -> LPTSTR { (self.pbstg_str_wordcap)(s) }
+    pub unsafe fn pbstg_atoi_imp(&self, arg1: LPTSTR) -> INT { (self.pbstg_atoi_imp)(arg1) }
+    pub unsafe fn pbstg_atof_imp(&self, arg1: LPTSTR) -> f64 { (self.pbstg_atof_imp)(arg1) }
+    pub unsafe fn pbstg_strtod_imp(&self, pText: LPTSTR, endptr: *mut LPTSTR) -> f64 {
+        (self.pbstg_strtod_imp)(pText, endptr)
+    }
+    pub unsafe fn pbstg_atol_imp(&self, arg1: LPTSTR) -> ::std::os::raw::c_long {
+        (self.pbstg_atol_imp)(arg1)
+    }
+    pub unsafe fn pbstg_strtol_imp(
+        &self,
+        arg1: LPTSTR,
+        arg2: *mut LPTSTR,
+        arg3: ::std::os::raw::c_int
+    ) -> ::std::os::raw::c_long {
+        (self.pbstg_strtol_imp)(arg1, arg2, arg3)
+    }
+    pub unsafe fn pbstg_atou_imp(&self, arg1: LPTSTR) -> UINT { (self.pbstg_atou_imp)(arg1) }
+    pub unsafe fn pbstg_atoul_imp(&self, arg1: LPTSTR) -> ULONG { (self.pbstg_atoul_imp)(arg1) }
+    pub unsafe fn pbstg_strtoul_imp(
+        &self,
+        arg1: LPTSTR,
+        arg2: *mut LPTSTR,
+        arg3: ::std::os::raw::c_int
+    ) -> ULONG {
+        (self.pbstg_strtoul_imp)(arg1, arg2, arg3)
+    }
+    pub unsafe fn pbstg_remove_imp(&self, arg1: LPTSTR) -> INT { (self.pbstg_remove_imp)(arg1) }
+    pub unsafe fn pbstg_dde_alloc(
+        &self,
+        iNumberOfBytes: ::std::os::raw::c_ushort
+    ) -> *mut ::std::os::raw::c_void {
+        (self.pbstg_dde_alloc)(iNumberOfBytes)
+    }
+    pub unsafe fn pbstg_dde_free(&self, arg1: *mut ::std::os::raw::c_void) -> () {
+        (self.pbstg_dde_free)(arg1)
+    }
+    pub unsafe fn pbstg_dde_get_handle(&self, arg1: *mut ::std::os::raw::c_void) -> GLOBALHANDLE {
+        (self.pbstg_dde_get_handle)(arg1)
+    }
+    pub unsafe fn pbstg_dde_lock(&self, arg1: GLOBALHANDLE) -> *mut ::std::os::raw::c_void {
+        (self.pbstg_dde_lock)(arg1)
+    }
+    pub unsafe fn pbstg_dde_unlock(&self, arg1: GLOBALHANDLE) -> () { (self.pbstg_dde_unlock)(arg1) }
+    pub unsafe fn pbstg_huge_memcmp(
+        &self,
+        v1: *mut ::std::os::raw::c_void,
+        v2: *mut ::std::os::raw::c_void,
+        count: ULONG
+    ) -> ::std::os::raw::c_short {
+        (self.pbstg_huge_memcmp)(v1, v2, count)
+    }
+    pub unsafe fn pbstg_huge_memcpy(
+        &self,
+        v1: *mut ::std::os::raw::c_void,
+        v2: *mut ::std::os::raw::c_void,
+        count: ULONG
+    ) -> *mut ::std::os::raw::c_void {
+        (self.pbstg_huge_memcpy)(v1, v2, count)
+    }
+    pub unsafe fn pbstg_huge_memmove(
+        &self,
+        v1: *mut ::std::os::raw::c_void,
+        v2: *mut ::std::os::raw::c_void,
+        count: ULONG
+    ) -> *mut ::std::os::raw::c_void {
+        (self.pbstg_huge_memmove)(v1, v2, count)
+    }
+    pub unsafe fn pbstg_huge_memset(
+        &self,
+        v1: *mut ::std::os::raw::c_void,
+        c: ::std::os::raw::c_short,
+        count: ULONG
+    ) -> *mut ::std::os::raw::c_void {
+        (self.pbstg_huge_memset)(v1, c, count)
+    }
+    pub unsafe fn pbstg_huge_strchr(&self, s: *mut TCHAR, c: TCHAR) -> *mut TCHAR {
+        (self.pbstg_huge_strchr)(s, c)
+    }
+    pub unsafe fn pbstg_huge_strcpy(&self, s: *mut TCHAR, s2: *mut TCHAR) -> *mut TCHAR {
+        (self.pbstg_huge_strcpy)(s, s2)
+    }
+    pub unsafe fn pbstg_huge_strlen(&self, s: *mut TCHAR) -> ULONG { (self.pbstg_huge_strlen)(s) }
+    pub unsafe fn pbstg_huge_strncpy(&self, s: *mut TCHAR, s2: *mut TCHAR, count: ULONG) -> *mut TCHAR {
+        (self.pbstg_huge_strncpy)(s, s2, count)
+    }
+    pub unsafe fn pbstg_huge_strstr(&self, s: *mut TCHAR, s2: *mut TCHAR) -> *mut TCHAR {
+        (self.pbstg_huge_strstr)(s, s2)
+    }
+    pub unsafe fn pbstg_unicodestrdup(
+        &self,
+        sa: ppbstg_anchor,
+        pwsz: LPCWSTR,
+        subpool: pbstg_subpool
+    ) -> LPWSTR {
+        (self.pbstg_unicodestrdup)(sa, pwsz, subpool)
+    }
+    pub unsafe fn pbstg_unicodestr_build(
+        &self,
+        sa: ppbstg_anchor,
+        subpool: pbstg_subpool,
+        syn: *mut LPWSTR,
+        synLen: *mut ::std::os::raw::c_long,
+        synOff: *mut ::std::os::raw::c_long,
+        string: LPCWSTR
+    ) -> () {
+        (self.pbstg_unicodestr_build)(sa, subpool, syn, synLen, synOff, string)
+    }
+    pub unsafe fn pbstg_strtounicodedup(
+        &self,
+        pthis: ppbstg_anchor,
+        psz: LPCTSTR,
+        subpool: pbstg_subpool
+    ) -> LPWSTR {
+        (self.pbstg_strtounicodedup)(pthis, psz, subpool)
+    }
+    pub unsafe fn pbstg_unicodetostrdup(
+        &self,
+        pthis: ppbstg_anchor,
+        pwsz: LPCWSTR,
+        subpool: pbstg_subpool
+    ) -> LPTSTR {
+        (self.pbstg_unicodetostrdup)(pthis, pwsz, subpool)
+    }
+    pub unsafe fn pbstg_strtoansidup(
+        &self,
+        pthis: ppbstg_anchor,
+        psz: LPCTSTR,
+        subpool: pbstg_subpool
+    ) -> LPSTR {
+        (self.pbstg_strtoansidup)(pthis, psz, subpool)
+    }
+    pub unsafe fn pbstg_ansitostrdup(
+        &self,
+        pthis: ppbstg_anchor,
+        pasz: LPCSTR,
+        subpool: pbstg_subpool
+    ) -> LPTSTR {
+        (self.pbstg_ansitostrdup)(pthis, pasz, subpool)
+    }
+    pub unsafe fn pbstg_strtoprintable(&self, dest: LPSTR, source: LPCTSTR) -> LPSTR {
+        (self.pbstg_strtoprintable)(dest, source)
+    }
+    pub unsafe fn pbstg_strtoprintabledup(
+        &self,
+        pthis: ppbstg_anchor,
+        psz: LPCTSTR,
+        subpool: pbstg_subpool
+    ) -> LPSTR {
+        (self.pbstg_strtoprintabledup)(pthis, psz, subpool)
+    }
+    pub unsafe fn pbstg_printabletostr(&self, dest: LPTSTR, source: LPCSTR) -> LPTSTR {
+        (self.pbstg_printabletostr)(dest, source)
+    }
+    pub unsafe fn pbstg_printabletostrdup(
+        &self,
+        pthis: ppbstg_anchor,
+        pasz: LPCSTR,
+        subpool: pbstg_subpool
+    ) -> LPTSTR {
+        (self.pbstg_printabletostrdup)(pthis, pasz, subpool)
+    }
+    pub unsafe fn pbstg_lchrcmp(&self, c1: TCHAR, c2: TCHAR) -> INT { (self.pbstg_lchrcmp)(c1, c2) }
+    pub unsafe fn pbstg_lchrcmpi(&self, c1: TCHAR, c2: TCHAR) -> INT { (self.pbstg_lchrcmpi)(c1, c2) }
+    pub unsafe fn sh_dbg_console_init(&self) -> () { (self.sh_dbg_console_init)() }
+    pub unsafe fn sh_dbg_console_out(&self, string: LPTSTR) -> () { (self.sh_dbg_console_out)(string) }
+    pub unsafe fn sh_dbg_console_lock(&self) -> () { (self.sh_dbg_console_lock)() }
+    pub unsafe fn sh_dbg_console_unlock(&self) -> () { (self.sh_dbg_console_unlock)() }
+    pub unsafe fn sh_dbg_init(&self, arg1: ppbstg_anchor) -> *mut SH_DBG_THIS { (self.sh_dbg_init)(arg1) }
+    pub unsafe fn sh_dbg_this(&self) -> *mut SH_DBG_THIS { (self.sh_dbg_this)() }
+    pub unsafe fn sh_dbg_term(&self, dbgthis: *mut SH_DBG_THIS) -> () { (self.sh_dbg_term)(dbgthis) }
+    pub unsafe fn sh_dbg_read_input(&self, dbgthis: *mut SH_DBG_THIS, dbg_infile: LPTSTR) -> INT {
+        (self.sh_dbg_read_input)(dbgthis, dbg_infile)
+    }
+    pub unsafe fn sh_dbg_outfile(&self, dbgthis: *mut SH_DBG_THIS, filename: LPTSTR) -> () {
+        (self.sh_dbg_outfile)(dbgthis, filename)
+    }
+    pub unsafe fn sh_dbg_open(&self, dbgthis: *mut SH_DBG_THIS) -> INT { (self.sh_dbg_open)(dbgthis) }
+    pub unsafe fn sh_dbg_close(&self, dbgthis: *mut SH_DBG_THIS) -> INT { (self.sh_dbg_close)(dbgthis) }
+    pub unsafe fn sh_dbg_set(&self, dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT {
+        (self.sh_dbg_set)(dbgthis, dbg_code)
+    }
+    pub unsafe fn sh_dbg_del(&self, dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT {
+        (self.sh_dbg_del)(dbgthis, dbg_code)
+    }
+    pub unsafe fn sh_dbg_header(&self, dbgthis: *mut SH_DBG_THIS, header_state: INT) -> () {
+        (self.sh_dbg_header)(dbgthis, header_state)
+    }
+    pub unsafe fn sh_dbg_indent(&self, dbgthis: *mut SH_DBG_THIS, indent_state: INT) -> () {
+        (self.sh_dbg_indent)(dbgthis, indent_state)
+    }
+    pub unsafe fn sh_dbg_set_this(&self, dbgthis: *mut SH_DBG_THIS) -> () { (self.sh_dbg_set_this)(dbgthis) }
+    pub unsafe fn sh_dbg_start_indent(&self, dbgthis: *mut SH_DBG_THIS) -> () {
+        (self.sh_dbg_start_indent)(dbgthis)
+    }
+    pub unsafe fn sh_dbg_end_indent(&self, dbgthis: *mut SH_DBG_THIS) -> () {
+        (self.sh_dbg_end_indent)(dbgthis)
+    }
+    pub unsafe fn sh_dbg_enter(&self, dbgthis: *mut SH_DBG_THIS, dbg_code: INT, string: LPTSTR) -> INT {
+        (self.sh_dbg_enter)(dbgthis, dbg_code, string)
+    }
+    pub unsafe fn sh_dbg_leave(&self, dbgthis: *mut SH_DBG_THIS, dbg_code: INT, string: LPTSTR) -> INT {
+        (self.sh_dbg_leave)(dbgthis, dbg_code, string)
+    }
+    pub unsafe fn sh_dbg_on(&self, dbgthis: *mut SH_DBG_THIS) -> () { (self.sh_dbg_on)(dbgthis) }
+    pub unsafe fn sh_dbg_off(&self, dbgthis: *mut SH_DBG_THIS) -> () { (self.sh_dbg_off)(dbgthis) }
+    pub unsafe fn sh_dbg_query(&self, dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT {
+        (self.sh_dbg_query)(dbgthis, dbg_code)
+    }
+    pub unsafe fn sh_dbg_is_hdr_on(&self, dbgthis: *mut SH_DBG_THIS) -> INT {
+        (self.sh_dbg_is_hdr_on)(dbgthis)
+    }
+    pub unsafe fn sh_dbg_is_indent_on(&self, dbgthis: *mut SH_DBG_THIS) -> INT {
+        (self.sh_dbg_is_indent_on)(dbgthis)
+    }
+    pub unsafe fn shlist_delete(&self, self_: *mut shlist) -> () { (self.shlist_delete)(self_) }
+    pub unsafe fn shlist_deleteFree(&self, self_: *mut shlist) -> *mut ::std::os::raw::c_void {
+        (self.shlist_deleteFree)(self_)
+    }
+    pub unsafe fn shlist_get_next(&self, self_: *mut shlist) -> *mut ::std::os::raw::c_void {
+        (self.shlist_get_next)(self_)
+    }
+    pub unsafe fn shlist_get_prev(&self, self_: *mut shlist) -> *mut ::std::os::raw::c_void {
+        (self.shlist_get_prev)(self_)
+    }
+    pub unsafe fn shlist_putafter(&self, self_: *mut shlist, node: *mut shlnode) -> INT {
+        (self.shlist_putafter)(self_, node)
+    }
+    pub unsafe fn shlist_addafter(&self, self_: *mut shlist, data: *mut ::std::os::raw::c_void) -> INT {
+        (self.shlist_addafter)(self_, data)
+    }
+    pub unsafe fn shlist_addbefore(&self, self_: *mut shlist, data: *mut ::std::os::raw::c_void) -> INT {
+        (self.shlist_addbefore)(self_, data)
+    }
+    pub unsafe fn shlist_remove(&self, self_: *mut shlist) -> *mut ::std::os::raw::c_void {
+        (self.shlist_remove)(self_)
+    }
+    pub unsafe fn shlist_insert_at_curr(
+        &self,
+        self_: *mut shlist,
+        userdata: *mut ::std::os::raw::c_void
+    ) -> INT {
+        (self.shlist_insert_at_curr)(self_, userdata)
+    }
+    pub unsafe fn shlist_insert(&self, self_: *mut shlist, userdata: *mut ::std::os::raw::c_void) -> INT {
+        (self.shlist_insert)(self_, userdata)
+    }
+    pub unsafe fn shlist_new(&self, sa: ppbstg_anchor, subpool: pbstg_subpool) -> *mut shlist {
+        (self.shlist_new)(sa, subpool)
+    }
+    pub unsafe fn shlist_curr_node(&self, self_: *mut shlist) -> *mut shlnode {
+        (self.shlist_curr_node)(self_)
+    }
+    pub unsafe fn shlist_get_count(&self, self_: *mut shlist) -> UINT { (self.shlist_get_count)(self_) }
+    pub unsafe fn shlist_get_first(&self, self_: *mut shlist) -> *mut ::std::os::raw::c_void {
+        (self.shlist_get_first)(self_)
+    }
+    pub unsafe fn shlist_get_last(&self, self_: *mut shlist) -> *mut ::std::os::raw::c_void {
+        (self.shlist_get_last)(self_)
+    }
+    pub unsafe fn shlist_get_curr(&self, self_: *mut shlist) -> *mut ::std::os::raw::c_void {
+        (self.shlist_get_curr)(self_)
+    }
+    pub unsafe fn shlist_update(
+        &self,
+        self_: *mut shlist,
+        newdata: *mut ::std::os::raw::c_void
+    ) -> *mut ::std::os::raw::c_void {
+        (self.shlist_update)(self_, newdata)
+    }
+    pub unsafe fn shlist_get_handle(&self, self_: *mut shlist) -> SH_LIST_HANDLE {
+        (self.shlist_get_handle)(self_)
+    }
+    pub unsafe fn shlist_set_current(&self, self_: *mut shlist, handle: SH_LIST_HANDLE) -> () {
+        (self.shlist_set_current)(self_, handle)
+    }
+    pub unsafe fn shlist_traversal(
+        &self,
+        self_: *mut shlist,
+        data: *mut ::std::os::raw::c_void,
+        trav_func: PASCALFAR_INT_PROC
+    ) -> INT {
+        (self.shlist_traversal)(self_, data, trav_func)
+    }
+    pub unsafe fn shlist_sort(
+        &self,
+        self_: *mut shlist,
+        compare_func: PASCALFAR_INT_PROC,
+        options: ::std::os::raw::c_int
+    ) -> *mut LPTSTR {
+        (self.shlist_sort)(self_, compare_func, options)
+    }
+    pub unsafe fn shlist_sort_param(
+        &self,
+        self_: *mut shlist,
+        lpData: *mut ::std::os::raw::c_void,
+        compare_func: PASCALFAR_INT_PROC,
+        options: ::std::os::raw::c_int
+    ) -> *mut LPTSTR {
+        (self.shlist_sort_param)(self_, lpData, compare_func, options)
+    }
+    pub unsafe fn sh_grwblk_init(&self, grwblk: PSH_GROWBLOCK, incr: UINT, str_size: UINT) -> () {
+        (self.sh_grwblk_init)(grwblk, incr, str_size)
+    }
+    pub unsafe fn sh_new_grwblk(
+        &self,
+        stgthis: ppbstg_anchor,
+        increment: UINT,
+        struct_size: UINT,
+        subpool: pbstg_subpool
+    ) -> PSH_GROWBLOCK {
+        (self.sh_new_grwblk)(stgthis, increment, struct_size, subpool)
+    }
+    pub unsafe fn sh_set_grwblk_item(
+        &self,
+        stgthis: ppbstg_anchor,
+        grwblk: PSH_GROWBLOCK,
+        pos: UINT,
+        item: *mut ::std::os::raw::c_void,
+        subpool: pbstg_subpool
+    ) -> () {
+        (self.sh_set_grwblk_item)(stgthis, grwblk, pos, item, subpool)
+    }
+    pub unsafe fn sh_add_to_grwblk(
+        &self,
+        stgthis: ppbstg_anchor,
+        grwblk: PSH_GROWBLOCK,
+        item: *mut ::std::os::raw::c_void,
+        subpool: pbstg_subpool
+    ) -> UINT {
+        (self.sh_add_to_grwblk)(stgthis, grwblk, item, subpool)
+    }
+    pub unsafe fn sh_append_to_grwblk(
+        &self,
+        stgthis: ppbstg_anchor,
+        grwblk: PSH_GROWBLOCK,
+        item_array: *mut ::std::os::raw::c_void,
+        array_len: UINT,
+        subpool: pbstg_subpool
+    ) -> () {
+        (self.sh_append_to_grwblk)(stgthis, grwblk, item_array, array_len, subpool)
+    }
+    pub unsafe fn sh_grwblk_delete(&self, stgthis: ppbstg_anchor, grwblk: PSH_GROWBLOCK) -> () {
+        (self.sh_grwblk_delete)(stgthis, grwblk)
+    }
+    pub unsafe fn sh_grwblk_close(
+        &self,
+        stgthis: ppbstg_anchor,
+        grwblk: PSH_GROWBLOCK,
+        no_items: *mut UINT
+    ) -> *mut ::std::os::raw::c_void {
+        (self.sh_grwblk_close)(stgthis, grwblk, no_items)
+    }
+    pub unsafe fn ob_set_session_icontext(
+        &self,
+        obthis: POB_THIS,
+        pNewContext: *mut ::std::os::raw::c_void
+    ) -> () {
+        (self.ob_set_session_icontext)(obthis, pNewContext)
+    }
+    pub unsafe fn rt_move_thread(&self, rtthis: POB_THIS) -> BOOL { (self.rt_move_thread)(rtthis) }
+    pub unsafe fn rt_clear_thread(&self) -> () { (self.rt_clear_thread)() }
+    pub unsafe fn rt_get_current_this(&self) -> POB_THIS { (self.rt_get_current_this)() }
+    pub unsafe fn rt_add_task(&self, rtthis: POB_THIS) -> BOOL { (self.rt_add_task)(rtthis) }
+    pub unsafe fn rt_free_task(&self) -> BOOL { (self.rt_free_task)() }
+    pub unsafe fn rt_get_current_task_info(&self, info_pos: INT) -> *mut ::std::os::raw::c_void {
+        (self.rt_get_current_task_info)(info_pos)
+    }
+    pub unsafe fn rt_set_current_task_info(
+        &self,
+        info_pos: INT,
+        user_info: *mut ::std::os::raw::c_void
+    ) -> BOOL {
+        (self.rt_set_current_task_info)(info_pos, user_info)
+    }
+    pub unsafe fn rt_get_free_task_slot(&self) -> INT { (self.rt_get_free_task_slot)() }
+    pub unsafe fn rt_is_running_exe(&self) -> BOOL { (self.rt_is_running_exe)() }
+    pub unsafe fn shhash_new(
+        &self,
+        arg1: INT,
+        arg2: KEY_FUNC,
+        arg3: BOOL,
+        arg4: BOOL,
+        arg5: ppbstg_anchor,
+        arg6: pbstg_subpool
+    ) -> *mut shhash {
+        (self.shhash_new)(arg1, arg2, arg3, arg4, arg5, arg6)
+    }
+    pub unsafe fn shhash_new_arg(
+        &self,
+        arg1: INT,
+        arg2: KEY_FUNC_ARG,
+        arg3: BOOL,
+        arg4: BOOL,
+        arg5: ppbstg_anchor,
+        arg6: pbstg_subpool,
+        arg7: *mut ::std::os::raw::c_void
+    ) -> *mut shhash {
+        (self.shhash_new_arg)(arg1, arg2, arg3, arg4, arg5, arg6, arg7)
+    }
+    pub unsafe fn shhash_delete(&self, arg1: *mut shhash) -> () { (self.shhash_delete)(arg1) }
+    pub unsafe fn shhash_clear(&self, arg1: *mut shhash) -> () { (self.shhash_clear)(arg1) }
+    pub unsafe fn shhash_get_first(&self, arg1: *mut shhash) -> *mut ::std::os::raw::c_void {
+        (self.shhash_get_first)(arg1)
+    }
+    pub unsafe fn shhash_get_next(&self, arg1: *mut shhash) -> *mut ::std::os::raw::c_void {
+        (self.shhash_get_next)(arg1)
+    }
+    pub unsafe fn shhash_insert(
+        &self,
+        arg1: *mut shhash,
+        arg2: *mut ::std::os::raw::c_void
+    ) -> ::std::os::raw::c_int {
+        (self.shhash_insert)(arg1, arg2)
+    }
+    pub unsafe fn shhash_search(
+        &self,
+        arg1: *mut shhash,
+        arg2: *mut ::std::os::raw::c_void
+    ) -> *mut ::std::os::raw::c_void {
+        (self.shhash_search)(arg1, arg2)
+    }
+    pub unsafe fn shhash_search_unique(
+        &self,
+        pThis: *mut shhash,
+        key: *mut ::std::os::raw::c_void
+    ) -> *mut ::std::os::raw::c_void {
+        (self.shhash_search_unique)(pThis, key)
+    }
+    pub unsafe fn shhash_searchNext(
+        &self,
+        arg1: *mut shhash,
+        arg2: *mut ::std::os::raw::c_void
+    ) -> *mut ::std::os::raw::c_void {
+        (self.shhash_searchNext)(arg1, arg2)
+    }
+    pub unsafe fn shhash_searchSlot(
+        &self,
+        arg1: *mut shhash,
+        arg2: *mut ::std::os::raw::c_void
+    ) -> *mut shlist {
+        (self.shhash_searchSlot)(arg1, arg2)
+    }
+    pub unsafe fn shhash_remove(&self, arg1: *mut shhash) -> *mut ::std::os::raw::c_void {
+        (self.shhash_remove)(arg1)
+    }
+    pub unsafe fn shhash_statistics(&self, arg1: *mut shhash, arg2: PHASHSTAT) -> PHASHSTAT {
+        (self.shhash_statistics)(arg1, arg2)
+    }
+    pub unsafe fn shhash_traversal(
+        &self,
+        pthis: *mut shhash,
+        data: *mut ::std::os::raw::c_void,
+        trav_func: PASCALFAR_INT_PROC
+    ) -> BOOL {
+        (self.shhash_traversal)(pthis, data, trav_func)
+    }
+    pub unsafe fn ob_add_const_data(
+        &self,
+        obthis: POB_THIS,
+        conpool: POB_CONPOOL,
+        data: *mut ::std::os::raw::c_void,
+        item_type: OB_CONPOOL_ITEM_TYPE::Type,
+        nitems: UINT,
+        len: ULONG
+    ) -> OB_CONST_REF {
+        (self.ob_add_const_data)(obthis, conpool, data, item_type, nitems, len)
+    }
+    pub unsafe fn ob_looksym_keyfunc(
+        &self,
+        pDataNode: *mut ::std::os::raw::c_void,
+        tobthis: *mut ::std::os::raw::c_void
+    ) -> LPTSTR {
+        (self.ob_looksym_keyfunc)(pDataNode, tobthis)
+    }
+    pub unsafe fn ob_looksym_reference(
+        &self,
+        obthis: POB_THIS,
+        look_symtab: POB_LOOK_SYMTAB,
+        name: LPTSTR
+    ) -> OB_SYM_ID {
+        (self.ob_looksym_reference)(obthis, look_symtab, name)
+    }
+    pub unsafe fn ob_looksym_delete(&self, obthis: POB_THIS, look_symtab: POB_LOOK_SYMTAB, slot: UINT) -> () {
+        (self.ob_looksym_delete)(obthis, look_symtab, slot)
+    }
+    pub unsafe fn ob_dynarray_index(
+        &self,
+        obthis: POB_THIS,
+        theArray: *mut tag_OB_DYNARRAY,
+        index: ULONG,
+        extend: BOOL
+    ) -> *mut ::std::os::raw::c_void {
+        (self.ob_dynarray_index)(obthis, theArray, index, extend)
+    }
+    pub unsafe fn ob_dynarray_grow(
+        &self,
+        obthis: POB_THIS,
+        theArray: *mut tag_OB_DYNARRAY,
+        limit: ULONG,
+        initialize: BOOL
+    ) -> () {
+        (self.ob_dynarray_grow)(obthis, theArray, limit, initialize)
+    }
+    pub unsafe fn ob_narray_create_static(
+        &self,
+        obthis: POB_THIS,
+        subpool: OB_SUBPOOL,
+        num_items: ULONG,
+        elmtType: OB_CLASS_HNDL,
+        elmtSize: USHORT,
+        numDim: USHORT,
+        boundsArray: *mut ::std::os::raw::c_long,
+        userData: USHORT,
+        useNulls: BOOL,
+        freeData: BOOL,
+        initFn: PNARRAY_INIT_FN
+    ) -> *mut tag_OB_NARRAY {
+        (self.ob_narray_create_static)(
+            obthis,
+            subpool,
+            num_items,
+            elmtType,
+            elmtSize,
+            numDim,
+            boundsArray,
+            userData,
+            useNulls,
+            freeData,
+            initFn
+        )
+    }
+    pub unsafe fn ob_narray_create_dynamic(
+        &self,
+        obthis: POB_THIS,
+        subpool: OB_SUBPOOL,
+        elmtType: OB_CLASS_HNDL,
+        elmtSize: USHORT,
+        userData: USHORT,
+        useNulls: BOOL,
+        freeData: BOOL,
+        initFn: PNARRAY_INIT_FN
+    ) -> *mut tag_OB_NARRAY {
+        (self.ob_narray_create_dynamic)(
+            obthis, subpool, elmtType, elmtSize, userData, useNulls, freeData, initFn
+        )
+    }
+    pub unsafe fn ob_set_arraydef(
+        &self,
+        obthis: POB_THIS,
+        arraydef: POB_ARRAYDEF,
+        no_dims: UINT,
+        arr_style: OB_ARRAY_SYMBOL_STYLE::Type,
+        bounds: *mut ::std::os::raw::c_long
+    ) -> () {
+        (self.ob_set_arraydef)(obthis, arraydef, no_dims, arr_style, bounds)
+    }
+    pub unsafe fn ob_get_array_len(&self, obthis: POB_THIS, arraydef: POB_ARRAYDEF) -> ULONG {
+        (self.ob_get_array_len)(obthis, arraydef)
+    }
+    pub unsafe fn ob_array_item_init_callback(
+        &self,
+        obthis: POB_THIS,
+        theArray: *mut tag_OB_NARRAY,
+        theItem: *mut ::std::os::raw::c_void
+    ) -> BOOL {
+        (self.ob_array_item_init_callback)(obthis, theArray, theItem)
+    }
+    pub unsafe fn ob_init_array(
+        &self,
+        obthis: POB_THIS,
+        arrdef: POB_ARRAYDEF,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        init_data: BOOL
+    ) -> POB_ARRAY_INST {
+        (self.ob_init_array)(obthis, arrdef, group, class_id, init_data)
+    }
+    pub unsafe fn ob_array_varinfo_nullval(&self, obthis: POB_THIS, array_inst: POB_ARRAY_INST) -> BOOL {
+        (self.ob_array_varinfo_nullval)(obthis, array_inst)
+    }
+    pub unsafe fn ob_array_set_varinfo_nullval(
+        &self,
+        obthis: POB_THIS,
+        array_inst: POB_ARRAY_INST,
+        bNull: BOOL
+    ) -> () {
+        (self.ob_array_set_varinfo_nullval)(obthis, array_inst, bNull)
+    }
+    pub unsafe fn ob_remove_array_data(
+        &self,
+        obthis: POB_THIS,
+        array_inst: POB_ARRAY_INST,
+        IsNullVarInfor: BOOL
+    ) -> () {
+        (self.ob_remove_array_data)(obthis, array_inst, IsNullVarInfor)
+    }
+    pub unsafe fn ob_init_pcode_blk(
+        &self,
+        obthis: POB_THIS,
+        no_items: UINT,
+        no_line_incr: UINT,
+        subpool: OB_SUBPOOL
+    ) -> POB_PCODE_BLK {
+        (self.ob_init_pcode_blk)(obthis, no_items, no_line_incr, subpool)
+    }
+    pub unsafe fn ob_del_pcode_blk(&self, obthis: POB_THIS, pcode_blk: POB_PCODE_BLK) -> () {
+        (self.ob_del_pcode_blk)(obthis, pcode_blk)
+    }
+    pub unsafe fn ob_reuse_routine(
+        &self,
+        obthis: POB_THIS,
+        routlist: POB_ROUTLIST,
+        rout_id: OB_ROUT_ID,
+        proto_id: OB_PROTO_ID,
+        subpool: OB_SUBPOOL,
+        clear_pcode: BOOL
+    ) -> () {
+        (self.ob_reuse_routine)(obthis, routlist, rout_id, proto_id, subpool, clear_pcode)
+    }
+    pub unsafe fn sh_MAX_DEC(&self) -> *const SH_DEC { (self.sh_MAX_DEC)() }
+    pub unsafe fn shMaxDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
+        (self.shMaxDec)(dst, src1, src2)
+    }
+    pub unsafe fn shMinDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
+        (self.shMinDec)(dst, src1, src2)
+    }
+    pub unsafe fn shCompareDec(&self, src1: PSH_DEC, src2: PSH_DEC) -> SHORT {
+        (self.shCompareDec)(src1, src2)
+    }
+    pub unsafe fn shAbsDec(&self, dst: PSH_DEC, src: PSH_DEC) -> PSH_DEC { (self.shAbsDec)(dst, src) }
+    pub unsafe fn shNegateDec(&self, dst: PSH_DEC, src: PSH_DEC) -> PSH_DEC { (self.shNegateDec)(dst, src) }
+    pub unsafe fn shRoundDec(&self, dst: PSH_DEC, src: PSH_DEC, n: SHORT) -> PSH_DEC {
+        (self.shRoundDec)(dst, src, n)
+    }
+    pub unsafe fn shTruncDec(&self, dst: PSH_DEC, src: PSH_DEC, n: SHORT) -> PSH_DEC {
+        (self.shTruncDec)(dst, src, n)
+    }
+    pub unsafe fn shAddDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
+        (self.shAddDec)(dst, src1, src2)
+    }
+    pub unsafe fn shSubDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
+        (self.shSubDec)(dst, src1, src2)
+    }
+    pub unsafe fn shMultDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
+        (self.shMultDec)(dst, src1, src2)
+    }
+    pub unsafe fn shDivDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
+        (self.shDivDec)(dst, src1, src2)
+    }
+    pub unsafe fn shModDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
+        (self.shModDec)(dst, src1, src2)
+    }
+    pub unsafe fn shExpDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
+        (self.shExpDec)(dst, src1, src2)
+    }
+    pub unsafe fn shIntToDec(&self, dst: PSH_DEC, src: SHORT) -> PSH_DEC { (self.shIntToDec)(dst, src) }
+    pub unsafe fn shDecToInt(&self, dst: *mut SHORT, src: PSH_DEC) -> *mut SHORT {
+        (self.shDecToInt)(dst, src)
+    }
+    pub unsafe fn shUintToDec(&self, dst: PSH_DEC, src: USHORT) -> PSH_DEC { (self.shUintToDec)(dst, src) }
+    pub unsafe fn shDecToUint(&self, dst: *mut USHORT, src: PSH_DEC) -> *mut USHORT {
+        (self.shDecToUint)(dst, src)
+    }
+    pub unsafe fn shByteToDec(&self, dst: PSH_DEC, src: ::std::os::raw::c_uchar) -> PSH_DEC {
+        (self.shByteToDec)(dst, src)
+    }
+    pub unsafe fn shDecToByte(
+        &self,
+        dst: *mut ::std::os::raw::c_uchar,
+        src: PSH_DEC
+    ) -> *mut ::std::os::raw::c_uchar {
+        (self.shDecToByte)(dst, src)
+    }
+    pub unsafe fn shLongToDec(&self, dst: PSH_DEC, src: ::std::os::raw::c_long) -> PSH_DEC {
+        (self.shLongToDec)(dst, src)
+    }
+    pub unsafe fn shDecToLong(
+        &self,
+        arg1: *mut ::std::os::raw::c_long,
+        src: PSH_DEC
+    ) -> *mut ::std::os::raw::c_long {
+        (self.shDecToLong)(arg1, src)
+    }
+    pub unsafe fn shUlongToDec(&self, dst: PSH_DEC, src: ULONG) -> PSH_DEC { (self.shUlongToDec)(dst, src) }
+    pub unsafe fn shDecToUlong(&self, dst: *mut ULONG, src: PSH_DEC) -> *mut ULONG {
+        (self.shDecToUlong)(dst, src)
+    }
+    pub unsafe fn shLonglongToDec(&self, dst: PSH_DEC, src: *mut ::std::os::raw::c_longlong) -> PSH_DEC {
+        (self.shLonglongToDec)(dst, src)
+    }
+    pub unsafe fn shDecToLonglong(
+        &self,
+        dst: *mut ::std::os::raw::c_longlong,
+        src: PSH_DEC
+    ) -> *mut ::std::os::raw::c_longlong {
+        (self.shDecToLonglong)(dst, src)
+    }
+    pub unsafe fn shDecToFloat(&self, dst: *mut f32, src: PSH_DEC) -> *mut f32 {
+        (self.shDecToFloat)(dst, src)
+    }
+    pub unsafe fn shFloatToDec(&self, dst: PSH_DEC, src: *mut f32) -> PSH_DEC {
+        (self.shFloatToDec)(dst, src)
+    }
+    pub unsafe fn shDoubleToDec(&self, dst: PSH_DEC, src: *mut f64) -> PSH_DEC {
+        (self.shDoubleToDec)(dst, src)
+    }
+    pub unsafe fn shDecToDouble(&self, dst: *mut f64, src: PSH_DEC) -> *mut f64 {
+        (self.shDecToDouble)(dst, src)
+    }
+    pub unsafe fn shDecToAscii(&self, dst: LPTSTR, src: PSH_DEC) -> LPTSTR { (self.shDecToAscii)(dst, src) }
+    pub unsafe fn shAsciiToDec(&self, dst: PSH_DEC, src: LPTSTR) -> PSH_DEC { (self.shAsciiToDec)(dst, src) }
+    pub unsafe fn shAsciiToDecRnd(&self, dst: PSH_DEC, src: LPTSTR, n: SHORT) -> PSH_DEC {
+        (self.shAsciiToDecRnd)(dst, src, n)
+    }
+    pub unsafe fn shSetDecFractions(&self, d: PSH_DEC, n: SHORT) -> () { (self.shSetDecFractions)(d, n) }
+    pub unsafe fn shSetDecNegative(&self, d: PSH_DEC, n: BOOL) -> () { (self.shSetDecNegative)(d, n) }
+    pub unsafe fn shDecSetOverflow(&self, dec: PSH_DEC, neg: BOOL) -> BOOL {
+        (self.shDecSetOverflow)(dec, neg)
+    }
+    pub unsafe fn shdtDayName(&self, w_day: ::std::os::raw::c_short, lpName: LPTSTR) -> BOOL {
+        (self.shdtDayName)(w_day, lpName)
+    }
+    pub unsafe fn shdtDayOfWeek(&self, t: PSH_TIME) -> ::std::os::raw::c_int { (self.shdtDayOfWeek)(t) }
+    pub unsafe fn shdtBuildTime(
+        &self,
+        fTime1: PSH_TIME,
+        year: INT,
+        mon: ::std::os::raw::c_uchar,
+        day: ::std::os::raw::c_uchar,
+        hour: ::std::os::raw::c_uchar,
+        min: ::std::os::raw::c_uchar,
+        sec: ::std::os::raw::c_uchar,
+        msec: ::std::os::raw::c_long
+    ) -> () {
+        (self.shdtBuildTime)(fTime1, year, mon, day, hour, min, sec, msec)
+    }
+    pub unsafe fn shdtDiffDate(&self, fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long {
+        (self.shdtDiffDate)(fTime1, fTime2)
+    }
+    pub unsafe fn shdtDiffTime(&self, fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long {
+        (self.shdtDiffTime)(fTime1, fTime2)
+    }
+    pub unsafe fn shdtDiffMSec(&self, fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long {
+        (self.shdtDiffMSec)(fTime1, fTime2)
+    }
+    pub unsafe fn shdtNow(&self, fTime: PSH_TIME) -> () { (self.shdtNow)(fTime) }
+    pub unsafe fn shdtParse(
+        &self,
+        fTime: PSH_TIME,
+        sTime: LPTSTR,
+        flags: ::std::os::raw::c_int
+    ) -> ::std::os::raw::c_int {
+        (self.shdtParse)(fTime, sTime, flags)
+    }
+    pub unsafe fn shdtParseEx(
+        &self,
+        fTime: PSH_TIME,
+        sTime: LPTSTR,
+        flags: ::std::os::raw::c_int,
+        dwCultureFormat: LPTSTR
+    ) -> ::std::os::raw::c_int {
+        (self.shdtParseEx)(fTime, sTime, flags, dwCultureFormat)
+    }
+    pub unsafe fn shdtParseStringEx(
+        &self,
+        fTime: PSH_TIME,
+        sTime: LPTSTR,
+        flags: ::std::os::raw::c_int,
+        bStrictly: BOOL
+    ) -> ::std::os::raw::c_int {
+        (self.shdtParseStringEx)(fTime, sTime, flags, bStrictly)
+    }
+    pub unsafe fn shdtParseStringExWithLcid(
+        &self,
+        fTime: PSH_TIME,
+        sTime: LPTSTR,
+        flags: ::std::os::raw::c_int,
+        bStrictly: BOOL,
+        uInLcid: ::std::os::raw::c_int
+    ) -> ::std::os::raw::c_int {
+        (self.shdtParseStringExWithLcid)(fTime, sTime, flags, bStrictly, uInLcid)
+    }
+    pub unsafe fn shdtParseToString(
+        &self,
+        fTime: PSH_TIME,
+        sTime: LPTSTR,
+        flags: ::std::os::raw::c_int
+    ) -> () {
+        (self.shdtParseToString)(fTime, sTime, flags)
+    }
+    pub unsafe fn shdtRelativeDate(
+        &self,
+        oDate: PSH_TIME,
+        iDate: PSH_TIME,
+        dayCount: ::std::os::raw::c_long
+    ) -> () {
+        (self.shdtRelativeDate)(oDate, iDate, dayCount)
+    }
+    pub unsafe fn shdtToMJDDate(&self, pDate: PSH_TIME, pMJDDate: *mut f64) -> () {
+        (self.shdtToMJDDate)(pDate, pMJDDate)
+    }
+    pub unsafe fn shdtToMJDTime(&self, pTime: PSH_TIME, pMJDTime: *mut f64) -> () {
+        (self.shdtToMJDTime)(pTime, pMJDTime)
+    }
+    pub unsafe fn shdtToMJDTimestamp(
+        &self,
+        pDateTime: PSH_TIME,
+        pMJDDate: *mut f64,
+        pMJDTime: *mut f64
+    ) -> () {
+        (self.shdtToMJDTimestamp)(pDateTime, pMJDDate, pMJDTime)
+    }
+    pub unsafe fn shMJDDateTodt(&self, pDate: PSH_TIME, MJDDate: f64) -> () {
+        (self.shMJDDateTodt)(pDate, MJDDate)
+    }
+    pub unsafe fn shMJDTimeTodt(&self, pTime: PSH_TIME, MJDTime: f64) -> () {
+        (self.shMJDTimeTodt)(pTime, MJDTime)
+    }
+    pub unsafe fn shMJDTimestampTodt(&self, pDateTime: PSH_TIME, MJDDate: f64, MJDTime: f64) -> () {
+        (self.shMJDTimestampTodt)(pDateTime, MJDDate, MJDTime)
+    }
+    pub unsafe fn shdtString(&self, sdate: LPTSTR, stime: LPTSTR) -> () { (self.shdtString)(sdate, stime) }
+    pub unsafe fn ob_mgr_init(&self, dbgthis: *mut SH_DBG_THIS, stgthis: ppbstg_anchor) -> POB_THIS {
+        (self.ob_mgr_init)(dbgthis, stgthis)
+    }
+    pub unsafe fn ob_mgr_init_ex(
+        &self,
+        dbgthis: *mut SH_DBG_THIS,
+        stgthis: ppbstg_anchor,
+        lpstrTypdefPblName: LPTSTR
+    ) -> POB_THIS {
+        (self.ob_mgr_init_ex)(dbgthis, stgthis, lpstrTypdefPblName)
+    }
+    pub unsafe fn ob_mgr_restart(&self, obthis: POB_THIS) -> () { (self.ob_mgr_restart)(obthis) }
+    pub unsafe fn ob_mgr_terminate(&self, obthis: POB_THIS) -> () { (self.ob_mgr_terminate)(obthis) }
+    pub unsafe fn ob_free_memory(&self, obthis: POB_THIS, data: *mut ::std::os::raw::c_void) -> () {
+        (self.ob_free_memory)(obthis, data)
+    }
+    pub unsafe fn ob_free_link_error_list(&self, obthis: POB_THIS) -> () {
+        (self.ob_free_link_error_list)(obthis)
+    }
+    pub unsafe fn ob_get_link_error_list(&self, obthis: POB_THIS) -> *mut ::std::os::raw::c_void {
+        (self.ob_get_link_error_list)(obthis)
+    }
+    pub unsafe fn ob_enter_critical_section(&self, obthis: POB_THIS) -> () {
+        (self.ob_enter_critical_section)(obthis)
+    }
+    pub unsafe fn ob_leave_critical_section(&self, obthis: POB_THIS) -> () {
+        (self.ob_leave_critical_section)(obthis)
+    }
+    pub unsafe fn ob_alloc_string(&self, obthis: POB_THIS, len: ULONG) -> LPTSTR {
+        (self.ob_alloc_string)(obthis, len)
+    }
+    pub unsafe fn ob_alloc_blob(&self, obthis: POB_THIS, len: ULONG) -> PSH_BINARY {
+        (self.ob_alloc_blob)(obthis, len)
+    }
+    pub unsafe fn ob_alloc_dec(&self, obthis: POB_THIS) -> PSH_DEC { (self.ob_alloc_dec)(obthis) }
+    pub unsafe fn ob_alloc_double(&self, obthis: POB_THIS) -> *mut f64 { (self.ob_alloc_double)(obthis) }
+    pub unsafe fn ob_alloc_longlong(&self, obthis: POB_THIS) -> *mut ::std::os::raw::c_longlong {
+        (self.ob_alloc_longlong)(obthis)
+    }
+    pub unsafe fn ob_alloc_time(&self, obthis: POB_THIS) -> PSH_TIME { (self.ob_alloc_time)(obthis) }
+    pub unsafe fn ob_realloc_string(&self, obthis: POB_THIS, string: LPTSTR, len: ULONG) -> LPTSTR {
+        (self.ob_realloc_string)(obthis, string, len)
+    }
+    pub unsafe fn ob_realloc_blob(&self, obthis: POB_THIS, blob: PSH_BINARY, len: ULONG) -> PSH_BINARY {
+        (self.ob_realloc_blob)(obthis, blob, len)
+    }
+    pub unsafe fn ob_dup_string(&self, obthis: POB_THIS, string: LPTSTR) -> LPTSTR {
+        (self.ob_dup_string)(obthis, string)
+    }
+    pub unsafe fn ob_dup_blob(&self, obthis: POB_THIS, blob: PSH_BINARY) -> PSH_BINARY {
+        (self.ob_dup_blob)(obthis, blob)
+    }
+    pub unsafe fn ob_dup_dec(&self, obthis: POB_THIS, dec_val: PSH_DEC) -> PSH_DEC {
+        (self.ob_dup_dec)(obthis, dec_val)
+    }
+    pub unsafe fn ob_dup_double(&self, obthis: POB_THIS, double_val: *mut f64) -> *mut f64 {
+        (self.ob_dup_double)(obthis, double_val)
+    }
+    pub unsafe fn ob_dup_longlong(
+        &self,
+        obthis: POB_THIS,
+        longlong_val: *mut ::std::os::raw::c_longlong
+    ) -> *mut ::std::os::raw::c_longlong {
+        (self.ob_dup_longlong)(obthis, longlong_val)
+    }
+    pub unsafe fn ob_dup_time(&self, obthis: POB_THIS, time_val: PSH_TIME) -> PSH_TIME {
+        (self.ob_dup_time)(obthis, time_val)
+    }
+    pub unsafe fn ob_free_value(&self, obthis: POB_THIS, data: *mut ::std::os::raw::c_void) -> () {
+        (self.ob_free_value)(obthis, data)
+    }
+    pub unsafe fn ob_create_appl_report(&self, obthis: POB_THIS) -> POB_APPL_REPORT {
+        (self.ob_create_appl_report)(obthis)
+    }
+    pub unsafe fn ob_create_object_report(
+        &self,
+        obthis: POB_THIS,
+        lib_name: LPTSTR,
+        object_name: LPTSTR,
+        class_id: OB_CLASS_ID
+    ) -> POB_APPL_REPORT {
+        (self.ob_create_object_report)(obthis, lib_name, object_name, class_id)
+    }
+    pub unsafe fn ob_free_appl_report(&self, obthis: POB_THIS, appl_report: POB_APPL_REPORT) -> () {
+        (self.ob_free_appl_report)(obthis, appl_report)
+    }
+    pub unsafe fn ob_get_mode(&self, obthis: POB_THIS) -> OB_MODE { (self.ob_get_mode)(obthis) }
+    pub unsafe fn ob_set_mode(&self, obthis: POB_THIS, mode: OB_MODE) -> OB_MODE {
+        (self.ob_set_mode)(obthis, mode)
+    }
+    pub unsafe fn ob_get_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT,
+        pData: POB_DATA
+    ) -> POB_DATA {
+        (self.ob_get_field)(obthis, obinst, field_id, pData)
+    }
+    pub unsafe fn ob_set_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT,
+        pData: POB_DATA
+    ) -> () {
+        (self.ob_set_field)(obthis, obinst, field_id, pData)
+    }
+    pub unsafe fn ob_get_field_data(&self, obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> POB_DATA {
+        (self.ob_get_field_data)(obthis, obinst, field_id)
+    }
+    pub unsafe fn ob_get_no_fields(&self, obthis: POB_THIS, obinst: OB_INST_ID) -> ULONG {
+        (self.ob_get_no_fields)(obthis, obinst)
+    }
+    pub unsafe fn ob_get_parent_obinst(&self, obthis: POB_THIS, obinst: OB_INST_ID) -> OB_INST_ID {
+        (self.ob_get_parent_obinst)(obthis, obinst)
+    }
+    pub unsafe fn ob_get_first_user_field(&self, obthis: POB_THIS, obinst: OB_INST_ID) -> ULONG {
+        (self.ob_get_first_user_field)(obthis, obinst)
+    }
+    pub unsafe fn ob_get_field_type(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT
+    ) -> OB_CLASS_ID {
+        (self.ob_get_field_type)(obthis, obinst, field_id)
+    }
+    pub unsafe fn ob_get_int_field(&self, obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> INT {
+        (self.ob_get_int_field)(obthis, obinst, field_id)
+    }
+    pub unsafe fn ob_get_uint_field(&self, obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> UINT {
+        (self.ob_get_uint_field)(obthis, obinst, field_id)
+    }
+    pub unsafe fn ob_get_byte_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT
+    ) -> ::std::os::raw::c_uchar {
+        (self.ob_get_byte_field)(obthis, obinst, field_id)
+    }
+    pub unsafe fn ob_get_long_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT
+    ) -> ::std::os::raw::c_long {
+        (self.ob_get_long_field)(obthis, obinst, field_id)
+    }
+    pub unsafe fn ob_get_ulong_field(&self, obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> ULONG {
+        (self.ob_get_ulong_field)(obthis, obinst, field_id)
+    }
+    pub unsafe fn ob_get_float_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT,
+        fl: *mut f32
+    ) -> *mut f32 {
+        (self.ob_get_float_field)(obthis, obinst, field_id, fl)
+    }
+    pub unsafe fn ob_get_ptr_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT
+    ) -> *mut ::std::os::raw::c_void {
+        (self.ob_get_ptr_field)(obthis, obinst, field_id)
+    }
+    pub unsafe fn ob_get_inst_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT
+    ) -> OB_INST_ID {
+        (self.ob_get_inst_field)(obthis, obinst, field_id)
+    }
+    pub unsafe fn ob_get_array_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT,
+        no_items: *mut UINT
+    ) -> *mut ::std::os::raw::c_void {
+        (self.ob_get_array_field)(obthis, obinst, field_id, no_items)
+    }
+    pub unsafe fn ob_array_index(
+        &self,
+        obthis: POB_THIS,
+        array_vals: *mut ::std::os::raw::c_void,
+        index: ULONG,
+        type_: POB_CLASS_ID
+    ) -> *mut ::std::os::raw::c_void {
+        (self.ob_array_index)(obthis, array_vals, index, type_)
+    }
+    pub unsafe fn ob_get_indirect_obdata(
+        &self,
+        obthis: POB_THIS,
+        obInst: OB_INST_ID,
+        obInfo: POB_DATA_INFO
+    ) -> POB_DATA {
+        (self.ob_get_indirect_obdata)(obthis, obInst, obInfo)
+    }
+    pub unsafe fn ob_array_item(
+        &self,
+        obthis: POB_THIS,
+        array_vals: *mut ::std::os::raw::c_void,
+        index: ULONG
+    ) -> POB_DATA {
+        (self.ob_array_item)(obthis, array_vals, index)
+    }
+    pub unsafe fn ob_array_get_index_from_subs(
+        &self,
+        obthis: POB_THIS,
+        theArray: OB_ARRAY_ID,
+        subs: *mut ::std::os::raw::c_long
+    ) -> ULONG {
+        (self.ob_array_get_index_from_subs)(obthis, theArray, subs)
+    }
+    pub unsafe fn ob_array_calc_index(
+        &self,
+        obthis: POB_THIS,
+        numDims: UINT,
+        bounds: *mut ::std::os::raw::c_long,
+        subs: *mut ::std::os::raw::c_long
+    ) -> ULONG {
+        (self.ob_array_calc_index)(obthis, numDims, bounds, subs)
+    }
+    pub unsafe fn ob_set_int_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT,
+        int_val: INT
+    ) -> () {
+        (self.ob_set_int_field)(obthis, obinst, field_id, int_val)
+    }
+    pub unsafe fn ob_set_uint_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT,
+        uint_val: UINT
+    ) -> () {
+        (self.ob_set_uint_field)(obthis, obinst, field_id, uint_val)
+    }
+    pub unsafe fn ob_set_long_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT,
+        long_val: ::std::os::raw::c_long
+    ) -> () {
+        (self.ob_set_long_field)(obthis, obinst, field_id, long_val)
+    }
+    pub unsafe fn ob_set_ulong_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT,
+        ulong_val: ULONG
+    ) -> () {
+        (self.ob_set_ulong_field)(obthis, obinst, field_id, ulong_val)
+    }
+    pub unsafe fn ob_set_float_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT,
+        flval: f32
+    ) -> () {
+        (self.ob_set_float_field)(obthis, obinst, field_id, flval)
+    }
+    pub unsafe fn ob_set_ptr_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT,
+        ptrval: *mut ::std::os::raw::c_void
+    ) -> () {
+        (self.ob_set_ptr_field)(obthis, obinst, field_id, ptrval)
+    }
+    pub unsafe fn ob_set_array_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT,
+        pArray: *mut ::std::os::raw::c_void
+    ) -> () {
+        (self.ob_set_array_field)(obthis, obinst, field_id, pArray)
+    }
+    pub unsafe fn ob_set_obinst_field(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT,
+        obinstval: OB_INST_ID
+    ) -> () {
+        (self.ob_set_obinst_field)(obthis, obinst, field_id, obinstval)
+    }
+    pub unsafe fn ob_set_underlying_object(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        obj: *mut ::std::os::raw::c_void
+    ) -> () {
+        (self.ob_set_underlying_object)(obthis, obinst, obj)
+    }
+    pub unsafe fn ob_get_underlying_object(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID
+    ) -> *mut ::std::os::raw::c_void {
+        (self.ob_get_underlying_object)(obthis, obinst)
+    }
+    pub unsafe fn ob_is_any_group_locked(&self, obthis: POB_THIS) -> BOOL {
+        (self.ob_is_any_group_locked)(obthis)
+    }
+    pub unsafe fn ob_get_group_lock_count(&self, obthis: POB_THIS) -> UINT {
+        (self.ob_get_group_lock_count)(obthis)
+    }
+    pub unsafe fn ob_is_group_locked(&self, obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> BOOL {
+        (self.ob_is_group_locked)(obthis, group_hndl)
+    }
+    pub unsafe fn ob_is_group_unlocked(&self, obthis: POB_THIS, obGroupHandle: OB_GROUP_HNDL) -> BOOL {
+        (self.ob_is_group_unlocked)(obthis, obGroupHandle)
+    }
+    pub unsafe fn ob_is_group_write_locked(&self, obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> BOOL {
+        (self.ob_is_group_write_locked)(obthis, group_hndl)
+    }
+    pub unsafe fn ob_lock_group(&self, obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, write_only: BOOL) -> INT {
+        (self.ob_lock_group)(obthis, group_hndl, write_only)
+    }
+    pub unsafe fn ob_unlock_group(&self, obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> INT {
+        (self.ob_unlock_group)(obthis, group_hndl)
+    }
+    pub unsafe fn ob_clear_unlocked_groups(&self, obthis: POB_THIS) -> () {
+        (self.ob_clear_unlocked_groups)(obthis)
+    }
+    pub unsafe fn ob_clear_all_other_unlocked_groups(&self, obthis: POB_THIS, obGroupId: OB_GROUP_ID) -> () {
+        (self.ob_clear_all_other_unlocked_groups)(obthis, obGroupId)
+    }
+    pub unsafe fn ob_is_ancestor_locked(
+        &self,
+        obthis: POB_THIS,
+        groupid: OB_GROUP_ID,
+        cReadWrite: TCHAR
+    ) -> BOOL {
+        (self.ob_is_ancestor_locked)(obthis, groupid, cReadWrite)
+    }
+    pub unsafe fn ob_is_descendent_locked(
+        &self,
+        obthis: POB_THIS,
+        groupid: OB_GROUP_ID,
+        cReadWrite: TCHAR
+    ) -> BOOL {
+        (self.ob_is_descendent_locked)(obthis, groupid, cReadWrite)
+    }
+    pub unsafe fn ob_validate_liblist(
+        &self,
+        obThis: POB_THIS,
+        pLibList: *mut LPTSTR,
+        iNumberOfItems: UINT
+    ) -> INT {
+        (self.ob_validate_liblist)(obThis, pLibList, iNumberOfItems)
+    }
+    pub unsafe fn ob_set_liblist(
+        &self,
+        obthis: POB_THIS,
+        lib_list: *mut LPTSTR,
+        no_items: UINT,
+        bCreateNewLoader: BOOL
+    ) -> INT {
+        (self.ob_set_liblist)(obthis, lib_list, no_items, bCreateNewLoader)
+    }
+    pub unsafe fn ob_get_liblist(&self, obthis: POB_THIS, no_items: *mut UINT) -> *mut LPTSTR {
+        (self.ob_get_liblist)(obthis, no_items)
+    }
+    pub unsafe fn ob_set_default_appl(
+        &self,
+        obthis: POB_THIS,
+        lib_name: LPTSTR,
+        appl_group_name: LPTSTR
+    ) -> () {
+        (self.ob_set_default_appl)(obthis, lib_name, appl_group_name)
+    }
+    pub unsafe fn ob_load_appl_group(&self, obthis: POB_THIS) -> BOOL { (self.ob_load_appl_group)(obthis) }
+    pub unsafe fn ob_is_group_in_memory(
+        &self,
+        obthis: POB_THIS,
+        lib_name: LPTSTR,
+        qualified_name: LPTSTR
+    ) -> OB_GROUP_HNDL {
+        (self.ob_is_group_in_memory)(obthis, lib_name, qualified_name)
+    }
+    pub unsafe fn ob_group_declare(
+        &self,
+        obthis: POB_THIS,
+        lib_name: LPTSTR,
+        group_name: LPTSTR,
+        class_id: OB_CLASS_ID
+    ) -> OB_GROUP_HNDL {
+        (self.ob_group_declare)(obthis, lib_name, group_name, class_id)
+    }
+    pub unsafe fn ob_group_reference(
+        &self,
+        obthis: POB_THIS,
+        lib_name: LPTSTR,
+        group_name: LPTSTR,
+        class_id: OB_CLASS_ID
+    ) -> OB_GROUP_HNDL {
+        (self.ob_group_reference)(obthis, lib_name, group_name, class_id)
+    }
+    pub unsafe fn ob_get_group_name(&self, obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> LPTSTR {
+        (self.ob_get_group_name)(obthis, group_hndl)
+    }
+    pub unsafe fn ob_get_group_full_name(&self, obthis: POB_THIS, grouphndl: OB_GROUP_HNDL) -> LPTSTR {
+        (self.ob_get_group_full_name)(obthis, grouphndl)
+    }
+    pub unsafe fn ob_group_save(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        lib_name: LPTSTR,
+        comment: LPTSTR
+    ) -> INT {
+        (self.ob_group_save)(obthis, group_hndl, lib_name, comment)
+    }
+    pub unsafe fn ob_group_save_win(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        lib_name: LPTSTR,
+        comment: LPTSTR,
+        bSaveNormalize: BOOL
+    ) -> INT {
+        (self.ob_group_save_win)(obthis, group_hndl, lib_name, comment, bSaveNormalize)
+    }
+    pub unsafe fn ob_load_group_source(&self, obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> INT {
+        (self.ob_load_group_source)(obthis, group_hndl)
+    }
+    pub unsafe fn ob_rename_group(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        new_name: LPTSTR
+    ) -> INT {
+        (self.ob_rename_group)(obthis, group_hndl, new_name)
+    }
+    pub unsafe fn ob_move_group(&self, obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, lib_name: LPTSTR) -> INT {
+        (self.ob_move_group)(obthis, group_hndl, lib_name)
+    }
+    pub unsafe fn ob_move_group_with_name(
+        &self,
+        obthis: POB_THIS,
+        qual_name: LPTSTR,
+        oldlib: LPTSTR,
+        newlib: LPTSTR
+    ) -> INT {
+        (self.ob_move_group_with_name)(obthis, qual_name, oldlib, newlib)
+    }
+    pub unsafe fn ob_copy_group_with_name(
+        &self,
+        obthis: POB_THIS,
+        qual_name: LPTSTR,
+        oldlib: LPTSTR,
+        newlib: LPTSTR
+    ) -> INT {
+        (self.ob_copy_group_with_name)(obthis, qual_name, oldlib, newlib)
+    }
+    pub unsafe fn ob_copy_group(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        new_name: LPTSTR,
+        lib_name: LPTSTR
+    ) -> () {
+        (self.ob_copy_group)(obthis, group_hndl, new_name, lib_name)
+    }
+    pub unsafe fn ob_delete_group(&self, obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> () {
+        (self.ob_delete_group)(obthis, group_hndl)
+    }
+    pub unsafe fn ob_delete_group_with_name(
+        &self,
+        obthis: POB_THIS,
+        lib_name: LPTSTR,
+        group_name: LPTSTR,
+        class_id: OB_CLASS_ID
+    ) -> INT {
+        (self.ob_delete_group_with_name)(obthis, lib_name, group_name, class_id)
+    }
+    pub unsafe fn ob_restore_group(&self, obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> () {
+        (self.ob_restore_group)(obthis, group_hndl)
+    }
+    pub unsafe fn ob_save_working_group(&self, obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> () {
+        (self.ob_save_working_group)(obthis, group_hndl)
+    }
+    pub unsafe fn ob_delete_working_group(&self, obthis: POB_THIS) -> () {
+        (self.ob_delete_working_group)(obthis)
+    }
+    pub unsafe fn ob_restore_working_group(&self, obthis: POB_THIS) -> () {
+        (self.ob_restore_working_group)(obthis)
+    }
+    pub unsafe fn ob_open_group_id(&self, obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> () {
+        (self.ob_open_group_id)(obthis, group_hndl)
+    }
+    pub unsafe fn ob_close_group(&self, obthis: POB_THIS) -> () { (self.ob_close_group)(obthis) }
+    pub unsafe fn ob_get_group_lib(&self, obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> LPTSTR {
+        (self.ob_get_group_lib)(obthis, group_hndl)
+    }
+    pub unsafe fn ob_run_garbage_collection(&self, obthis: POB_THIS, force: BOOL) -> INT {
+        (self.ob_run_garbage_collection)(obthis, force)
+    }
+    pub unsafe fn ob_delete_instlist_shlist(&self, obthis: POB_THIS, instlist: *mut shlist) -> () {
+        (self.ob_delete_instlist_shlist)(obthis, instlist)
+    }
+    pub unsafe fn ob_get_group_instlist_as_shlist(
+        &self,
+        obthis: POB_THIS,
+        groupId: OB_GROUP_ID
+    ) -> *mut shlist {
+        (self.ob_get_group_instlist_as_shlist)(obthis, groupId)
+    }
+    pub unsafe fn ob_delete_groups_shlist(&self, obthis: POB_THIS, groups: *mut shlist) -> () {
+        (self.ob_delete_groups_shlist)(obthis, groups)
+    }
+    pub unsafe fn ob_get_groups_shlist(&self, obthis: POB_THIS) -> *mut shlist {
+        (self.ob_get_groups_shlist)(obthis)
+    }
+    pub unsafe fn ob_store_source(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        source: LPTSTR,
+        len: UINT
+    ) -> () {
+        (self.ob_store_source)(obthis, class_hndl, source, len)
+    }
+    pub unsafe fn ob_init_source(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        source: LPTSTR,
+        len: UINT
+    ) -> INT {
+        (self.ob_init_source)(obthis, group_hndl, source, len)
+    }
+    pub unsafe fn ob_store_global_src(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        source: LPTSTR,
+        len: UINT
+    ) -> INT {
+        (self.ob_store_global_src)(obthis, group_hndl, source, len)
+    }
+    pub unsafe fn ob_store_namespace_decl_src(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        source: LPTSTR,
+        len: UINT
+    ) -> INT {
+        (self.ob_store_namespace_decl_src)(obthis, group_hndl, source, len)
+    }
+    pub unsafe fn ob_store_shared_src(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        source: LPTSTR,
+        len: UINT
+    ) -> INT {
+        (self.ob_store_shared_src)(obthis, group_hndl, source, len)
+    }
+    pub unsafe fn ob_store_prototype_source(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        source: LPTSTR,
+        len: UINT
+    ) -> () {
+        (self.ob_store_prototype_source)(obthis, class_hndl, source, len)
+    }
+    pub unsafe fn ob_store_instvar_source(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        source: LPTSTR,
+        len: UINT
+    ) -> () {
+        (self.ob_store_instvar_source)(obthis, class_hndl, source, len)
+    }
+    pub unsafe fn ob_get_global_src(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        len: *mut UINT
+    ) -> LPTSTR {
+        (self.ob_get_global_src)(obthis, group_hndl, len)
+    }
+    pub unsafe fn ob_get_namespace_decl_src(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        len: *mut UINT
+    ) -> LPTSTR {
+        (self.ob_get_namespace_decl_src)(obthis, group_hndl, len)
+    }
+    pub unsafe fn ob_get_shared_src(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        len: *mut UINT
+    ) -> LPTSTR {
+        (self.ob_get_shared_src)(obthis, group_hndl, len)
+    }
+    pub unsafe fn ob_get_prototype_source(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        len: *mut UINT
+    ) -> LPTSTR {
+        (self.ob_get_prototype_source)(obthis, class_hndl, len)
+    }
+    pub unsafe fn ob_get_instvar_source(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        len: *mut UINT
+    ) -> LPTSTR {
+        (self.ob_get_instvar_source)(obthis, class_hndl, len)
+    }
+    pub unsafe fn ob_get_routine_src(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        index: OB_VTABLE_ID
+    ) -> LPTSTR {
+        (self.ob_get_routine_src)(obthis, class_hndl, index)
+    }
+    pub unsafe fn ob_decl_and_store_routine_src(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        routname: LPTSTR,
+        result_type: LPTSTR,
+        no_args: INT,
+        arg_pass_style: POB_PROTOARG_TYPE,
+        arg_type_names: *mut LPTSTR,
+        arg_names: *mut LPTSTR,
+        arg_grouping: POB_GROUPTYPE,
+        source: LPTSTR,
+        len: UINT
+    ) -> INT {
+        (self.ob_decl_and_store_routine_src)(
+            obthis,
+            class_hndl,
+            routname,
+            result_type,
+            no_args,
+            arg_pass_style,
+            arg_type_names,
+            arg_names,
+            arg_grouping,
+            source,
+            len
+        )
+    }
+    pub unsafe fn ob_store_routine_src(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        index: OB_VTABLE_ID,
+        source: LPTSTR,
+        len: UINT
+    ) -> () {
+        (self.ob_store_routine_src)(obthis, class_hndl, index, source, len)
+    }
+    pub unsafe fn ob_store_create_src(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        source: LPTSTR,
+        len: UINT
+    ) -> INT {
+        (self.ob_store_create_src)(obthis, class_hndl, source, len)
+    }
+    pub unsafe fn ob_store_destroy_src(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        source: LPTSTR,
+        len: UINT
+    ) -> INT {
+        (self.ob_store_destroy_src)(obthis, class_hndl, source, len)
+    }
+    pub unsafe fn ob_get_function_src(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        index: OB_VTABLE_ID
+    ) -> LPTSTR {
+        (self.ob_get_function_src)(obthis, class_hndl, index)
+    }
+    pub unsafe fn ob_store_function_src(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        index: OB_VTABLE_ID,
+        source: LPTSTR,
+        len: UINT
+    ) -> () {
+        (self.ob_store_function_src)(obthis, class_hndl, index, source, len)
+    }
+    pub unsafe fn ob_symbol_search_extended(
+        &self,
+        obthis: POB_THIS,
+        obClassHandle: OB_CLASS_HNDL,
+        iCurrScope: INT,
+        pszVarName: LPTSTR,
+        bSkipVars: BOOL,
+        bSkipTHIS: BOOL,
+        puiLevel: *mut UINT,
+        pbIsConstantField: *mut BOOL,
+        pbIsPrivateMember: *mut BOOL,
+        ppszFullName: *mut LPTSTR
+    ) -> BOOL {
+        (self.ob_symbol_search_extended)(
+            obthis,
+            obClassHandle,
+            iCurrScope,
+            pszVarName,
+            bSkipVars,
+            bSkipTHIS,
+            puiLevel,
+            pbIsConstantField,
+            pbIsPrivateMember,
+            ppszFullName
+        )
+    }
+    pub unsafe fn ob_symbol_search(
+        &self,
+        obthis: POB_THIS,
+        obClassHandle: OB_CLASS_HNDL,
+        iCurrScope: INT,
+        pszVarName: LPTSTR,
+        bSkipVars: BOOL,
+        bSkipTHIS: BOOL,
+        puiLevel: *mut UINT,
+        pbIsConstantField: *mut BOOL
+    ) -> BOOL {
+        (self.ob_symbol_search)(
+            obthis,
+            obClassHandle,
+            iCurrScope,
+            pszVarName,
+            bSkipVars,
+            bSkipTHIS,
+            puiLevel,
+            pbIsConstantField
+        )
+    }
+    pub unsafe fn ob_class_declare(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        class_name: LPTSTR,
+        parent_class: OB_CLASS_ID,
+        within_class: OB_CLASS_ID
+    ) -> OB_CLASS_HNDL {
+        (self.ob_class_declare)(obthis, group_hndl, class_name, parent_class, within_class)
+    }
+    pub unsafe fn ob_get_full_qualified_typename(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        class_id: OB_CLASS_ID
+    ) -> LPTSTR {
+        (self.ob_get_full_qualified_typename)(obthis, group_hndl, class_id)
+    }
+    pub unsafe fn ob_class_declare_inh(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        class_name: LPTSTR,
+        parent_class: OB_CLASS_HNDL,
+        within_class: OB_CLASS_ID
+    ) -> OB_CLASS_HNDL {
+        (self.ob_class_declare_inh)(obthis, group_hndl, class_name, parent_class, within_class)
+    }
+    pub unsafe fn ob_class_reference(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        class_name: LPTSTR
+    ) -> OB_CLASS_HNDL {
+        (self.ob_class_reference)(obthis, group_hndl, class_name)
+    }
+    pub unsafe fn ob_class_name(&self, obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> LPTSTR {
+        (self.ob_class_name)(obthis, class_hndl)
+    }
+    pub unsafe fn ob_class_name_not_indirect(&self, obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> LPTSTR {
+        (self.ob_class_name_not_indirect)(obthis, class_hndl)
+    }
+    pub unsafe fn ob_get_type_name(&self, obthis: POB_THIS, datanode: POB_DATA) -> LPTSTR {
+        (self.ob_get_type_name)(obthis, datanode)
+    }
+    pub unsafe fn ob_classhndl_indirect(&self, obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_CLASS_HNDL {
+        (self.ob_classhndl_indirect)(obthis, class_hndl)
+    }
+    pub unsafe fn ob_get_parent_class(&self, obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_CLASS_HNDL {
+        (self.ob_get_parent_class)(obthis, class_hndl)
+    }
+    pub unsafe fn ob_get_within_class(&self, obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_CLASS_HNDL {
+        (self.ob_get_within_class)(obthis, class_hndl)
+    }
+    pub unsafe fn ob_class_delete(&self, obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> () {
+        (self.ob_class_delete)(obthis, class_hndl)
+    }
+    pub unsafe fn ob_class_rename(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        new_name: LPTSTR
+    ) -> INT {
+        (self.ob_class_rename)(obthis, class_hndl, new_name)
+    }
+    pub unsafe fn ob_is_a_system_class(&self, obthis: POB_THIS, class_name: LPTSTR) -> BOOL {
+        (self.ob_is_a_system_class)(obthis, class_name)
+    }
+    pub unsafe fn ob_is_class_inherited(&self, obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL {
+        (self.ob_is_class_inherited)(obthis, class_hndl)
+    }
+    pub unsafe fn ob_is_class_descendant(
+        &self,
+        obthis: POB_THIS,
+        ancestor: OB_CLASS_HNDL,
+        descendant: OB_CLASS_HNDL
+    ) -> BOOL {
+        (self.ob_is_class_descendant)(obthis, ancestor, descendant)
+    }
+    pub unsafe fn ob_is_inh_from_user_class(&self, obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL {
+        (self.ob_is_inh_from_user_class)(obthis, class_hndl)
+    }
+    pub unsafe fn ob_get_sec_class_ancestor(
+        &self,
+        obthis: POB_THIS,
+        sec_class: OB_CLASS_HNDL
+    ) -> OB_CLASS_HNDL {
+        (self.ob_get_sec_class_ancestor)(obthis, sec_class)
+    }
+    pub unsafe fn ob_is_class_enum(&self, obThis: POB_THIS, obClassHndl: OB_CLASS_HNDL) -> BOOL {
+        (self.ob_is_class_enum)(obThis, obClassHndl)
+    }
+    pub unsafe fn ob_new_event(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        event_name: LPTSTR,
+        token_name: LPTSTR,
+        result_type: LPTSTR,
+        no_args: INT,
+        arg_pass_style: POB_PROTOARG_TYPE,
+        arg_type_names: *mut LPTSTR,
+        arg_names: *mut LPTSTR,
+        arg_grouping: POB_GROUPTYPE,
+        is_external_event: BOOL
+    ) -> OB_VTABLE_ID {
+        (self.ob_new_event)(
+            obthis,
+            class_hndl,
+            event_name,
+            token_name,
+            result_type,
+            no_args,
+            arg_pass_style,
+            arg_type_names,
+            arg_names,
+            arg_grouping,
+            is_external_event
+        )
+    }
+    pub unsafe fn ob_update_event(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        vtable_id: OB_VTABLE_ID,
+        event_name: LPTSTR,
+        token_name: LPTSTR,
+        result_type: LPTSTR,
+        no_args: INT,
+        arg_pass_style: POB_PROTOARG_TYPE,
+        arg_type_names: *mut LPTSTR,
+        arg_names: *mut LPTSTR,
+        arg_grouping: POB_GROUPTYPE,
+        is_external_event: BOOL,
+        no_throws: INT,
+        throws_names: *mut LPTSTR
+    ) -> INT {
+        (self.ob_update_event)(
+            obthis,
+            class_hndl,
+            vtable_id,
+            event_name,
+            token_name,
+            result_type,
+            no_args,
+            arg_pass_style,
+            arg_type_names,
+            arg_names,
+            arg_grouping,
+            is_external_event,
+            no_throws,
+            throws_names
+        )
+    }
+    pub unsafe fn ob_delete_event(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        event_name: LPTSTR
+    ) -> INT {
+        (self.ob_delete_event)(obthis, class_hndl, event_name)
+    }
+    pub unsafe fn ob_has_events(&self, obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL {
+        (self.ob_has_events)(obthis, class_hndl)
+    }
+    pub unsafe fn ob_get_event_token_id(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        event_name: LPTSTR,
+        vtable_id: POB_VTABLE_ID
+    ) -> OB_EVT_TOKEN_ID {
+        (self.ob_get_event_token_id)(obthis, class_hndl, event_name, vtable_id)
+    }
+    pub unsafe fn ob_get_event_id_from_token(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        event_token: OB_EVT_TOKEN_ID
+    ) -> OB_VTABLE_ID {
+        (self.ob_get_event_id_from_token)(obthis, class_hndl, event_token)
+    }
+    pub unsafe fn ob_does_event_script_exist(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        event_id: OB_VTABLE_ID
+    ) -> BOOL {
+        (self.ob_does_event_script_exist)(obthis, class_hndl, event_id)
+    }
+    pub unsafe fn ob_get_routine_name(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        index: OB_VTABLE_ID
+    ) -> LPTSTR {
+        (self.ob_get_routine_name)(obthis, class_hndl, index)
+    }
+    pub unsafe fn ob_delete_routine(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        index: OB_VTABLE_ID
+    ) -> () {
+        (self.ob_delete_routine)(obthis, class_hndl, index)
+    }
+    pub unsafe fn ob_get_curr_routine(&self, obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_VTABLE_ID {
+        (self.ob_get_curr_routine)(obthis, class_hndl)
+    }
+    pub unsafe fn ob_get_curr_function(&self, obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_VTABLE_ID {
+        (self.ob_get_curr_function)(obthis, class_hndl)
+    }
+    pub unsafe fn ob_get_routid_from_vtable_id(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        vtable_id: OB_VTABLE_ID
+    ) -> OB_ROUT_ID {
+        (self.ob_get_routid_from_vtable_id)(obthis, class_hndl, vtable_id)
+    }
+    pub unsafe fn ob_is_valid_event_index(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        index: OB_VTABLE_ID
+    ) -> BOOL {
+        (self.ob_is_valid_event_index)(obthis, class_hndl, index)
+    }
+    pub unsafe fn ob_has_scripts(&self, obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL {
+        (self.ob_has_scripts)(obthis, class_hndl)
+    }
+    pub unsafe fn ob_get_routine_type(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        index: OB_VTABLE_ID
+    ) -> OB_ROUT_TYPE::Type {
+        (self.ob_get_routine_type)(obthis, class_hndl, index)
+    }
+    pub unsafe fn ob_get_function_vtable_ids(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        include_dlls: BOOL,
+        include_ancestors: BOOL,
+        no_items: *mut UINT
+    ) -> POB_VTABLE_ID {
+        (self.ob_get_function_vtable_ids)(obthis, class_hndl, include_dlls, include_ancestors, no_items)
+    }
+    pub unsafe fn ob_get_function_vtable_ids_for_ide(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        include_dlls: BOOL,
+        include_ancestors: BOOL,
+        no_items: *mut UINT
+    ) -> POB_VTABLE_ID {
+        (self.ob_get_function_vtable_ids_for_ide)(
+            obthis,
+            class_hndl,
+            include_dlls,
+            include_ancestors,
+            no_items
+        )
+    }
+    pub unsafe fn ob_get_event_vtable_ids(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        include_dlls: BOOL,
+        no_items: *mut UINT
+    ) -> POB_VTABLE_ID {
+        (self.ob_get_event_vtable_ids)(obthis, class_hndl, include_dlls, no_items)
+    }
+    pub unsafe fn ob_get_function_name(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        index: OB_VTABLE_ID
+    ) -> LPTSTR {
+        (self.ob_get_function_name)(obthis, class_hndl, index)
+    }
+    pub unsafe fn ob_delete_function(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        index: OB_VTABLE_ID
+    ) -> INT {
+        (self.ob_delete_function)(obthis, class_hndl, index)
+    }
+    pub unsafe fn ob_find_routine(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        routine_type: OB_ROUT_TYPE::Type,
+        routine_name: LPTSTR,
+        result_type: LPTSTR,
+        no_args: INT,
+        arg_pass_style: POB_PROTOARG_TYPE,
+        arg_type_names: *mut LPTSTR,
+        arg_grouping: POB_GROUPTYPE,
+        ov_error: POB_PROTO_OVERLOAD_ERROR,
+        pproto_id: POB_PROTO_ID,
+        pvtable_id: POB_VTABLE_ID
+    ) -> BOOL {
+        (self.ob_find_routine)(
+            obthis,
+            class_hndl,
+            routine_type,
+            routine_name,
+            result_type,
+            no_args,
+            arg_pass_style,
+            arg_type_names,
+            arg_grouping,
+            ov_error,
+            pproto_id,
+            pvtable_id
+        )
+    }
+    pub unsafe fn ob_get_vtable_id_from_proto_id(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        proto_id: OB_PROTO_ID
+    ) -> OB_VTABLE_ID {
+        (self.ob_get_vtable_id_from_proto_id)(obthis, class_hndl, proto_id)
+    }
+    pub unsafe fn ob_get_dll_func_names(&self, obthis: POB_THIS, no_funcs: *mut UINT) -> *mut LPTSTR {
+        (self.ob_get_dll_func_names)(obthis, no_funcs)
+    }
+    pub unsafe fn ob_get_global_func_names_in_lib(
+        &self,
+        obthis: POB_THIS,
+        no_funcs: *mut UINT,
+        lib_name: LPTSTR
+    ) -> *mut LPTSTR {
+        (self.ob_get_global_func_names_in_lib)(obthis, no_funcs, lib_name)
+    }
+    pub unsafe fn ob_get_global_func_index(
+        &self,
+        obthis: POB_THIS,
+        name: LPTSTR,
+        class_hndl: POB_CLASS_HNDL
+    ) -> OB_VTABLE_ID {
+        (self.ob_get_global_func_index)(obthis, name, class_hndl)
+    }
+    pub unsafe fn ob_get_func_index_in_lib(
+        &self,
+        obthis: POB_THIS,
+        name: LPTSTR,
+        lib_name: LPTSTR,
+        class_hndl: POB_CLASS_HNDL
+    ) -> OB_VTABLE_ID {
+        (self.ob_get_func_index_in_lib)(obthis, name, lib_name, class_hndl)
+    }
+    pub unsafe fn ob_get_proto_is_external_event(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        index: OB_VTABLE_ID
+    ) -> BOOL {
+        (self.ob_get_proto_is_external_event)(obthis, class_hndl, index)
+    }
+    pub unsafe fn ob_get_protoarg_info(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        vtable_id: OB_VTABLE_ID,
+        no_items: *mut UINT,
+        type_name: *mut LPTSTR,
+        member_access: POB_MEMBER_ACCESS
+    ) -> POB_ARG_INFO {
+        (self.ob_get_protoarg_info)(obthis, class_hndl, vtable_id, no_items, type_name, member_access)
+    }
+    pub unsafe fn ob_get_proto_info(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        vtable_id: OB_VTABLE_ID,
+        no_args: *mut UINT,
+        name: *mut LPTSTR,
+        type_: *mut LPTSTR,
+        member_access: POB_MEMBER_ACCESS,
+        dll_lib_name: *mut LPTSTR,
+        is_obsolete: *mut BOOL,
+        token: POB_EVT_TOKEN_ID,
+        rout_type: *mut OB_ROUT_TYPE::Type,
+        is_inherit: *mut BOOL
+    ) -> POB_ARG_INFO {
+        (self.ob_get_proto_info)(
+            obthis,
+            class_hndl,
+            vtable_id,
+            no_args,
+            name,
+            type_,
+            member_access,
+            dll_lib_name,
+            is_obsolete,
+            token,
+            rout_type,
+            is_inherit
+        )
+    }
+    pub unsafe fn ob_get_method_signature(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        vtable_id: OB_VTABLE_ID
+    ) -> LPTSTR {
+        (self.ob_get_method_signature)(obthis, class_hndl, vtable_id)
+    }
+    pub unsafe fn ob_was_event_prototype_changed(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        event_id: OB_VTABLE_ID
+    ) -> BOOL {
+        (self.ob_was_event_prototype_changed)(obthis, class_hndl, event_id)
+    }
+    pub unsafe fn ob_get_proto_name_info(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        func_id: OB_VTABLE_ID,
+        name: *mut LPTSTR,
+        is_obsolete: *mut BOOL
+    ) -> () {
+        (self.ob_get_proto_name_info)(obthis, class_hndl, func_id, name, is_obsolete)
+    }
+    pub unsafe fn ob_get_proto_throws_info(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        func_id: OB_VTABLE_ID,
+        throws_list: *mut POB_CLASS_ID,
+        no_throws: *mut UINT,
+        group_id: POB_GROUP_ID
+    ) -> () {
+        (self.ob_get_proto_throws_info)(obthis, class_hndl, func_id, throws_list, no_throws, group_id)
+    }
+    pub unsafe fn ob_lookup_routine_by_name(
+        &self,
+        obthis: POB_THIS,
+        obInst: OB_INST_ID,
+        lpstrRoutineName: LPTSTR,
+        pVtableId: POB_VTABLE_ID,
+        pNumRoutines: *mut UINT,
+        pobRoutineType: *mut OB_ROUT_TYPE::Type,
+        pNoArgs: *mut UINT,
+        ppobArgClassId: *mut POB_CLASS_ID,
+        pbVarArgs: *mut BOOL
+    ) -> HRESULT {
+        (self.ob_lookup_routine_by_name)(
+            obthis,
+            obInst,
+            lpstrRoutineName,
+            pVtableId,
+            pNumRoutines,
+            pobRoutineType,
+            pNoArgs,
+            ppobArgClassId,
+            pbVarArgs
+        )
+    }
+    pub unsafe fn ob_get_objnames_of_class(
+        &self,
+        obthis: POB_THIS,
+        class_id: OB_CLASS_ID,
+        no_items: *mut UINT
+    ) -> *mut LPTSTR {
+        (self.ob_get_objnames_of_class)(obthis, class_id, no_items)
+    }
+    pub unsafe fn ob_has_object_of_class(&self, obthis: POB_THIS, class_id: OB_CLASS_ID) -> BOOL {
+        (self.ob_has_object_of_class)(obthis, class_id)
+    }
+    pub unsafe fn ob_get_obj_classhndls_of_class(
+        &self,
+        obthis: POB_THIS,
+        obClassID: OB_CLASS_ID,
+        pNumberOfItems: *mut UINT
+    ) -> POB_CLASS_HNDL {
+        (self.ob_get_obj_classhndls_of_class)(obthis, obClassID, pNumberOfItems)
+    }
+    pub unsafe fn ob_get_objnames_of_class_in_lib(
+        &self,
+        obthis: POB_THIS,
+        class_id: OB_CLASS_ID,
+        no_items: *mut UINT,
+        lib_name: LPTSTR
+    ) -> *mut LPTSTR {
+        (self.ob_get_objnames_of_class_in_lib)(obthis, class_id, no_items, lib_name)
+    }
+    pub unsafe fn ob_global_reference(
+        &self,
+        obthis: POB_THIS,
+        class_name: LPTSTR,
+        group_hndl: POB_GROUP_HNDL
+    ) -> OB_CLASS_HNDL {
+        (self.ob_global_reference)(obthis, class_name, group_hndl)
+    }
+    pub unsafe fn ob_global_reference_in_lib(
+        &self,
+        obthis: POB_THIS,
+        class_name: LPTSTR,
+        lib_name: LPTSTR,
+        group_hndl: POB_GROUP_HNDL,
+        class_id: OB_CLASS_ID
+    ) -> OB_CLASS_HNDL {
+        (self.ob_global_reference_in_lib)(obthis, class_name, lib_name, group_hndl, class_id)
+    }
+    pub unsafe fn ob_global_reference_of_class(
+        &self,
+        obthis: POB_THIS,
+        name: LPTSTR,
+        grouphndl: POB_GROUP_HNDL,
+        of_class: OB_CLASS_ID
+    ) -> OB_CLASS_HNDL {
+        (self.ob_global_reference_of_class)(obthis, name, grouphndl, of_class)
+    }
+    pub unsafe fn ob_get_obinst_class_hndl(&self, obthis: POB_THIS, obinst: OB_INST_ID) -> OB_CLASS_HNDL {
+        (self.ob_get_obinst_class_hndl)(obthis, obinst)
+    }
+    pub unsafe fn ob_is_a_typedef(&self, obthis: POB_THIS, data: POB_DATA) -> BOOL {
+        (self.ob_is_a_typedef)(obthis, data)
+    }
+    pub unsafe fn ob_is_an_enum(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        data_node: POB_DATA
+    ) -> BOOL {
+        (self.ob_is_an_enum)(obthis, group_hndl, data_node)
+    }
+    pub unsafe fn ob_get_system_class(&self, obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_CLASS_ID {
+        (self.ob_get_system_class)(obthis, class_hndl)
+    }
+    pub unsafe fn ob_get_obinst_system_class(&self, obthis: POB_THIS, obinst: OB_INST_ID) -> OB_CLASS_ID {
+        (self.ob_get_obinst_system_class)(obthis, obinst)
+    }
+    pub unsafe fn ob_get_obinst_group_hndl(&self, obthis: POB_THIS, obinst: OB_INST_ID) -> OB_GROUP_HNDL {
+        (self.ob_get_obinst_group_hndl)(obthis, obinst)
+    }
+    pub unsafe fn ob_get_obinst_class_name(&self, obthis: POB_THIS, obinst: OB_INST_ID) -> LPTSTR {
+        (self.ob_get_obinst_class_name)(obthis, obinst)
+    }
+    pub unsafe fn ob_fetch_fields_of_class(
+        &self,
+        obthis: POB_THIS,
+        in_class: OB_CLASS_HNDL,
+        of_class: OB_CLASS_ID,
+        field_filter: OB_FIELD_FILTER,
+        class_list: *mut POB_CLASS_ID,
+        no_items: *mut UINT
+    ) -> *mut LPTSTR {
+        (self.ob_fetch_fields_of_class)(obthis, in_class, of_class, field_filter, class_list, no_items)
+    }
+    pub unsafe fn ob_get_fields_of_class(
+        &self,
+        obthis: POB_THIS,
+        in_class: OB_CLASS_HNDL,
+        of_class: OB_CLASS_ID,
+        class_list: *mut POB_CLASS_ID,
+        no_items: *mut UINT
+    ) -> *mut LPTSTR {
+        (self.ob_get_fields_of_class)(obthis, in_class, of_class, class_list, no_items)
+    }
+    pub unsafe fn ob_get_local_var_info(&self, obthis: POB_THIS, no_items: *mut UINT) -> POB_DATA_INFO {
+        (self.ob_get_local_var_info)(obthis, no_items)
+    }
+    pub unsafe fn ob_get_shared_vars_of_class(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        return_shared: BOOL,
+        return_global: BOOL,
+        of_class: OB_CLASS_ID,
+        no_items: *mut UINT
+    ) -> POB_DATA_INFO {
+        (self.ob_get_shared_vars_of_class)(
+            obthis,
+            group_hndl,
+            return_shared,
+            return_global,
+            of_class,
+            no_items
+        )
+    }
+    pub unsafe fn ob_get_shared_var_info(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        return_shared: BOOL,
+        return_global: BOOL,
+        no_items: *mut UINT
+    ) -> POB_DATA_INFO {
+        (self.ob_get_shared_var_info)(obthis, group_hndl, return_shared, return_global, no_items)
+    }
+    pub unsafe fn ob_get_global_vars_of_class(
+        &self,
+        obthis: POB_THIS,
+        of_class: OB_CLASS_ID,
+        no_items: *mut UINT
+    ) -> POB_DATA_INFO {
+        (self.ob_get_global_vars_of_class)(obthis, of_class, no_items)
+    }
+    pub unsafe fn ob_get_class_field_info(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        no_items: *mut UINT
+    ) -> POB_DATA_INFO {
+        (self.ob_get_class_field_info)(obthis, class_hndl, no_items)
+    }
+    pub unsafe fn ob_get_enum_info(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        no_enums: *mut UINT
+    ) -> POB_ENUM_INFO {
+        (self.ob_get_enum_info)(obthis, class_hndl, no_enums)
+    }
+    pub unsafe fn ob_get_class_event_info(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        no_events: *mut UINT
+    ) -> POB_EVENT_INFO {
+        (self.ob_get_class_event_info)(obthis, class_hndl, no_events)
+    }
+    pub unsafe fn ob_get_instance_field_info(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        no_items: *mut UINT
+    ) -> POB_DATA_INFO {
+        (self.ob_get_instance_field_info)(obthis, class_hndl, no_items)
+    }
+    pub unsafe fn ob_get_obinst_field_info(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        no_items: *mut UINT,
+        field_filter: BOOL
+    ) -> POB_DATA_INFO {
+        (self.ob_get_obinst_field_info)(obthis, obinst, no_items, field_filter)
+    }
+    pub unsafe fn ob_get_obinst_all_field_info(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        no_items: *mut UINT,
+        field_filter: BOOL
+    ) -> POB_DATA_INFO {
+        (self.ob_get_obinst_all_field_info)(obthis, obinst, no_items, field_filter)
+    }
+    pub unsafe fn ob_get_classes_within_group(
+        &self,
+        obthis: POB_THIS,
+        in_group_hndl: OB_GROUP_HNDL,
+        of_class_id: OB_CLASS_ID,
+        total_items: *mut UINT
+    ) -> POB_CLASS_INFO {
+        (self.ob_get_classes_within_group)(obthis, in_group_hndl, of_class_id, total_items)
+    }
+    pub unsafe fn ob_get_enums_within_group(
+        &self,
+        obthis: POB_THIS,
+        in_group_hndl: OB_GROUP_HNDL,
+        total_items: *mut UINT
+    ) -> POB_CLASS_INFO {
+        (self.ob_get_enums_within_group)(obthis, in_group_hndl, total_items)
+    }
+    pub unsafe fn ob_get_global_var_data(&self, obthis: POB_THIS, var_name: LPTSTR) -> POB_DATA {
+        (self.ob_get_global_var_data)(obthis, var_name)
+    }
+    pub unsafe fn ob_object_reference_count(&self, obthis: POB_THIS, obinst: OB_INST_ID) -> ULONG {
+        (self.ob_object_reference_count)(obthis, obinst)
+    }
+    pub unsafe fn ob_named_global_var_info(&self, obthis: POB_THIS, varname: LPTSTR) -> POB_DATA_INFO {
+        (self.ob_named_global_var_info)(obthis, varname)
+    }
+    pub unsafe fn ob_named_shared_var_info(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        varname: LPTSTR
+    ) -> POB_DATA_INFO {
+        (self.ob_named_shared_var_info)(obthis, group_hndl, varname)
+    }
+    pub unsafe fn ob_named_special_var_info(&self, obthis: POB_THIS, varname: LPTSTR) -> POB_DATA_INFO {
+        (self.ob_named_special_var_info)(obthis, varname)
+    }
+    pub unsafe fn ob_named_local_var_info(&self, obthis: POB_THIS, varname: LPTSTR) -> POB_DATA_INFO {
+        (self.ob_named_local_var_info)(obthis, varname)
+    }
+    pub unsafe fn ob_named_field_info(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        fieldname: LPTSTR
+    ) -> POB_DATA_INFO {
+        (self.ob_named_field_info)(obthis, obinst, fieldname)
+    }
+    pub unsafe fn ob_get_array_info(&self, obthis: POB_THIS, data_node: POB_DATA) -> POB_ARRAY_INFO {
+        (self.ob_get_array_info)(obthis, data_node)
+    }
+    pub unsafe fn ob_get_array_bounds_string(
+        &self,
+        obthis: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        data_node: POB_DATA
+    ) -> LPTSTR {
+        (self.ob_get_array_bounds_string)(obthis, group_hndl, data_node)
+    }
+    pub unsafe fn ob_get_array_bounds_string_from_field_info(
+        &self,
+        obthis: POB_THIS,
+        fieldinfo: POB_DATA_INFO
+    ) -> LPTSTR {
+        (self.ob_get_array_bounds_string_from_field_info)(obthis, fieldinfo)
+    }
+    pub unsafe fn ob_get_info_watchpoint(
+        &self,
+        obthis: POB_THIS,
+        info: POB_DATA_INFO
+    ) -> *mut ::std::os::raw::c_void {
+        (self.ob_get_info_watchpoint)(obthis, info)
+    }
+    pub unsafe fn ob_compile_lib_entry(
+        &self,
+        obthis: POB_THIS,
+        lib_name: LPTSTR,
+        entry_name: LPTSTR,
+        write_source: BOOL
+    ) -> INT {
+        (self.ob_compile_lib_entry)(obthis, lib_name, entry_name, write_source)
+    }
+    pub unsafe fn ob_compile_lib_typedefs(
+        &self,
+        obthis: POB_THIS,
+        lib_name: LPTSTR,
+        entry_name: LPTSTR,
+        bUpdateModifyTime: BOOL
+    ) -> INT {
+        (self.ob_compile_lib_typedefs)(obthis, lib_name, entry_name, bUpdateModifyTime)
+    }
+    pub unsafe fn ob_compile_lib_entry_3_pass(
+        &self,
+        obThis: POB_THIS,
+        lpszLibraryName: LPTSTR,
+        lpszEntryName: LPTSTR
+    ) -> BOOL {
+        (self.ob_compile_lib_entry_3_pass)(obThis, lpszLibraryName, lpszEntryName)
+    }
+    pub unsafe fn ob_compile_lib_scripts(
+        &self,
+        obthis: POB_THIS,
+        lib_name: LPTSTR,
+        entry_name: LPTSTR
+    ) -> INT {
+        (self.ob_compile_lib_scripts)(obthis, lib_name, entry_name)
+    }
+    pub unsafe fn ob_func_search(
+        &self,
+        obthis: POB_THIS,
+        name: LPTSTR,
+        argtypes: POB_CLASS_ID,
+        no_args: UINT,
+        type_: POB_CLASS_ID,
+        error: POB_PROTOREF_ERROR
+    ) -> POB_FUNCCALL_INFO {
+        (self.ob_func_search)(obthis, name, argtypes, no_args, type_, error)
+    }
+    pub unsafe fn ob_del_funccall_info(&self, obthis: POB_THIS, funccall_info: POB_FUNCCALL_INFO) -> () {
+        (self.ob_del_funccall_info)(obthis, funccall_info)
+    }
+    pub unsafe fn ob_link_project(&self, obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> INT {
+        (self.ob_link_project)(obthis, group_hndl)
+    }
+    pub unsafe fn ob_check_for_locked_menu(&self, obthis: POB_THIS) -> () {
+        (self.ob_check_for_locked_menu)(obthis)
+    }
+    pub unsafe fn ob_create_obinst(&self, obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_INST_ID {
+        (self.ob_create_obinst)(obthis, class_hndl)
+    }
+    pub unsafe fn ob_instantiate_child_object(
+        &self,
+        obthis: POB_THIS,
+        parent_obinst: OB_INST_ID,
+        child_type: OB_CLASS_ID,
+        field_id: UINT,
+        child_obinst: POB_INST_ID
+    ) -> INT {
+        (self.ob_instantiate_child_object)(obthis, parent_obinst, child_type, field_id, child_obinst)
+    }
+    pub unsafe fn ob_instantiate_system_object(
+        &self,
+        obthis: POB_THIS,
+        object_type: OB_CLASS_ID,
+        pObint: POB_INST_ID
+    ) -> INT {
+        (self.ob_instantiate_system_object)(obthis, object_type, pObint)
+    }
+    pub unsafe fn ob_destroy_obinst(&self, obthis: POB_THIS, obinst: OB_INST_ID) -> INT {
+        (self.ob_destroy_obinst)(obthis, obinst)
+    }
+    pub unsafe fn ob_set_runtime(&self, obthis: POB_THIS, bInRuntime: BOOL) -> () {
+        (self.ob_set_runtime)(obthis, bInRuntime)
+    }
+    pub unsafe fn ob_create_executable(
+        &self,
+        obthis: POB_THIS,
+        pExecBlock: POB_EXEC,
+        bFreeGroups: BOOL,
+        pManifestInfo: LPTSTR
+    ) -> INT {
+        (self.ob_create_executable)(obthis, pExecBlock, bFreeGroups, pManifestInfo)
+    }
+    pub unsafe fn ob_create_library(&self, obthis: POB_THIS, pExecBlock: POB_EXEC) -> INT {
+        (self.ob_create_library)(obthis, pExecBlock)
+    }
+    pub unsafe fn ob_create_consolidated_library(
+        &self,
+        obthis: POB_THIS,
+        pTargetLibrary: LPTSTR,
+        nSourceLibs: ULONG,
+        pSourceLibs: *mut LPTSTR,
+        pIncludeLibType: POB_LIB_INCLUDE_TYPE,
+        nComponents: ULONG,
+        pComponents: *mut LPTSTR,
+        pPBRFile: LPTSTR,
+        pPBDArray: *mut PBD_ARRAY,
+        pNumPBD: *mut ULONG,
+        ppErrorMessage: *mut LPTSTR
+    ) -> INT {
+        (self.ob_create_consolidated_library)(
+            obthis,
+            pTargetLibrary,
+            nSourceLibs,
+            pSourceLibs,
+            pIncludeLibType,
+            nComponents,
+            pComponents,
+            pPBRFile,
+            pPBDArray,
+            pNumPBD,
+            ppErrorMessage
+        )
+    }
+    pub unsafe fn ob_create_interface_in_library(
+        &self,
+        pClassArray: *mut PPBIClassDef,
+        ulNumClasses: ULONG,
+        lpstrDestLibrary: LPTSTR,
+        lpstrLibraryComments: LPTSTR,
+        bCreatePbl: BOOL
+    ) -> HRESULT {
+        (self.ob_create_interface_in_library)(
+            pClassArray,
+            ulNumClasses,
+            lpstrDestLibrary,
+            lpstrLibraryComments,
+            bCreatePbl
+        )
+    }
+    pub unsafe fn ob_create_interface_class(
+        &self,
+        obthis: POB_THIS,
+        hSourceClass: OB_CLASS_HNDL,
+        lpstrDestClassName: LPTSTR,
+        lpstrDestLibrary: LPTSTR,
+        lpstrComments: LPTSTR,
+        lpstrSourceClassName: LPTSTR
+    ) -> HRESULT {
+        (self.ob_create_interface_class)(
+            obthis,
+            hSourceClass,
+            lpstrDestClassName,
+            lpstrDestLibrary,
+            lpstrComments,
+            lpstrSourceClassName
+        )
+    }
+    pub unsafe fn ob_init_executable(&self, obthis: POB_THIS, executable_name: LPTSTR) -> OB_CLASS_HNDL {
+        (self.ob_init_executable)(obthis, executable_name)
+    }
+    pub unsafe fn ob_scan_source_blocks(
+        &self,
+        obthis: POB_THIS,
+        source: POB_SOURCE_BLOCK,
+        src_len: ULONG,
+        srcloc: *mut *mut ::std::os::raw::c_void,
+        no_blocks: *mut UINT,
+        subpool: OB_SUBPOOL
+    ) -> *mut LPTSTR {
+        (self.ob_scan_source_blocks)(obthis, source, src_len, srcloc, no_blocks, subpool)
+    }
+    pub unsafe fn ob_create_launcher(
+        &self,
+        obThis: POB_THIS,
+        pExecBlock: POB_EXEC,
+        pObjectList: *mut ::std::os::raw::c_void
+    ) -> INT {
+        (self.ob_create_launcher)(obThis, pExecBlock, pObjectList)
+    }
+    pub unsafe fn ob_sanitize_pb_name(
+        &self,
+        obThis: POB_THIS,
+        lpszDestName: LPTSTR,
+        destLength: ::std::os::raw::c_long,
+        lpszNameToSanitize: LPTSTR
+    ) -> () {
+        (self.ob_sanitize_pb_name)(obThis, lpszDestName, destLength, lpszNameToSanitize)
+    }
+    pub unsafe fn ob_validate_class(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        no_items: *mut UINT
+    ) -> POB_CONFLICT_LIST {
+        (self.ob_validate_class)(obthis, class_hndl, no_items)
+    }
+    pub unsafe fn ob_get_orphaned_classes(
+        &self,
+        obthis: POB_THIS,
+        in_group_hndl: OB_GROUP_HNDL,
+        total_items: *mut UINT
+    ) -> POB_CLASS_HNDL {
+        (self.ob_get_orphaned_classes)(obthis, in_group_hndl, total_items)
+    }
+    pub unsafe fn ob_validate_type_name(
+        &self,
+        obThis: POB_THIS,
+        obGroupHndl: OB_GROUP_HNDL,
+        TypeName: LPTSTR
+    ) -> BOOL {
+        (self.ob_validate_type_name)(obThis, obGroupHndl, TypeName)
+    }
+    pub unsafe fn ob_convert_to_ver2_source(
+        &self,
+        obthis: POB_THIS,
+        lib_name: LPTSTR,
+        entry_name: LPTSTR
+    ) -> INT {
+        (self.ob_convert_to_ver2_source)(obthis, lib_name, entry_name)
+    }
+    pub unsafe fn ob_is_vers2_obj(
+        &self,
+        obthis: POB_THIS,
+        lib_name: LPTSTR,
+        entry_name: LPTSTR,
+        error: *mut INT
+    ) -> BOOL {
+        (self.ob_is_vers2_obj)(obthis, lib_name, entry_name, error)
+    }
+    pub unsafe fn ob_build_ordered_compile_list(
+        &self,
+        obthis: POB_THIS,
+        list_type: OB_COMPILE_LIST_TYPE,
+        no_items: *mut UINT,
+        inconsistency: POB_INCONSISTENCY_TYPE
+    ) -> POB_COMPILE_LIST {
+        (self.ob_build_ordered_compile_list)(obthis, list_type, no_items, inconsistency)
+    }
+    pub unsafe fn ob_free_ordered_compile_list(
+        &self,
+        obthis: POB_THIS,
+        compile_list: POB_COMPILE_LIST,
+        no_items: UINT
+    ) -> () {
+        (self.ob_free_ordered_compile_list)(obthis, compile_list, no_items)
+    }
+    pub unsafe fn ob_build_hierarchy_list(
+        &self,
+        obthis: POB_THIS,
+        no_items: *mut UINT,
+        type_: OB_CLASS_ID
+    ) -> POB_HIERARCHY_LIST {
+        (self.ob_build_hierarchy_list)(obthis, no_items, type_)
+    }
+    pub unsafe fn ob_free_hierarchy_list(
+        &self,
+        obthis: POB_THIS,
+        hierarchy_list: POB_HIERARCHY_LIST,
+        no_items: UINT
+    ) -> () {
+        (self.ob_free_hierarchy_list)(obthis, hierarchy_list, no_items)
+    }
+    pub unsafe fn ob_clear_instance_ref(
+        &self,
+        obthis: POB_THIS,
+        back_ptr: *mut ::std::os::raw::c_void
+    ) -> () {
+        (self.ob_clear_instance_ref)(obthis, back_ptr)
+    }
+    pub unsafe fn ob_insert_inst_ref_dbg(
+        &self,
+        obthis: POB_THIS,
+        obinst: OB_INST_ID,
+        ref_addr: *mut ::std::os::raw::c_void,
+        fileName: LPTSTR,
+        lineNo: UINT
+    ) -> () {
+        (self.ob_insert_inst_ref_dbg)(obthis, obinst, ref_addr, fileName, lineNo)
+    }
+    pub unsafe fn ob_open_typedef_group(
+        &self,
+        obThis: POB_THIS,
+        lpszLibraryName: LPTSTR,
+        lpszGroupName: LPTSTR,
+        bCreateIfNotFound: BOOL
+    ) -> INT {
+        (self.ob_open_typedef_group)(obThis, lpszLibraryName, lpszGroupName, bCreateIfNotFound)
+    }
+    pub unsafe fn ob_save_dll_to_pbd(&self, argc: ::std::os::raw::c_int, argv: *mut LPTSTR) -> INT {
+        (self.ob_save_dll_to_pbd)(argc, argv)
+    }
+    pub unsafe fn ob_convert_pbx_to_native_groups(
+        &self,
+        obthis: POB_THIS,
+        pbl_name: LPCTSTR,
+        dll_name: LPCTSTR
+    ) -> INT {
+        (self.ob_convert_pbx_to_native_groups)(obthis, pbl_name, dll_name)
+    }
+    pub unsafe fn ob_share_typedef_group(&self, destObThis: POB_THIS, srcObThis: POB_THIS) -> INT {
+        (self.ob_share_typedef_group)(destObThis, srcObThis)
+    }
+    pub unsafe fn ob_unshare_typedef_group(&self, obThis: POB_THIS) -> INT {
+        (self.ob_unshare_typedef_group)(obThis)
+    }
+    pub unsafe fn ob_cm_evaluate_expression(
+        &self,
+        obthis: POB_THIS,
+        text: LPTSTR,
+        result_data_node: POB_DATA
+    ) -> INT {
+        (self.ob_cm_evaluate_expression)(obthis, text, result_data_node)
+    }
+    pub unsafe fn ob_entryInheritsFromClass(
+        &self,
+        obThis: POB_THIS,
+        lpszLibraryName: LPTSTR,
+        lpszTypeName: LPTSTR,
+        lpszEntryName: LPTSTR
+    ) -> BOOL {
+        (self.ob_entryInheritsFromClass)(obThis, lpszLibraryName, lpszTypeName, lpszEntryName)
+    }
+    pub unsafe fn ob_get_class_from_name(
+        &self,
+        obThis: POB_THIS,
+        lpszClassName: LPTSTR,
+        pbIsEnum: *mut BOOL
+    ) -> OB_CLASS_HNDL {
+        (self.ob_get_class_from_name)(obThis, lpszClassName, pbIsEnum)
+    }
+    pub unsafe fn ob_local_global_lv(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        var_id: OB_SYM_ID
+    ) -> POB_DATA {
+        (self.ob_local_global_lv)(obthis, group, var_id)
+    }
+    pub unsafe fn ob_local_global_refpkt(
+        &self,
+        obthis: POB_THIS,
+        destination: POB_DATA,
+        group: POB_GROUP,
+        var_id: OB_SYM_ID
+    ) -> () {
+        (self.ob_local_global_refpkt)(obthis, destination, group, var_id)
+    }
+    pub unsafe fn ob_shared_global_lv(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        var_id: OB_SYM_ID
+    ) -> POB_DATA {
+        (self.ob_shared_global_lv)(obthis, group, var_id)
+    }
+    pub unsafe fn ob_shared_global_refpkt(
+        &self,
+        obthis: POB_THIS,
+        destination: POB_DATA,
+        group: POB_GROUP,
+        var_id: OB_SYM_ID
+    ) -> () {
+        (self.ob_shared_global_refpkt)(obthis, destination, group, var_id)
+    }
+    pub unsafe fn ob_shared_lv(&self, obthis: POB_THIS, group: POB_GROUP, var_id: OB_SYM_ID) -> POB_DATA {
+        (self.ob_shared_lv)(obthis, group, var_id)
+    }
+    pub unsafe fn ob_shared_refpkt(
+        &self,
+        obthis: POB_THIS,
+        destination: POB_DATA,
+        group: POB_GROUP,
+        var_id: OB_SYM_ID
+    ) -> () {
+        (self.ob_shared_refpkt)(obthis, destination, group, var_id)
+    }
+    pub unsafe fn ob_convert_chararray_to_string(&self, obthis: POB_THIS, data: POB_DATA) -> BOOL {
+        (self.ob_convert_chararray_to_string)(obthis, data)
+    }
+    pub unsafe fn ob_class_delete_and_withinclass(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        class_id: OB_CLASS_ID
+    ) -> () {
+        (self.ob_class_delete_and_withinclass)(obthis, class_hndl, class_id)
+    }
+    pub unsafe fn ob_find_orphan_class(
+        &self,
+        obThis: POB_THIS,
+        lpszLibraryName: LPTSTR,
+        lpszEntryName: LPTSTR,
+        bFoundAncestor: BOOL
+    ) -> INT {
+        (self.ob_find_orphan_class)(obThis, lpszLibraryName, lpszEntryName, bFoundAncestor)
+    }
+    pub unsafe fn ob_nuke_orphan_class(
+        &self,
+        obThis: POB_THIS,
+        lpszLibraryName: LPTSTR,
+        lpszEntryName: LPTSTR
+    ) -> BOOL {
+        (self.ob_nuke_orphan_class)(obThis, lpszLibraryName, lpszEntryName)
+    }
+    pub unsafe fn ob_is_ancestor_class_modified(&self, obThis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL {
+        (self.ob_is_ancestor_class_modified)(obThis, class_hndl)
+    }
+    pub unsafe fn ob_rebuild_instance_image(&self, obThis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> () {
+        (self.ob_rebuild_instance_image)(obThis, class_hndl)
+    }
+    pub unsafe fn ob_build_compile_list(&self, obthis: POB_THIS, no_items: *mut UINT) -> POB_COMPILE_LIST {
+        (self.ob_build_compile_list)(obthis, no_items)
+    }
+    pub unsafe fn ot_get_next_evaled_arg(&self, obthis: POB_THIS) -> POB_DATA {
+        (self.ot_get_next_evaled_arg)(obthis)
+    }
+    pub unsafe fn ot_get_next_evaled_arg_no_convert(&self, obthis: POB_THIS) -> POB_DATA {
+        (self.ot_get_next_evaled_arg_no_convert)(obthis)
+    }
+    pub unsafe fn ot_get_next_lvalue_arg(&self, obthis: POB_THIS, str_: *mut POT_LVALUE_INFO) -> POB_DATA {
+        (self.ot_get_next_lvalue_arg)(obthis, str_)
+    }
+    pub unsafe fn ot_get_simple_intarg(&self, obthis: POB_THIS, null: *mut BOOL) -> INT {
+        (self.ot_get_simple_intarg)(obthis, null)
+    }
+    pub unsafe fn ot_get_simple_longarg(&self, obthis: POB_THIS, null: *mut BOOL) -> ::std::os::raw::c_long {
+        (self.ot_get_simple_longarg)(obthis, null)
+    }
+    pub unsafe fn ot_get_intarg(&self, obthis: POB_THIS, null: *mut BOOL) -> INT {
+        (self.ot_get_intarg)(obthis, null)
+    }
+    pub unsafe fn ot_get_uintarg(&self, obthis: POB_THIS, null: *mut BOOL) -> UINT {
+        (self.ot_get_uintarg)(obthis, null)
+    }
+    pub unsafe fn ot_get_longarg(&self, obthis: POB_THIS, null: *mut BOOL) -> ::std::os::raw::c_long {
+        (self.ot_get_longarg)(obthis, null)
+    }
+    pub unsafe fn ot_get_ulongarg(&self, obthis: POB_THIS, null: *mut BOOL) -> ULONG {
+        (self.ot_get_ulongarg)(obthis, null)
+    }
+    pub unsafe fn ot_get_decarg(&self, obthis: POB_THIS, null: *mut BOOL) -> PSH_DEC {
+        (self.ot_get_decarg)(obthis, null)
+    }
+    pub unsafe fn ot_get_floatarg(&self, obthis: POB_THIS, fl: *mut f32, null: *mut BOOL) -> *mut f32 {
+        (self.ot_get_floatarg)(obthis, fl, null)
+    }
+    pub unsafe fn ot_get_doublearg(&self, obthis: POB_THIS, doub: *mut f64, null: *mut BOOL) -> *mut f64 {
+        (self.ot_get_doublearg)(obthis, doub, null)
+    }
+    pub unsafe fn ot_get_longlongarg(
+        &self,
+        obthis: POB_THIS,
+        longlong_val: *mut ::std::os::raw::c_longlong,
+        null: *mut BOOL
+    ) -> *mut ::std::os::raw::c_longlong {
+        (self.ot_get_longlongarg)(obthis, longlong_val, null)
+    }
+    pub unsafe fn ot_get_obinstarg(
+        &self,
+        obthis: POB_THIS,
+        obinst: POB_INST_ID,
+        null: *mut BOOL
+    ) -> POB_INST_ID {
+        (self.ot_get_obinstarg)(obthis, obinst, null)
+    }
+    pub unsafe fn ot_get_valptr_arg(&self, obthis: POB_THIS, null: *mut BOOL) -> *mut ::std::os::raw::c_void {
+        (self.ot_get_valptr_arg)(obthis, null)
+    }
+    pub unsafe fn ot_init_arglist(&self, obthis: POB_THIS, nargs: UINT) -> UINT {
+        (self.ot_init_arglist)(obthis, nargs)
+    }
+    pub unsafe fn ot_get_valptr(&self, obthis: POB_THIS, data: POB_DATA) -> *mut ::std::os::raw::c_void {
+        (self.ot_get_valptr)(obthis, data)
+    }
+    pub unsafe fn ot_type_srch(&self, name: LPTSTR) -> INT { (self.ot_type_srch)(name) }
+    pub unsafe fn ot_type_attr(&self, type_: OB_CLASS_ID) -> INT { (self.ot_type_attr)(type_) }
+    pub unsafe fn ot_get_class_name(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> LPTSTR {
+        (self.ot_get_class_name)(obthis, group, class_id)
+    }
+    pub unsafe fn ot_is_array_eq(
+        &self,
+        obthis: POB_THIS,
+        array_id1: OB_ARRAY_ID,
+        array_id2: OB_ARRAY_ID,
+        nullval: *mut BOOL
+    ) -> BOOL {
+        (self.ot_is_array_eq)(obthis, array_id1, array_id2, nullval)
+    }
+    pub unsafe fn ot_is_struct_eq(
+        &self,
+        obthis: POB_THIS,
+        data_node1: POB_DATA,
+        data_node2: POB_DATA,
+        nullval: *mut BOOL
+    ) -> BOOL {
+        (self.ot_is_struct_eq)(obthis, data_node1, data_node2, nullval)
+    }
+    pub unsafe fn ot_create_obinst_with_name(
+        &self,
+        obthis: POB_THIS,
+        lvalue_data: POB_DATA,
+        lvalue_info: POT_LVALUE_INFO,
+        class_name: LPTSTR,
+        nested_obinst: OB_INST_ID
+    ) -> OB_INST_ID {
+        (self.ot_create_obinst_with_name)(obthis, lvalue_data, lvalue_info, class_name, nested_obinst)
+    }
+    pub unsafe fn ot_create_obinst_at_lval(
+        &self,
+        obthis: POB_THIS,
+        lvalue_data: POB_DATA,
+        lvalue_info: POT_LVALUE_INFO,
+        nested_obinst: OB_INST_ID
+    ) -> OB_INST_ID {
+        (self.ot_create_obinst_at_lval)(obthis, lvalue_data, lvalue_info, nested_obinst)
+    }
+    pub unsafe fn ot_get_curr_obinst_expr(
+        &self,
+        obthis: POB_THIS,
+        obinst_buf: POB_INST_ID,
+        nullval: *mut BOOL
+    ) -> POB_INST_ID {
+        (self.ot_get_curr_obinst_expr)(obthis, obinst_buf, nullval)
+    }
+    pub unsafe fn ot_func_call(
+        &self,
+        obthis: POB_THIS,
+        funccall_info: POB_FUNCCALL_INFO,
+        actual_args: *mut *mut ::std::os::raw::c_void
+    ) -> POB_DATA {
+        (self.ot_func_call)(obthis, funccall_info, actual_args)
+    }
+    pub unsafe fn ot_set_return_val(&self, obthis: POB_THIS, data_node: POB_DATA) -> () {
+        (self.ot_set_return_val)(obthis, data_node)
+    }
+    pub unsafe fn ot_set_return_double(&self, obthis: POB_THIS, doub_val: *mut f64, null_val: BOOL) -> () {
+        (self.ot_set_return_double)(obthis, doub_val, null_val)
+    }
+    pub unsafe fn ot_set_return_longlong(
+        &self,
+        obthis: POB_THIS,
+        longl_val: *mut ::std::os::raw::c_longlong,
+        null_val: BOOL
+    ) -> () {
+        (self.ot_set_return_longlong)(obthis, longl_val, null_val)
+    }
+    pub unsafe fn ot_set_return_dec(&self, obthis: POB_THIS, dec_val: PSH_DEC, null_val: BOOL) -> () {
+        (self.ot_set_return_dec)(obthis, dec_val, null_val)
+    }
+    pub unsafe fn ot_no_return_val(&self, obthis: POB_THIS) -> () { (self.ot_no_return_val)(obthis) }
+    pub unsafe fn ot_assign_lvalue_dec(
+        &self,
+        obthis: POB_THIS,
+        lvalue_data: POB_DATA,
+        val: PSH_DEC,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_lvalue_dec)(obthis, lvalue_data, val, nullval)
+    }
+    pub unsafe fn ot_assign_lvalue_double(
+        &self,
+        obthis: POB_THIS,
+        lvalue_data: POB_DATA,
+        val: f64,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_lvalue_double)(obthis, lvalue_data, val, nullval)
+    }
+    pub unsafe fn ot_assign_lvalue_longlong(
+        &self,
+        obthis: POB_THIS,
+        lvalue_data: POB_DATA,
+        val: ::std::os::raw::c_longlong,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_lvalue_longlong)(obthis, lvalue_data, val, nullval)
+    }
+    pub unsafe fn ot_assign_lvalue_blob(
+        &self,
+        obthis: POB_THIS,
+        lvalue_data: POB_DATA,
+        val: PSH_BINARY,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_lvalue_blob)(obthis, lvalue_data, val, nullval)
+    }
+    pub unsafe fn ot_assign_lvalue_obinst(
+        &self,
+        obthis: POB_THIS,
+        lvalue_data: POB_DATA,
+        val: OB_INST_ID,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_lvalue_obinst)(obthis, lvalue_data, val, nullval)
+    }
+    pub unsafe fn ot_assign_lvalue_array(
+        &self,
+        obthis: POB_THIS,
+        lvalue_data: POB_DATA,
+        rvalue_array: OB_ARRAY_ID,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_lvalue_array)(obthis, lvalue_data, rvalue_array, nullval)
+    }
+    pub unsafe fn ot_assign_lvalue_any(
+        &self,
+        obthis: POB_THIS,
+        lvalue_data: POB_DATA,
+        rvalue_data: POB_DATA,
+        rhs_class_id: OB_CLASS_ID
+    ) -> () {
+        (self.ot_assign_lvalue_any)(obthis, lvalue_data, rvalue_data, rhs_class_id)
+    }
+    pub unsafe fn ot_set_local_var(&self, ths: POB_THIS, sym_id: OB_SYM_ID, data_node: POB_DATA) -> INT {
+        (self.ot_set_local_var)(ths, sym_id, data_node)
+    }
+    pub unsafe fn ot_set_shared_var(
+        &self,
+        ths: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        sym_id: OB_SYM_ID,
+        data_node: POB_DATA
+    ) -> INT {
+        (self.ot_set_shared_var)(ths, group_hndl, sym_id, data_node)
+    }
+    pub unsafe fn ot_set_obinst_var(
+        &self,
+        ths: POB_THIS,
+        ob_inst_id: OB_INST_ID,
+        field_id: UINT,
+        data_node: POB_DATA
+    ) -> INT {
+        (self.ot_set_obinst_var)(ths, ob_inst_id, field_id, data_node)
+    }
+    pub unsafe fn ot_set_local_array_item(
+        &self,
+        ths: POB_THIS,
+        sym_id: OB_SYM_ID,
+        index: UINT,
+        data_node: POB_DATA
+    ) -> INT {
+        (self.ot_set_local_array_item)(ths, sym_id, index, data_node)
+    }
+    pub unsafe fn ot_set_shared_array_item(
+        &self,
+        ths: POB_THIS,
+        group_hndl: OB_GROUP_HNDL,
+        sym_id: OB_SYM_ID,
+        index: UINT,
+        data_node: POB_DATA
+    ) -> INT {
+        (self.ot_set_shared_array_item)(ths, group_hndl, sym_id, index, data_node)
+    }
+    pub unsafe fn ot_set_obinst_array_item(
+        &self,
+        ths: POB_THIS,
+        obinst: OB_INST_ID,
+        field_id: UINT,
+        index: ULONG,
+        new_data: POB_DATA
+    ) -> INT {
+        (self.ot_set_obinst_array_item)(ths, obinst, field_id, index, new_data)
+    }
+    pub unsafe fn ot_get_array_values(
+        &self,
+        obthis: POB_THIS,
+        arraynode: POB_DATA,
+        nitems: *mut UINT
+    ) -> *mut ::std::os::raw::c_void {
+        (self.ot_get_array_values)(obthis, arraynode, nitems)
+    }
+    pub unsafe fn ot_reset_array(&self, obthis: POB_THIS, array_node: POB_DATA, nitems: ULONG) -> INT {
+        (self.ot_reset_array)(obthis, array_node, nitems)
+    }
+    pub unsafe fn ot_get_local_var(
+        &self,
+        obthis: POB_THIS,
+        grphndl: OB_GROUP_HNDL,
+        sym_id: OB_SYM_ID
+    ) -> POB_DATA {
+        (self.ot_get_local_var)(obthis, grphndl, sym_id)
+    }
+    pub unsafe fn ot_get_shared_var(
+        &self,
+        obthis: POB_THIS,
+        grphndl: OB_GROUP_HNDL,
+        sym_id: OB_SYM_ID
+    ) -> POB_DATA {
+        (self.ot_get_shared_var)(obthis, grphndl, sym_id)
+    }
+    pub unsafe fn ot_math_type_convert(&self, class_id1: OB_CLASS_ID, class_id2: OB_CLASS_ID) -> OB_CLASS_ID {
+        (self.ot_math_type_convert)(class_id1, class_id2)
+    }
+    pub unsafe fn ot_get_int_value(&self, obthis: POB_THIS, data_node: POB_DATA) -> INT {
+        (self.ot_get_int_value)(obthis, data_node)
+    }
+    pub unsafe fn ot_get_uint_value(&self, obthis: POB_THIS, data_node: POB_DATA) -> UINT {
+        (self.ot_get_uint_value)(obthis, data_node)
+    }
+    pub unsafe fn ot_get_byte_value(&self, obthis: POB_THIS, data_node: POB_DATA) -> ::std::os::raw::c_uchar {
+        (self.ot_get_byte_value)(obthis, data_node)
+    }
+    pub unsafe fn ot_get_long_value(&self, obthis: POB_THIS, data_node: POB_DATA) -> ::std::os::raw::c_long {
+        (self.ot_get_long_value)(obthis, data_node)
+    }
+    pub unsafe fn ot_get_ulong_value(&self, obthis: POB_THIS, data_node: POB_DATA) -> ULONG {
+        (self.ot_get_ulong_value)(obthis, data_node)
+    }
+    pub unsafe fn ot_get_dec_value(&self, obthis: POB_THIS, data_node: POB_DATA) -> PSH_DEC {
+        (self.ot_get_dec_value)(obthis, data_node)
+    }
+    pub unsafe fn ot_get_float_value(&self, obthis: POB_THIS, data_node: POB_DATA) -> f32 {
+        (self.ot_get_float_value)(obthis, data_node)
+    }
+    pub unsafe fn ot_get_double_value(&self, obthis: POB_THIS, data_node: POB_DATA) -> f64 {
+        (self.ot_get_double_value)(obthis, data_node)
+    }
+    pub unsafe fn ot_get_longlong_value(
+        &self,
+        obthis: POB_THIS,
+        data_node: POB_DATA
+    ) -> ::std::os::raw::c_longlong {
+        (self.ot_get_longlong_value)(obthis, data_node)
+    }
+    pub unsafe fn ot_free_val_ptr(&self, obthis: POB_THIS, data_node: POB_DATA) -> () {
+        (self.ot_free_val_ptr)(obthis, data_node)
+    }
+    pub unsafe fn ot_free_array(&self, obthis: POB_THIS, data_node: POB_DATA) -> () {
+        (self.ot_free_array)(obthis, data_node)
+    }
+    pub unsafe fn ot_convert_to_int(&self, obthis: POB_THIS, data_node: POB_DATA) -> INT {
+        (self.ot_convert_to_int)(obthis, data_node)
+    }
+    pub unsafe fn ot_convert_to_uint(&self, obthis: POB_THIS, data_node: POB_DATA) -> UINT {
+        (self.ot_convert_to_uint)(obthis, data_node)
+    }
+    pub unsafe fn ot_convert_to_byte(
+        &self,
+        obthis: POB_THIS,
+        data_node: POB_DATA
+    ) -> ::std::os::raw::c_uchar {
+        (self.ot_convert_to_byte)(obthis, data_node)
+    }
+    pub unsafe fn ot_convert_to_long(&self, obthis: POB_THIS, data_node: POB_DATA) -> ::std::os::raw::c_long {
+        (self.ot_convert_to_long)(obthis, data_node)
+    }
+    pub unsafe fn ot_convert_to_ulong(&self, obthis: POB_THIS, data_node: POB_DATA) -> ULONG {
+        (self.ot_convert_to_ulong)(obthis, data_node)
+    }
+    pub unsafe fn ot_convert_to_dec(&self, obthis: POB_THIS, data_node: POB_DATA) -> PSH_DEC {
+        (self.ot_convert_to_dec)(obthis, data_node)
+    }
+    pub unsafe fn ot_convert_to_float(&self, obthis: POB_THIS, data_node: POB_DATA) -> f32 {
+        (self.ot_convert_to_float)(obthis, data_node)
+    }
+    pub unsafe fn ot_convert_to_double(&self, obthis: POB_THIS, data_node: POB_DATA) -> f64 {
+        (self.ot_convert_to_double)(obthis, data_node)
+    }
+    pub unsafe fn ot_convert_to_longlong(
+        &self,
+        obthis: POB_THIS,
+        data_node: POB_DATA
+    ) -> ::std::os::raw::c_longlong {
+        (self.ot_convert_to_longlong)(obthis, data_node)
+    }
+    pub unsafe fn ot_ansi_lower(&self, obthis: POB_THIS, string: LPTSTR) -> LPTSTR {
+        (self.ot_ansi_lower)(obthis, string)
+    }
+    pub unsafe fn ot_ansi_upper(&self, obthis: POB_THIS, string: LPTSTR) -> LPTSTR {
+        (self.ot_ansi_upper)(obthis, string)
+    }
+    pub unsafe fn ot_ansi_strcmp(&self, obthis: POB_THIS, stringOne: LPTSTR, stringTwo: LPTSTR) -> INT {
+        (self.ot_ansi_strcmp)(obthis, stringOne, stringTwo)
+    }
+    pub unsafe fn ot_get_field_lv(&self, obthis: POB_THIS, obInst: OB_INST_ID, fieldId: UINT) -> POB_DATA {
+        (self.ot_get_field_lv)(obthis, obInst, fieldId)
+    }
+    pub unsafe fn ot_get_field_item_lv(
+        &self,
+        obthis: POB_THIS,
+        obInst: OB_INST_ID,
+        fieldId: UINT,
+        item_index: ULONG
+    ) -> POB_DATA {
+        (self.ot_get_field_item_lv)(obthis, obInst, fieldId, item_index)
+    }
+    pub unsafe fn ot_assign_ref_int(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: INT,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_int)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_uint(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: UINT,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_uint)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_byte(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: ::std::os::raw::c_uchar,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_byte)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_long(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: ::std::os::raw::c_long,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_long)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_ulong(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: ULONG,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_ulong)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_dec(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: PSH_DEC,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_dec)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_float(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: f32,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_float)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_double(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: f64,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_double)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_longlong(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: ::std::os::raw::c_longlong,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_longlong)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_string(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: LPTSTR,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_string)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_bool(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: BOOL,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_bool)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_char(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: TCHAR,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_char)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_blob(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: PSH_BINARY,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_blob)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_time(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: PSH_TIME,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_time)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_date(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: PSH_TIME,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_date)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_datetime(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: PSH_TIME,
+        nullval: BOOL
+    ) -> () {
+        (self.ot_assign_ref_datetime)(obthis, refpak, value, nullval)
+    }
+    pub unsafe fn ot_assign_ref_obinst(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: OB_INST_ID,
+        nullval: BOOL,
+        type_: OB_CLASS_ID
+    ) -> INT {
+        (self.ot_assign_ref_obinst)(obthis, refpak, value, nullval, type_)
+    }
+    pub unsafe fn ot_assign_ref_enum(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: INT,
+        nullval: BOOL,
+        type_: OB_CLASS_ID
+    ) -> () {
+        (self.ot_assign_ref_enum)(obthis, refpak, value, nullval, type_)
+    }
+    pub unsafe fn ot_assign_ref_array(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        value: OB_ARRAY_ID,
+        nullval: BOOL,
+        type_: OB_CLASS_ID
+    ) -> () {
+        (self.ot_assign_ref_array)(obthis, refpak, value, nullval, type_)
+    }
+    pub unsafe fn ot_assign_ref_any(
+        &self,
+        obthis: POB_THIS,
+        refpak: POT_REF_PAK,
+        rvalue_data: POB_DATA,
+        rhs_class_id: OB_CLASS_ID
+    ) -> () {
+        (self.ot_assign_ref_any)(obthis, refpak, rvalue_data, rhs_class_id)
+    }
+    pub unsafe fn ot_get_nested_obinst(&self, obthis: POB_THIS, obinst: OB_INST_ID) -> OB_INST_ID {
+        (self.ot_get_nested_obinst)(obthis, obinst)
+    }
+    pub unsafe fn ot_array_create_bounded(
+        &self,
+        obthis: POB_THIS,
+        num_items: ULONG,
+        elmtType: OB_CLASS_HNDL,
+        varInfo: USHORT,
+        numDim: USHORT,
+        boundsArray: *mut ::std::os::raw::c_long
+    ) -> *mut ::std::os::raw::c_void {
+        (self.ot_array_create_bounded)(obthis, num_items, elmtType, varInfo, numDim, boundsArray)
+    }
+    pub unsafe fn ot_array_create_unbounded(
+        &self,
+        obthis: POB_THIS,
+        elmtType: OB_CLASS_HNDL,
+        varInfo: USHORT
+    ) -> *mut ::std::os::raw::c_void {
+        (self.ot_array_create_unbounded)(obthis, elmtType, varInfo)
+    }
+    pub unsafe fn ot_array_index(
+        &self,
+        obthis: POB_THIS,
+        array: *mut ::std::os::raw::c_void,
+        index: ULONG
+    ) -> POB_DATA {
+        (self.ot_array_index)(obthis, array, index)
+    }
+    pub unsafe fn ot_array_set_free_data(
+        &self,
+        obthis: POB_THIS,
+        array: *mut ::std::os::raw::c_void,
+        newValue: BOOL
+    ) -> () {
+        (self.ot_array_set_free_data)(obthis, array, newValue)
+    }
+    pub unsafe fn ot_array_free_data(&self, obthis: POB_THIS, array: *mut ::std::os::raw::c_void) -> BOOL {
+        (self.ot_array_free_data)(obthis, array)
+    }
+    pub unsafe fn ot_array_class_id(
+        &self,
+        obthis: POB_THIS,
+        array: *mut ::std::os::raw::c_void
+    ) -> OB_CLASS_ID {
+        (self.ot_array_class_id)(obthis, array)
+    }
+    pub unsafe fn ot_array_class_hndl(
+        &self,
+        obthis: POB_THIS,
+        array: *mut ::std::os::raw::c_void
+    ) -> OB_CLASS_HNDL {
+        (self.ot_array_class_hndl)(obthis, array)
+    }
+    pub unsafe fn ot_array_num_dimensions(
+        &self,
+        obthis: POB_THIS,
+        array: *mut ::std::os::raw::c_void
+    ) -> USHORT {
+        (self.ot_array_num_dimensions)(obthis, array)
+    }
+    pub unsafe fn ot_array_num_items(&self, obthis: POB_THIS, array: *mut ::std::os::raw::c_void) -> ULONG {
+        (self.ot_array_num_items)(obthis, array)
+    }
+    pub unsafe fn ot_is_array_unbounded(&self, obthis: POB_THIS, array: *mut ::std::os::raw::c_void) -> BOOL {
+        (self.ot_is_array_unbounded)(obthis, array)
+    }
+    pub unsafe fn ot_get_arraydef_no_dims(
+        &self,
+        obthis: POB_THIS,
+        arrdef: *mut ::std::os::raw::c_void
+    ) -> USHORT {
+        (self.ot_get_arraydef_no_dims)(obthis, arrdef)
+    }
+    pub unsafe fn ot_get_arraydef_style(
+        &self,
+        obthis: POB_THIS,
+        arrdef: *mut ::std::os::raw::c_void
+    ) -> OB_ARRAY_SYMBOL_STYLE::Type {
+        (self.ot_get_arraydef_style)(obthis, arrdef)
+    }
+    pub unsafe fn ot_get_arraydef_bounds(
+        &self,
+        obthis: POB_THIS,
+        arrdef: *mut ::std::os::raw::c_void
+    ) -> *mut ::std::os::raw::c_long {
+        (self.ot_get_arraydef_bounds)(obthis, arrdef)
+    }
+    pub unsafe fn ot_get_arraydef_varinfo(
+        &self,
+        obthis: POB_THIS,
+        arrdef: *mut ::std::os::raw::c_void
+    ) -> OB_INFO_FLAGS {
+        (self.ot_get_arraydef_varinfo)(obthis, arrdef)
+    }
+    pub unsafe fn ot_get_arraydef_upper_bound(
+        &self,
+        obthis: POB_THIS,
+        arrdef: *mut ::std::os::raw::c_void,
+        dimension: ::std::os::raw::c_long
+    ) -> ::std::os::raw::c_long {
+        (self.ot_get_arraydef_upper_bound)(obthis, arrdef, dimension)
+    }
+    pub unsafe fn ot_get_arraydef_lower_bound(
+        &self,
+        obthis: POB_THIS,
+        arrdef: *mut ::std::os::raw::c_void,
+        dimension: ::std::os::raw::c_long
+    ) -> ::std::os::raw::c_long {
+        (self.ot_get_arraydef_lower_bound)(obthis, arrdef, dimension)
+    }
+    pub unsafe fn ot_randomize(&self, obthis: POB_THIS, iSeed: UINT) -> () {
+        (self.ot_randomize)(obthis, iSeed)
+    }
+    pub unsafe fn ot_rand(&self, obthis: POB_THIS, lLimit: ::std::os::raw::c_long) -> ::std::os::raw::c_long {
+        (self.ot_rand)(obthis, lLimit)
+    }
+    pub unsafe fn ot_class_compare(
+        &self,
+        obthis: POB_THIS,
+        classHndl1: OB_CLASS_HNDL,
+        classHndl2: OB_CLASS_HNDL
+    ) -> BOOL {
+        (self.ot_class_compare)(obthis, classHndl1, classHndl2)
+    }
+    pub unsafe fn ot_assign_global_var_obinst(
+        &self,
+        obthis: POB_THIS,
+        szName: LPTSTR,
+        obInst: OB_INST_ID
+    ) -> INT {
+        (self.ot_assign_global_var_obinst)(obthis, szName, obInst)
+    }
+    pub unsafe fn ob_class_indirect(
+        &self,
+        obthis: POB_THIS,
+        group: *mut POB_GROUP,
+        class_id: POB_CLASS_ID
+    ) -> INT {
+        (self.ob_class_indirect)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_add_external_class_ref(
+        &self,
+        obthis: POB_THIS,
+        name: LPTSTR,
+        local_group: POB_GROUP,
+        ext_group_id: OB_GROUP_ID,
+        ext_class_id: OB_CLASS_ID,
+        refstyle: OB_GLOB_REFSTYLE,
+        error: *mut INT
+    ) -> OB_CLASS_ID {
+        (self.ob_add_external_class_ref)(
+            obthis,
+            name,
+            local_group,
+            ext_group_id,
+            ext_class_id,
+            refstyle,
+            error
+        )
+    }
+    pub unsafe fn ob_get_local_class(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        name: LPTSTR,
+        refstyle: OB_GLOB_REFSTYLE,
+        error: *mut INT
+    ) -> OB_CLASS_ID {
+        (self.ob_get_local_class)(obthis, group, name, refstyle, error)
+    }
+    pub unsafe fn ob_get_primary_class(
+        &self,
+        obthis: POB_THIS,
+        group: *mut POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> OB_CLASS_ID {
+        (self.ob_get_primary_class)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_build_qual_sec_class_name(
+        &self,
+        obthis: POB_THIS,
+        primary_class_name: LPTSTR,
+        sec_class_name: LPTSTR
+    ) -> LPTSTR {
+        (self.ob_build_qual_sec_class_name)(obthis, primary_class_name, sec_class_name)
+    }
+    pub unsafe fn ob_decl_indirect_sec_class(
+        &self,
+        obthis: POB_THIS,
+        target_group: POB_GROUP,
+        prim_class_name: LPTSTR,
+        sec_class_name: LPTSTR,
+        error: *mut INT
+    ) -> OB_CLASS_ID {
+        (self.ob_decl_indirect_sec_class)(obthis, target_group, prim_class_name, sec_class_name, error)
+    }
+    pub unsafe fn ob_update_class_ref(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        refstyle: OB_GLOB_REFSTYLE,
+        is_prim_parent: BOOL
+    ) -> () {
+        (self.ob_update_class_ref)(obthis, group, class_id, refstyle, is_prim_parent)
+    }
+    pub unsafe fn ob_update_glob_class_instflag(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        is_instance: BOOL
+    ) -> () {
+        (self.ob_update_glob_class_instflag)(obthis, group, class_id, is_instance)
+    }
+    pub unsafe fn ob_is_class_member_accessable(
+        &self,
+        obthis: POB_THIS,
+        member_access: OB_MEMBER_ACCESS::Type,
+        access_check_type: OB_MEMBER_ACCESS_TYPE::Type,
+        inheritance_level: UINT,
+        in_system_routine: BOOL
+    ) -> BOOL {
+        (self.ob_is_class_member_accessable)(
+            obthis,
+            member_access,
+            access_check_type,
+            inheritance_level,
+            in_system_routine
+        )
+    }
+    pub unsafe fn ob_get_system_func_class(&self, obthis: POB_THIS) -> POB_RUNTIME_CLASS {
+        (self.ob_get_system_func_class)(obthis)
+    }
+    pub unsafe fn ob_get_global_func_class(
+        &self,
+        obthis: POB_THIS,
+        pGroup: POB_GROUP,
+        classId: OB_CLASS_ID,
+        module_id: OB_MODULE_ID
+    ) -> POB_RUNTIME_CLASS {
+        (self.ob_get_global_func_class)(obthis, pGroup, classId, module_id)
+    }
+    pub unsafe fn ob_type_declare(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        type_name: LPTSTR,
+        type_kind: OB_TYPE_KIND::Type,
+        style: OB_CLASS_STYLE::Type,
+        parent_type: OB_CLASS_ID,
+        nested_type: OB_CLASS_ID,
+        autoinstantiate: BOOL,
+        error: *mut INT
+    ) -> OB_CLASS_ID {
+        (self.ob_type_declare)(
+            obthis,
+            group,
+            type_name,
+            type_kind,
+            style,
+            parent_type,
+            nested_type,
+            autoinstantiate,
+            error
+        )
+    }
+    pub unsafe fn ob_type_declare_class(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        type_name: LPTSTR,
+        type_kind: OB_TYPE_KIND::Type,
+        class_style: OB_CLASS_STYLE::Type,
+        parent_class: OB_CLASS_ID,
+        nested_class: OB_CLASS_ID,
+        autoinstantiate: BOOL,
+        error: *mut INT
+    ) -> OB_CLASS_ID {
+        (self.ob_type_declare_class)(
+            obthis,
+            group,
+            type_name,
+            type_kind,
+            class_style,
+            parent_class,
+            nested_class,
+            autoinstantiate,
+            error
+        )
+    }
+    pub unsafe fn ob_type_declare_vtab(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        parent_class: OB_CLASS_ID,
+        error: *mut INT
+    ) -> () {
+        (self.ob_type_declare_vtab)(obthis, group, class_id, parent_class, error)
+    }
+    pub unsafe fn ob_type_reference(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        type_name: LPTSTR
+    ) -> OB_CLASS_ID {
+        (self.ob_type_reference)(obthis, group, type_name)
+    }
+    pub unsafe fn ob_get_first_type(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: POB_CLASS_ID,
+        style: POB_CLASS_STYLE
+    ) -> LPTSTR {
+        (self.ob_get_first_type)(obthis, group, class_id, style)
+    }
+    pub unsafe fn ob_get_next_type(
+        &self,
+        obthis: POB_THIS,
+        class_id: POB_CLASS_ID,
+        style: POB_CLASS_STYLE
+    ) -> LPTSTR {
+        (self.ob_get_next_type)(obthis, class_id, style)
+    }
+    pub unsafe fn ob_type_init_process(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        class_style: OB_CLASS_STYLE::Type
+    ) -> () {
+        (self.ob_type_init_process)(obthis, group, class_id, class_style)
+    }
+    pub unsafe fn ob_type_decl_process(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> () {
+        (self.ob_type_decl_process)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_get_nested_class(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> OB_CLASS_ID {
+        (self.ob_get_nested_class)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_get_class_entry(
+        &self,
+        obthis: POB_THIS,
+        group: *mut POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> POB_CLASS_ENTRY {
+        (self.ob_get_class_entry)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_is_class_indirect(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> BOOL {
+        (self.ob_is_class_indirect)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_fetch_routine(
+        &self,
+        class_entry: POB_CLASS_ENTRY,
+        rout_id: OB_ROUT_ID,
+        type_: *mut OB_ROUT_TYPE::Type
+    ) -> POB_ROUTNODE {
+        (self.ob_fetch_routine)(class_entry, rout_id, type_)
+    }
+    pub unsafe fn ob_type_proto_decl(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        name: LPTSTR,
+        rout_type: OB_ROUT_TYPE::Type,
+        type_: OB_CLASS_ID,
+        mod_id: OB_MODULE_ID,
+        args: POB_PROTO_ARG,
+        no_args: UINT,
+        func_type: OB_FUNC_TYPE,
+        dllname: LPTSTR,
+        aliasname: LPTSTR,
+        sys_func_id: OB_VTABLE_ID,
+        proto_style: OB_FUNCPROTO_STYLE::Type,
+        member_access: OB_MEMBER_ACCESS::Type,
+        is_obsolete: BOOL,
+        is_local_decl: BOOL,
+        token_id: OB_EVT_TOKEN_ID,
+        is_event_external: BOOL,
+        throws_list: POB_CLASS_ID,
+        no_throws: UINT,
+        error: *mut INT
+    ) -> OB_PROTO_ID {
+        (self.ob_type_proto_decl)(
+            obthis,
+            group,
+            class_id,
+            name,
+            rout_type,
+            type_,
+            mod_id,
+            args,
+            no_args,
+            func_type,
+            dllname,
+            aliasname,
+            sys_func_id,
+            proto_style,
+            member_access,
+            is_obsolete,
+            is_local_decl,
+            token_id,
+            is_event_external,
+            throws_list,
+            no_throws,
+            error
+        )
+    }
+    pub unsafe fn ob_type_proto_ref(
+        &self,
+        obthis: POB_THIS,
+        group: *mut POB_GROUP,
+        class_id: POB_CLASS_ID,
+        funcname: LPTSTR,
+        rout_type: OB_ROUT_TYPE::Type,
+        access_type: OB_MEMBER_ACCESS_TYPE::Type,
+        funcargs: *mut POB_ACT_ARG,
+        no_args: UINT,
+        ret_type: POB_CLASS_ID,
+        func_type: POB_FUNC_TYPE,
+        dllname: *mut LPTSTR,
+        proto_id: POB_PROTO_ID,
+        vtable_id: POB_VTABLE_ID,
+        error: POB_PROTOREF_ERROR,
+        bound_exact_match: BOOL
+    ) -> OB_MODULE_ID {
+        (self.ob_type_proto_ref)(
+            obthis,
+            group,
+            class_id,
+            funcname,
+            rout_type,
+            access_type,
+            funcargs,
+            no_args,
+            ret_type,
+            func_type,
+            dllname,
+            proto_id,
+            vtable_id,
+            error,
+            bound_exact_match
+        )
+    }
+    pub unsafe fn ob_proto_error_upgrade(
+        &self,
+        obthis: POB_THIS,
+        currerror: OB_PROTOREF_ERROR::Type,
+        newerror: OB_PROTOREF_ERROR::Type
+    ) -> OB_PROTOREF_ERROR::Type {
+        (self.ob_proto_error_upgrade)(obthis, currerror, newerror)
+    }
+    pub unsafe fn ob_get_proto_access_type(
+        &self,
+        obthis: POB_THIS,
+        curr_group: POB_GROUP,
+        curr_class_id: OB_CLASS_ID,
+        formal_arg_group: POB_GROUP,
+        formal_arg_class_id: OB_CLASS_ID
+    ) -> OB_MEMBER_ACCESS_TYPE::Type {
+        (self.ob_get_proto_access_type)(
+            obthis,
+            curr_group,
+            curr_class_id,
+            formal_arg_group,
+            formal_arg_class_id
+        )
+    }
+    pub unsafe fn ob_type_process_protos(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> () {
+        (self.ob_type_process_protos)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_type_reprocess_protos(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        delete_proto_name: LPTSTR,
+        delete_proto_rout_type: OB_ROUT_TYPE::Type,
+        delete_proto_args: POB_PROTO_ARG,
+        delete_proto_no_args: UINT,
+        filter_userprotos: BOOL
+    ) -> INT {
+        (self.ob_type_reprocess_protos)(
+            obthis,
+            group,
+            class_id,
+            delete_proto_name,
+            delete_proto_rout_type,
+            delete_proto_args,
+            delete_proto_no_args,
+            filter_userprotos
+        )
+    }
+    pub unsafe fn ob_get_type_proto_names(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        rout_type: OB_ROUT_TYPE::Type,
+        include_ancestors: BOOL,
+        local_protos_only: BOOL,
+        nprotos: *mut UINT,
+        error: *mut BOOL
+    ) -> POB_PROTONAME {
+        (self.ob_get_type_proto_names)(
+            obthis,
+            group,
+            class_id,
+            rout_type,
+            include_ancestors,
+            local_protos_only,
+            nprotos,
+            error
+        )
+    }
+    pub unsafe fn ob_declare_external_event_type(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        parent_class: OB_CLASS_ID,
+        error: *mut INT
+    ) -> () {
+        (self.ob_declare_external_event_type)(obthis, group, class_id, parent_class, error)
+    }
+    pub unsafe fn ob_get_type_proto_names_for_ide(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        rout_type: OB_ROUT_TYPE::Type,
+        include_ancestors: BOOL,
+        local_protos_only: BOOL,
+        nprotos: *mut UINT,
+        error: *mut BOOL
+    ) -> POB_PROTONAME {
+        (self.ob_get_type_proto_names_for_ide)(
+            obthis,
+            group,
+            class_id,
+            rout_type,
+            include_ancestors,
+            local_protos_only,
+            nprotos,
+            error
+        )
+    }
+    pub unsafe fn ob_type_vtable_module_srch(
+        &self,
+        obthis: POB_THIS,
+        group: *mut POB_GROUP,
+        class_id: POB_CLASS_ID,
+        vtable_id: OB_VTABLE_ID
+    ) -> OB_PROTO_ID {
+        (self.ob_type_vtable_module_srch)(obthis, group, class_id, vtable_id)
+    }
+    pub unsafe fn ob_get_prototype(
+        &self,
+        obthis: POB_THIS,
+        curr_group: *mut POB_GROUP,
+        curr_class_id: POB_CLASS_ID,
+        vtable_id: OB_VTABLE_ID
+    ) -> POB_PROTOTYPE {
+        (self.ob_get_prototype)(obthis, curr_group, curr_class_id, vtable_id)
+    }
+    pub unsafe fn ob_update_proto_mod_id(
+        &self,
+        obthis: POB_THIS,
+        proto_id: OB_PROTO_ID,
+        mod_id: OB_MODULE_ID
+    ) -> () {
+        (self.ob_update_proto_mod_id)(obthis, proto_id, mod_id)
+    }
+    pub unsafe fn ob_update_proto_rout_id(
+        &self,
+        obthis: POB_THIS,
+        proto_id: OB_PROTO_ID,
+        rout_id: OB_ROUT_ID
+    ) -> () {
+        (self.ob_update_proto_rout_id)(obthis, proto_id, rout_id)
+    }
+    pub unsafe fn ob_protolist_read(
+        &self,
+        obthis: POB_THIS,
+        class_entry: POB_CLASS_ENTRY,
+        subpool: OB_SUBPOOL
+    ) -> INT {
+        (self.ob_protolist_read)(obthis, class_entry, subpool)
+    }
+    pub unsafe fn ob_protolist_write(
+        &self,
+        obthis: POB_THIS,
+        class_entry: POB_CLASS_ENTRY
+    ) -> OB_ERROR::Type {
+        (self.ob_protolist_write)(obthis, class_entry)
+    }
+    pub unsafe fn ob_prototype_match_for_event(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        proto: POB_PROTOTYPE,
+        proto_group: POB_GROUP,
+        result_type: OB_CLASS_ID,
+        args: POB_PROTO_ARG,
+        no_args: UINT
+    ) -> BOOL {
+        (self.ob_prototype_match_for_event)(obthis, group, proto, proto_group, result_type, args, no_args)
+    }
+    pub unsafe fn ob_prototype_search(
+        &self,
+        obthis: POB_THIS,
+        proto_list: POB_PROTOTYPE,
+        no_proto_list: UINT,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        name: LPTSTR,
+        rout_type: OB_ROUT_TYPE::Type,
+        proto_group: POB_GROUP,
+        result_type: OB_CLASS_ID,
+        args: POB_PROTO_ARG,
+        no_args: UINT,
+        error: POB_PROTO_OVERLOAD_ERROR
+    ) -> OB_PROTO_ID {
+        (self.ob_prototype_search)(
+            obthis,
+            proto_list,
+            no_proto_list,
+            group,
+            class_id,
+            name,
+            rout_type,
+            proto_group,
+            result_type,
+            args,
+            no_args,
+            error
+        )
+    }
+    pub unsafe fn ob_proto_overload_search(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        name: LPTSTR,
+        rout_type: OB_ROUT_TYPE::Type,
+        type_: OB_CLASS_ID,
+        args: POB_PROTO_ARG,
+        no_args: UINT
+    ) -> OB_PROTO_OVERLOAD_ERROR {
+        (self.ob_proto_overload_search)(obthis, group, class_id, name, rout_type, type_, args, no_args)
+    }
+    pub unsafe fn ob_event_module_name(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_entry: POB_CLASS_ENTRY,
+        mod_id: OB_MODULE_ID
+    ) -> LPTSTR {
+        (self.ob_event_module_name)(obthis, group, class_entry, mod_id)
+    }
+    pub unsafe fn ob_find_first_event(
+        &self,
+        obthis: POB_THIS,
+        class_hndl: POB_CLASS_HNDL,
+        event_name: LPTSTR
+    ) -> OB_VTABLE_ID {
+        (self.ob_find_first_event)(obthis, class_hndl, event_name)
+    }
+    pub unsafe fn ob_type_event_script_srch(
+        &self,
+        obthis: POB_THIS,
+        group: *mut POB_GROUP,
+        class_id: POB_CLASS_ID,
+        name: LPTSTR,
+        error: *mut INT
+    ) -> OB_MODULE_ID {
+        (self.ob_type_event_script_srch)(obthis, group, class_id, name, error)
+    }
+    pub unsafe fn ob_build_proto_vtable(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_entry: POB_CLASS_ENTRY
+    ) -> INT {
+        (self.ob_build_proto_vtable)(obthis, group, class_entry)
+    }
+    pub unsafe fn ob_type_field_decl(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        target_class_id: OB_CLASS_ID,
+        name: LPTSTR,
+        info: OB_INFO_FLAGS,
+        lookup_info: OB_LOOKUP_INFO,
+        class_id: OB_CLASS_ID,
+        arrdef: POB_ARRAYDEF,
+        dup_field_type: POB_FIELD_TYPE,
+        error: *mut INT
+    ) -> OB_SYM_ID {
+        (self.ob_type_field_decl)(
+            obthis,
+            group,
+            target_class_id,
+            name,
+            info,
+            lookup_info,
+            class_id,
+            arrdef,
+            dup_field_type,
+            error
+        )
+    }
+    pub unsafe fn ob_type_field_search(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        name: LPTSTR,
+        fieldtype: POB_CLASS_ID,
+        actual_field_id: POB_SYM_ID
+    ) -> OB_SYM_ID {
+        (self.ob_type_field_search)(obthis, group, class_id, name, fieldtype, actual_field_id)
+    }
+    pub unsafe fn ob_type_field_ref(
+        &self,
+        obthis: POB_THIS,
+        group: *mut POB_GROUP,
+        class_id: POB_CLASS_ID,
+        name: LPTSTR,
+        curr_group: POB_GROUP,
+        curr_class_id: OB_CLASS_ID,
+        field_type: POB_CLASS_ID,
+        grouping: POB_GROUPTYPE,
+        lookup_info: POB_LOOKUP_INFO,
+        init_value: *mut POB_DATA,
+        rel_field_id: POB_SYM_ID,
+        access_check_type: POB_MEMBER_ACCESS_TYPE,
+        level: *mut UINT,
+        error: *mut INT
+    ) -> OB_SYM_ID {
+        (self.ob_type_field_ref)(
+            obthis,
+            group,
+            class_id,
+            name,
+            curr_group,
+            curr_class_id,
+            field_type,
+            grouping,
+            lookup_info,
+            init_value,
+            rel_field_id,
+            access_check_type,
+            level,
+            error
+        )
+    }
+    pub unsafe fn ob_get_type_field_info(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        nfields: *mut UINT,
+        error: *mut INT,
+        filter_fields: BOOL
+    ) -> POB_TYPEINFO {
+        (self.ob_get_type_field_info)(obthis, group, class_id, nfields, error, filter_fields)
+    }
+    pub unsafe fn ob_set_field_init_value(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        field_id: OB_SYM_ID,
+        value: OB_CONST_REF
+    ) -> () {
+        (self.ob_set_field_init_value)(obthis, group, class_id, field_id, value)
+    }
+    pub unsafe fn ob_get_field_init_value(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        field_id: OB_SYM_ID
+    ) -> POB_DATA {
+        (self.ob_get_field_init_value)(obthis, group, class_id, field_id)
+    }
+    pub unsafe fn ob_type_field_clear_instvars(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> () {
+        (self.ob_type_field_clear_instvars)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_convert_fields_to_const(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> INT {
+        (self.ob_convert_fields_to_const)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_build_instance_image(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> INT {
+        (self.ob_build_instance_image)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_field_decl_indattr_funcs(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        field_id: OB_SYM_ID,
+        func_templates: POB_INDATTR_FUNCTMPLT,
+        no_template_items: UINT
+    ) -> () {
+        (self.ob_field_decl_indattr_funcs)(
+            obthis,
+            group,
+            class_id,
+            field_id,
+            func_templates,
+            no_template_items
+        )
+    }
+    pub unsafe fn ob_field_get_indattr_funcs(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        field_id: OB_SYM_ID,
+        no_tmplts: *mut UINT
+    ) -> POB_INDATTR_FUNCTMPLT {
+        (self.ob_field_get_indattr_funcs)(obthis, group, class_id, field_id, no_tmplts)
+    }
+    pub unsafe fn ob_field_requires_update_notification(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        field_id: OB_SYM_ID
+    ) -> BOOL {
+        (self.ob_field_requires_update_notification)(obthis, group, class_id, field_id)
+    }
+    pub unsafe fn ob_get_field_symtab(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> POB_LOOK_SYMTAB {
+        (self.ob_get_field_symtab)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_enum_entry_decl(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        name: LPTSTR,
+        has_val: BOOL,
+        value: INT
+    ) -> INT {
+        (self.ob_enum_entry_decl)(obthis, group, class_id, name, has_val, value)
+    }
+    pub unsafe fn ob_enum_decl_process(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> () {
+        (self.ob_enum_decl_process)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_enum_reference(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        enumname: LPTSTR,
+        enum_val: *mut INT,
+        class_id: POB_CLASS_ID,
+        group_id: POB_GROUP_ID
+    ) -> INT {
+        (self.ob_enum_reference)(obthis, group, enumname, enum_val, class_id, group_id)
+    }
+    pub unsafe fn ob_get_type_enum_info(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        nenums: *mut UINT
+    ) -> POB_ENUM_INFO {
+        (self.ob_get_type_enum_info)(obthis, group, class_id, nenums)
+    }
+    pub unsafe fn ob_is_type_enum(&self, obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID) -> BOOL {
+        (self.ob_is_type_enum)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_type_indattr_search(
+        &self,
+        obthis: POB_THIS,
+        group: *mut POB_GROUP,
+        class_id: POB_CLASS_ID,
+        no_tmplts: *mut UINT
+    ) -> POB_INDATTR_FUNCTMPLT {
+        (self.ob_type_indattr_search)(obthis, group, class_id, no_tmplts)
+    }
+    pub unsafe fn ob_type_decl_indattr_funcs(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        func_templates: POB_INDATTR_FUNCTMPLT,
+        no_func_templates: UINT
+    ) -> () {
+        (self.ob_type_decl_indattr_funcs)(obthis, group, class_id, func_templates, no_func_templates)
+    }
+    pub unsafe fn ob_is_an_ancestor(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        of_group: POB_GROUP,
+        of_class_id: OB_CLASS_ID,
+        ret: *mut INT
+    ) -> BOOL {
+        (self.ob_is_an_ancestor)(obthis, group, class_id, of_group, of_class_id, ret)
+    }
+    pub unsafe fn ob_is_an_ancestor_excl(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        of_group: POB_GROUP,
+        of_class_id: OB_CLASS_ID,
+        ret: *mut INT
+    ) -> BOOL {
+        (self.ob_is_an_ancestor_excl)(obthis, group, class_id, of_group, of_class_id, ret)
+    }
+    pub unsafe fn ob_find_type_ancestor(
+        &self,
+        obthis: POB_THIS,
+        group1: POB_GROUP,
+        class_id1: OB_CLASS_ID,
+        group2: POB_GROUP,
+        class_id2: OB_CLASS_ID
+    ) -> INT {
+        (self.ob_find_type_ancestor)(obthis, group1, class_id1, group2, class_id2)
+    }
+    pub unsafe fn ob_find_common_ancestor(
+        &self,
+        obthis: POB_THIS,
+        group1: POB_GROUP,
+        class_id1: OB_CLASS_ID,
+        group2: *mut POB_GROUP,
+        class_id2: OB_CLASS_ID
+    ) -> OB_CLASS_ID {
+        (self.ob_find_common_ancestor)(obthis, group1, class_id1, group2, class_id2)
+    }
+    pub unsafe fn ob_get_ancestor_system_class(
+        &self,
+        obthis: POB_THIS,
+        group: *mut POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> OB_CLASS_ID {
+        (self.ob_get_ancestor_system_class)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_get_runtime_class(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> POB_RUNTIME_CLASS {
+        (self.ob_get_runtime_class)(obthis, group, class_id)
+    }
+    pub unsafe fn ob_get_func_vtable_entry(&self, obinst: OB_INST_ID, offset: ULONG) -> OB_FUNC_FUNC {
+        (self.ob_get_func_vtable_entry)(obinst, offset)
+    }
+    pub unsafe fn ob_rout_declare(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_entry: POB_CLASS_ENTRY,
+        routname: LPTSTR,
+        qual_routname: LPTSTR,
+        rout_type: OB_ROUT_TYPE::Type,
+        func_type: OB_FUNC_TYPE,
+        proto_id: OB_PROTO_ID,
+        glob_id: OB_SYM_ID,
+        rout_id: POB_ROUT_ID,
+        subpool: OB_SUBPOOL,
+        clear_routine: BOOL,
+        error: *mut INT
+    ) -> OB_MODULE_ID {
+        (self.ob_rout_declare)(
+            obthis,
+            group,
+            class_entry,
+            routname,
+            qual_routname,
+            rout_type,
+            func_type,
+            proto_id,
+            glob_id,
+            rout_id,
+            subpool,
+            clear_routine,
+            error
+        )
+    }
+    pub unsafe fn ob_open_routine(
+        &self,
+        obthis: POB_THIS,
+        class_entry: POB_CLASS_ENTRY,
+        module_id: OB_MODULE_ID
+    ) -> POB_ROUTNODE {
+        (self.ob_open_routine)(obthis, class_entry, module_id)
+    }
+    pub unsafe fn ob_close_routine(&self, obthis: POB_THIS) -> () { (self.ob_close_routine)(obthis) }
+    pub unsafe fn ob_func_indirect(
+        &self,
+        obthis: POB_THIS,
+        group: *mut POB_GROUP,
+        class_entry: *mut POB_CLASS_ENTRY,
+        mod_id: POB_MODULE_ID
+    ) -> INT {
+        (self.ob_func_indirect)(obthis, group, class_entry, mod_id)
+    }
+    pub unsafe fn ob_local_var_declare(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        varname: LPTSTR,
+        varinfo: OB_INFO_FLAGS,
+        lookup_info: OB_LOOKUP_INFO,
+        type_: OB_CLASS_ID,
+        error: *mut INT
+    ) -> OB_SYM_ID {
+        (self.ob_local_var_declare)(obthis, group, varname, varinfo, lookup_info, type_, error)
+    }
+    pub unsafe fn ob_local_array_declare(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        varname: LPTSTR,
+        varinfo: OB_INFO_FLAGS,
+        lookup_info: OB_LOOKUP_INFO,
+        type_: OB_CLASS_ID,
+        arrdef: POB_ARRAYDEF,
+        error: *mut INT
+    ) -> OB_SYM_ID {
+        (self.ob_local_array_declare)(obthis, group, varname, varinfo, lookup_info, type_, arrdef, error)
+    }
+    pub unsafe fn ob_local_var_reference(
+        &self,
+        obthis: POB_THIS,
+        varname: LPTSTR,
+        type_: POB_CLASS_ID,
+        varinfo: POB_INFO_FLAGS,
+        lookup_info: POB_LOOKUP_INFO,
+        init_value: *mut POB_DATA,
+        array_def: *mut POB_ARRAYDEF
+    ) -> OB_SYM_ID {
+        (self.ob_local_var_reference)(obthis, varname, type_, varinfo, lookup_info, init_value, array_def)
+    }
+    pub unsafe fn ob_local_set_var(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        var_id: OB_SYM_ID,
+        value: OB_CONST_REF
+    ) -> () {
+        (self.ob_local_set_var)(obthis, group, var_id, value)
+    }
+    pub unsafe fn ob_local_set_id_var(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        var_id: OB_SYM_ID,
+        value: UINT
+    ) -> () {
+        (self.ob_local_set_id_var)(obthis, group, var_id, value)
+    }
+    pub unsafe fn ob_set_const(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        value: *mut ::std::os::raw::c_void,
+        item_type: OB_CONPOOL_ITEM_TYPE::Type,
+        nitems: UINT,
+        len: ULONG
+    ) -> OB_CONST_REF {
+        (self.ob_set_const)(obthis, group, value, item_type, nitems, len)
+    }
+    pub unsafe fn ob_get_const(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        const_ref: OB_CONST_REF
+    ) -> *mut ::std::os::raw::c_void {
+        (self.ob_get_const)(obthis, group, const_ref)
+    }
+    pub unsafe fn ob_convert_vars_to_const(&self, obthis: POB_THIS, group: POB_GROUP) -> INT {
+        (self.ob_convert_vars_to_const)(obthis, group)
+    }
+    pub unsafe fn ob_clear_group_objects(&self, obthis: POB_THIS, pGroup: POB_GROUP) -> BOOL {
+        (self.ob_clear_group_objects)(obthis, pGroup)
+    }
+    pub unsafe fn ob_init_group_objects(&self, obthis: POB_THIS, pGroup: POB_GROUP) -> () {
+        (self.ob_init_group_objects)(obthis, pGroup)
+    }
+    pub unsafe fn shformatDateTimeWeb(
+        &self,
+        pResult: LPTSTR,
+        maxLen: ::std::os::raw::c_int,
+        prMask: LPTSTR,
+        value: PSH_TIME,
+        flags: ::std::os::raw::c_int,
+        cultureInfo: LPMONTHANDDAYNAMESSTRUCT
+    ) -> ::std::os::raw::c_long {
+        (self.shformatDateTimeWeb)(pResult, maxLen, prMask, value, flags, cultureInfo)
+    }
+    pub unsafe fn shformatDateTime(
+        &self,
+        pResult: LPTSTR,
+        maxLen: ::std::os::raw::c_int,
+        prMask: LPTSTR,
+        value: PSH_TIME,
+        flags: ::std::os::raw::c_int
+    ) -> ::std::os::raw::c_long {
+        (self.shformatDateTime)(pResult, maxLen, prMask, value, flags)
+    }
+    pub unsafe fn shformatDecimal(
+        &self,
+        pResult: LPTSTR,
+        maxLen: ::std::os::raw::c_int,
+        prFmt: LPTSTR,
+        value: *mut ::std::os::raw::c_void,
+        flags: ::std::os::raw::c_int
+    ) -> ::std::os::raw::c_long {
+        (self.shformatDecimal)(pResult, maxLen, prFmt, value, flags)
+    }
+    pub unsafe fn shformatDecimalWeb(
+        &self,
+        pResult: LPTSTR,
+        maxLen: ::std::os::raw::c_int,
+        prFmt: LPTSTR,
+        value: *mut ::std::os::raw::c_void,
+        flags: ::std::os::raw::c_int,
+        dwCultureFormat: LPTSTR
+    ) -> ::std::os::raw::c_long {
+        (self.shformatDecimalWeb)(pResult, maxLen, prFmt, value, flags, dwCultureFormat)
+    }
+    pub unsafe fn shformatDouble(
+        &self,
+        pResult: LPTSTR,
+        maxLen: ::std::os::raw::c_int,
+        prMask: LPTSTR,
+        value: f64,
+        flags: ::std::os::raw::c_int
+    ) -> ::std::os::raw::c_long {
+        (self.shformatDouble)(pResult, maxLen, prMask, value, flags)
+    }
+    pub unsafe fn shformatDoubleWeb(
+        &self,
+        pResult: LPTSTR,
+        maxLen: ::std::os::raw::c_int,
+        prMask: LPTSTR,
+        value: f64,
+        flags: ::std::os::raw::c_int,
+        dwCultureFormat: LPTSTR
+    ) -> ::std::os::raw::c_long {
+        (self.shformatDoubleWeb)(pResult, maxLen, prMask, value, flags, dwCultureFormat)
+    }
+    pub unsafe fn shformatLonglong(
+        &self,
+        pResult: LPTSTR,
+        maxLen: ::std::os::raw::c_int,
+        prMask: LPTSTR,
+        value: ::std::os::raw::c_longlong,
+        flags: ::std::os::raw::c_int
+    ) -> ::std::os::raw::c_long {
+        (self.shformatLonglong)(pResult, maxLen, prMask, value, flags)
+    }
+    pub unsafe fn shformatLonglongWeb(
+        &self,
+        pResult: LPTSTR,
+        maxLen: ::std::os::raw::c_int,
+        prMask: LPTSTR,
+        value: ::std::os::raw::c_longlong,
+        flags: ::std::os::raw::c_int,
+        dwCultureFormat: LPTSTR
+    ) -> ::std::os::raw::c_long {
+        (self.shformatLonglongWeb)(pResult, maxLen, prMask, value, flags, dwCultureFormat)
+    }
+    pub unsafe fn shformatReal(
+        &self,
+        pResult: LPTSTR,
+        maxLen: ::std::os::raw::c_int,
+        prMask: LPTSTR,
+        pValue: *mut f32,
+        flags: ::std::os::raw::c_int
+    ) -> ::std::os::raw::c_long {
+        (self.shformatReal)(pResult, maxLen, prMask, pValue, flags)
+    }
+    pub unsafe fn shformatRealWeb(
+        &self,
+        pResult: LPTSTR,
+        maxLen: ::std::os::raw::c_int,
+        prMask: LPTSTR,
+        pValue: *mut f32,
+        flags: ::std::os::raw::c_int,
+        dwCultureFormat: LPTSTR
+    ) -> ::std::os::raw::c_long {
+        (self.shformatRealWeb)(pResult, maxLen, prMask, pValue, flags, dwCultureFormat)
+    }
+    pub unsafe fn shformatString(
+        &self,
+        pResult: LPTSTR,
+        maxLen: ::std::os::raw::c_int,
+        prMask: LPTSTR,
+        value: LPTSTR,
+        flags: ::std::os::raw::c_int
+    ) -> ::std::os::raw::c_long {
+        (self.shformatString)(pResult, maxLen, prMask, value, flags)
+    }
+    pub unsafe fn shformatCmplDateTimeMask(
+        &self,
+        prMask: LPTSTR,
+        psMask: LPTSTR,
+        maxLen: ::std::os::raw::c_int
+    ) -> ::std::os::raw::c_int {
+        (self.shformatCmplDateTimeMask)(prMask, psMask, maxLen)
+    }
+    pub unsafe fn shformatCmplDateTimeMaskWeb(
+        &self,
+        prMask: LPTSTR,
+        psMask: LPTSTR,
+        maxLen: ::std::os::raw::c_int,
+        dwCultureFormat: LPTSTR
+    ) -> ::std::os::raw::c_int {
+        (self.shformatCmplDateTimeMaskWeb)(prMask, psMask, maxLen, dwCultureFormat)
+    }
+    pub unsafe fn shformatCmplNumericMask(
+        &self,
+        prMask: LPTSTR,
+        psMask: LPTSTR,
+        maxLen: ::std::os::raw::c_int
+    ) -> ::std::os::raw::c_int {
+        (self.shformatCmplNumericMask)(prMask, psMask, maxLen)
+    }
+    pub unsafe fn shformatCmplNumericMaskWeb(
+        &self,
+        prMask: LPTSTR,
+        psMask: LPTSTR,
+        maxLen: ::std::os::raw::c_int,
+        dwCultureFormat: LPTSTR
+    ) -> ::std::os::raw::c_int {
+        (self.shformatCmplNumericMaskWeb)(prMask, psMask, maxLen, dwCultureFormat)
+    }
+    pub unsafe fn shformatCmplNumericMaskWebCommasPos(
+        &self,
+        prMask: LPTSTR,
+        psMask: LPTSTR,
+        maxLen: ::std::os::raw::c_int,
+        dwCultureFormat: LPTSTR
+    ) -> ::std::os::raw::c_int {
+        (self.shformatCmplNumericMaskWebCommasPos)(prMask, psMask, maxLen, dwCultureFormat)
+    }
+    pub unsafe fn shformatCmplStringMask(
+        &self,
+        prMask: LPTSTR,
+        psMask: LPTSTR,
+        maxLen: ::std::os::raw::c_int
+    ) -> ::std::os::raw::c_int {
+        (self.shformatCmplStringMask)(prMask, psMask, maxLen)
+    }
+    pub unsafe fn shformatErrorString(&self, errMsg: LPTSTR, err: ::std::os::raw::c_int) -> () {
+        (self.shformatErrorString)(errMsg, err)
+    }
+    pub unsafe fn shregExprCmpl(
+        &self,
+        pattern: LPTSTR,
+        srcPattern: LPTSTR,
+        maxLen: ::std::os::raw::c_int
+    ) -> ::std::os::raw::c_int {
+        (self.shregExprCmpl)(pattern, srcPattern, maxLen)
+    }
+    pub unsafe fn shregExprMatch(&self, string: LPTSTR, pattern: LPTSTR) -> ::std::os::raw::c_int {
+        (self.shregExprMatch)(string, pattern)
+    }
+    pub unsafe fn shIsValidReal(&self, n: LPTSTR) -> BOOL { (self.shIsValidReal)(n) }
+    pub unsafe fn shNormalizeReal(&self, out: LPTSTR, in_: LPTSTR) -> () { (self.shNormalizeReal)(out, in_) }
+    pub unsafe fn shNormalizeRealbyLocale(&self, out: LPTSTR, in_: LPTSTR) -> () {
+        (self.shNormalizeRealbyLocale)(out, in_)
+    }
+    pub unsafe fn shIsValidRealWeb(&self, n: LPTSTR, paramPeriodChar: TCHAR, paramCommaChar: TCHAR) -> BOOL {
+        (self.shIsValidRealWeb)(n, paramPeriodChar, paramCommaChar)
+    }
+    pub unsafe fn shNormalizeRealWeb(
+        &self,
+        out: LPTSTR,
+        in_: LPTSTR,
+        paramPeriodChar: TCHAR,
+        paramCommaChar: TCHAR
+    ) -> () {
+        (self.shNormalizeRealWeb)(out, in_, paramPeriodChar, paramCommaChar)
+    }
+    pub unsafe fn shNormalizeRealbyLocaleWeb(
+        &self,
+        out: LPTSTR,
+        in_: LPTSTR,
+        paramPeriodChar: TCHAR,
+        paramCommaChar: TCHAR
+    ) -> () {
+        (self.shNormalizeRealbyLocaleWeb)(out, in_, paramPeriodChar, paramCommaChar)
+    }
+    pub unsafe fn shIsValidRealNoLocale(&self, n: LPTSTR) -> BOOL { (self.shIsValidRealNoLocale)(n) }
+    pub unsafe fn ob_add_glbsym_var(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        name: LPTSTR,
+        reftype: OB_GLOB_REFTYPE,
+        class_id: OB_CLASS_ID,
+        id: OB_SYM_ID
+    ) -> OB_SYM_ID {
+        (self.ob_add_glbsym_var)(obthis, group, name, reftype, class_id, id)
+    }
+    pub unsafe fn ob_add_glbsym_class(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        name: LPTSTR,
+        reftype: OB_GLOB_REFTYPE,
+        refstyle: OB_GLOB_REFSTYLE,
+        group_id: OB_GROUP_ID,
+        class_id: OB_CLASS_ID,
+        sys_class_id: OB_CLASS_ID
+    ) -> OB_SYM_ID {
+        (self.ob_add_glbsym_class)(obthis, group, name, reftype, refstyle, group_id, class_id, sys_class_id)
+    }
+    pub unsafe fn ob_add_glbsym_func(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        name: LPTSTR,
+        reftype: OB_GLOB_REFTYPE,
+        class_id: OB_CLASS_ID,
+        mod_id: OB_MODULE_ID
+    ) -> OB_SYM_ID {
+        (self.ob_add_glbsym_func)(obthis, group, name, reftype, class_id, mod_id)
+    }
+    pub unsafe fn rt_set_class_handle(
+        &self,
+        rtthis: POB_THIS,
+        appclasshndl: OB_CLASS_HNDL,
+        appinst: OB_INST_ID
+    ) -> () {
+        (self.rt_set_class_handle)(rtthis, appclasshndl, appinst)
+    }
+    pub unsafe fn rt_init(&self, obthis: POB_THIS, stgthis: ppbstg_anchor) -> POB_THIS {
+        (self.rt_init)(obthis, stgthis)
+    }
+    pub unsafe fn rt_start_debug(
+        &self,
+        rtthis: POB_THIS,
+        rtBreakCallback: *mut RT_BREAK_PROC,
+        pUserData: *mut ::std::os::raw::c_void
+    ) -> INT {
+        (self.rt_start_debug)(rtthis, rtBreakCallback, pUserData)
+    }
+    pub unsafe fn rt_stop_debug(&self, rtthis: POB_THIS) -> INT { (self.rt_stop_debug)(rtthis) }
+    pub unsafe fn rt_set_pcode_to_line(&self, obthis: POB_THIS, line_no: UINT) -> INT {
+        (self.rt_set_pcode_to_line)(obthis, line_no)
+    }
+    pub unsafe fn rt_breakpoint(
+        &self,
+        rtthis: POB_THIS,
+        bSet: BOOL,
+        obClassHndl: OB_CLASS_HNDL,
+        vtable_id: OB_VTABLE_ID,
+        iLineNumber: UINT,
+        n_times: UINT,
+        condition: LPTSTR,
+        id: ::std::os::raw::c_long
+    ) -> PRT_BREAKPOINT {
+        (self.rt_breakpoint)(rtthis, bSet, obClassHndl, vtable_id, iLineNumber, n_times, condition, id)
+    }
+    pub unsafe fn rt_create_watchpoint(
+        &self,
+        rtthis: POB_THIS,
+        pdata_info: POB_DATA_INFO,
+        watch_type: WATCHPOINT_TYPE::Type,
+        item_scope: ::std::os::raw::c_uchar,
+        id: ::std::os::raw::c_long
+    ) -> *mut ::std::os::raw::c_void {
+        (self.rt_create_watchpoint)(rtthis, pdata_info, watch_type, item_scope, id)
+    }
+    pub unsafe fn rt_find_watchpoint_for_watchid(
+        &self,
+        rtthis: POB_THIS,
+        watchId: ::std::os::raw::c_long
+    ) -> *mut ::std::os::raw::c_void {
+        (self.rt_find_watchpoint_for_watchid)(rtthis, watchId)
+    }
+    pub unsafe fn rt_delete_watchpoint(&self, rtthis: POB_THIS, watchpt: *mut ::std::os::raw::c_void) -> () {
+        (self.rt_delete_watchpoint)(rtthis, watchpt)
+    }
+    pub unsafe fn rt_is_line_executable(
+        &self,
+        rtthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        vtable_id: OB_VTABLE_ID,
+        line_no: UINT
+    ) -> BOOL {
+        (self.rt_is_line_executable)(rtthis, class_hndl, vtable_id, line_no)
+    }
+    pub unsafe fn rt_closest_executable_line(
+        &self,
+        rtthis: POB_THIS,
+        class_hndl: OB_CLASS_HNDL,
+        vtable_id: OB_VTABLE_ID,
+        line_no: UINT
+    ) -> UINT {
+        (self.rt_closest_executable_line)(rtthis, class_hndl, vtable_id, line_no)
+    }
+    pub unsafe fn rt_start_run(&self, rtthis: POB_THIS) -> INT { (self.rt_start_run)(rtthis) }
+    pub unsafe fn rt_stop_run(&self, rtthis: POB_THIS) -> INT { (self.rt_stop_run)(rtthis) }
+    pub unsafe fn rt_create_obinst(&self, rtthis: POB_THIS, name: LPTSTR, obinst: POB_INST_ID) -> INT {
+        (self.rt_create_obinst)(rtthis, name, obinst)
+    }
+    pub unsafe fn rtReturnValGet(&self, rtThis: POB_THIS) -> POB_DATA { (self.rtReturnValGet)(rtThis) }
+    pub unsafe fn rtReturnValFree(&self, rtThis: POB_THIS) -> () { (self.rtReturnValFree)(rtThis) }
+    pub unsafe fn rt_error(&self, rtthis: POB_THIS, iMessageID: INT) -> INT {
+        (self.rt_error)(rtthis, iMessageID)
+    }
+    pub unsafe fn rt_free_error_struct(&self, rtthis: POB_THIS, error_struct: PRT_ERROR_STRUCT) -> () {
+        (self.rt_free_error_struct)(rtthis, error_struct)
+    }
+    pub unsafe fn rt_error_using_struct(
+        &self,
+        rtthis: POB_THIS,
+        error_struct: PRT_ERROR_STRUCT,
+        exceptionClassName: LPTSTR
+    ) -> INT {
+        (self.rt_error_using_struct)(rtthis, error_struct, exceptionClassName)
+    }
+    pub unsafe fn rt_normalize_error_id(&self, obthis: POB_THIS, iMessageID: INT) -> INT {
+        (self.rt_normalize_error_id)(obthis, iMessageID)
+    }
+    pub unsafe fn ot_handle_exception(
+        &self,
+        rtthis: POB_THIS,
+        pException_Stack: *mut ::std::os::raw::c_void,
+        currDepth: USHORT
+    ) -> INT {
+        (self.ot_handle_exception)(rtthis, pException_Stack, currDepth)
+    }
+    pub unsafe fn ob_dbg_pop_call_stack_ntimes(&self, obthis: POB_THIS, n: UINT) -> INT {
+        (self.ob_dbg_pop_call_stack_ntimes)(obthis, n)
+    }
+    pub unsafe fn ob_dbg_push_call_stack_ntimes(&self, obthis: POB_THIS, n: UINT) -> INT {
+        (self.ob_dbg_push_call_stack_ntimes)(obthis, n)
+    }
+    pub unsafe fn ob_get_current_stack_location(&self, obthis: POB_THIS) -> PRT_BREAKPOINT {
+        (self.ob_get_current_stack_location)(obthis)
+    }
+    pub unsafe fn rtRoutineSearch(
+        &self,
+        obThis: POB_THIS,
+        rtCallInfo: RT_CALL_INFO,
+        pchRoutineName: LPTSTR,
+        pobdArgArray: POB_DATA,
+        uiNoArgs: UINT,
+        obRoutineType: OB_ROUT_TYPE::Type,
+        pobRoutineId: POB_VTABLE_ID
+    ) -> INT {
+        (self.rtRoutineSearch)(
+            obThis,
+            rtCallInfo,
+            pchRoutineName,
+            pobdArgArray,
+            uiNoArgs,
+            obRoutineType,
+            pobRoutineId
+        )
+    }
+    pub unsafe fn rtRoutineExec(
+        &self,
+        obThis: POB_THIS,
+        rtCallInfo: RT_CALL_INFO,
+        pobdArgArray: POB_DATA,
+        uiNoArgs: UINT,
+        obRoutineId: OB_VTABLE_ID,
+        obRoutineType: OB_ROUT_TYPE::Type,
+        bConvert: BOOL
+    ) -> RT_EXEC_STATUS::Type {
+        (self.rtRoutineExec)(obThis, rtCallInfo, pobdArgArray, uiNoArgs, obRoutineId, obRoutineType, bConvert)
+    }
+    pub unsafe fn rtRoutineExecByName(
+        &self,
+        obThis: POB_THIS,
+        pchRoutineName: LPTSTR,
+        rtCallInfo: RT_CALL_INFO,
+        pobdArgArray: POB_DATA,
+        uiNoArgs: UINT,
+        obRoutineType: OB_ROUT_TYPE::Type,
+        bConvert: BOOL
+    ) -> RT_EXEC_STATUS::Type {
+        (self.rtRoutineExecByName)(
+            obThis,
+            pchRoutineName,
+            rtCallInfo,
+            pobdArgArray,
+            uiNoArgs,
+            obRoutineType,
+            bConvert
+        )
+    }
+    pub unsafe fn rtRoutineExecPosted(&self, pData: *mut ::std::os::raw::c_void) -> RT_EXEC_STATUS::Type {
+        (self.rtRoutineExecPosted)(pData)
+    }
+    pub unsafe fn rtRoutineInfo(
+        &self,
+        obThis: POB_THIS,
+        rtCallInfo: RT_CALL_INFO,
+        obRoutineId: OB_VTABLE_ID,
+        pRoutineProtoInfo: PRT_ROUTINE_PROTO_INFO
+    ) -> INT {
+        (self.rtRoutineInfo)(obThis, rtCallInfo, obRoutineId, pRoutineProtoInfo)
+    }
+    pub unsafe fn rtInitializeInfoForCall(
+        &self,
+        obThis: POB_THIS,
+        pRoutineProtoInfo: PRT_ROUTINE_PROTO_INFO
+    ) -> INT {
+        (self.rtInitializeInfoForCall)(obThis, pRoutineProtoInfo)
+    }
+    pub unsafe fn rtCleanupInfoAfterCall(
+        &self,
+        obThis: POB_THIS,
+        pRoutineProtoInfo: PRT_ROUTINE_PROTO_INFO
+    ) -> INT {
+        (self.rtCleanupInfoAfterCall)(obThis, pRoutineProtoInfo)
+    }
+    pub unsafe fn rtRoutineCount(
+        &self,
+        obThis: POB_THIS,
+        rtCallInfo: RT_CALL_INFO,
+        pusRoutineTotal: *mut USHORT,
+        pusFuncTotal: *mut USHORT,
+        pusEventTotal: *mut USHORT
+    ) -> INT {
+        (self.rtRoutineCount)(obThis, rtCallInfo, pusRoutineTotal, pusFuncTotal, pusEventTotal)
+    }
+    pub unsafe fn rtReferenceArgCreate(
+        &self,
+        obThis: POB_THIS,
+        pobdRefArg: POB_DATA,
+        prtRefArgInfo: PRT_REFARG_INFO
+    ) -> INT {
+        (self.rtReferenceArgCreate)(obThis, pobdRefArg, prtRefArgInfo)
+    }
+    pub unsafe fn rtReferenceArgFree(&self, obThis: POB_THIS, pobdRefArg: POB_DATA) -> INT {
+        (self.rtReferenceArgFree)(obThis, pobdRefArg)
+    }
+    pub unsafe fn rtGetClassDescrip(
+        &self,
+        obThis: POB_THIS,
+        obClassHndl: OB_CLASS_HNDL,
+        prtClassDescrip: PRT_CLASS_DESCRIP,
+        pobClassIdSystem: POB_CLASS_ID
+    ) -> INT {
+        (self.rtGetClassDescrip)(obThis, obClassHndl, prtClassDescrip, pobClassIdSystem)
+    }
+    pub unsafe fn rtDataFree(&self, pobThis: POB_THIS, pobdVal: POB_DATA) -> () {
+        (self.rtDataFree)(pobThis, pobdVal)
+    }
+    pub unsafe fn rtDataCopy(
+        &self,
+        pobThis: POB_THIS,
+        pobdDest: POB_DATA,
+        pobdSrc: POB_DATA,
+        AddReference: BOOL
+    ) -> () {
+        (self.rtDataCopy)(pobThis, pobdDest, pobdSrc, AddReference)
+    }
+    pub unsafe fn rt_hit_level_0(&self, obthis: POB_THIS) -> () { (self.rt_hit_level_0)(obthis) }
+    pub unsafe fn ob_create_object(
+        &self,
+        obthis: POB_THIS,
+        destination: POB_DATA,
+        p_group: POB_GROUP,
+        class_id: OB_CLASS_ID
+    ) -> INT {
+        (self.ob_create_object)(obthis, destination, p_group, class_id)
+    }
+    pub unsafe fn ob_create_object_using(
+        &self,
+        obthis: POB_THIS,
+        destination: POB_DATA,
+        context: POB_RUNTIME_INST,
+        class_name: LPTSTR
+    ) -> HRESULT {
+        (self.ob_create_object_using)(obthis, destination, context, class_name)
+    }
+    pub unsafe fn ob_copy_rtinst(&self, obthis: POB_THIS, from_rtinst: POB_RUNTIME_INST) -> POB_RUNTIME_INST {
+        (self.ob_copy_rtinst)(obthis, from_rtinst)
+    }
+    pub unsafe fn ob_destroy_rtinst(&self, obthis: POB_THIS, rtinst: POB_RUNTIME_INST) -> INT {
+        (self.ob_destroy_rtinst)(obthis, rtinst)
+    }
+    pub unsafe fn ob_get_primary_rtinst(
+        &self,
+        obthis: POB_THIS,
+        rtinst: POB_RUNTIME_INST
+    ) -> POB_RUNTIME_INST {
+        (self.ob_get_primary_rtinst)(obthis, rtinst)
+    }
+    pub unsafe fn ob_is_rtinst_autoinstantiate(&self, obthis: POB_THIS, rtinst: POB_RUNTIME_INST) -> BOOL {
+        (self.ob_is_rtinst_autoinstantiate)(obthis, rtinst)
+    }
+    pub unsafe fn ob_object_compare(
+        &self,
+        obthis: POB_THIS,
+        rtinst1: POB_RUNTIME_INST,
+        rtinst2: POB_RUNTIME_INST
+    ) -> BOOL {
+        (self.ob_object_compare)(obthis, rtinst1, rtinst2)
+    }
+    pub unsafe fn ob_invoke_static(
+        &self,
+        rtinst: POB_RUNTIME_INST,
+        context: POB_RUNTIME_CLASS,
+        vtableId: OB_VTABLE_ID,
+        numArgs: USHORT,
+        args: POB_DATA,
+        result: POB_DATA
+    ) -> HRESULT {
+        (self.ob_invoke_static)(rtinst, context, vtableId, numArgs, args, result)
+    }
+    pub unsafe fn ob_invoke_dynamic(
+        &self,
+        rtinst: POB_RUNTIME_INST,
+        context: POB_RUNTIME_CLASS,
+        routType: OB_ROUT_TYPE::Type,
+        name: LPTSTR,
+        numArgs: USHORT,
+        args: POB_DATA,
+        result: POB_DATA
+    ) -> HRESULT {
+        (self.ob_invoke_dynamic)(rtinst, context, routType, name, numArgs, args, result)
+    }
+    pub unsafe fn ob_invoke_staticAsync(
+        &self,
+        rtinst: POB_RUNTIME_INST,
+        context: POB_RUNTIME_CLASS,
+        vtableId: OB_VTABLE_ID,
+        numArgs: USHORT,
+        args: POB_DATA
+    ) -> HRESULT {
+        (self.ob_invoke_staticAsync)(rtinst, context, vtableId, numArgs, args)
+    }
+    pub unsafe fn ob_invoke_dynamicAsync(
+        &self,
+        rtinst: POB_RUNTIME_INST,
+        context: POB_RUNTIME_CLASS,
+        routType: OB_ROUT_TYPE::Type,
+        name: LPTSTR,
+        numArgs: USHORT,
+        args: POB_DATA
+    ) -> HRESULT {
+        (self.ob_invoke_dynamicAsync)(rtinst, context, routType, name, numArgs, args)
+    }
+    pub unsafe fn ob_instance_lv(
+        &self,
+        obthis: POB_THIS,
+        current_inst: POB_RUNTIME_INST,
+        var_id: OB_SYM_ID
+    ) -> POB_DATA {
+        (self.ob_instance_lv)(obthis, current_inst, var_id)
+    }
+    pub unsafe fn ob_instance_fldupdate_refpkt(
+        &self,
+        obthis: POB_THIS,
+        destination: POB_DATA,
+        current_inst: POB_RUNTIME_INST,
+        var_id: OB_SYM_ID
+    ) -> () {
+        (self.ob_instance_fldupdate_refpkt)(obthis, destination, current_inst, var_id)
+    }
+    pub unsafe fn ob_instance_flditemupdate_refpkt(
+        &self,
+        obthis: POB_THIS,
+        destination: POB_DATA,
+        current_inst: POB_RUNTIME_INST,
+        group_id: OB_GROUP_ID,
+        var_id: OB_SYM_ID,
+        lvalue: POB_DATA,
+        item_index: ULONG
+    ) -> () {
+        (self.ob_instance_flditemupdate_refpkt)(
+            obthis,
+            destination,
+            current_inst,
+            group_id,
+            var_id,
+            lvalue,
+            item_index
+        )
+    }
+    pub unsafe fn ob_instance_simple_refpkt(
+        &self,
+        obthis: POB_THIS,
+        destination: POB_DATA,
+        current_inst: POB_RUNTIME_INST,
+        var_id: OB_SYM_ID
+    ) -> () {
+        (self.ob_instance_simple_refpkt)(obthis, destination, current_inst, var_id)
+    }
+    pub unsafe fn ob_get_group_load_state(
+        &self,
+        pGroupReference: *mut ::std::os::raw::c_void
+    ) -> OB_GROUP_LOAD_STATE {
+        (self.ob_get_group_load_state)(pGroupReference)
+    }
+    pub unsafe fn ob_get_groupref_group(&self, pGroupReference: *mut ::std::os::raw::c_void) -> POB_GROUP {
+        (self.ob_get_groupref_group)(pGroupReference)
+    }
+    pub unsafe fn ob_group_get_next_index(&self, obthis: POB_THIS) -> ULONG {
+        (self.ob_group_get_next_index)(obthis)
+    }
+    pub unsafe fn ob_close_typedef_group(&self, obThis: POB_THIS) -> () {
+        (self.ob_close_typedef_group)(obThis)
+    }
+    pub unsafe fn ob_create_group_structure(&self, obThis: POB_THIS, lpszGroupName: LPTSTR) -> POB_GROUP {
+        (self.ob_create_group_structure)(obThis, lpszGroupName)
+    }
+    pub unsafe fn ob_new_group(
+        &self,
+        obthis: POB_THIS,
+        lib_name: LPTSTR,
+        qual_group_name: LPTSTR,
+        group_lock_state: OB_GROUP_LOCK_STATE,
+        group_load_state: OB_GROUP_LOAD_STATE
+    ) -> POB_GROUP {
+        (self.ob_new_group)(obthis, lib_name, qual_group_name, group_lock_state, group_load_state)
+    }
+    pub unsafe fn ob_del_group_structure(&self, obThis: POB_THIS, pGroup: POB_GROUP) -> () {
+        (self.ob_del_group_structure)(obThis, pGroup)
+    }
+    pub unsafe fn ob_group_data_srch(&self, obThis: POB_THIS, obGroupHandle: OB_GROUP_HNDL) -> POB_GROUP {
+        (self.ob_group_data_srch)(obThis, obGroupHandle)
+    }
+    pub unsafe fn ob_replace_group(
+        &self,
+        obThis: POB_THIS,
+        obGroupID: OB_GROUP_ID,
+        pNewGroup: POB_GROUP
+    ) -> () {
+        (self.ob_replace_group)(obThis, obGroupID, pNewGroup)
+    }
+    pub unsafe fn ob_copy_group_shrsym_data(&self, obthis: POB_THIS, group: POB_GROUP) -> () {
+        (self.ob_copy_group_shrsym_data)(obthis, group)
+    }
+    pub unsafe fn ob_get_qualified_name_with_namespace(
+        &self,
+        obThis: POB_THIS,
+        pGroup: POB_GROUP,
+        lpszNamespace: LPTSTR
+    ) -> LPTSTR {
+        (self.ob_get_qualified_name_with_namespace)(obThis, pGroup, lpszNamespace)
+    }
+    pub unsafe fn ob_get_source_from_group(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        src_type: *mut POB_SOURCE_BLK_TYPE,
+        no_blocks: *mut UINT,
+        subpool: OB_SUBPOOL,
+        ppSrcLastEdit: *mut POB_SRC_LAST_EDIT,
+        pNoSrcLastEdit: *mut UINT
+    ) -> *mut LPTSTR {
+        (self.ob_get_source_from_group)(
+            obthis,
+            group,
+            src_type,
+            no_blocks,
+            subpool,
+            ppSrcLastEdit,
+            pNoSrcLastEdit
+        )
+    }
+    pub unsafe fn ob_get_var(
+        &self,
+        obthis: POB_THIS,
+        group: *mut POB_GROUP,
+        look_symtab: POB_LOOK_SYMTAB,
+        var_id: OB_SYM_ID
+    ) -> POB_DATA {
+        (self.ob_get_var)(obthis, group, look_symtab, var_id)
+    }
+    pub unsafe fn ob_init_var_data(&self, obthis: POB_THIS, var_data: POB_DATA, group: POB_GROUP) -> () {
+        (self.ob_init_var_data)(obthis, var_data, group)
+    }
+    pub unsafe fn ob_global_indirect(
+        &self,
+        obthis: POB_THIS,
+        group: *mut POB_GROUP,
+        glob_id: POB_SYM_ID
+    ) -> POB_DATA {
+        (self.ob_global_indirect)(obthis, group, glob_id)
+    }
+    pub unsafe fn ob_global_var_declare(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        varname: LPTSTR,
+        varinfo: OB_INFO_FLAGS,
+        lookup_info: OB_LOOKUP_INFO,
+        type_: OB_CLASS_ID,
+        error: *mut INT
+    ) -> OB_SYM_ID {
+        (self.ob_global_var_declare)(obthis, group, varname, varinfo, lookup_info, type_, error)
+    }
+    pub unsafe fn ob_global_array_declare(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        var: LPTSTR,
+        varinfo: OB_INFO_FLAGS,
+        lookup_info: OB_LOOKUP_INFO,
+        type_: OB_CLASS_ID,
+        arrdef: POB_ARRAYDEF,
+        error: *mut INT
+    ) -> OB_SYM_ID {
+        (self.ob_global_array_declare)(obthis, group, var, varinfo, lookup_info, type_, arrdef, error)
+    }
+    pub unsafe fn ob_shared_var_reference(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        varname: LPTSTR,
+        type_: POB_CLASS_ID,
+        varinfo: POB_INFO_FLAGS,
+        lookup_info: POB_LOOKUP_INFO,
+        init_value: *mut POB_DATA,
+        array_def: *mut POB_ARRAYDEF
+    ) -> OB_SYM_ID {
+        (self.ob_shared_var_reference)(
+            obthis,
+            group,
+            varname,
+            type_,
+            varinfo,
+            lookup_info,
+            init_value,
+            array_def
+        )
+    }
+    pub unsafe fn ob_global_set_var(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        var_id: OB_SYM_ID,
+        value: OB_CONST_REF
+    ) -> () {
+        (self.ob_global_set_var)(obthis, group, var_id, value)
+    }
+    pub unsafe fn ob_global_set_id_var(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        var_id: OB_SYM_ID,
+        value: UINT
+    ) -> () {
+        (self.ob_global_set_id_var)(obthis, group, var_id, value)
+    }
+    pub unsafe fn ob_get_local_symtab(
+        &self,
+        obthis: POB_THIS,
+        group: *mut POB_GROUP,
+        var_id: POB_SYM_ID
+    ) -> POB_LOOK_SYMTAB {
+        (self.ob_get_local_symtab)(obthis, group, var_id)
+    }
+    pub unsafe fn ob_get_unconverted_var(
+        &self,
+        obthis: POB_THIS,
+        group: *mut POB_GROUP,
+        var: OB_SYM_ID,
+        level: UINT
+    ) -> POB_DATA {
+        (self.ob_get_unconverted_var)(obthis, group, var, level)
+    }
+    pub unsafe fn ob_lookup_shared_var_info(
+        &self,
+        obThis: POB_THIS,
+        iGroupID: OB_GROUP_ID,
+        iSymbolID: OB_SYM_ID,
+        pType: POB_CLASS_ID,
+        varinfo: POB_INFO_FLAGS,
+        lookup_info: POB_LOOKUP_INFO,
+        init_value: *mut POB_DATA,
+        array_def: *mut POB_ARRAYDEF
+    ) -> INT {
+        (self.ob_lookup_shared_var_info)(
+            obThis,
+            iGroupID,
+            iSymbolID,
+            pType,
+            varinfo,
+            lookup_info,
+            init_value,
+            array_def
+        )
+    }
+    pub unsafe fn ob_clear_shared_vars(&self, obthis: POB_THIS, group: POB_GROUP, level: INT) -> () {
+        (self.ob_clear_shared_vars)(obthis, group, level)
+    }
+    pub unsafe fn ot_eval_expr(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_entry: POB_CLASS_ENTRY,
+        pcode_blk: POB_PCODE_BLK,
+        expr_result_buf: POB_DATA
+    ) -> POB_DATA {
+        (self.ot_eval_expr)(obthis, group, class_entry, pcode_blk, expr_result_buf)
+    }
+    pub unsafe fn ot_dbg_funccall(
+        &self,
+        obthis: POB_THIS,
+        call_label: LPTSTR,
+        group: POB_GROUP,
+        class_entry: OB_CLASS_ID,
+        name: LPTSTR
+    ) -> () {
+        (self.ot_dbg_funccall)(obthis, call_label, group, class_entry, name)
+    }
+    pub unsafe fn ot_run_dllfunccall(
+        &self,
+        obthis: POB_THIS,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        funcname: LPTSTR,
+        evaled_arglist: POB_DATA,
+        no_args: UINT,
+        funcproto: POB_PROTOTYPE
+    ) -> INT {
+        (self.ot_run_dllfunccall)(obthis, group, class_id, funcname, evaled_arglist, no_args, funcproto)
+    }
+    pub unsafe fn ot_run_rpcfunccall(
+        &self,
+        obthis: POB_THIS,
+        rtinst: POB_RUNTIME_INST,
+        group: POB_GROUP,
+        class_id: OB_CLASS_ID,
+        funcname: LPTSTR,
+        evaled_arglist: POB_DATA,
+        no_args: UINT,
+        funcproto: POB_PROTOTYPE,
+        rpc_funcname: LPTSTR
+    ) -> INT {
+        (self.ot_run_rpcfunccall)(
+            obthis,
+            rtinst,
+            group,
+            class_id,
+            funcname,
+            evaled_arglist,
+            no_args,
+            funcproto,
+            rpc_funcname
+        )
+    }
+    pub unsafe fn ot_get_dll_funcptr_by_name(
+        &self,
+        obthis: POB_THIS,
+        dllname: LPTSTR,
+        funcname: LPTSTR
+    ) -> OS_CALLC_FUNC {
+        (self.ot_get_dll_funcptr_by_name)(obthis, dllname, funcname)
+    }
+    pub unsafe fn ot_post_call(
+        &self,
+        obthis: POB_THIS,
+        pRuntimeClass: POB_RUNTIME_CLASS,
+        vtableId: OB_VTABLE_ID,
+        uiNoArgs: UINT,
+        args: POB_DATA
+    ) -> INT {
+        (self.ot_post_call)(obthis, pRuntimeClass, vtableId, uiNoArgs, args)
+    }
+    pub unsafe fn ot_check_types(
+        &self,
+        obthis: POB_THIS,
+        group1: POB_GROUP,
+        type1: OB_CLASS_ID,
+        grouping1: OB_GROUPTYPE,
+        group2: POB_GROUP,
+        type2: OB_CLASS_ID,
+        grouping2: OB_GROUPTYPE,
+        ancestor_flag: *mut UINT
+    ) -> OT_TYPE_CHECK_ERROR::Type {
+        (self.ot_check_types)(obthis, group1, type1, grouping1, group2, type2, grouping2, ancestor_flag)
+    }
+    pub unsafe fn ot_type_loc(&self, obthis: POB_THIS, data_node: POB_DATA) -> OT_TYPE_LOC::Type {
+        (self.ot_type_loc)(obthis, data_node)
+    }
+    pub unsafe fn ot_init_data_node(
+        &self,
+        obthis: POB_THIS,
+        data_node: POB_DATA,
+        type_: OB_CLASS_ID,
+        varinfo: OB_INFO_FLAGS
+    ) -> () {
+        (self.ot_init_data_node)(obthis, data_node, type_, varinfo)
+    }
+    pub unsafe fn ot_set_lvalue(
+        &self,
+        obthis: POB_THIS,
+        group_id: OB_GROUP_ID,
+        lvalue_data: POB_DATA,
+        rvalue_data: POB_DATA,
+        do_error_check: BOOL
+    ) -> INT {
+        (self.ot_set_lvalue)(obthis, group_id, lvalue_data, rvalue_data, do_error_check)
+    }
+    pub unsafe fn ot_free_out_node(&self, obthis: POB_THIS, data_node: POB_DATA) -> () {
+        (self.ot_free_out_node)(obthis, data_node)
+    }
+    pub unsafe fn ot_free_inv_meth_args(
+        &self,
+        obthis: POB_THIS,
+        pArrayDataNode: POB_DATA,
+        pFreeFlags: LPTSTR
+    ) -> INT {
+        (self.ot_free_inv_meth_args)(obthis, pArrayDataNode, pFreeFlags)
+    }
+    pub unsafe fn ot_copy_array(&self, obthis: POB_THIS, old_array_inst: POB_ARRAY_INST) -> POB_ARRAY_INST {
+        (self.ot_copy_array)(obthis, old_array_inst)
+    }
+    pub unsafe fn ot_get_string_from_chararray(&self, obthis: POB_THIS, arrayinst: POB_ARRAY_INST) -> LPTSTR {
+        (self.ot_get_string_from_chararray)(obthis, arrayinst)
+    }
+    pub unsafe fn ot_create_chararray_from_string(
+        &self,
+        obthis: POB_THIS,
+        string_val: LPTSTR,
+        target_data_node: POB_DATA
+    ) -> POB_DATA {
+        (self.ot_create_chararray_from_string)(obthis, string_val, target_data_node)
+    }
+    pub unsafe fn ot_create_bounded_chararray_from_string(
+        &self,
+        obthis: POB_THIS,
+        string_val: LPTSTR,
+        bounds: *mut ::std::os::raw::c_long,
+        target_data_node: POB_DATA
+    ) -> POB_DATA {
+        (self.ot_create_bounded_chararray_from_string)(obthis, string_val, bounds, target_data_node)
+    }
+    pub unsafe fn ot_get_char_value(&self, obthis: POB_THIS, data_node: POB_DATA) -> TCHAR {
+        (self.ot_get_char_value)(obthis, data_node)
+    }
+    pub unsafe fn ot_get_string_value(&self, obthis: POB_THIS, data_node: POB_DATA) -> LPTSTR {
+        (self.ot_get_string_value)(obthis, data_node)
+    }
+    pub unsafe fn ot_get_string_from_char(&self, obthis: POB_THIS, char_val: TCHAR) -> LPTSTR {
+        (self.ot_get_string_from_char)(obthis, char_val)
+    }
+    pub unsafe fn ot_string_cat(&self, obthis: POB_THIS, string1: LPTSTR, string2: LPTSTR) -> LPTSTR {
+        (self.ot_string_cat)(obthis, string1, string2)
+    }
+    pub unsafe fn ot_binary_cat(&self, obthis: POB_THIS, bin1: PSH_BINARY, bin2: PSH_BINARY) -> PSH_BINARY {
+        (self.ot_binary_cat)(obthis, bin1, bin2)
+    }
+    pub unsafe fn ot_halt(&self, obthis: POB_THIS, send_close_event: BOOL) -> INT {
+        (self.ot_halt)(obthis, send_close_event)
+    }
+    pub unsafe fn ot_convert_bounded_to_bounded(
+        &self,
+        obthis: POB_THIS,
+        old_array_inst: POB_ARRAY_INST,
+        new_class_id: OB_CLASS_ID,
+        new_nitems: ULONG,
+        new_ndims: INT,
+        bounds: *mut ::std::os::raw::c_long,
+        free_old_array: BOOL
+    ) -> POB_ARRAY_INST {
+        (self.ot_convert_bounded_to_bounded)(
+            obthis,
+            old_array_inst,
+            new_class_id,
+            new_nitems,
+            new_ndims,
+            bounds,
+            free_old_array
+        )
+    }
+    pub unsafe fn ot_convert_bounded_to_unbounded(
+        &self,
+        obthis: POB_THIS,
+        old_array_inst: POB_ARRAY_INST,
+        new_class_id: OB_CLASS_ID
+    ) -> POB_ARRAY_INST {
+        (self.ot_convert_bounded_to_unbounded)(obthis, old_array_inst, new_class_id)
+    }
+    pub unsafe fn ot_convert_unbounded_to_bounded(
+        &self,
+        obthis: POB_THIS,
+        old_array_inst: POB_ARRAY_INST,
+        new_class_id: OB_CLASS_ID,
+        new_nitems: ULONG,
+        new_ndims: INT,
+        bounds: *mut ::std::os::raw::c_long
+    ) -> POB_ARRAY_INST {
+        (self.ot_convert_unbounded_to_bounded)(
+            obthis,
+            old_array_inst,
+            new_class_id,
+            new_nitems,
+            new_ndims,
+            bounds
+        )
+    }
+    pub unsafe fn ot_convert_unbounded_to_unbounded(
+        &self,
+        obthis: POB_THIS,
+        old_array_inst: POB_ARRAY_INST,
+        new_class_id: OB_CLASS_ID
+    ) -> POB_ARRAY_INST {
+        (self.ot_convert_unbounded_to_unbounded)(obthis, old_array_inst, new_class_id)
+    }
+    pub unsafe fn ot_convert_any_to_bounded(
+        &self,
+        obthis: POB_THIS,
+        any_node: POB_DATA,
+        new_class_id: OB_CLASS_ID,
+        new_nitems: ULONG,
+        new_ndims: INT,
+        bounds: *mut ::std::os::raw::c_long
+    ) -> POB_ARRAY_INST {
+        (self.ot_convert_any_to_bounded)(obthis, any_node, new_class_id, new_nitems, new_ndims, bounds)
+    }
+    pub unsafe fn ot_convert_any_to_unbounded(
+        &self,
+        obthis: POB_THIS,
+        any_node: POB_DATA,
+        new_class_id: OB_CLASS_ID
+    ) -> POB_ARRAY_INST {
+        (self.ot_convert_any_to_unbounded)(obthis, any_node, new_class_id)
+    }
+    pub unsafe fn ot_convert_array_to_object(
+        &self,
+        obthis: POB_THIS,
+        any_array_inst: POB_ARRAY_INST,
+        new_class_id: OB_CLASS_ID
+    ) -> POB_RUNTIME_INST {
+        (self.ot_convert_array_to_object)(obthis, any_array_inst, new_class_id)
+    }
+    pub unsafe fn ot_build_simple_refpak(
+        &self,
+        obthis: POB_THIS,
+        lvalue_data: POB_DATA,
+        group_id: OB_GROUP_ID
+    ) -> POT_REF_PAK {
+        (self.ot_build_simple_refpak)(obthis, lvalue_data, group_id)
+    }
+    pub unsafe fn ot_build_field_refpak(
+        &self,
+        obthis: POB_THIS,
+        group_id: OB_GROUP_ID,
+        rtinst: POB_RUNTIME_INST,
+        field_id: UINT,
+        item_index: ULONG,
+        bTriggerFieldUpdate: BOOL
+    ) -> POT_REF_PAK {
+        (self.ot_build_field_refpak)(obthis, group_id, rtinst, field_id, item_index, bTriggerFieldUpdate)
+    }
+    pub unsafe fn ot_add_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_add_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_sub_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_sub_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_mul_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_mul_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_div_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_div_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_pow_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_pow_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_neg_any(&self, prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA) -> INT {
+        (self.ot_neg_any)(prtThis, pResult, pAny1)
+    }
+    pub unsafe fn ot_eq_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_eq_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_ne_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_ne_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_gt_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_gt_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_lt_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_lt_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_ge_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_ge_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_le_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_le_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_and_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_and_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_or_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_or_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_not_any(&self, prtThis: POB_THIS, pResult: POB_DATA, pAny: POB_DATA) -> INT {
+        (self.ot_not_any)(prtThis, pResult, pAny)
+    }
+    pub unsafe fn ot_incr_any(&self, prtThis: POB_THIS, pAny: POB_DATA) -> INT {
+        (self.ot_incr_any)(prtThis, pAny)
+    }
+    pub unsafe fn ot_decr_any(&self, prtThis: POB_THIS, pAny: POB_DATA) -> INT {
+        (self.ot_decr_any)(prtThis, pAny)
+    }
+    pub unsafe fn ot_mod_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_mod_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_min_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_min_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_max_any(
+        &self,
+        prtThis: POB_THIS,
+        pResult: POB_DATA,
+        pAny1: POB_DATA,
+        pAny2: POB_DATA
+    ) -> INT {
+        (self.ot_max_any)(prtThis, pResult, pAny1, pAny2)
+    }
+    pub unsafe fn ot_check_any_exact_type(
+        &self,
+        obthis: POB_THIS,
+        any_var: POB_DATA,
+        expected_type: OB_CLASS_ID
+    ) -> INT {
+        (self.ot_check_any_exact_type)(obthis, any_var, expected_type)
+    }
+    pub unsafe fn ot_check_any_string_type(
+        &self,
+        obthis: POB_THIS,
+        any_var: POB_DATA,
+        expected_type: OB_CLASS_ID
+    ) -> INT {
+        (self.ot_check_any_string_type)(obthis, any_var, expected_type)
+    }
+    pub unsafe fn ot_check_any_binary_type(
+        &self,
+        obthis: POB_THIS,
+        any_var: POB_DATA,
+        expected_type: OB_CLASS_ID
+    ) -> INT {
+        (self.ot_check_any_binary_type)(obthis, any_var, expected_type)
+    }
+    pub unsafe fn ot_check_any_math_type(
+        &self,
+        obthis: POB_THIS,
+        any_var: POB_DATA,
+        expected_type: OB_CLASS_ID
+    ) -> INT {
+        (self.ot_check_any_math_type)(obthis, any_var, expected_type)
+    }
+    pub unsafe fn ot_check_any_enum_type(
+        &self,
+        obthis: POB_THIS,
+        any_var: POB_DATA,
+        current_group: POB_GROUP,
+        expected_type: OB_CLASS_ID
+    ) -> INT {
+        (self.ot_check_any_enum_type)(obthis, any_var, current_group, expected_type)
+    }
+    pub unsafe fn ot_check_any_object_type(
+        &self,
+        obthis: POB_THIS,
+        any_var: POB_DATA,
+        current_group: POB_GROUP,
+        expected_type: OB_CLASS_ID
+    ) -> INT {
+        (self.ot_check_any_object_type)(obthis, any_var, current_group, expected_type)
+    }
+    pub unsafe fn ot_duplicate_any(&self, pobThis: POB_THIS, pAny: POB_DATA) -> INT {
+        (self.ot_duplicate_any)(pobThis, pAny)
+    }
+    pub unsafe fn ot_abs_any(&self, prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA) -> INT {
+        (self.ot_abs_any)(prtThis, pResult, pAny1)
+    }
+    pub unsafe fn ot_ceiling_any(&self, prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA) -> INT {
+        (self.ot_ceiling_any)(prtThis, pResult, pAny1)
+    }
+    pub unsafe fn ot_string_to_binary(
+        &self,
+        rtThis: POB_THIS,
+        lpStr: LPTSTR,
+        EncodingType: ::std::os::raw::c_int,
+        bNullTerminated: BOOL
+    ) -> PSH_BINARY {
+        (self.ot_string_to_binary)(rtThis, lpStr, EncodingType, bNullTerminated)
+    }
+    pub unsafe fn ot_bytearray_to_binary(&self, rtThis: POB_THIS, array_inst: POB_ARRAY_INST) -> PSH_BINARY {
+        (self.ot_bytearray_to_binary)(rtThis, array_inst)
+    }
+    pub unsafe fn ot_any_to_binary(&self, rtThis: POB_THIS, obData: POB_DATA) -> PSH_BINARY {
+        (self.ot_any_to_binary)(rtThis, obData)
+    }
+    pub unsafe fn ob_set_curr_rtinst_and_return(&self, obthis: POB_THIS, new_rtinst: POB_RUNTIME_INST) -> () {
+        (self.ob_set_curr_rtinst_and_return)(obthis, new_rtinst)
+    }
+    pub unsafe fn ob_unset_curr_rtinst_and_return(&self, obthis: POB_THIS) -> () {
+        (self.ob_unset_curr_rtinst_and_return)(obthis)
+    }
+    pub unsafe fn ob_open_trace(
+        &self,
+        obthis: POB_THIS,
+        filename: LPTSTR,
+        kind: OB_TIMERKIND
+    ) -> OB_ERROR_RETURN {
+        (self.ob_open_trace)(obthis, filename, kind)
+    }
+    pub unsafe fn ob_close_trace(&self, obthis: POB_THIS) -> OB_ERROR_RETURN { (self.ob_close_trace)(obthis) }
+    pub unsafe fn ob_begin_trace(&self, obthis: POB_THIS, message: LPTSTR) -> OB_ERROR_RETURN {
+        (self.ob_begin_trace)(obthis, message)
+    }
+    pub unsafe fn ob_end_trace(&self, obthis: POB_THIS) -> OB_ERROR_RETURN { (self.ob_end_trace)(obthis) }
+    pub unsafe fn ob_enable_event_trace(&self, obthis: POB_THIS, event: OB_TRACEID) -> OB_ERROR_RETURN {
+        (self.ob_enable_event_trace)(obthis, event)
+    }
+    pub unsafe fn ob_disable_event_trace(&self, obthis: POB_THIS, event: OB_TRACEID) -> OB_ERROR_RETURN {
+        (self.ob_disable_event_trace)(obthis, event)
     }
 }
