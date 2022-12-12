@@ -18,7 +18,6 @@ pub struct IUnknown__bindgen_vtable(::std::os::raw::c_void);
 pub struct IUnknown {
     pub vtable_: *const IUnknown__bindgen_vtable
 }
-pub type PASCALFAR_INT_PROC = ::std::option::Option<unsafe extern "C" fn() -> ::std::os::raw::c_int>;
 #[repr(C, packed)]
 #[derive(Copy, Clone)]
 pub struct pbstg_statistics {
@@ -215,7 +214,6 @@ pub struct shlistnode {
     pub d: SHLNODE_DATA
 }
 pub type shlnode = shlistnode;
-pub type SH_LIST_HANDLE = *mut ::std::os::raw::c_void;
 #[repr(C, packed)]
 #[derive(Copy, Clone)]
 pub union shlisthead {
@@ -286,14 +284,12 @@ pub mod ob_exe_code_type {
     pub const OB_CCODE_EXE: Type = 1;
 }
 pub use self::ob_exe_code_type::Type as OB_EXE_CODE_TYPE;
-#[doc = ""]
 #[repr(C, packed)]
 #[derive(Copy, Clone)]
 pub struct ob_response_window_stack_node {
     pub routine_level: UINT,
     pub expr_stack_ptr: INT
 }
-#[doc = ""]
 pub type ResponseWindowStackNode = ob_response_window_stack_node;
 pub type POB_THIS = *mut ob_this;
 #[repr(C, packed)]
@@ -496,12 +492,6 @@ pub mod OB_ARRAY_SYMBOL_STYLE {
 pub type KEY_FUNC = ::std::option::Option<
     unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> *mut ::std::os::raw::c_void
 >;
-pub type KEY_FUNC_ARG = ::std::option::Option<
-    unsafe extern "C" fn(
-        arg1: *mut ::std::os::raw::c_void,
-        arg2: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void
->;
 #[repr(C, packed)]
 #[derive(Copy, Clone)]
 pub struct shhashx {
@@ -517,14 +507,6 @@ pub struct shhashx {
     pub listHash: BOOL
 }
 pub type shhash = shhashx;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct HASHSTAT {
-    pub optSpread: f64,
-    pub actSpread: f64,
-    pub maxInList: INT
-}
-pub type PHASHSTAT = *mut HASHSTAT;
 pub mod OB_ERROR {
     pub type Type = ::std::os::raw::c_int;
     pub const OB_SUCCESS: Type = 0;
@@ -1520,7 +1502,6 @@ pub struct ob_runtime_vtable {
     pub func_ptr: OS_CALLC_FUNC
 }
 pub type POB_RUNTIME_VTABLE = *mut ob_runtime_vtable;
-pub type PPOB_RUNTIME_CLASS = *mut POB_RUNTIME_CLASS;
 pub type POB_PROTOTYPE = *mut ob_prototype;
 pub type POB_CLASS_ENTRY = *mut ob_class_entry;
 #[repr(C)]
@@ -1816,30 +1797,6 @@ pub struct ob_protoname {
     pub no_args: UINT
 }
 pub type POB_PROTONAME = *mut ob_protoname;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct MONTHANDDAYNAMESSTRUCT_TAG {
-    pub monAbbrev: *mut LPTSTR,
-    pub monName: *mut LPTSTR,
-    pub dayAbbrev: *mut LPTSTR,
-    pub dayName: *mut LPTSTR
-}
-pub type LPMONTHANDDAYNAMESSTRUCT = *mut MONTHANDDAYNAMESSTRUCT_TAG;
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct REGPROFILESTRUCT_TAG {
-    pub hKey: HANDLE,
-    pub lpszSubKey: LPTSTR,
-    pub lpszValueName: LPTSTR,
-    pub lRegError: ::std::os::raw::c_long,
-    pub lpszIniFileName: LPTSTR,
-    pub lpszSectionName: LPTSTR,
-    pub lpszKeyName: LPTSTR,
-    pub lpszValueReceiver: LPTSTR,
-    pub dwValueSize: DWORD,
-    pub lpszDefaultValue: LPTSTR
-}
-pub type LPREGPROFILESTRUCT = *mut REGPROFILESTRUCT_TAG;
 pub mod ob_glob_reftype {
     pub type Type = ::std::os::raw::c_int;
     pub const OB_GLOB_REF: Type = 0;
@@ -1908,12 +1865,7 @@ pub mod WATCHPOINT_TYPE {
     pub const SHARED_WATCH: Type = 2;
     pub const INSTANCE_WATCH: Type = 3;
 }
-#[doc = "In order not to include an extreme number of PB header files in ocx"]
-#[doc = "the rt_error_struct structure which is defined here"]
-#[doc = "is redefined in pbrxctl.h"]
-#[doc = ""]
-#[doc = "IT MUST BE KEPT IN SYNC WITH THE VERSION WITHIN PBRXCTL.H"]
-#[doc = ""]
+#[doc = "In order not to include an extreme number of PB header files in ocx\nthe rt_error_struct structure which is defined here\nis redefined in pbrxctl.h\n\nIT MUST BE KEPT IN SYNC WITH THE VERSION WITHIN PBRXCTL.H\n"]
 #[repr(C, packed)]
 #[derive(Copy, Clone)]
 pub struct rt_error_struct {
@@ -1925,12 +1877,7 @@ pub struct rt_error_struct {
     pub class_name: LPTSTR,
     pub rout_name: LPTSTR
 }
-#[doc = "In order not to include an extreme number of PB header files in ocx"]
-#[doc = "the rt_error_struct structure which is defined here"]
-#[doc = "is redefined in pbrxctl.h"]
-#[doc = ""]
-#[doc = "IT MUST BE KEPT IN SYNC WITH THE VERSION WITHIN PBRXCTL.H"]
-#[doc = ""]
+#[doc = "In order not to include an extreme number of PB header files in ocx\nthe rt_error_struct structure which is defined here\nis redefined in pbrxctl.h\n\nIT MUST BE KEPT IN SYNC WITH THE VERSION WITHIN PBRXCTL.H\n"]
 pub type PRT_ERROR_STRUCT = *mut rt_error_struct;
 pub mod RT_CALL_TYPE {
     pub type Type = ::std::os::raw::c_int;
@@ -2247,29 +2194,6 @@ pub struct DBI_Command {
     pub pDBIConnect: *mut CPB_DBI_Connection,
     pub fnPS_Callback: DBIPSCallback
 }
-#[repr(C, packed)]
-#[derive(Copy, Clone)]
-pub struct rtdb_statement {
-    pub bBindSelectBuffer: SHORT,
-    pub risc_padding: SHORT,
-    pub obcrOutputInfoBuffer: OB_CONST_REF,
-    pub obcrDeclaration: OB_CONST_REF,
-    pub obcrName: OB_CONST_REF,
-    pub obcrOffsetArray: OB_CONST_REF,
-    pub obcrStagingArea: OB_CONST_REF,
-    pub obcrSyntax: OB_CONST_REF,
-    pub obcrTransaction: OB_CONST_REF,
-    pub obcrCursprocVarPcode: OB_CONST_REF,
-    pub iFetchDirection: USHORT,
-    pub risc_padding2: SHORT,
-    pub iNumberOfInputItems: USHORT,
-    pub risc_padding3: SHORT,
-    pub iNumberOfOutputItems: USHORT,
-    pub risc_padding4: SHORT,
-    pub timeStamp: TIME_T,
-    pub pGroup: POB_GROUP
-}
-pub type PRTDB_STATEMENT = *mut rtdb_statement;
 pub mod ob_timer_kind {
     pub type Type = ::std::os::raw::c_int;
     pub const OB_TIMER_NONE: Type = 1;
@@ -2332,6 +2256,8 @@ pub struct Api {
     pbstg_free_pool: unsafe extern "C" fn(pthis: ppbstg_anchor, subPool: pbstg_subpool),
     pbstg_new_pool: unsafe extern "C" fn(pthis: ppbstg_anchor) -> pbstg_subpool,
     pbstg_new_pool_nofast: unsafe extern "C" fn(pthis: ppbstg_anchor) -> pbstg_subpool,
+    pbstg_new_pool_with_size_nofast:
+        unsafe extern "C" fn(pthis: ppbstg_anchor, page_size: USHORT) -> pbstg_subpool,
     pbstg_set_pool_name:
         unsafe extern "C" fn(pthis: ppbstg_anchor, subPool: pbstg_subpool, lpstrName: LPTSTR),
     pbstg_set_poolpagesize: unsafe extern "C" fn(pthis: ppbstg_anchor, pagesize: ULONG) -> BOOL,
@@ -2463,104 +2389,6 @@ pub struct Api {
         unsafe extern "C" fn(pthis: ppbstg_anchor, pasz: LPCSTR, subpool: pbstg_subpool) -> LPTSTR,
     pbstg_lchrcmp: unsafe extern "C" fn(c1: TCHAR, c2: TCHAR) -> INT,
     pbstg_lchrcmpi: unsafe extern "C" fn(c1: TCHAR, c2: TCHAR) -> INT,
-    sh_dbg_console_init: unsafe extern "C" fn(),
-    sh_dbg_console_out: unsafe extern "C" fn(string: LPTSTR),
-    sh_dbg_console_lock: unsafe extern "C" fn(),
-    sh_dbg_console_unlock: unsafe extern "C" fn(),
-    sh_dbg_init: unsafe extern "C" fn(arg1: ppbstg_anchor) -> *mut SH_DBG_THIS,
-    sh_dbg_this: unsafe extern "C" fn() -> *mut SH_DBG_THIS,
-    sh_dbg_term: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
-    sh_dbg_read_input: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_infile: LPTSTR) -> INT,
-    sh_dbg_outfile: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, filename: LPTSTR),
-    sh_dbg_open: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS) -> INT,
-    sh_dbg_close: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS) -> INT,
-    sh_dbg_set: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT,
-    sh_dbg_del: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT,
-    sh_dbg_header: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, header_state: INT),
-    sh_dbg_indent: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, indent_state: INT),
-    sh_dbg_set_this: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
-    sh_dbg_out: unsafe extern "C" fn(code: INT, format_str: LPTSTR, ...) -> INT,
-    sh_dbg_start_indent: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
-    sh_dbg_end_indent: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
-    sh_dbg_enter: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT, string: LPTSTR) -> INT,
-    sh_dbg_leave: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT, string: LPTSTR) -> INT,
-    sh_dbg_on: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
-    sh_dbg_off: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
-    sh_dbg_query: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT,
-    sh_dbg_is_hdr_on: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS) -> INT,
-    sh_dbg_is_indent_on: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS) -> INT,
-    shlist_delete: unsafe extern "C" fn(self_: *mut shlist),
-    shlist_deleteFree: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
-    shlist_get_next: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
-    shlist_get_prev: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
-    shlist_putafter: unsafe extern "C" fn(self_: *mut shlist, node: *mut shlnode) -> INT,
-    shlist_addafter: unsafe extern "C" fn(self_: *mut shlist, data: *mut ::std::os::raw::c_void) -> INT,
-    shlist_addbefore: unsafe extern "C" fn(self_: *mut shlist, data: *mut ::std::os::raw::c_void) -> INT,
-    shlist_remove: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
-    shlist_insert_at_curr:
-        unsafe extern "C" fn(self_: *mut shlist, userdata: *mut ::std::os::raw::c_void) -> INT,
-    shlist_insert: unsafe extern "C" fn(self_: *mut shlist, userdata: *mut ::std::os::raw::c_void) -> INT,
-    shlist_new: unsafe extern "C" fn(sa: ppbstg_anchor, subpool: pbstg_subpool) -> *mut shlist,
-    shlist_curr_node: unsafe extern "C" fn(self_: *mut shlist) -> *mut shlnode,
-    shlist_get_count: unsafe extern "C" fn(self_: *mut shlist) -> UINT,
-    shlist_get_first: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
-    shlist_get_last: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
-    shlist_get_curr: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
-    shlist_update: unsafe extern "C" fn(
-        self_: *mut shlist,
-        newdata: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void,
-    shlist_get_handle: unsafe extern "C" fn(self_: *mut shlist) -> SH_LIST_HANDLE,
-    shlist_set_current: unsafe extern "C" fn(self_: *mut shlist, handle: SH_LIST_HANDLE),
-    shlist_traversal: unsafe extern "C" fn(
-        self_: *mut shlist,
-        data: *mut ::std::os::raw::c_void,
-        trav_func: PASCALFAR_INT_PROC
-    ) -> INT,
-    shlist_sort: unsafe extern "C" fn(
-        self_: *mut shlist,
-        compare_func: PASCALFAR_INT_PROC,
-        options: ::std::os::raw::c_int
-    ) -> *mut LPTSTR,
-    shlist_sort_param: unsafe extern "C" fn(
-        self_: *mut shlist,
-        lpData: *mut ::std::os::raw::c_void,
-        compare_func: PASCALFAR_INT_PROC,
-        options: ::std::os::raw::c_int
-    ) -> *mut LPTSTR,
-    sh_grwblk_init: unsafe extern "C" fn(grwblk: PSH_GROWBLOCK, incr: UINT, str_size: UINT),
-    sh_new_grwblk: unsafe extern "C" fn(
-        stgthis: ppbstg_anchor,
-        increment: UINT,
-        struct_size: UINT,
-        subpool: pbstg_subpool
-    ) -> PSH_GROWBLOCK,
-    sh_set_grwblk_item: unsafe extern "C" fn(
-        stgthis: ppbstg_anchor,
-        grwblk: PSH_GROWBLOCK,
-        pos: UINT,
-        item: *mut ::std::os::raw::c_void,
-        subpool: pbstg_subpool
-    ),
-    sh_add_to_grwblk: unsafe extern "C" fn(
-        stgthis: ppbstg_anchor,
-        grwblk: PSH_GROWBLOCK,
-        item: *mut ::std::os::raw::c_void,
-        subpool: pbstg_subpool
-    ) -> UINT,
-    sh_append_to_grwblk: unsafe extern "C" fn(
-        stgthis: ppbstg_anchor,
-        grwblk: PSH_GROWBLOCK,
-        item_array: *mut ::std::os::raw::c_void,
-        array_len: UINT,
-        subpool: pbstg_subpool
-    ),
-    sh_grwblk_delete: unsafe extern "C" fn(stgthis: ppbstg_anchor, grwblk: PSH_GROWBLOCK),
-    sh_grwblk_close: unsafe extern "C" fn(
-        stgthis: ppbstg_anchor,
-        grwblk: PSH_GROWBLOCK,
-        no_items: *mut UINT
-    ) -> *mut ::std::os::raw::c_void,
     ob_set_session_icontext: unsafe extern "C" fn(obthis: POB_THIS, pNewContext: *mut ::std::os::raw::c_void),
     rt_move_thread: unsafe extern "C" fn(rtthis: POB_THIS) -> BOOL,
     rt_clear_thread: unsafe extern "C" fn(),
@@ -2572,50 +2400,6 @@ pub struct Api {
         unsafe extern "C" fn(info_pos: INT, user_info: *mut ::std::os::raw::c_void) -> BOOL,
     rt_get_free_task_slot: unsafe extern "C" fn() -> INT,
     rt_is_running_exe: unsafe extern "C" fn() -> BOOL,
-    shhash_new: unsafe extern "C" fn(
-        arg1: INT,
-        arg2: KEY_FUNC,
-        arg3: BOOL,
-        arg4: BOOL,
-        arg5: ppbstg_anchor,
-        arg6: pbstg_subpool
-    ) -> *mut shhash,
-    shhash_new_arg: unsafe extern "C" fn(
-        arg1: INT,
-        arg2: KEY_FUNC_ARG,
-        arg3: BOOL,
-        arg4: BOOL,
-        arg5: ppbstg_anchor,
-        arg6: pbstg_subpool,
-        arg7: *mut ::std::os::raw::c_void
-    ) -> *mut shhash,
-    shhash_delete: unsafe extern "C" fn(arg1: *mut shhash),
-    shhash_clear: unsafe extern "C" fn(arg1: *mut shhash),
-    shhash_get_first: unsafe extern "C" fn(arg1: *mut shhash) -> *mut ::std::os::raw::c_void,
-    shhash_get_next: unsafe extern "C" fn(arg1: *mut shhash) -> *mut ::std::os::raw::c_void,
-    shhash_insert:
-        unsafe extern "C" fn(arg1: *mut shhash, arg2: *mut ::std::os::raw::c_void) -> ::std::os::raw::c_int,
-    shhash_search: unsafe extern "C" fn(
-        arg1: *mut shhash,
-        arg2: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void,
-    shhash_search_unique: unsafe extern "C" fn(
-        pThis: *mut shhash,
-        key: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void,
-    shhash_searchNext: unsafe extern "C" fn(
-        arg1: *mut shhash,
-        arg2: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void,
-    shhash_searchSlot:
-        unsafe extern "C" fn(arg1: *mut shhash, arg2: *mut ::std::os::raw::c_void) -> *mut shlist,
-    shhash_remove: unsafe extern "C" fn(arg1: *mut shhash) -> *mut ::std::os::raw::c_void,
-    shhash_statistics: unsafe extern "C" fn(arg1: *mut shhash, arg2: PHASHSTAT) -> PHASHSTAT,
-    shhash_traversal: unsafe extern "C" fn(
-        pthis: *mut shhash,
-        data: *mut ::std::os::raw::c_void,
-        trav_func: PASCALFAR_INT_PROC
-    ) -> BOOL,
     ob_add_const_data: unsafe extern "C" fn(
         obthis: POB_THIS,
         conpool: POB_CONPOOL,
@@ -2706,97 +2490,6 @@ pub struct Api {
         subpool: OB_SUBPOOL,
         clear_pcode: BOOL
     ),
-    sh_MAX_DEC: unsafe extern "C" fn() -> *const SH_DEC,
-    shMaxDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    shMinDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    shCompareDec: unsafe extern "C" fn(src1: PSH_DEC, src2: PSH_DEC) -> SHORT,
-    shAbsDec: unsafe extern "C" fn(dst: PSH_DEC, src: PSH_DEC) -> PSH_DEC,
-    shNegateDec: unsafe extern "C" fn(dst: PSH_DEC, src: PSH_DEC) -> PSH_DEC,
-    shRoundDec: unsafe extern "C" fn(dst: PSH_DEC, src: PSH_DEC, n: SHORT) -> PSH_DEC,
-    shTruncDec: unsafe extern "C" fn(dst: PSH_DEC, src: PSH_DEC, n: SHORT) -> PSH_DEC,
-    shAddDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    shSubDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    shMultDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    shDivDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    shModDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    shExpDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    shIntToDec: unsafe extern "C" fn(dst: PSH_DEC, src: SHORT) -> PSH_DEC,
-    shDecToInt: unsafe extern "C" fn(dst: *mut SHORT, src: PSH_DEC) -> *mut SHORT,
-    shUintToDec: unsafe extern "C" fn(dst: PSH_DEC, src: USHORT) -> PSH_DEC,
-    shDecToUint: unsafe extern "C" fn(dst: *mut USHORT, src: PSH_DEC) -> *mut USHORT,
-    shByteToDec: unsafe extern "C" fn(dst: PSH_DEC, src: ::std::os::raw::c_uchar) -> PSH_DEC,
-    shDecToByte:
-        unsafe extern "C" fn(dst: *mut ::std::os::raw::c_uchar, src: PSH_DEC) -> *mut ::std::os::raw::c_uchar,
-    shLongToDec: unsafe extern "C" fn(dst: PSH_DEC, src: ::std::os::raw::c_long) -> PSH_DEC,
-    shDecToLong:
-        unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_long, src: PSH_DEC) -> *mut ::std::os::raw::c_long,
-    shUlongToDec: unsafe extern "C" fn(dst: PSH_DEC, src: ULONG) -> PSH_DEC,
-    shDecToUlong: unsafe extern "C" fn(dst: *mut ULONG, src: PSH_DEC) -> *mut ULONG,
-    shLonglongToDec: unsafe extern "C" fn(dst: PSH_DEC, src: *mut ::std::os::raw::c_longlong) -> PSH_DEC,
-    shDecToLonglong: unsafe extern "C" fn(
-        dst: *mut ::std::os::raw::c_longlong,
-        src: PSH_DEC
-    ) -> *mut ::std::os::raw::c_longlong,
-    shDecToFloat: unsafe extern "C" fn(dst: *mut f32, src: PSH_DEC) -> *mut f32,
-    shFloatToDec: unsafe extern "C" fn(dst: PSH_DEC, src: *mut f32) -> PSH_DEC,
-    shDoubleToDec: unsafe extern "C" fn(dst: PSH_DEC, src: *mut f64) -> PSH_DEC,
-    shDecToDouble: unsafe extern "C" fn(dst: *mut f64, src: PSH_DEC) -> *mut f64,
-    shDecToAscii: unsafe extern "C" fn(dst: LPTSTR, src: PSH_DEC) -> LPTSTR,
-    shAsciiToDec: unsafe extern "C" fn(dst: PSH_DEC, src: LPTSTR) -> PSH_DEC,
-    shAsciiToDecRnd: unsafe extern "C" fn(dst: PSH_DEC, src: LPTSTR, n: SHORT) -> PSH_DEC,
-    shSetDecFractions: unsafe extern "C" fn(d: PSH_DEC, n: SHORT),
-    shSetDecNegative: unsafe extern "C" fn(d: PSH_DEC, n: BOOL),
-    shDecSetOverflow: unsafe extern "C" fn(dec: PSH_DEC, neg: BOOL) -> BOOL,
-    shdtDayName: unsafe extern "C" fn(w_day: ::std::os::raw::c_short, lpName: LPTSTR) -> BOOL,
-    shdtDayOfWeek: unsafe extern "C" fn(t: PSH_TIME) -> ::std::os::raw::c_int,
-    shdtBuildTime: unsafe extern "C" fn(
-        fTime1: PSH_TIME,
-        year: INT,
-        mon: ::std::os::raw::c_uchar,
-        day: ::std::os::raw::c_uchar,
-        hour: ::std::os::raw::c_uchar,
-        min: ::std::os::raw::c_uchar,
-        sec: ::std::os::raw::c_uchar,
-        msec: ::std::os::raw::c_long
-    ),
-    shdtDiffDate: unsafe extern "C" fn(fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long,
-    shdtDiffTime: unsafe extern "C" fn(fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long,
-    shdtDiffMSec: unsafe extern "C" fn(fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long,
-    shdtNow: unsafe extern "C" fn(fTime: PSH_TIME),
-    shdtParse: unsafe extern "C" fn(
-        fTime: PSH_TIME,
-        sTime: LPTSTR,
-        flags: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_int,
-    shdtParseEx: unsafe extern "C" fn(
-        fTime: PSH_TIME,
-        sTime: LPTSTR,
-        flags: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_int,
-    shdtParseStringEx: unsafe extern "C" fn(
-        fTime: PSH_TIME,
-        sTime: LPTSTR,
-        flags: ::std::os::raw::c_int,
-        bStrictly: BOOL
-    ) -> ::std::os::raw::c_int,
-    shdtParseStringExWithLcid: unsafe extern "C" fn(
-        fTime: PSH_TIME,
-        sTime: LPTSTR,
-        flags: ::std::os::raw::c_int,
-        bStrictly: BOOL,
-        uInLcid: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_int,
-    shdtParseToString: unsafe extern "C" fn(fTime: PSH_TIME, sTime: LPTSTR, flags: ::std::os::raw::c_int),
-    shdtRelativeDate:
-        unsafe extern "C" fn(oDate: PSH_TIME, iDate: PSH_TIME, dayCount: ::std::os::raw::c_long),
-    shdtToMJDDate: unsafe extern "C" fn(pDate: PSH_TIME, pMJDDate: *mut f64),
-    shdtToMJDTime: unsafe extern "C" fn(pTime: PSH_TIME, pMJDTime: *mut f64),
-    shdtToMJDTimestamp: unsafe extern "C" fn(pDateTime: PSH_TIME, pMJDDate: *mut f64, pMJDTime: *mut f64),
-    shMJDDateTodt: unsafe extern "C" fn(pDate: PSH_TIME, MJDDate: f64),
-    shMJDTimeTodt: unsafe extern "C" fn(pTime: PSH_TIME, MJDTime: f64),
-    shMJDTimestampTodt: unsafe extern "C" fn(pDateTime: PSH_TIME, MJDDate: f64, MJDTime: f64),
-    shdtString: unsafe extern "C" fn(sdate: LPTSTR, stime: LPTSTR),
     ob_mgr_init: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, stgthis: ppbstg_anchor) -> POB_THIS,
     ob_mgr_init_ex: unsafe extern "C" fn(
         dbgthis: *mut SH_DBG_THIS,
@@ -4407,137 +4100,6 @@ pub struct Api {
     ob_convert_vars_to_const: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP) -> INT,
     ob_clear_group_objects: unsafe extern "C" fn(obthis: POB_THIS, pGroup: POB_GROUP) -> BOOL,
     ob_init_group_objects: unsafe extern "C" fn(obthis: POB_THIS, pGroup: POB_GROUP),
-    shformatDateTimeWeb: unsafe extern "C" fn(
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        value: PSH_TIME,
-        flags: ::std::os::raw::c_int,
-        cultureInfo: LPMONTHANDDAYNAMESSTRUCT
-    ) -> ::std::os::raw::c_long,
-    shformatDateTime: unsafe extern "C" fn(
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        value: PSH_TIME,
-        flags: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_long,
-    shformatDecimal: unsafe extern "C" fn(
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prFmt: LPTSTR,
-        value: *mut ::std::os::raw::c_void,
-        flags: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_long,
-    shformatDecimalWeb: unsafe extern "C" fn(
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prFmt: LPTSTR,
-        value: *mut ::std::os::raw::c_void,
-        flags: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_long,
-    shformatDouble: unsafe extern "C" fn(
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        value: f64,
-        flags: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_long,
-    shformatDoubleWeb: unsafe extern "C" fn(
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        value: f64,
-        flags: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_long,
-    shformatLonglong: unsafe extern "C" fn(
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        value: ::std::os::raw::c_longlong,
-        flags: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_long,
-    shformatLonglongWeb: unsafe extern "C" fn(
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        value: ::std::os::raw::c_longlong,
-        flags: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_long,
-    shformatReal: unsafe extern "C" fn(
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        pValue: *mut f32,
-        flags: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_long,
-    shformatRealWeb: unsafe extern "C" fn(
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        pValue: *mut f32,
-        flags: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_long,
-    shformatString: unsafe extern "C" fn(
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        value: LPTSTR,
-        flags: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_long,
-    shformatCmplDateTimeMask: unsafe extern "C" fn(
-        prMask: LPTSTR,
-        psMask: LPTSTR,
-        maxLen: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_int,
-    shformatCmplDateTimeMaskWeb: unsafe extern "C" fn(
-        prMask: LPTSTR,
-        psMask: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_int,
-    shformatCmplNumericMask: unsafe extern "C" fn(
-        prMask: LPTSTR,
-        psMask: LPTSTR,
-        maxLen: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_int,
-    shformatCmplNumericMaskWeb: unsafe extern "C" fn(
-        prMask: LPTSTR,
-        psMask: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_int,
-    shformatCmplNumericMaskWebCommasPos: unsafe extern "C" fn(
-        prMask: LPTSTR,
-        psMask: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_int,
-    shformatCmplStringMask: unsafe extern "C" fn(
-        prMask: LPTSTR,
-        psMask: LPTSTR,
-        maxLen: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_int,
-    shformatErrorString: unsafe extern "C" fn(errMsg: LPTSTR, err: ::std::os::raw::c_int),
-    shregExprCmpl: unsafe extern "C" fn(
-        pattern: LPTSTR,
-        srcPattern: LPTSTR,
-        maxLen: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_int,
-    shregExprMatch: unsafe extern "C" fn(string: LPTSTR, pattern: LPTSTR) -> ::std::os::raw::c_int,
-    shIsValidReal: unsafe extern "C" fn(n: LPTSTR) -> BOOL,
-    shNormalizeReal: unsafe extern "C" fn(out: LPTSTR, in_: LPTSTR),
-    shNormalizeRealbyLocale: unsafe extern "C" fn(out: LPTSTR, in_: LPTSTR),
-    shIsValidRealWeb: unsafe extern "C" fn(n: LPTSTR, paramPeriodChar: TCHAR, paramCommaChar: TCHAR) -> BOOL,
-    shNormalizeRealWeb:
-        unsafe extern "C" fn(out: LPTSTR, in_: LPTSTR, paramPeriodChar: TCHAR, paramCommaChar: TCHAR),
-    shNormalizeRealbyLocaleWeb:
-        unsafe extern "C" fn(out: LPTSTR, in_: LPTSTR, paramPeriodChar: TCHAR, paramCommaChar: TCHAR),
-    shIsValidRealNoLocale: unsafe extern "C" fn(n: LPTSTR) -> BOOL,
     ob_add_glbsym_var: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
@@ -5078,6 +4640,8 @@ impl Api {
         let pbstg_free_pool = __library.get(b"pbstg_free_pool\0").map(|sym| *sym)?;
         let pbstg_new_pool = __library.get(b"pbstg_new_pool\0").map(|sym| *sym)?;
         let pbstg_new_pool_nofast = __library.get(b"pbstg_new_pool_nofast\0").map(|sym| *sym)?;
+        let pbstg_new_pool_with_size_nofast =
+            __library.get(b"pbstg_new_pool_with_size_nofast\0").map(|sym| *sym)?;
         let pbstg_set_pool_name = __library.get(b"pbstg_set_pool_name\0").map(|sym| *sym)?;
         let pbstg_set_poolpagesize = __library.get(b"pbstg_set_poolpagesize\0").map(|sym| *sym)?;
         let pbstg_write_debug = __library.get(b"pbstg_write_debug\0").map(|sym| *sym)?;
@@ -5137,61 +4701,6 @@ impl Api {
         let pbstg_printabletostrdup = __library.get(b"pbstg_printabletostrdup\0").map(|sym| *sym)?;
         let pbstg_lchrcmp = __library.get(b"pbstg_lchrcmp\0").map(|sym| *sym)?;
         let pbstg_lchrcmpi = __library.get(b"pbstg_lchrcmpi\0").map(|sym| *sym)?;
-        let sh_dbg_console_init = __library.get(b"sh_dbg_console_init\0").map(|sym| *sym)?;
-        let sh_dbg_console_out = __library.get(b"sh_dbg_console_out\0").map(|sym| *sym)?;
-        let sh_dbg_console_lock = __library.get(b"sh_dbg_console_lock\0").map(|sym| *sym)?;
-        let sh_dbg_console_unlock = __library.get(b"sh_dbg_console_unlock\0").map(|sym| *sym)?;
-        let sh_dbg_init = __library.get(b"sh_dbg_init\0").map(|sym| *sym)?;
-        let sh_dbg_this = __library.get(b"sh_dbg_this\0").map(|sym| *sym)?;
-        let sh_dbg_term = __library.get(b"sh_dbg_term\0").map(|sym| *sym)?;
-        let sh_dbg_read_input = __library.get(b"sh_dbg_read_input\0").map(|sym| *sym)?;
-        let sh_dbg_outfile = __library.get(b"sh_dbg_outfile\0").map(|sym| *sym)?;
-        let sh_dbg_open = __library.get(b"sh_dbg_open\0").map(|sym| *sym)?;
-        let sh_dbg_close = __library.get(b"sh_dbg_close\0").map(|sym| *sym)?;
-        let sh_dbg_set = __library.get(b"sh_dbg_set\0").map(|sym| *sym)?;
-        let sh_dbg_del = __library.get(b"sh_dbg_del\0").map(|sym| *sym)?;
-        let sh_dbg_header = __library.get(b"sh_dbg_header\0").map(|sym| *sym)?;
-        let sh_dbg_indent = __library.get(b"sh_dbg_indent\0").map(|sym| *sym)?;
-        let sh_dbg_set_this = __library.get(b"sh_dbg_set_this\0").map(|sym| *sym)?;
-        let sh_dbg_out = __library.get(b"_sh_dbg_out\0").map(|sym| *sym)?;
-        let sh_dbg_start_indent = __library.get(b"sh_dbg_start_indent\0").map(|sym| *sym)?;
-        let sh_dbg_end_indent = __library.get(b"sh_dbg_end_indent\0").map(|sym| *sym)?;
-        let sh_dbg_enter = __library.get(b"sh_dbg_enter\0").map(|sym| *sym)?;
-        let sh_dbg_leave = __library.get(b"sh_dbg_leave\0").map(|sym| *sym)?;
-        let sh_dbg_on = __library.get(b"sh_dbg_on\0").map(|sym| *sym)?;
-        let sh_dbg_off = __library.get(b"sh_dbg_off\0").map(|sym| *sym)?;
-        let sh_dbg_query = __library.get(b"sh_dbg_query\0").map(|sym| *sym)?;
-        let sh_dbg_is_hdr_on = __library.get(b"sh_dbg_is_hdr_on\0").map(|sym| *sym)?;
-        let sh_dbg_is_indent_on = __library.get(b"sh_dbg_is_indent_on\0").map(|sym| *sym)?;
-        let shlist_delete = __library.get(b"shlist_delete\0").map(|sym| *sym)?;
-        let shlist_deleteFree = __library.get(b"shlist_deleteFree\0").map(|sym| *sym)?;
-        let shlist_get_next = __library.get(b"shlist_get_next\0").map(|sym| *sym)?;
-        let shlist_get_prev = __library.get(b"shlist_get_prev\0").map(|sym| *sym)?;
-        let shlist_putafter = __library.get(b"shlist_putafter\0").map(|sym| *sym)?;
-        let shlist_addafter = __library.get(b"shlist_addafter\0").map(|sym| *sym)?;
-        let shlist_addbefore = __library.get(b"shlist_addbefore\0").map(|sym| *sym)?;
-        let shlist_remove = __library.get(b"shlist_remove\0").map(|sym| *sym)?;
-        let shlist_insert_at_curr = __library.get(b"shlist_insert_at_curr\0").map(|sym| *sym)?;
-        let shlist_insert = __library.get(b"shlist_insert\0").map(|sym| *sym)?;
-        let shlist_new = __library.get(b"shlist_new\0").map(|sym| *sym)?;
-        let shlist_curr_node = __library.get(b"shlist_curr_node\0").map(|sym| *sym)?;
-        let shlist_get_count = __library.get(b"shlist_get_count\0").map(|sym| *sym)?;
-        let shlist_get_first = __library.get(b"shlist_get_first\0").map(|sym| *sym)?;
-        let shlist_get_last = __library.get(b"shlist_get_last\0").map(|sym| *sym)?;
-        let shlist_get_curr = __library.get(b"shlist_get_curr\0").map(|sym| *sym)?;
-        let shlist_update = __library.get(b"shlist_update\0").map(|sym| *sym)?;
-        let shlist_get_handle = __library.get(b"shlist_get_handle\0").map(|sym| *sym)?;
-        let shlist_set_current = __library.get(b"shlist_set_current\0").map(|sym| *sym)?;
-        let shlist_traversal = __library.get(b"shlist_traversal\0").map(|sym| *sym)?;
-        let shlist_sort = __library.get(b"shlist_sort\0").map(|sym| *sym)?;
-        let shlist_sort_param = __library.get(b"shlist_sort_param\0").map(|sym| *sym)?;
-        let sh_grwblk_init = __library.get(b"sh_grwblk_init\0").map(|sym| *sym)?;
-        let sh_new_grwblk = __library.get(b"sh_new_grwblk\0").map(|sym| *sym)?;
-        let sh_set_grwblk_item = __library.get(b"sh_set_grwblk_item\0").map(|sym| *sym)?;
-        let sh_add_to_grwblk = __library.get(b"sh_add_to_grwblk\0").map(|sym| *sym)?;
-        let sh_append_to_grwblk = __library.get(b"sh_append_to_grwblk\0").map(|sym| *sym)?;
-        let sh_grwblk_delete = __library.get(b"sh_grwblk_delete\0").map(|sym| *sym)?;
-        let sh_grwblk_close = __library.get(b"sh_grwblk_close\0").map(|sym| *sym)?;
         let ob_set_session_icontext = __library.get(b"ob_set_session_icontext\0").map(|sym| *sym)?;
         let rt_move_thread = __library.get(b"rt_move_thread\0").map(|sym| *sym)?;
         let rt_clear_thread = __library.get(b"rt_clear_thread\0").map(|sym| *sym)?;
@@ -5202,20 +4711,6 @@ impl Api {
         let rt_set_current_task_info = __library.get(b"rt_set_current_task_info\0").map(|sym| *sym)?;
         let rt_get_free_task_slot = __library.get(b"rt_get_free_task_slot\0").map(|sym| *sym)?;
         let rt_is_running_exe = __library.get(b"rt_is_running_exe\0").map(|sym| *sym)?;
-        let shhash_new = __library.get(b"shhash_new\0").map(|sym| *sym)?;
-        let shhash_new_arg = __library.get(b"shhash_new_arg\0").map(|sym| *sym)?;
-        let shhash_delete = __library.get(b"shhash_delete\0").map(|sym| *sym)?;
-        let shhash_clear = __library.get(b"shhash_clear\0").map(|sym| *sym)?;
-        let shhash_get_first = __library.get(b"shhash_get_first\0").map(|sym| *sym)?;
-        let shhash_get_next = __library.get(b"shhash_get_next\0").map(|sym| *sym)?;
-        let shhash_insert = __library.get(b"shhash_insert\0").map(|sym| *sym)?;
-        let shhash_search = __library.get(b"shhash_search\0").map(|sym| *sym)?;
-        let shhash_search_unique = __library.get(b"shhash_search_unique\0").map(|sym| *sym)?;
-        let shhash_searchNext = __library.get(b"shhash_searchNext\0").map(|sym| *sym)?;
-        let shhash_searchSlot = __library.get(b"shhash_searchSlot\0").map(|sym| *sym)?;
-        let shhash_remove = __library.get(b"shhash_remove\0").map(|sym| *sym)?;
-        let shhash_statistics = __library.get(b"shhash_statistics\0").map(|sym| *sym)?;
-        let shhash_traversal = __library.get(b"shhash_traversal\0").map(|sym| *sym)?;
         let ob_add_const_data = __library.get(b"ob_add_const_data\0").map(|sym| *sym)?;
         let ob_looksym_keyfunc = __library.get(b"ob_looksym_keyfunc\0").map(|sym| *sym)?;
         let ob_looksym_reference = __library.get(b"ob_looksym_reference\0").map(|sym| *sym)?;
@@ -5235,62 +4730,6 @@ impl Api {
         let ob_init_pcode_blk = __library.get(b"ob_init_pcode_blk\0").map(|sym| *sym)?;
         let ob_del_pcode_blk = __library.get(b"ob_del_pcode_blk\0").map(|sym| *sym)?;
         let ob_reuse_routine = __library.get(b"ob_reuse_routine\0").map(|sym| *sym)?;
-        let sh_MAX_DEC = __library.get(b"sh_MAX_DEC\0").map(|sym| *sym)?;
-        let shMaxDec = __library.get(b"shMaxDec\0").map(|sym| *sym)?;
-        let shMinDec = __library.get(b"shMinDec\0").map(|sym| *sym)?;
-        let shCompareDec = __library.get(b"shCompareDec\0").map(|sym| *sym)?;
-        let shAbsDec = __library.get(b"shAbsDec\0").map(|sym| *sym)?;
-        let shNegateDec = __library.get(b"shNegateDec\0").map(|sym| *sym)?;
-        let shRoundDec = __library.get(b"shRoundDec\0").map(|sym| *sym)?;
-        let shTruncDec = __library.get(b"shTruncDec\0").map(|sym| *sym)?;
-        let shAddDec = __library.get(b"shAddDec\0").map(|sym| *sym)?;
-        let shSubDec = __library.get(b"shSubDec\0").map(|sym| *sym)?;
-        let shMultDec = __library.get(b"shMultDec\0").map(|sym| *sym)?;
-        let shDivDec = __library.get(b"shDivDec\0").map(|sym| *sym)?;
-        let shModDec = __library.get(b"shModDec\0").map(|sym| *sym)?;
-        let shExpDec = __library.get(b"shExpDec\0").map(|sym| *sym)?;
-        let shIntToDec = __library.get(b"shIntToDec\0").map(|sym| *sym)?;
-        let shDecToInt = __library.get(b"shDecToInt\0").map(|sym| *sym)?;
-        let shUintToDec = __library.get(b"shUintToDec\0").map(|sym| *sym)?;
-        let shDecToUint = __library.get(b"shDecToUint\0").map(|sym| *sym)?;
-        let shByteToDec = __library.get(b"shByteToDec\0").map(|sym| *sym)?;
-        let shDecToByte = __library.get(b"shDecToByte\0").map(|sym| *sym)?;
-        let shLongToDec = __library.get(b"shLongToDec\0").map(|sym| *sym)?;
-        let shDecToLong = __library.get(b"shDecToLong\0").map(|sym| *sym)?;
-        let shUlongToDec = __library.get(b"shUlongToDec\0").map(|sym| *sym)?;
-        let shDecToUlong = __library.get(b"shDecToUlong\0").map(|sym| *sym)?;
-        let shLonglongToDec = __library.get(b"shLonglongToDec\0").map(|sym| *sym)?;
-        let shDecToLonglong = __library.get(b"shDecToLonglong\0").map(|sym| *sym)?;
-        let shDecToFloat = __library.get(b"shDecToFloat\0").map(|sym| *sym)?;
-        let shFloatToDec = __library.get(b"shFloatToDec\0").map(|sym| *sym)?;
-        let shDoubleToDec = __library.get(b"shDoubleToDec\0").map(|sym| *sym)?;
-        let shDecToDouble = __library.get(b"shDecToDouble\0").map(|sym| *sym)?;
-        let shDecToAscii = __library.get(b"shDecToAscii\0").map(|sym| *sym)?;
-        let shAsciiToDec = __library.get(b"shAsciiToDec\0").map(|sym| *sym)?;
-        let shAsciiToDecRnd = __library.get(b"shAsciiToDecRnd\0").map(|sym| *sym)?;
-        let shSetDecFractions = __library.get(b"shSetDecFractions\0").map(|sym| *sym)?;
-        let shSetDecNegative = __library.get(b"shSetDecNegative\0").map(|sym| *sym)?;
-        let shDecSetOverflow = __library.get(b"shDecSetOverflow\0").map(|sym| *sym)?;
-        let shdtDayName = __library.get(b"shdtDayName\0").map(|sym| *sym)?;
-        let shdtDayOfWeek = __library.get(b"shdtDayOfWeek\0").map(|sym| *sym)?;
-        let shdtBuildTime = __library.get(b"shdtBuildTime\0").map(|sym| *sym)?;
-        let shdtDiffDate = __library.get(b"shdtDiffDate\0").map(|sym| *sym)?;
-        let shdtDiffTime = __library.get(b"shdtDiffTime\0").map(|sym| *sym)?;
-        let shdtDiffMSec = __library.get(b"shdtDiffMSec\0").map(|sym| *sym)?;
-        let shdtNow = __library.get(b"shdtNow\0").map(|sym| *sym)?;
-        let shdtParse = __library.get(b"shdtParse\0").map(|sym| *sym)?;
-        let shdtParseEx = __library.get(b"shdtParseEx\0").map(|sym| *sym)?;
-        let shdtParseStringEx = __library.get(b"shdtParseStringEx\0").map(|sym| *sym)?;
-        let shdtParseStringExWithLcid = __library.get(b"shdtParseStringExWithLcid\0").map(|sym| *sym)?;
-        let shdtParseToString = __library.get(b"shdtParseToString\0").map(|sym| *sym)?;
-        let shdtRelativeDate = __library.get(b"shdtRelativeDate\0").map(|sym| *sym)?;
-        let shdtToMJDDate = __library.get(b"shdtToMJDDate\0").map(|sym| *sym)?;
-        let shdtToMJDTime = __library.get(b"shdtToMJDTime\0").map(|sym| *sym)?;
-        let shdtToMJDTimestamp = __library.get(b"shdtToMJDTimestamp\0").map(|sym| *sym)?;
-        let shMJDDateTodt = __library.get(b"shMJDDateTodt\0").map(|sym| *sym)?;
-        let shMJDTimeTodt = __library.get(b"shMJDTimeTodt\0").map(|sym| *sym)?;
-        let shMJDTimestampTodt = __library.get(b"shMJDTimestampTodt\0").map(|sym| *sym)?;
-        let shdtString = __library.get(b"shdtString\0").map(|sym| *sym)?;
         let ob_mgr_init = __library.get(b"ob_mgr_init\0").map(|sym| *sym)?;
         let ob_mgr_init_ex = __library.get(b"ob_mgr_init_ex\0").map(|sym| *sym)?;
         let ob_mgr_restart = __library.get(b"ob_mgr_restart\0").map(|sym| *sym)?;
@@ -5796,34 +5235,6 @@ impl Api {
         let ob_convert_vars_to_const = __library.get(b"ob_convert_vars_to_const\0").map(|sym| *sym)?;
         let ob_clear_group_objects = __library.get(b"ob_clear_group_objects\0").map(|sym| *sym)?;
         let ob_init_group_objects = __library.get(b"ob_init_group_objects\0").map(|sym| *sym)?;
-        let shformatDateTimeWeb = __library.get(b"shformatDateTimeWeb\0").map(|sym| *sym)?;
-        let shformatDateTime = __library.get(b"shformatDateTime\0").map(|sym| *sym)?;
-        let shformatDecimal = __library.get(b"shformatDecimal\0").map(|sym| *sym)?;
-        let shformatDecimalWeb = __library.get(b"shformatDecimalWeb\0").map(|sym| *sym)?;
-        let shformatDouble = __library.get(b"shformatDouble\0").map(|sym| *sym)?;
-        let shformatDoubleWeb = __library.get(b"shformatDoubleWeb\0").map(|sym| *sym)?;
-        let shformatLonglong = __library.get(b"shformatLonglong\0").map(|sym| *sym)?;
-        let shformatLonglongWeb = __library.get(b"shformatLonglongWeb\0").map(|sym| *sym)?;
-        let shformatReal = __library.get(b"shformatReal\0").map(|sym| *sym)?;
-        let shformatRealWeb = __library.get(b"shformatRealWeb\0").map(|sym| *sym)?;
-        let shformatString = __library.get(b"shformatString\0").map(|sym| *sym)?;
-        let shformatCmplDateTimeMask = __library.get(b"shformatCmplDateTimeMask\0").map(|sym| *sym)?;
-        let shformatCmplDateTimeMaskWeb = __library.get(b"shformatCmplDateTimeMaskWeb\0").map(|sym| *sym)?;
-        let shformatCmplNumericMask = __library.get(b"shformatCmplNumericMask\0").map(|sym| *sym)?;
-        let shformatCmplNumericMaskWeb = __library.get(b"shformatCmplNumericMaskWeb\0").map(|sym| *sym)?;
-        let shformatCmplNumericMaskWebCommasPos =
-            __library.get(b"shformatCmplNumericMaskWebCommasPos\0").map(|sym| *sym)?;
-        let shformatCmplStringMask = __library.get(b"shformatCmplStringMask\0").map(|sym| *sym)?;
-        let shformatErrorString = __library.get(b"shformatErrorString\0").map(|sym| *sym)?;
-        let shregExprCmpl = __library.get(b"shregExprCmpl\0").map(|sym| *sym)?;
-        let shregExprMatch = __library.get(b"shregExprMatch\0").map(|sym| *sym)?;
-        let shIsValidReal = __library.get(b"shIsValidReal\0").map(|sym| *sym)?;
-        let shNormalizeReal = __library.get(b"shNormalizeReal\0").map(|sym| *sym)?;
-        let shNormalizeRealbyLocale = __library.get(b"shNormalizeRealbyLocale\0").map(|sym| *sym)?;
-        let shIsValidRealWeb = __library.get(b"shIsValidRealWeb\0").map(|sym| *sym)?;
-        let shNormalizeRealWeb = __library.get(b"shNormalizeRealWeb\0").map(|sym| *sym)?;
-        let shNormalizeRealbyLocaleWeb = __library.get(b"shNormalizeRealbyLocaleWeb\0").map(|sym| *sym)?;
-        let shIsValidRealNoLocale = __library.get(b"shIsValidRealNoLocale\0").map(|sym| *sym)?;
         let ob_add_glbsym_var = __library.get(b"ob_add_glbsym_var\0").map(|sym| *sym)?;
         let ob_add_glbsym_class = __library.get(b"ob_add_glbsym_class\0").map(|sym| *sym)?;
         let ob_add_glbsym_func = __library.get(b"ob_add_glbsym_func\0").map(|sym| *sym)?;
@@ -6001,6 +5412,7 @@ impl Api {
             pbstg_free_pool,
             pbstg_new_pool,
             pbstg_new_pool_nofast,
+            pbstg_new_pool_with_size_nofast,
             pbstg_set_pool_name,
             pbstg_set_poolpagesize,
             pbstg_write_debug,
@@ -6060,61 +5472,6 @@ impl Api {
             pbstg_printabletostrdup,
             pbstg_lchrcmp,
             pbstg_lchrcmpi,
-            sh_dbg_console_init,
-            sh_dbg_console_out,
-            sh_dbg_console_lock,
-            sh_dbg_console_unlock,
-            sh_dbg_init,
-            sh_dbg_this,
-            sh_dbg_term,
-            sh_dbg_read_input,
-            sh_dbg_outfile,
-            sh_dbg_open,
-            sh_dbg_close,
-            sh_dbg_set,
-            sh_dbg_del,
-            sh_dbg_header,
-            sh_dbg_indent,
-            sh_dbg_set_this,
-            sh_dbg_out,
-            sh_dbg_start_indent,
-            sh_dbg_end_indent,
-            sh_dbg_enter,
-            sh_dbg_leave,
-            sh_dbg_on,
-            sh_dbg_off,
-            sh_dbg_query,
-            sh_dbg_is_hdr_on,
-            sh_dbg_is_indent_on,
-            shlist_delete,
-            shlist_deleteFree,
-            shlist_get_next,
-            shlist_get_prev,
-            shlist_putafter,
-            shlist_addafter,
-            shlist_addbefore,
-            shlist_remove,
-            shlist_insert_at_curr,
-            shlist_insert,
-            shlist_new,
-            shlist_curr_node,
-            shlist_get_count,
-            shlist_get_first,
-            shlist_get_last,
-            shlist_get_curr,
-            shlist_update,
-            shlist_get_handle,
-            shlist_set_current,
-            shlist_traversal,
-            shlist_sort,
-            shlist_sort_param,
-            sh_grwblk_init,
-            sh_new_grwblk,
-            sh_set_grwblk_item,
-            sh_add_to_grwblk,
-            sh_append_to_grwblk,
-            sh_grwblk_delete,
-            sh_grwblk_close,
             ob_set_session_icontext,
             rt_move_thread,
             rt_clear_thread,
@@ -6125,20 +5482,6 @@ impl Api {
             rt_set_current_task_info,
             rt_get_free_task_slot,
             rt_is_running_exe,
-            shhash_new,
-            shhash_new_arg,
-            shhash_delete,
-            shhash_clear,
-            shhash_get_first,
-            shhash_get_next,
-            shhash_insert,
-            shhash_search,
-            shhash_search_unique,
-            shhash_searchNext,
-            shhash_searchSlot,
-            shhash_remove,
-            shhash_statistics,
-            shhash_traversal,
             ob_add_const_data,
             ob_looksym_keyfunc,
             ob_looksym_reference,
@@ -6157,62 +5500,6 @@ impl Api {
             ob_init_pcode_blk,
             ob_del_pcode_blk,
             ob_reuse_routine,
-            sh_MAX_DEC,
-            shMaxDec,
-            shMinDec,
-            shCompareDec,
-            shAbsDec,
-            shNegateDec,
-            shRoundDec,
-            shTruncDec,
-            shAddDec,
-            shSubDec,
-            shMultDec,
-            shDivDec,
-            shModDec,
-            shExpDec,
-            shIntToDec,
-            shDecToInt,
-            shUintToDec,
-            shDecToUint,
-            shByteToDec,
-            shDecToByte,
-            shLongToDec,
-            shDecToLong,
-            shUlongToDec,
-            shDecToUlong,
-            shLonglongToDec,
-            shDecToLonglong,
-            shDecToFloat,
-            shFloatToDec,
-            shDoubleToDec,
-            shDecToDouble,
-            shDecToAscii,
-            shAsciiToDec,
-            shAsciiToDecRnd,
-            shSetDecFractions,
-            shSetDecNegative,
-            shDecSetOverflow,
-            shdtDayName,
-            shdtDayOfWeek,
-            shdtBuildTime,
-            shdtDiffDate,
-            shdtDiffTime,
-            shdtDiffMSec,
-            shdtNow,
-            shdtParse,
-            shdtParseEx,
-            shdtParseStringEx,
-            shdtParseStringExWithLcid,
-            shdtParseToString,
-            shdtRelativeDate,
-            shdtToMJDDate,
-            shdtToMJDTime,
-            shdtToMJDTimestamp,
-            shMJDDateTodt,
-            shMJDTimeTodt,
-            shMJDTimestampTodt,
-            shdtString,
             ob_mgr_init,
             ob_mgr_init_ex,
             ob_mgr_restart,
@@ -6683,33 +5970,6 @@ impl Api {
             ob_convert_vars_to_const,
             ob_clear_group_objects,
             ob_init_group_objects,
-            shformatDateTimeWeb,
-            shformatDateTime,
-            shformatDecimal,
-            shformatDecimalWeb,
-            shformatDouble,
-            shformatDoubleWeb,
-            shformatLonglong,
-            shformatLonglongWeb,
-            shformatReal,
-            shformatRealWeb,
-            shformatString,
-            shformatCmplDateTimeMask,
-            shformatCmplDateTimeMaskWeb,
-            shformatCmplNumericMask,
-            shformatCmplNumericMaskWeb,
-            shformatCmplNumericMaskWebCommasPos,
-            shformatCmplStringMask,
-            shformatErrorString,
-            shregExprCmpl,
-            shregExprMatch,
-            shIsValidReal,
-            shNormalizeReal,
-            shNormalizeRealbyLocale,
-            shIsValidRealWeb,
-            shNormalizeRealWeb,
-            shNormalizeRealbyLocaleWeb,
-            shIsValidRealNoLocale,
             ob_add_glbsym_var,
             ob_add_glbsym_class,
             ob_add_glbsym_func,
@@ -6879,6 +6139,13 @@ impl Api {
     }
     pub unsafe fn pbstg_new_pool_nofast(&self, pthis: ppbstg_anchor) -> pbstg_subpool {
         (self.pbstg_new_pool_nofast)(pthis)
+    }
+    pub unsafe fn pbstg_new_pool_with_size_nofast(
+        &self,
+        pthis: ppbstg_anchor,
+        page_size: USHORT
+    ) -> pbstg_subpool {
+        (self.pbstg_new_pool_with_size_nofast)(pthis, page_size)
     }
     pub unsafe fn pbstg_set_pool_name(
         &self,
@@ -7157,195 +6424,6 @@ impl Api {
     }
     pub unsafe fn pbstg_lchrcmp(&self, c1: TCHAR, c2: TCHAR) -> INT { (self.pbstg_lchrcmp)(c1, c2) }
     pub unsafe fn pbstg_lchrcmpi(&self, c1: TCHAR, c2: TCHAR) -> INT { (self.pbstg_lchrcmpi)(c1, c2) }
-    pub unsafe fn sh_dbg_console_init(&self) -> () { (self.sh_dbg_console_init)() }
-    pub unsafe fn sh_dbg_console_out(&self, string: LPTSTR) -> () { (self.sh_dbg_console_out)(string) }
-    pub unsafe fn sh_dbg_console_lock(&self) -> () { (self.sh_dbg_console_lock)() }
-    pub unsafe fn sh_dbg_console_unlock(&self) -> () { (self.sh_dbg_console_unlock)() }
-    pub unsafe fn sh_dbg_init(&self, arg1: ppbstg_anchor) -> *mut SH_DBG_THIS { (self.sh_dbg_init)(arg1) }
-    pub unsafe fn sh_dbg_this(&self) -> *mut SH_DBG_THIS { (self.sh_dbg_this)() }
-    pub unsafe fn sh_dbg_term(&self, dbgthis: *mut SH_DBG_THIS) -> () { (self.sh_dbg_term)(dbgthis) }
-    pub unsafe fn sh_dbg_read_input(&self, dbgthis: *mut SH_DBG_THIS, dbg_infile: LPTSTR) -> INT {
-        (self.sh_dbg_read_input)(dbgthis, dbg_infile)
-    }
-    pub unsafe fn sh_dbg_outfile(&self, dbgthis: *mut SH_DBG_THIS, filename: LPTSTR) -> () {
-        (self.sh_dbg_outfile)(dbgthis, filename)
-    }
-    pub unsafe fn sh_dbg_open(&self, dbgthis: *mut SH_DBG_THIS) -> INT { (self.sh_dbg_open)(dbgthis) }
-    pub unsafe fn sh_dbg_close(&self, dbgthis: *mut SH_DBG_THIS) -> INT { (self.sh_dbg_close)(dbgthis) }
-    pub unsafe fn sh_dbg_set(&self, dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT {
-        (self.sh_dbg_set)(dbgthis, dbg_code)
-    }
-    pub unsafe fn sh_dbg_del(&self, dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT {
-        (self.sh_dbg_del)(dbgthis, dbg_code)
-    }
-    pub unsafe fn sh_dbg_header(&self, dbgthis: *mut SH_DBG_THIS, header_state: INT) -> () {
-        (self.sh_dbg_header)(dbgthis, header_state)
-    }
-    pub unsafe fn sh_dbg_indent(&self, dbgthis: *mut SH_DBG_THIS, indent_state: INT) -> () {
-        (self.sh_dbg_indent)(dbgthis, indent_state)
-    }
-    pub unsafe fn sh_dbg_set_this(&self, dbgthis: *mut SH_DBG_THIS) -> () { (self.sh_dbg_set_this)(dbgthis) }
-    pub unsafe fn sh_dbg_start_indent(&self, dbgthis: *mut SH_DBG_THIS) -> () {
-        (self.sh_dbg_start_indent)(dbgthis)
-    }
-    pub unsafe fn sh_dbg_end_indent(&self, dbgthis: *mut SH_DBG_THIS) -> () {
-        (self.sh_dbg_end_indent)(dbgthis)
-    }
-    pub unsafe fn sh_dbg_enter(&self, dbgthis: *mut SH_DBG_THIS, dbg_code: INT, string: LPTSTR) -> INT {
-        (self.sh_dbg_enter)(dbgthis, dbg_code, string)
-    }
-    pub unsafe fn sh_dbg_leave(&self, dbgthis: *mut SH_DBG_THIS, dbg_code: INT, string: LPTSTR) -> INT {
-        (self.sh_dbg_leave)(dbgthis, dbg_code, string)
-    }
-    pub unsafe fn sh_dbg_on(&self, dbgthis: *mut SH_DBG_THIS) -> () { (self.sh_dbg_on)(dbgthis) }
-    pub unsafe fn sh_dbg_off(&self, dbgthis: *mut SH_DBG_THIS) -> () { (self.sh_dbg_off)(dbgthis) }
-    pub unsafe fn sh_dbg_query(&self, dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT {
-        (self.sh_dbg_query)(dbgthis, dbg_code)
-    }
-    pub unsafe fn sh_dbg_is_hdr_on(&self, dbgthis: *mut SH_DBG_THIS) -> INT {
-        (self.sh_dbg_is_hdr_on)(dbgthis)
-    }
-    pub unsafe fn sh_dbg_is_indent_on(&self, dbgthis: *mut SH_DBG_THIS) -> INT {
-        (self.sh_dbg_is_indent_on)(dbgthis)
-    }
-    pub unsafe fn shlist_delete(&self, self_: *mut shlist) -> () { (self.shlist_delete)(self_) }
-    pub unsafe fn shlist_deleteFree(&self, self_: *mut shlist) -> *mut ::std::os::raw::c_void {
-        (self.shlist_deleteFree)(self_)
-    }
-    pub unsafe fn shlist_get_next(&self, self_: *mut shlist) -> *mut ::std::os::raw::c_void {
-        (self.shlist_get_next)(self_)
-    }
-    pub unsafe fn shlist_get_prev(&self, self_: *mut shlist) -> *mut ::std::os::raw::c_void {
-        (self.shlist_get_prev)(self_)
-    }
-    pub unsafe fn shlist_putafter(&self, self_: *mut shlist, node: *mut shlnode) -> INT {
-        (self.shlist_putafter)(self_, node)
-    }
-    pub unsafe fn shlist_addafter(&self, self_: *mut shlist, data: *mut ::std::os::raw::c_void) -> INT {
-        (self.shlist_addafter)(self_, data)
-    }
-    pub unsafe fn shlist_addbefore(&self, self_: *mut shlist, data: *mut ::std::os::raw::c_void) -> INT {
-        (self.shlist_addbefore)(self_, data)
-    }
-    pub unsafe fn shlist_remove(&self, self_: *mut shlist) -> *mut ::std::os::raw::c_void {
-        (self.shlist_remove)(self_)
-    }
-    pub unsafe fn shlist_insert_at_curr(
-        &self,
-        self_: *mut shlist,
-        userdata: *mut ::std::os::raw::c_void
-    ) -> INT {
-        (self.shlist_insert_at_curr)(self_, userdata)
-    }
-    pub unsafe fn shlist_insert(&self, self_: *mut shlist, userdata: *mut ::std::os::raw::c_void) -> INT {
-        (self.shlist_insert)(self_, userdata)
-    }
-    pub unsafe fn shlist_new(&self, sa: ppbstg_anchor, subpool: pbstg_subpool) -> *mut shlist {
-        (self.shlist_new)(sa, subpool)
-    }
-    pub unsafe fn shlist_curr_node(&self, self_: *mut shlist) -> *mut shlnode {
-        (self.shlist_curr_node)(self_)
-    }
-    pub unsafe fn shlist_get_count(&self, self_: *mut shlist) -> UINT { (self.shlist_get_count)(self_) }
-    pub unsafe fn shlist_get_first(&self, self_: *mut shlist) -> *mut ::std::os::raw::c_void {
-        (self.shlist_get_first)(self_)
-    }
-    pub unsafe fn shlist_get_last(&self, self_: *mut shlist) -> *mut ::std::os::raw::c_void {
-        (self.shlist_get_last)(self_)
-    }
-    pub unsafe fn shlist_get_curr(&self, self_: *mut shlist) -> *mut ::std::os::raw::c_void {
-        (self.shlist_get_curr)(self_)
-    }
-    pub unsafe fn shlist_update(
-        &self,
-        self_: *mut shlist,
-        newdata: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void {
-        (self.shlist_update)(self_, newdata)
-    }
-    pub unsafe fn shlist_get_handle(&self, self_: *mut shlist) -> SH_LIST_HANDLE {
-        (self.shlist_get_handle)(self_)
-    }
-    pub unsafe fn shlist_set_current(&self, self_: *mut shlist, handle: SH_LIST_HANDLE) -> () {
-        (self.shlist_set_current)(self_, handle)
-    }
-    pub unsafe fn shlist_traversal(
-        &self,
-        self_: *mut shlist,
-        data: *mut ::std::os::raw::c_void,
-        trav_func: PASCALFAR_INT_PROC
-    ) -> INT {
-        (self.shlist_traversal)(self_, data, trav_func)
-    }
-    pub unsafe fn shlist_sort(
-        &self,
-        self_: *mut shlist,
-        compare_func: PASCALFAR_INT_PROC,
-        options: ::std::os::raw::c_int
-    ) -> *mut LPTSTR {
-        (self.shlist_sort)(self_, compare_func, options)
-    }
-    pub unsafe fn shlist_sort_param(
-        &self,
-        self_: *mut shlist,
-        lpData: *mut ::std::os::raw::c_void,
-        compare_func: PASCALFAR_INT_PROC,
-        options: ::std::os::raw::c_int
-    ) -> *mut LPTSTR {
-        (self.shlist_sort_param)(self_, lpData, compare_func, options)
-    }
-    pub unsafe fn sh_grwblk_init(&self, grwblk: PSH_GROWBLOCK, incr: UINT, str_size: UINT) -> () {
-        (self.sh_grwblk_init)(grwblk, incr, str_size)
-    }
-    pub unsafe fn sh_new_grwblk(
-        &self,
-        stgthis: ppbstg_anchor,
-        increment: UINT,
-        struct_size: UINT,
-        subpool: pbstg_subpool
-    ) -> PSH_GROWBLOCK {
-        (self.sh_new_grwblk)(stgthis, increment, struct_size, subpool)
-    }
-    pub unsafe fn sh_set_grwblk_item(
-        &self,
-        stgthis: ppbstg_anchor,
-        grwblk: PSH_GROWBLOCK,
-        pos: UINT,
-        item: *mut ::std::os::raw::c_void,
-        subpool: pbstg_subpool
-    ) -> () {
-        (self.sh_set_grwblk_item)(stgthis, grwblk, pos, item, subpool)
-    }
-    pub unsafe fn sh_add_to_grwblk(
-        &self,
-        stgthis: ppbstg_anchor,
-        grwblk: PSH_GROWBLOCK,
-        item: *mut ::std::os::raw::c_void,
-        subpool: pbstg_subpool
-    ) -> UINT {
-        (self.sh_add_to_grwblk)(stgthis, grwblk, item, subpool)
-    }
-    pub unsafe fn sh_append_to_grwblk(
-        &self,
-        stgthis: ppbstg_anchor,
-        grwblk: PSH_GROWBLOCK,
-        item_array: *mut ::std::os::raw::c_void,
-        array_len: UINT,
-        subpool: pbstg_subpool
-    ) -> () {
-        (self.sh_append_to_grwblk)(stgthis, grwblk, item_array, array_len, subpool)
-    }
-    pub unsafe fn sh_grwblk_delete(&self, stgthis: ppbstg_anchor, grwblk: PSH_GROWBLOCK) -> () {
-        (self.sh_grwblk_delete)(stgthis, grwblk)
-    }
-    pub unsafe fn sh_grwblk_close(
-        &self,
-        stgthis: ppbstg_anchor,
-        grwblk: PSH_GROWBLOCK,
-        no_items: *mut UINT
-    ) -> *mut ::std::os::raw::c_void {
-        (self.sh_grwblk_close)(stgthis, grwblk, no_items)
-    }
     pub unsafe fn ob_set_session_icontext(
         &self,
         obthis: POB_THIS,
@@ -7370,86 +6448,6 @@ impl Api {
     }
     pub unsafe fn rt_get_free_task_slot(&self) -> INT { (self.rt_get_free_task_slot)() }
     pub unsafe fn rt_is_running_exe(&self) -> BOOL { (self.rt_is_running_exe)() }
-    pub unsafe fn shhash_new(
-        &self,
-        arg1: INT,
-        arg2: KEY_FUNC,
-        arg3: BOOL,
-        arg4: BOOL,
-        arg5: ppbstg_anchor,
-        arg6: pbstg_subpool
-    ) -> *mut shhash {
-        (self.shhash_new)(arg1, arg2, arg3, arg4, arg5, arg6)
-    }
-    pub unsafe fn shhash_new_arg(
-        &self,
-        arg1: INT,
-        arg2: KEY_FUNC_ARG,
-        arg3: BOOL,
-        arg4: BOOL,
-        arg5: ppbstg_anchor,
-        arg6: pbstg_subpool,
-        arg7: *mut ::std::os::raw::c_void
-    ) -> *mut shhash {
-        (self.shhash_new_arg)(arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-    }
-    pub unsafe fn shhash_delete(&self, arg1: *mut shhash) -> () { (self.shhash_delete)(arg1) }
-    pub unsafe fn shhash_clear(&self, arg1: *mut shhash) -> () { (self.shhash_clear)(arg1) }
-    pub unsafe fn shhash_get_first(&self, arg1: *mut shhash) -> *mut ::std::os::raw::c_void {
-        (self.shhash_get_first)(arg1)
-    }
-    pub unsafe fn shhash_get_next(&self, arg1: *mut shhash) -> *mut ::std::os::raw::c_void {
-        (self.shhash_get_next)(arg1)
-    }
-    pub unsafe fn shhash_insert(
-        &self,
-        arg1: *mut shhash,
-        arg2: *mut ::std::os::raw::c_void
-    ) -> ::std::os::raw::c_int {
-        (self.shhash_insert)(arg1, arg2)
-    }
-    pub unsafe fn shhash_search(
-        &self,
-        arg1: *mut shhash,
-        arg2: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void {
-        (self.shhash_search)(arg1, arg2)
-    }
-    pub unsafe fn shhash_search_unique(
-        &self,
-        pThis: *mut shhash,
-        key: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void {
-        (self.shhash_search_unique)(pThis, key)
-    }
-    pub unsafe fn shhash_searchNext(
-        &self,
-        arg1: *mut shhash,
-        arg2: *mut ::std::os::raw::c_void
-    ) -> *mut ::std::os::raw::c_void {
-        (self.shhash_searchNext)(arg1, arg2)
-    }
-    pub unsafe fn shhash_searchSlot(
-        &self,
-        arg1: *mut shhash,
-        arg2: *mut ::std::os::raw::c_void
-    ) -> *mut shlist {
-        (self.shhash_searchSlot)(arg1, arg2)
-    }
-    pub unsafe fn shhash_remove(&self, arg1: *mut shhash) -> *mut ::std::os::raw::c_void {
-        (self.shhash_remove)(arg1)
-    }
-    pub unsafe fn shhash_statistics(&self, arg1: *mut shhash, arg2: PHASHSTAT) -> PHASHSTAT {
-        (self.shhash_statistics)(arg1, arg2)
-    }
-    pub unsafe fn shhash_traversal(
-        &self,
-        pthis: *mut shhash,
-        data: *mut ::std::os::raw::c_void,
-        trav_func: PASCALFAR_INT_PROC
-    ) -> BOOL {
-        (self.shhash_traversal)(pthis, data, trav_func)
-    }
     pub unsafe fn ob_add_const_data(
         &self,
         obthis: POB_THIS,
@@ -7613,209 +6611,6 @@ impl Api {
     ) -> () {
         (self.ob_reuse_routine)(obthis, routlist, rout_id, proto_id, subpool, clear_pcode)
     }
-    pub unsafe fn sh_MAX_DEC(&self) -> *const SH_DEC { (self.sh_MAX_DEC)() }
-    pub unsafe fn shMaxDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
-        (self.shMaxDec)(dst, src1, src2)
-    }
-    pub unsafe fn shMinDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
-        (self.shMinDec)(dst, src1, src2)
-    }
-    pub unsafe fn shCompareDec(&self, src1: PSH_DEC, src2: PSH_DEC) -> SHORT {
-        (self.shCompareDec)(src1, src2)
-    }
-    pub unsafe fn shAbsDec(&self, dst: PSH_DEC, src: PSH_DEC) -> PSH_DEC { (self.shAbsDec)(dst, src) }
-    pub unsafe fn shNegateDec(&self, dst: PSH_DEC, src: PSH_DEC) -> PSH_DEC { (self.shNegateDec)(dst, src) }
-    pub unsafe fn shRoundDec(&self, dst: PSH_DEC, src: PSH_DEC, n: SHORT) -> PSH_DEC {
-        (self.shRoundDec)(dst, src, n)
-    }
-    pub unsafe fn shTruncDec(&self, dst: PSH_DEC, src: PSH_DEC, n: SHORT) -> PSH_DEC {
-        (self.shTruncDec)(dst, src, n)
-    }
-    pub unsafe fn shAddDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
-        (self.shAddDec)(dst, src1, src2)
-    }
-    pub unsafe fn shSubDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
-        (self.shSubDec)(dst, src1, src2)
-    }
-    pub unsafe fn shMultDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
-        (self.shMultDec)(dst, src1, src2)
-    }
-    pub unsafe fn shDivDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
-        (self.shDivDec)(dst, src1, src2)
-    }
-    pub unsafe fn shModDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
-        (self.shModDec)(dst, src1, src2)
-    }
-    pub unsafe fn shExpDec(&self, dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC {
-        (self.shExpDec)(dst, src1, src2)
-    }
-    pub unsafe fn shIntToDec(&self, dst: PSH_DEC, src: SHORT) -> PSH_DEC { (self.shIntToDec)(dst, src) }
-    pub unsafe fn shDecToInt(&self, dst: *mut SHORT, src: PSH_DEC) -> *mut SHORT {
-        (self.shDecToInt)(dst, src)
-    }
-    pub unsafe fn shUintToDec(&self, dst: PSH_DEC, src: USHORT) -> PSH_DEC { (self.shUintToDec)(dst, src) }
-    pub unsafe fn shDecToUint(&self, dst: *mut USHORT, src: PSH_DEC) -> *mut USHORT {
-        (self.shDecToUint)(dst, src)
-    }
-    pub unsafe fn shByteToDec(&self, dst: PSH_DEC, src: ::std::os::raw::c_uchar) -> PSH_DEC {
-        (self.shByteToDec)(dst, src)
-    }
-    pub unsafe fn shDecToByte(
-        &self,
-        dst: *mut ::std::os::raw::c_uchar,
-        src: PSH_DEC
-    ) -> *mut ::std::os::raw::c_uchar {
-        (self.shDecToByte)(dst, src)
-    }
-    pub unsafe fn shLongToDec(&self, dst: PSH_DEC, src: ::std::os::raw::c_long) -> PSH_DEC {
-        (self.shLongToDec)(dst, src)
-    }
-    pub unsafe fn shDecToLong(
-        &self,
-        arg1: *mut ::std::os::raw::c_long,
-        src: PSH_DEC
-    ) -> *mut ::std::os::raw::c_long {
-        (self.shDecToLong)(arg1, src)
-    }
-    pub unsafe fn shUlongToDec(&self, dst: PSH_DEC, src: ULONG) -> PSH_DEC { (self.shUlongToDec)(dst, src) }
-    pub unsafe fn shDecToUlong(&self, dst: *mut ULONG, src: PSH_DEC) -> *mut ULONG {
-        (self.shDecToUlong)(dst, src)
-    }
-    pub unsafe fn shLonglongToDec(&self, dst: PSH_DEC, src: *mut ::std::os::raw::c_longlong) -> PSH_DEC {
-        (self.shLonglongToDec)(dst, src)
-    }
-    pub unsafe fn shDecToLonglong(
-        &self,
-        dst: *mut ::std::os::raw::c_longlong,
-        src: PSH_DEC
-    ) -> *mut ::std::os::raw::c_longlong {
-        (self.shDecToLonglong)(dst, src)
-    }
-    pub unsafe fn shDecToFloat(&self, dst: *mut f32, src: PSH_DEC) -> *mut f32 {
-        (self.shDecToFloat)(dst, src)
-    }
-    pub unsafe fn shFloatToDec(&self, dst: PSH_DEC, src: *mut f32) -> PSH_DEC {
-        (self.shFloatToDec)(dst, src)
-    }
-    pub unsafe fn shDoubleToDec(&self, dst: PSH_DEC, src: *mut f64) -> PSH_DEC {
-        (self.shDoubleToDec)(dst, src)
-    }
-    pub unsafe fn shDecToDouble(&self, dst: *mut f64, src: PSH_DEC) -> *mut f64 {
-        (self.shDecToDouble)(dst, src)
-    }
-    pub unsafe fn shDecToAscii(&self, dst: LPTSTR, src: PSH_DEC) -> LPTSTR { (self.shDecToAscii)(dst, src) }
-    pub unsafe fn shAsciiToDec(&self, dst: PSH_DEC, src: LPTSTR) -> PSH_DEC { (self.shAsciiToDec)(dst, src) }
-    pub unsafe fn shAsciiToDecRnd(&self, dst: PSH_DEC, src: LPTSTR, n: SHORT) -> PSH_DEC {
-        (self.shAsciiToDecRnd)(dst, src, n)
-    }
-    pub unsafe fn shSetDecFractions(&self, d: PSH_DEC, n: SHORT) -> () { (self.shSetDecFractions)(d, n) }
-    pub unsafe fn shSetDecNegative(&self, d: PSH_DEC, n: BOOL) -> () { (self.shSetDecNegative)(d, n) }
-    pub unsafe fn shDecSetOverflow(&self, dec: PSH_DEC, neg: BOOL) -> BOOL {
-        (self.shDecSetOverflow)(dec, neg)
-    }
-    pub unsafe fn shdtDayName(&self, w_day: ::std::os::raw::c_short, lpName: LPTSTR) -> BOOL {
-        (self.shdtDayName)(w_day, lpName)
-    }
-    pub unsafe fn shdtDayOfWeek(&self, t: PSH_TIME) -> ::std::os::raw::c_int { (self.shdtDayOfWeek)(t) }
-    pub unsafe fn shdtBuildTime(
-        &self,
-        fTime1: PSH_TIME,
-        year: INT,
-        mon: ::std::os::raw::c_uchar,
-        day: ::std::os::raw::c_uchar,
-        hour: ::std::os::raw::c_uchar,
-        min: ::std::os::raw::c_uchar,
-        sec: ::std::os::raw::c_uchar,
-        msec: ::std::os::raw::c_long
-    ) -> () {
-        (self.shdtBuildTime)(fTime1, year, mon, day, hour, min, sec, msec)
-    }
-    pub unsafe fn shdtDiffDate(&self, fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long {
-        (self.shdtDiffDate)(fTime1, fTime2)
-    }
-    pub unsafe fn shdtDiffTime(&self, fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long {
-        (self.shdtDiffTime)(fTime1, fTime2)
-    }
-    pub unsafe fn shdtDiffMSec(&self, fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long {
-        (self.shdtDiffMSec)(fTime1, fTime2)
-    }
-    pub unsafe fn shdtNow(&self, fTime: PSH_TIME) -> () { (self.shdtNow)(fTime) }
-    pub unsafe fn shdtParse(
-        &self,
-        fTime: PSH_TIME,
-        sTime: LPTSTR,
-        flags: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_int {
-        (self.shdtParse)(fTime, sTime, flags)
-    }
-    pub unsafe fn shdtParseEx(
-        &self,
-        fTime: PSH_TIME,
-        sTime: LPTSTR,
-        flags: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_int {
-        (self.shdtParseEx)(fTime, sTime, flags, dwCultureFormat)
-    }
-    pub unsafe fn shdtParseStringEx(
-        &self,
-        fTime: PSH_TIME,
-        sTime: LPTSTR,
-        flags: ::std::os::raw::c_int,
-        bStrictly: BOOL
-    ) -> ::std::os::raw::c_int {
-        (self.shdtParseStringEx)(fTime, sTime, flags, bStrictly)
-    }
-    pub unsafe fn shdtParseStringExWithLcid(
-        &self,
-        fTime: PSH_TIME,
-        sTime: LPTSTR,
-        flags: ::std::os::raw::c_int,
-        bStrictly: BOOL,
-        uInLcid: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_int {
-        (self.shdtParseStringExWithLcid)(fTime, sTime, flags, bStrictly, uInLcid)
-    }
-    pub unsafe fn shdtParseToString(
-        &self,
-        fTime: PSH_TIME,
-        sTime: LPTSTR,
-        flags: ::std::os::raw::c_int
-    ) -> () {
-        (self.shdtParseToString)(fTime, sTime, flags)
-    }
-    pub unsafe fn shdtRelativeDate(
-        &self,
-        oDate: PSH_TIME,
-        iDate: PSH_TIME,
-        dayCount: ::std::os::raw::c_long
-    ) -> () {
-        (self.shdtRelativeDate)(oDate, iDate, dayCount)
-    }
-    pub unsafe fn shdtToMJDDate(&self, pDate: PSH_TIME, pMJDDate: *mut f64) -> () {
-        (self.shdtToMJDDate)(pDate, pMJDDate)
-    }
-    pub unsafe fn shdtToMJDTime(&self, pTime: PSH_TIME, pMJDTime: *mut f64) -> () {
-        (self.shdtToMJDTime)(pTime, pMJDTime)
-    }
-    pub unsafe fn shdtToMJDTimestamp(
-        &self,
-        pDateTime: PSH_TIME,
-        pMJDDate: *mut f64,
-        pMJDTime: *mut f64
-    ) -> () {
-        (self.shdtToMJDTimestamp)(pDateTime, pMJDDate, pMJDTime)
-    }
-    pub unsafe fn shMJDDateTodt(&self, pDate: PSH_TIME, MJDDate: f64) -> () {
-        (self.shMJDDateTodt)(pDate, MJDDate)
-    }
-    pub unsafe fn shMJDTimeTodt(&self, pTime: PSH_TIME, MJDTime: f64) -> () {
-        (self.shMJDTimeTodt)(pTime, MJDTime)
-    }
-    pub unsafe fn shMJDTimestampTodt(&self, pDateTime: PSH_TIME, MJDDate: f64, MJDTime: f64) -> () {
-        (self.shMJDTimestampTodt)(pDateTime, MJDDate, MJDTime)
-    }
-    pub unsafe fn shdtString(&self, sdate: LPTSTR, stime: LPTSTR) -> () { (self.shdtString)(sdate, stime) }
     pub unsafe fn ob_mgr_init(&self, dbgthis: *mut SH_DBG_THIS, stgthis: ppbstg_anchor) -> POB_THIS {
         (self.ob_mgr_init)(dbgthis, stgthis)
     }
@@ -11416,213 +10211,6 @@ impl Api {
     pub unsafe fn ob_init_group_objects(&self, obthis: POB_THIS, pGroup: POB_GROUP) -> () {
         (self.ob_init_group_objects)(obthis, pGroup)
     }
-    pub unsafe fn shformatDateTimeWeb(
-        &self,
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        value: PSH_TIME,
-        flags: ::std::os::raw::c_int,
-        cultureInfo: LPMONTHANDDAYNAMESSTRUCT
-    ) -> ::std::os::raw::c_long {
-        (self.shformatDateTimeWeb)(pResult, maxLen, prMask, value, flags, cultureInfo)
-    }
-    pub unsafe fn shformatDateTime(
-        &self,
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        value: PSH_TIME,
-        flags: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_long {
-        (self.shformatDateTime)(pResult, maxLen, prMask, value, flags)
-    }
-    pub unsafe fn shformatDecimal(
-        &self,
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prFmt: LPTSTR,
-        value: *mut ::std::os::raw::c_void,
-        flags: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_long {
-        (self.shformatDecimal)(pResult, maxLen, prFmt, value, flags)
-    }
-    pub unsafe fn shformatDecimalWeb(
-        &self,
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prFmt: LPTSTR,
-        value: *mut ::std::os::raw::c_void,
-        flags: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_long {
-        (self.shformatDecimalWeb)(pResult, maxLen, prFmt, value, flags, dwCultureFormat)
-    }
-    pub unsafe fn shformatDouble(
-        &self,
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        value: f64,
-        flags: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_long {
-        (self.shformatDouble)(pResult, maxLen, prMask, value, flags)
-    }
-    pub unsafe fn shformatDoubleWeb(
-        &self,
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        value: f64,
-        flags: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_long {
-        (self.shformatDoubleWeb)(pResult, maxLen, prMask, value, flags, dwCultureFormat)
-    }
-    pub unsafe fn shformatLonglong(
-        &self,
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        value: ::std::os::raw::c_longlong,
-        flags: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_long {
-        (self.shformatLonglong)(pResult, maxLen, prMask, value, flags)
-    }
-    pub unsafe fn shformatLonglongWeb(
-        &self,
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        value: ::std::os::raw::c_longlong,
-        flags: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_long {
-        (self.shformatLonglongWeb)(pResult, maxLen, prMask, value, flags, dwCultureFormat)
-    }
-    pub unsafe fn shformatReal(
-        &self,
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        pValue: *mut f32,
-        flags: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_long {
-        (self.shformatReal)(pResult, maxLen, prMask, pValue, flags)
-    }
-    pub unsafe fn shformatRealWeb(
-        &self,
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        pValue: *mut f32,
-        flags: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_long {
-        (self.shformatRealWeb)(pResult, maxLen, prMask, pValue, flags, dwCultureFormat)
-    }
-    pub unsafe fn shformatString(
-        &self,
-        pResult: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        prMask: LPTSTR,
-        value: LPTSTR,
-        flags: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_long {
-        (self.shformatString)(pResult, maxLen, prMask, value, flags)
-    }
-    pub unsafe fn shformatCmplDateTimeMask(
-        &self,
-        prMask: LPTSTR,
-        psMask: LPTSTR,
-        maxLen: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_int {
-        (self.shformatCmplDateTimeMask)(prMask, psMask, maxLen)
-    }
-    pub unsafe fn shformatCmplDateTimeMaskWeb(
-        &self,
-        prMask: LPTSTR,
-        psMask: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_int {
-        (self.shformatCmplDateTimeMaskWeb)(prMask, psMask, maxLen, dwCultureFormat)
-    }
-    pub unsafe fn shformatCmplNumericMask(
-        &self,
-        prMask: LPTSTR,
-        psMask: LPTSTR,
-        maxLen: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_int {
-        (self.shformatCmplNumericMask)(prMask, psMask, maxLen)
-    }
-    pub unsafe fn shformatCmplNumericMaskWeb(
-        &self,
-        prMask: LPTSTR,
-        psMask: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_int {
-        (self.shformatCmplNumericMaskWeb)(prMask, psMask, maxLen, dwCultureFormat)
-    }
-    pub unsafe fn shformatCmplNumericMaskWebCommasPos(
-        &self,
-        prMask: LPTSTR,
-        psMask: LPTSTR,
-        maxLen: ::std::os::raw::c_int,
-        dwCultureFormat: LPTSTR
-    ) -> ::std::os::raw::c_int {
-        (self.shformatCmplNumericMaskWebCommasPos)(prMask, psMask, maxLen, dwCultureFormat)
-    }
-    pub unsafe fn shformatCmplStringMask(
-        &self,
-        prMask: LPTSTR,
-        psMask: LPTSTR,
-        maxLen: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_int {
-        (self.shformatCmplStringMask)(prMask, psMask, maxLen)
-    }
-    pub unsafe fn shformatErrorString(&self, errMsg: LPTSTR, err: ::std::os::raw::c_int) -> () {
-        (self.shformatErrorString)(errMsg, err)
-    }
-    pub unsafe fn shregExprCmpl(
-        &self,
-        pattern: LPTSTR,
-        srcPattern: LPTSTR,
-        maxLen: ::std::os::raw::c_int
-    ) -> ::std::os::raw::c_int {
-        (self.shregExprCmpl)(pattern, srcPattern, maxLen)
-    }
-    pub unsafe fn shregExprMatch(&self, string: LPTSTR, pattern: LPTSTR) -> ::std::os::raw::c_int {
-        (self.shregExprMatch)(string, pattern)
-    }
-    pub unsafe fn shIsValidReal(&self, n: LPTSTR) -> BOOL { (self.shIsValidReal)(n) }
-    pub unsafe fn shNormalizeReal(&self, out: LPTSTR, in_: LPTSTR) -> () { (self.shNormalizeReal)(out, in_) }
-    pub unsafe fn shNormalizeRealbyLocale(&self, out: LPTSTR, in_: LPTSTR) -> () {
-        (self.shNormalizeRealbyLocale)(out, in_)
-    }
-    pub unsafe fn shIsValidRealWeb(&self, n: LPTSTR, paramPeriodChar: TCHAR, paramCommaChar: TCHAR) -> BOOL {
-        (self.shIsValidRealWeb)(n, paramPeriodChar, paramCommaChar)
-    }
-    pub unsafe fn shNormalizeRealWeb(
-        &self,
-        out: LPTSTR,
-        in_: LPTSTR,
-        paramPeriodChar: TCHAR,
-        paramCommaChar: TCHAR
-    ) -> () {
-        (self.shNormalizeRealWeb)(out, in_, paramPeriodChar, paramCommaChar)
-    }
-    pub unsafe fn shNormalizeRealbyLocaleWeb(
-        &self,
-        out: LPTSTR,
-        in_: LPTSTR,
-        paramPeriodChar: TCHAR,
-        paramCommaChar: TCHAR
-    ) -> () {
-        (self.shNormalizeRealbyLocaleWeb)(out, in_, paramPeriodChar, paramCommaChar)
-    }
-    pub unsafe fn shIsValidRealNoLocale(&self, n: LPTSTR) -> BOOL { (self.shIsValidRealNoLocale)(n) }
     pub unsafe fn ob_add_glbsym_var(
         &self,
         obthis: POB_THIS,

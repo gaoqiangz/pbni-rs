@@ -20,16 +20,11 @@
 #define NOKANJI
 #define NOCRYPT
 #define NOMCX
-
-/**********************************************************************
-system library by 781770213@qq.com
-大自在 2021/6
-**********************************************************************/
-
+/*
 #ifndef POINTER_64
 #define POINTER_64 __ptr64 // 必须
 #endif
-
+*/
 #include <windows.h>
 #include <comdef.h>
 
