@@ -1,10 +1,15 @@
 use crate::pbstr::*;
 
 mod library;
-pub mod ffi;
+mod ffi;
+
+lazy_static::lazy_static! {
+static ref API: ffi::Api = unsafe { ffi::Api::load().unwrap() };
+}
 
 pub fn foo() {
     unsafe {
-        ffi::Api::load().unwrap();
+        let this = API.rt_get_current_this();
+        println!("{this:p}");
     }
 }

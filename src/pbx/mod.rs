@@ -37,7 +37,7 @@ pub use object::VisualObject;
 
 #[cfg(any(feature = "global_function", feature = "nonvisualobject", feature = "visualobject"))]
 pub use pbni_codegen::{
-    pbni_constructor as constructor, pbni_event as event, pbni_global_function as global_function, pbni_method as method, pbni_nonvisualobject as nonvisualobject, pbni_visualobject as visualobject
+    pbx_constructor as constructor, pbx_event as event, pbx_global_function as global_function, pbx_method as method, pbx_nonvisualobject as nonvisualobject, pbx_visualobject as visualobject
 };
 
 pub type Result<T> = ::std::result::Result<T, PBXRESULT>;

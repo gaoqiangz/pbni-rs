@@ -1,1 +1,1 @@
-mod bindings;
+pub mod bindings;

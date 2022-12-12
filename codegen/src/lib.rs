@@ -2,8 +2,8 @@
 
 use proc_macro::TokenStream;
 
-#[cfg(feature = "pbni")]
-mod pbni;
+#[cfg(feature = "pbx")]
+mod pbx;
 
 #[cfg(feature = "syslib")]
 mod syslib;
@@ -18,10 +18,10 @@ mod syslib;
 /// #[global_function(name = "gf_bitor")]
 /// fn bit_or(session: Session, a: pblong, b: pblong) -> pblong { a | b }
 /// ```
-#[cfg(all(feature = "pbni", feature = "global_function"))]
+#[cfg(all(feature = "pbx", feature = "global_function"))]
 #[proc_macro_attribute]
-pub fn pbni_global_function(args: TokenStream, input: TokenStream) -> TokenStream {
-    pbni::global_function(args, input)
+pub fn pbx_global_function(args: TokenStream, input: TokenStream) -> TokenStream {
+    pbx::global_function(args, input)
 }
 
 /// 生成不可视对象
@@ -92,7 +92,7 @@ pub fn pbni_global_function(args: TokenStream, input: TokenStream) -> TokenStrea
 /// end on
 /// ```
 ///
-/// - Rust(pbni-rs)
+/// - Rust(pbx-rs)
 ///
 /// ```no_run
 /// struct RustObject {
@@ -100,7 +100,7 @@ pub fn pbni_global_function(args: TokenStream, input: TokenStream) -> TokenStrea
 ///     ctx: ContextObject
 /// }
 ///
-/// #[nonvisualobject(name = "n_pbni")]
+/// #[nonvisualobject(name = "n_pbx")]
 /// impl RustObject {
 ///     #[constructor]
 ///     fn new(session: Session, ctx: ContextObject) -> RustObject {
@@ -119,7 +119,7 @@ pub fn pbni_global_function(args: TokenStream, input: TokenStream) -> TokenStrea
 ///     parent: RustObject
 /// }
 ///
-/// #[nonvisualobject(name = "n_pbni_child", inherit = "parent")]
+/// #[nonvisualobject(name = "n_pbx_child", inherit = "parent")]
 /// impl RustChildObject {
 ///     #[constructor]
 ///     fn new(session: Session, ctx: ContextObject) -> RustChildObject {
@@ -136,10 +136,10 @@ pub fn pbni_global_function(args: TokenStream, input: TokenStream) -> TokenStrea
 ///     }
 /// }
 /// ```
-#[cfg(all(feature = "pbni", feature = "nonvisualobject"))]
+#[cfg(all(feature = "pbx", feature = "nonvisualobject"))]
 #[proc_macro_attribute]
-pub fn pbni_nonvisualobject(args: TokenStream, input: TokenStream) -> TokenStream {
-    pbni::nonvisualobject(args, input)
+pub fn pbx_nonvisualobject(args: TokenStream, input: TokenStream) -> TokenStream {
+    pbx::nonvisualobject(args, input)
 }
 
 /// 生成可视对象
@@ -178,10 +178,10 @@ pub fn pbni_nonvisualobject(args: TokenStream, input: TokenStream) -> TokenStrea
 ///     }
 /// }
 /// ```
-#[cfg(all(feature = "pbni", feature = "visualobject"))]
+#[cfg(all(feature = "pbx", feature = "visualobject"))]
 #[proc_macro_attribute]
-pub fn pbni_visualobject(args: TokenStream, input: TokenStream) -> TokenStream {
-    pbni::visualobject(args, input)
+pub fn pbx_visualobject(args: TokenStream, input: TokenStream) -> TokenStream {
+    pbx::visualobject(args, input)
 }
 
 /// 标记对象的构造函数
@@ -197,11 +197,9 @@ pub fn pbni_visualobject(args: TokenStream, input: TokenStream) -> TokenStream {
 ///     }
 /// }
 /// ```
-#[cfg(all(feature = "pbni", any(feature = "nonvisualobject", feature = "visualobject")))]
+#[cfg(all(feature = "pbx", any(feature = "nonvisualobject", feature = "visualobject")))]
 #[proc_macro_attribute]
-pub fn pbni_constructor(args: TokenStream, input: TokenStream) -> TokenStream {
-    pbni::constructor(args, input)
-}
+pub fn pbx_constructor(args: TokenStream, input: TokenStream) -> TokenStream { pbx::constructor(args, input) }
 
 /// 标记对象函数
 ///
@@ -218,9 +216,9 @@ pub fn pbni_constructor(args: TokenStream, input: TokenStream) -> TokenStream {
 ///     format!("hello {}!",world)
 /// }
 /// ```
-#[cfg(all(feature = "pbni", any(feature = "nonvisualobject", feature = "visualobject")))]
+#[cfg(all(feature = "pbx", any(feature = "nonvisualobject", feature = "visualobject")))]
 #[proc_macro_attribute]
-pub fn pbni_method(args: TokenStream, input: TokenStream) -> TokenStream { pbni::method(args, input) }
+pub fn pbx_method(args: TokenStream, input: TokenStream) -> TokenStream { pbx::method(args, input) }
 
 /// 标记对象事件,如果方法体没有代码,则自动生成对应的调用代码
 ///
@@ -244,7 +242,7 @@ pub fn pbni_method(args: TokenStream, input: TokenStream) -> TokenStream { pbni:
 ///     fn context_mut(&mut self) -> &mut ContextObject { &mut self.ctx }
 /// }
 ///
-/// #[nonvisualobject(name = "n_pbni")]
+/// #[nonvisualobject(name = "n_pbx")]
 /// impl RustObject {
 ///     #[constructor]
 ///     fn new(session: Session, ctx: ContextObject) -> RustObject {
@@ -257,6 +255,6 @@ pub fn pbni_method(args: TokenStream, input: TokenStream) -> TokenStream { pbni:
 ///     fn on_fire(&mut self) {}
 /// }
 /// ```
-#[cfg(all(feature = "pbni", any(feature = "nonvisualobject", feature = "visualobject")))]
+#[cfg(all(feature = "pbx", any(feature = "nonvisualobject", feature = "visualobject")))]
 #[proc_macro_attribute]
-pub fn pbni_event(args: TokenStream, input: TokenStream) -> TokenStream { pbni::event(args, input) }
+pub fn pbx_event(args: TokenStream, input: TokenStream) -> TokenStream { pbx::event(args, input) }

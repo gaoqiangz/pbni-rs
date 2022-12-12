@@ -1,10 +1,10 @@
 use crate::{
-    pbni::{bindings::*, *}, pbstr::*
+    pbstr::*, pbx::{bindings::*, *}
 };
 use std::collections::HashMap;
 
 #[cfg(feature = "global_function")]
-use crate::pbni::codegen::global_function::GlobalFunction;
+use crate::pbx::codegen::global_function::GlobalFunction;
 
 #[cfg(feature = "global_function")]
 #[static_init::dynamic]

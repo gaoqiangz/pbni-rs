@@ -1,5 +1,5 @@
 use crate::{
-    pbni::{bindings::*, callinfo::FromCallInfo, value::ToValue, *}, pbstr::*
+    pbstr::*, pbx::{bindings::*, callinfo::FromCallInfo, value::ToValue, *}
 };
 
 /// 全局函数抽象

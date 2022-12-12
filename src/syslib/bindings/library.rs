@@ -73,7 +73,7 @@ impl PBLibrary {
     pub unsafe fn get<T>(&self, symbol: &[u8]) -> Result<Symbol<T>, PBLibraryError> {
         match self.pbvm.get(symbol).or_else(|_| self.pbsys.get(symbol)).or_else(|_| self.pbshr.get(symbol)) {
             Ok(sym) => Ok(sym),
-            Err(e) => Err(e.into())
+            Err(e) => Err(PBLibraryError::FindSymbol(String::from_utf8_lossy(symbol).into_owned(), e))
         }
     }
 }
@@ -81,6 +81,7 @@ impl PBLibrary {
 #[derive(Debug)]
 pub enum PBLibraryError {
     LibLoading(libloading::Error),
+    FindSymbol(String, libloading::Error),
     Other(String)
 }
 
@@ -109,6 +110,7 @@ impl std::fmt::Display for PBLibraryError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
             PBLibraryError::LibLoading(e) => e.fmt(f),
+            PBLibraryError::FindSymbol(sym, e) => write!(f, "symbol: {}, error: {}", sym, e),
             PBLibraryError::Other(e) => write!(f, "{e}")
         }
     }

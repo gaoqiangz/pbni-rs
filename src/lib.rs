@@ -381,8 +381,8 @@
 //#[macro_use]
 pub mod pbstr;
 
-#[cfg(feature = "pbni")]
-pub mod pbni;
+#[cfg(feature = "pbx")]
+pub mod pbx;
 
 #[cfg(feature = "syslib")]
 pub mod syslib;

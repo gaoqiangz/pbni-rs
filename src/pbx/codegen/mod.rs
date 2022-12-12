@@ -19,7 +19,7 @@ macro_rules! pbargs {
         |args| -> Result<()> {
             let mut idx = 0;
             $(
-                $crate::pbni::__private::codegen::ToValue::to_value($arg, &mut args.get(idx))?;
+                $crate::pbx::__private::codegen::ToValue::to_value($arg, &mut args.get(idx))?;
                 idx += 1;
             )*
             Ok(())
@@ -52,7 +52,7 @@ pub use throw;
 
 #[doc(hidden)]
 pub mod __private {
-    use crate::pbni::{bindings::*, *};
+    use crate::pbx::{bindings::*, *};
     use std::panic::{self, UnwindSafe};
 
     pub use value::{FromValue, FromValueOwned, ToValue};

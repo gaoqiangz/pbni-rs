@@ -1,4 +1,4 @@
-use pbni::*;
+use pbx::*;
 
 fn main() {
     let vm = VM::new(r#"C:\Program Files (x86)\Appeon\Shared\PowerBuilder\PBVM190.DLL"#).unwrap();

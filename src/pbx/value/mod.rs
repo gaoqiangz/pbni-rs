@@ -1,5 +1,5 @@
 use crate::{
-    pbni::{bindings::*, *}, prelude::*
+    pbx::{bindings::*, *}, prelude::*
 };
 
 mod array;

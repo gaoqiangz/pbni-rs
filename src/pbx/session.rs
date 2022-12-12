@@ -1,5 +1,5 @@
 use crate::{
-    pbni::{bindings::*, invoker::GlobalFunction, value::FromValueOwned, *}, prelude::*
+    pbx::{bindings::*, invoker::GlobalFunction, value::FromValueOwned, *}, prelude::*
 };
 use std::{borrow::Cow, ops::Deref};
 

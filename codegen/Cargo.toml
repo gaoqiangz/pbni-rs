@@ -21,7 +21,7 @@ quote = "1.0.9"
 [features]
 default = []
 
-pbni = []
+pbx = []
 syslib = []
 global_function = []
 nonvisualobject = []

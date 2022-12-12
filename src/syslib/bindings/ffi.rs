@@ -2325,45 +2325,45 @@ pub use self::ob_error_return::Type as OB_ERROR_RETURN;
 extern crate libloading;
 pub struct Api {
     __library: PBLibrary,
-    pub pbstg_begin: unsafe extern "C" fn(buffer: USHORT) -> ppbstg_anchor,
-    pub pbstg_begin_allocflags: unsafe extern "C" fn(buffer: USHORT, lAllocFlags: UINT) -> ppbstg_anchor,
-    pub pbstg_begin_nofast: unsafe extern "C" fn(buffer: USHORT) -> ppbstg_anchor,
-    pub pbstg_end: unsafe extern "C" fn(pthis: ppbstg_anchor),
-    pub pbstg_free_pool: unsafe extern "C" fn(pthis: ppbstg_anchor, subPool: pbstg_subpool),
-    pub pbstg_new_pool: unsafe extern "C" fn(pthis: ppbstg_anchor) -> pbstg_subpool,
-    pub pbstg_new_pool_nofast: unsafe extern "C" fn(pthis: ppbstg_anchor) -> pbstg_subpool,
-    pub pbstg_set_pool_name:
+    pbstg_begin: unsafe extern "C" fn(buffer: USHORT) -> ppbstg_anchor,
+    pbstg_begin_allocflags: unsafe extern "C" fn(buffer: USHORT, lAllocFlags: UINT) -> ppbstg_anchor,
+    pbstg_begin_nofast: unsafe extern "C" fn(buffer: USHORT) -> ppbstg_anchor,
+    pbstg_end: unsafe extern "C" fn(pthis: ppbstg_anchor),
+    pbstg_free_pool: unsafe extern "C" fn(pthis: ppbstg_anchor, subPool: pbstg_subpool),
+    pbstg_new_pool: unsafe extern "C" fn(pthis: ppbstg_anchor) -> pbstg_subpool,
+    pbstg_new_pool_nofast: unsafe extern "C" fn(pthis: ppbstg_anchor) -> pbstg_subpool,
+    pbstg_set_pool_name:
         unsafe extern "C" fn(pthis: ppbstg_anchor, subPool: pbstg_subpool, lpstrName: LPTSTR),
-    pub pbstg_set_poolpagesize: unsafe extern "C" fn(pthis: ppbstg_anchor, pagesize: ULONG) -> BOOL,
-    pub pbstg_write_debug: unsafe extern "C" fn(
+    pbstg_set_poolpagesize: unsafe extern "C" fn(pthis: ppbstg_anchor, pagesize: ULONG) -> BOOL,
+    pbstg_write_debug: unsafe extern "C" fn(
         pthis: ppbstg_anchor,
         subpool: pbstg_subpool,
         lpFile: LPTSTR
     ) -> ::std::os::raw::c_short,
-    pub pbstg_stat: unsafe extern "C" fn(pthis: ppbstg_anchor, stat: *mut pbstg_statistics),
-    pub pbstg_nextGeneration: unsafe extern "C" fn() -> ::std::os::raw::c_long,
-    pub pbstg_dumpLeaks: unsafe extern "C" fn(generation: ::std::os::raw::c_long),
-    pub pbstg_dumpHeap: unsafe extern "C" fn(),
-    pub pbstg_alloc: unsafe extern "C" fn(
+    pbstg_stat: unsafe extern "C" fn(pthis: ppbstg_anchor, stat: *mut pbstg_statistics),
+    pbstg_nextGeneration: unsafe extern "C" fn() -> ::std::os::raw::c_long,
+    pbstg_dumpLeaks: unsafe extern "C" fn(generation: ::std::os::raw::c_long),
+    pbstg_dumpHeap: unsafe extern "C" fn(),
+    pbstg_alloc: unsafe extern "C" fn(
         pthis: ppbstg_anchor,
         iNumberOfBytes: ULONG,
         subPool: pbstg_subpool
     ) -> *mut ::std::os::raw::c_void,
-    pub pbstg_free: unsafe extern "C" fn(pthis: ppbstg_anchor, stg: *mut ::std::os::raw::c_void),
-    pub pbstg_realloc: unsafe extern "C" fn(
+    pbstg_free: unsafe extern "C" fn(pthis: ppbstg_anchor, stg: *mut ::std::os::raw::c_void),
+    pbstg_realloc: unsafe extern "C" fn(
         pthis: ppbstg_anchor,
         pOldStorage: *mut ::std::os::raw::c_void,
         iLength: ULONG,
         subPool: pbstg_subpool
     ) -> *mut ::std::os::raw::c_void,
-    pub pbstg_size: unsafe extern "C" fn(pthis: ppbstg_anchor, pStg: *mut ::std::os::raw::c_void) -> ULONG,
-    pub pbstg_fast_strlen: unsafe extern "C" fn(s: LPTSTR) -> ULONG,
-    pub pbstg_ansitoupper: unsafe extern "C" fn(c: ::std::os::raw::c_int) -> ::std::os::raw::c_int,
-    pub pbstg_ansitolower: unsafe extern "C" fn(c: ::std::os::raw::c_int) -> ::std::os::raw::c_int,
-    pub pbstg_strdup:
+    pbstg_size: unsafe extern "C" fn(pthis: ppbstg_anchor, pStg: *mut ::std::os::raw::c_void) -> ULONG,
+    pbstg_fast_strlen: unsafe extern "C" fn(s: LPTSTR) -> ULONG,
+    pbstg_ansitoupper: unsafe extern "C" fn(c: ::std::os::raw::c_int) -> ::std::os::raw::c_int,
+    pbstg_ansitolower: unsafe extern "C" fn(c: ::std::os::raw::c_int) -> ::std::os::raw::c_int,
+    pbstg_strdup:
         unsafe extern "C" fn(pthis: ppbstg_anchor, string: LPCTSTR, subpool: pbstg_subpool) -> LPTSTR,
-    pub pbstg_strdup_malloc: unsafe extern "C" fn(lpstrString: LPTSTR) -> LPTSTR,
-    pub pbstg_str_build: unsafe extern "C" fn(
+    pbstg_strdup_malloc: unsafe extern "C" fn(lpstrString: LPTSTR) -> LPTSTR,
+    pbstg_str_build: unsafe extern "C" fn(
         sa: ppbstg_anchor,
         subpool: pbstg_subpool,
         syn: *mut LPTSTR,
@@ -2371,7 +2371,7 @@ pub struct Api {
         synOff: *mut ::std::os::raw::c_long,
         string: LPTSTR
     ),
-    pub pbstg_str_build_char: unsafe extern "C" fn(
+    pbstg_str_build_char: unsafe extern "C" fn(
         sa: ppbstg_anchor,
         subpool: pbstg_subpool,
         syn: *mut LPTSTR,
@@ -2379,7 +2379,7 @@ pub struct Api {
         synOff: *mut ::std::os::raw::c_long,
         c: TCHAR
     ),
-    pub pbstg_str_build_huge: unsafe extern "C" fn(
+    pbstg_str_build_huge: unsafe extern "C" fn(
         sa: ppbstg_anchor,
         subpool: pbstg_subpool,
         syn: *mut LPTSTR,
@@ -2387,59 +2387,59 @@ pub struct Api {
         synOff: *mut ::std::os::raw::c_long,
         string: *mut TCHAR
     ),
-    pub pbstg_str_remove_char: unsafe extern "C" fn(string: LPTSTR, c: TCHAR) -> LPTSTR,
-    pub pbstg_str_trim_left: unsafe extern "C" fn(string: LPTSTR, IncludeAllSpaceTypes: BOOL) -> LPTSTR,
-    pub pbstg_str_trim_right: unsafe extern "C" fn(string: LPTSTR, IncludeAllSpaceTypes: BOOL) -> LPTSTR,
-    pub pbstg_str_trim: unsafe extern "C" fn(string: LPTSTR, IncludeAllSpaceTypes: BOOL) -> LPTSTR,
-    pub pbstg_str_wordcap: unsafe extern "C" fn(s: LPTSTR) -> LPTSTR,
-    pub pbstg_atoi_imp: unsafe extern "C" fn(arg1: LPTSTR) -> INT,
-    pub pbstg_atof_imp: unsafe extern "C" fn(arg1: LPTSTR) -> f64,
-    pub pbstg_strtod_imp: unsafe extern "C" fn(pText: LPTSTR, endptr: *mut LPTSTR) -> f64,
-    pub pbstg_atol_imp: unsafe extern "C" fn(arg1: LPTSTR) -> ::std::os::raw::c_long,
-    pub pbstg_strtol_imp: unsafe extern "C" fn(
+    pbstg_str_remove_char: unsafe extern "C" fn(string: LPTSTR, c: TCHAR) -> LPTSTR,
+    pbstg_str_trim_left: unsafe extern "C" fn(string: LPTSTR, IncludeAllSpaceTypes: BOOL) -> LPTSTR,
+    pbstg_str_trim_right: unsafe extern "C" fn(string: LPTSTR, IncludeAllSpaceTypes: BOOL) -> LPTSTR,
+    pbstg_str_trim: unsafe extern "C" fn(string: LPTSTR, IncludeAllSpaceTypes: BOOL) -> LPTSTR,
+    pbstg_str_wordcap: unsafe extern "C" fn(s: LPTSTR) -> LPTSTR,
+    pbstg_atoi_imp: unsafe extern "C" fn(arg1: LPTSTR) -> INT,
+    pbstg_atof_imp: unsafe extern "C" fn(arg1: LPTSTR) -> f64,
+    pbstg_strtod_imp: unsafe extern "C" fn(pText: LPTSTR, endptr: *mut LPTSTR) -> f64,
+    pbstg_atol_imp: unsafe extern "C" fn(arg1: LPTSTR) -> ::std::os::raw::c_long,
+    pbstg_strtol_imp: unsafe extern "C" fn(
         arg1: LPTSTR,
         arg2: *mut LPTSTR,
         arg3: ::std::os::raw::c_int
     ) -> ::std::os::raw::c_long,
-    pub pbstg_atou_imp: unsafe extern "C" fn(arg1: LPTSTR) -> UINT,
-    pub pbstg_atoul_imp: unsafe extern "C" fn(arg1: LPTSTR) -> ULONG,
-    pub pbstg_strtoul_imp:
+    pbstg_atou_imp: unsafe extern "C" fn(arg1: LPTSTR) -> UINT,
+    pbstg_atoul_imp: unsafe extern "C" fn(arg1: LPTSTR) -> ULONG,
+    pbstg_strtoul_imp:
         unsafe extern "C" fn(arg1: LPTSTR, arg2: *mut LPTSTR, arg3: ::std::os::raw::c_int) -> ULONG,
-    pub pbstg_remove_imp: unsafe extern "C" fn(arg1: LPTSTR) -> INT,
-    pub pbstg_dde_alloc:
+    pbstg_remove_imp: unsafe extern "C" fn(arg1: LPTSTR) -> INT,
+    pbstg_dde_alloc:
         unsafe extern "C" fn(iNumberOfBytes: ::std::os::raw::c_ushort) -> *mut ::std::os::raw::c_void,
-    pub pbstg_dde_free: unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void),
-    pub pbstg_dde_get_handle: unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> GLOBALHANDLE,
-    pub pbstg_dde_lock: unsafe extern "C" fn(arg1: GLOBALHANDLE) -> *mut ::std::os::raw::c_void,
-    pub pbstg_dde_unlock: unsafe extern "C" fn(arg1: GLOBALHANDLE),
-    pub pbstg_huge_memcmp: unsafe extern "C" fn(
+    pbstg_dde_free: unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void),
+    pbstg_dde_get_handle: unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> GLOBALHANDLE,
+    pbstg_dde_lock: unsafe extern "C" fn(arg1: GLOBALHANDLE) -> *mut ::std::os::raw::c_void,
+    pbstg_dde_unlock: unsafe extern "C" fn(arg1: GLOBALHANDLE),
+    pbstg_huge_memcmp: unsafe extern "C" fn(
         v1: *mut ::std::os::raw::c_void,
         v2: *mut ::std::os::raw::c_void,
         count: ULONG
     ) -> ::std::os::raw::c_short,
-    pub pbstg_huge_memcpy: unsafe extern "C" fn(
+    pbstg_huge_memcpy: unsafe extern "C" fn(
         v1: *mut ::std::os::raw::c_void,
         v2: *mut ::std::os::raw::c_void,
         count: ULONG
     ) -> *mut ::std::os::raw::c_void,
-    pub pbstg_huge_memmove: unsafe extern "C" fn(
+    pbstg_huge_memmove: unsafe extern "C" fn(
         v1: *mut ::std::os::raw::c_void,
         v2: *mut ::std::os::raw::c_void,
         count: ULONG
     ) -> *mut ::std::os::raw::c_void,
-    pub pbstg_huge_memset: unsafe extern "C" fn(
+    pbstg_huge_memset: unsafe extern "C" fn(
         v1: *mut ::std::os::raw::c_void,
         c: ::std::os::raw::c_short,
         count: ULONG
     ) -> *mut ::std::os::raw::c_void,
-    pub pbstg_huge_strchr: unsafe extern "C" fn(s: *mut TCHAR, c: TCHAR) -> *mut TCHAR,
-    pub pbstg_huge_strcpy: unsafe extern "C" fn(s: *mut TCHAR, s2: *mut TCHAR) -> *mut TCHAR,
-    pub pbstg_huge_strlen: unsafe extern "C" fn(s: *mut TCHAR) -> ULONG,
-    pub pbstg_huge_strncpy: unsafe extern "C" fn(s: *mut TCHAR, s2: *mut TCHAR, count: ULONG) -> *mut TCHAR,
-    pub pbstg_huge_strstr: unsafe extern "C" fn(s: *mut TCHAR, s2: *mut TCHAR) -> *mut TCHAR,
-    pub pbstg_unicodestrdup:
+    pbstg_huge_strchr: unsafe extern "C" fn(s: *mut TCHAR, c: TCHAR) -> *mut TCHAR,
+    pbstg_huge_strcpy: unsafe extern "C" fn(s: *mut TCHAR, s2: *mut TCHAR) -> *mut TCHAR,
+    pbstg_huge_strlen: unsafe extern "C" fn(s: *mut TCHAR) -> ULONG,
+    pbstg_huge_strncpy: unsafe extern "C" fn(s: *mut TCHAR, s2: *mut TCHAR, count: ULONG) -> *mut TCHAR,
+    pbstg_huge_strstr: unsafe extern "C" fn(s: *mut TCHAR, s2: *mut TCHAR) -> *mut TCHAR,
+    pbstg_unicodestrdup:
         unsafe extern "C" fn(sa: ppbstg_anchor, pwsz: LPCWSTR, subpool: pbstg_subpool) -> LPWSTR,
-    pub pbstg_unicodestr_build: unsafe extern "C" fn(
+    pbstg_unicodestr_build: unsafe extern "C" fn(
         sa: ppbstg_anchor,
         subpool: pbstg_subpool,
         syn: *mut LPWSTR,
@@ -2447,133 +2447,132 @@ pub struct Api {
         synOff: *mut ::std::os::raw::c_long,
         string: LPCWSTR
     ),
-    pub pbstg_strtounicodedup:
+    pbstg_strtounicodedup:
         unsafe extern "C" fn(pthis: ppbstg_anchor, psz: LPCTSTR, subpool: pbstg_subpool) -> LPWSTR,
-    pub pbstg_unicodetostrdup:
+    pbstg_unicodetostrdup:
         unsafe extern "C" fn(pthis: ppbstg_anchor, pwsz: LPCWSTR, subpool: pbstg_subpool) -> LPTSTR,
-    pub pbstg_strtoansidup:
+    pbstg_strtoansidup:
         unsafe extern "C" fn(pthis: ppbstg_anchor, psz: LPCTSTR, subpool: pbstg_subpool) -> LPSTR,
-    pub pbstg_ansitostrdup:
+    pbstg_ansitostrdup:
         unsafe extern "C" fn(pthis: ppbstg_anchor, pasz: LPCSTR, subpool: pbstg_subpool) -> LPTSTR,
-    pub pbstg_strtoprintable: unsafe extern "C" fn(dest: LPSTR, source: LPCTSTR) -> LPSTR,
-    pub pbstg_strtoprintabledup:
+    pbstg_strtoprintable: unsafe extern "C" fn(dest: LPSTR, source: LPCTSTR) -> LPSTR,
+    pbstg_strtoprintabledup:
         unsafe extern "C" fn(pthis: ppbstg_anchor, psz: LPCTSTR, subpool: pbstg_subpool) -> LPSTR,
-    pub pbstg_printabletostr: unsafe extern "C" fn(dest: LPTSTR, source: LPCSTR) -> LPTSTR,
-    pub pbstg_printabletostrdup:
+    pbstg_printabletostr: unsafe extern "C" fn(dest: LPTSTR, source: LPCSTR) -> LPTSTR,
+    pbstg_printabletostrdup:
         unsafe extern "C" fn(pthis: ppbstg_anchor, pasz: LPCSTR, subpool: pbstg_subpool) -> LPTSTR,
-    pub pbstg_lchrcmp: unsafe extern "C" fn(c1: TCHAR, c2: TCHAR) -> INT,
-    pub pbstg_lchrcmpi: unsafe extern "C" fn(c1: TCHAR, c2: TCHAR) -> INT,
-    pub sh_dbg_console_init: unsafe extern "C" fn(),
-    pub sh_dbg_console_out: unsafe extern "C" fn(string: LPTSTR),
-    pub sh_dbg_console_lock: unsafe extern "C" fn(),
-    pub sh_dbg_console_unlock: unsafe extern "C" fn(),
-    pub sh_dbg_init: unsafe extern "C" fn(arg1: ppbstg_anchor) -> *mut SH_DBG_THIS,
-    pub sh_dbg_this: unsafe extern "C" fn() -> *mut SH_DBG_THIS,
-    pub sh_dbg_term: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
-    pub sh_dbg_read_input: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_infile: LPTSTR) -> INT,
-    pub sh_dbg_outfile: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, filename: LPTSTR),
-    pub sh_dbg_open: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS) -> INT,
-    pub sh_dbg_close: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS) -> INT,
-    pub sh_dbg_set: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT,
-    pub sh_dbg_del: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT,
-    pub sh_dbg_header: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, header_state: INT),
-    pub sh_dbg_indent: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, indent_state: INT),
-    pub sh_dbg_set_this: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
-    pub sh_dbg_out: unsafe extern "C" fn(code: INT, format_str: LPTSTR, ...) -> INT,
-    pub sh_dbg_start_indent: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
-    pub sh_dbg_end_indent: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
-    pub sh_dbg_enter: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT, string: LPTSTR) -> INT,
-    pub sh_dbg_leave: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT, string: LPTSTR) -> INT,
-    pub sh_dbg_on: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
-    pub sh_dbg_off: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
-    pub sh_dbg_query: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT,
-    pub sh_dbg_is_hdr_on: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS) -> INT,
-    pub sh_dbg_is_indent_on: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS) -> INT,
-    pub shlist_delete: unsafe extern "C" fn(self_: *mut shlist),
-    pub shlist_deleteFree: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
-    pub shlist_get_next: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
-    pub shlist_get_prev: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
-    pub shlist_putafter: unsafe extern "C" fn(self_: *mut shlist, node: *mut shlnode) -> INT,
-    pub shlist_addafter: unsafe extern "C" fn(self_: *mut shlist, data: *mut ::std::os::raw::c_void) -> INT,
-    pub shlist_addbefore: unsafe extern "C" fn(self_: *mut shlist, data: *mut ::std::os::raw::c_void) -> INT,
-    pub shlist_remove: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
-    pub shlist_insert_at_curr:
+    pbstg_lchrcmp: unsafe extern "C" fn(c1: TCHAR, c2: TCHAR) -> INT,
+    pbstg_lchrcmpi: unsafe extern "C" fn(c1: TCHAR, c2: TCHAR) -> INT,
+    sh_dbg_console_init: unsafe extern "C" fn(),
+    sh_dbg_console_out: unsafe extern "C" fn(string: LPTSTR),
+    sh_dbg_console_lock: unsafe extern "C" fn(),
+    sh_dbg_console_unlock: unsafe extern "C" fn(),
+    sh_dbg_init: unsafe extern "C" fn(arg1: ppbstg_anchor) -> *mut SH_DBG_THIS,
+    sh_dbg_this: unsafe extern "C" fn() -> *mut SH_DBG_THIS,
+    sh_dbg_term: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
+    sh_dbg_read_input: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_infile: LPTSTR) -> INT,
+    sh_dbg_outfile: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, filename: LPTSTR),
+    sh_dbg_open: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS) -> INT,
+    sh_dbg_close: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS) -> INT,
+    sh_dbg_set: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT,
+    sh_dbg_del: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT,
+    sh_dbg_header: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, header_state: INT),
+    sh_dbg_indent: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, indent_state: INT),
+    sh_dbg_set_this: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
+    sh_dbg_out: unsafe extern "C" fn(code: INT, format_str: LPTSTR, ...) -> INT,
+    sh_dbg_start_indent: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
+    sh_dbg_end_indent: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
+    sh_dbg_enter: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT, string: LPTSTR) -> INT,
+    sh_dbg_leave: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT, string: LPTSTR) -> INT,
+    sh_dbg_on: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
+    sh_dbg_off: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS),
+    sh_dbg_query: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, dbg_code: INT) -> INT,
+    sh_dbg_is_hdr_on: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS) -> INT,
+    sh_dbg_is_indent_on: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS) -> INT,
+    shlist_delete: unsafe extern "C" fn(self_: *mut shlist),
+    shlist_deleteFree: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
+    shlist_get_next: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
+    shlist_get_prev: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
+    shlist_putafter: unsafe extern "C" fn(self_: *mut shlist, node: *mut shlnode) -> INT,
+    shlist_addafter: unsafe extern "C" fn(self_: *mut shlist, data: *mut ::std::os::raw::c_void) -> INT,
+    shlist_addbefore: unsafe extern "C" fn(self_: *mut shlist, data: *mut ::std::os::raw::c_void) -> INT,
+    shlist_remove: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
+    shlist_insert_at_curr:
         unsafe extern "C" fn(self_: *mut shlist, userdata: *mut ::std::os::raw::c_void) -> INT,
-    pub shlist_insert: unsafe extern "C" fn(self_: *mut shlist, userdata: *mut ::std::os::raw::c_void) -> INT,
-    pub shlist_new: unsafe extern "C" fn(sa: ppbstg_anchor, subpool: pbstg_subpool) -> *mut shlist,
-    pub shlist_curr_node: unsafe extern "C" fn(self_: *mut shlist) -> *mut shlnode,
-    pub shlist_get_count: unsafe extern "C" fn(self_: *mut shlist) -> UINT,
-    pub shlist_get_first: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
-    pub shlist_get_last: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
-    pub shlist_get_curr: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
-    pub shlist_update: unsafe extern "C" fn(
+    shlist_insert: unsafe extern "C" fn(self_: *mut shlist, userdata: *mut ::std::os::raw::c_void) -> INT,
+    shlist_new: unsafe extern "C" fn(sa: ppbstg_anchor, subpool: pbstg_subpool) -> *mut shlist,
+    shlist_curr_node: unsafe extern "C" fn(self_: *mut shlist) -> *mut shlnode,
+    shlist_get_count: unsafe extern "C" fn(self_: *mut shlist) -> UINT,
+    shlist_get_first: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
+    shlist_get_last: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
+    shlist_get_curr: unsafe extern "C" fn(self_: *mut shlist) -> *mut ::std::os::raw::c_void,
+    shlist_update: unsafe extern "C" fn(
         self_: *mut shlist,
         newdata: *mut ::std::os::raw::c_void
     ) -> *mut ::std::os::raw::c_void,
-    pub shlist_get_handle: unsafe extern "C" fn(self_: *mut shlist) -> SH_LIST_HANDLE,
-    pub shlist_set_current: unsafe extern "C" fn(self_: *mut shlist, handle: SH_LIST_HANDLE),
-    pub shlist_traversal: unsafe extern "C" fn(
+    shlist_get_handle: unsafe extern "C" fn(self_: *mut shlist) -> SH_LIST_HANDLE,
+    shlist_set_current: unsafe extern "C" fn(self_: *mut shlist, handle: SH_LIST_HANDLE),
+    shlist_traversal: unsafe extern "C" fn(
         self_: *mut shlist,
         data: *mut ::std::os::raw::c_void,
         trav_func: PASCALFAR_INT_PROC
     ) -> INT,
-    pub shlist_sort: unsafe extern "C" fn(
+    shlist_sort: unsafe extern "C" fn(
         self_: *mut shlist,
         compare_func: PASCALFAR_INT_PROC,
         options: ::std::os::raw::c_int
     ) -> *mut LPTSTR,
-    pub shlist_sort_param: unsafe extern "C" fn(
+    shlist_sort_param: unsafe extern "C" fn(
         self_: *mut shlist,
         lpData: *mut ::std::os::raw::c_void,
         compare_func: PASCALFAR_INT_PROC,
         options: ::std::os::raw::c_int
     ) -> *mut LPTSTR,
-    pub sh_grwblk_init: unsafe extern "C" fn(grwblk: PSH_GROWBLOCK, incr: UINT, str_size: UINT),
-    pub sh_new_grwblk: unsafe extern "C" fn(
+    sh_grwblk_init: unsafe extern "C" fn(grwblk: PSH_GROWBLOCK, incr: UINT, str_size: UINT),
+    sh_new_grwblk: unsafe extern "C" fn(
         stgthis: ppbstg_anchor,
         increment: UINT,
         struct_size: UINT,
         subpool: pbstg_subpool
     ) -> PSH_GROWBLOCK,
-    pub sh_set_grwblk_item: unsafe extern "C" fn(
+    sh_set_grwblk_item: unsafe extern "C" fn(
         stgthis: ppbstg_anchor,
         grwblk: PSH_GROWBLOCK,
         pos: UINT,
         item: *mut ::std::os::raw::c_void,
         subpool: pbstg_subpool
     ),
-    pub sh_add_to_grwblk: unsafe extern "C" fn(
+    sh_add_to_grwblk: unsafe extern "C" fn(
         stgthis: ppbstg_anchor,
         grwblk: PSH_GROWBLOCK,
         item: *mut ::std::os::raw::c_void,
         subpool: pbstg_subpool
     ) -> UINT,
-    pub sh_append_to_grwblk: unsafe extern "C" fn(
+    sh_append_to_grwblk: unsafe extern "C" fn(
         stgthis: ppbstg_anchor,
         grwblk: PSH_GROWBLOCK,
         item_array: *mut ::std::os::raw::c_void,
         array_len: UINT,
         subpool: pbstg_subpool
     ),
-    pub sh_grwblk_delete: unsafe extern "C" fn(stgthis: ppbstg_anchor, grwblk: PSH_GROWBLOCK),
-    pub sh_grwblk_close: unsafe extern "C" fn(
+    sh_grwblk_delete: unsafe extern "C" fn(stgthis: ppbstg_anchor, grwblk: PSH_GROWBLOCK),
+    sh_grwblk_close: unsafe extern "C" fn(
         stgthis: ppbstg_anchor,
         grwblk: PSH_GROWBLOCK,
         no_items: *mut UINT
     ) -> *mut ::std::os::raw::c_void,
-    pub ob_set_session_icontext:
-        unsafe extern "C" fn(obthis: POB_THIS, pNewContext: *mut ::std::os::raw::c_void),
-    pub rt_move_thread: unsafe extern "C" fn(rtthis: POB_THIS) -> BOOL,
-    pub rt_clear_thread: unsafe extern "C" fn(),
-    pub rt_get_current_this: unsafe extern "C" fn() -> POB_THIS,
-    pub rt_add_task: unsafe extern "C" fn(rtthis: POB_THIS) -> BOOL,
-    pub rt_free_task: unsafe extern "C" fn() -> BOOL,
-    pub rt_get_current_task_info: unsafe extern "C" fn(info_pos: INT) -> *mut ::std::os::raw::c_void,
-    pub rt_set_current_task_info:
+    ob_set_session_icontext: unsafe extern "C" fn(obthis: POB_THIS, pNewContext: *mut ::std::os::raw::c_void),
+    rt_move_thread: unsafe extern "C" fn(rtthis: POB_THIS) -> BOOL,
+    rt_clear_thread: unsafe extern "C" fn(),
+    rt_get_current_this: unsafe extern "C" fn() -> POB_THIS,
+    rt_add_task: unsafe extern "C" fn(rtthis: POB_THIS) -> BOOL,
+    rt_free_task: unsafe extern "C" fn() -> BOOL,
+    rt_get_current_task_info: unsafe extern "C" fn(info_pos: INT) -> *mut ::std::os::raw::c_void,
+    rt_set_current_task_info:
         unsafe extern "C" fn(info_pos: INT, user_info: *mut ::std::os::raw::c_void) -> BOOL,
-    pub rt_get_free_task_slot: unsafe extern "C" fn() -> INT,
-    pub rt_is_running_exe: unsafe extern "C" fn() -> BOOL,
-    pub shhash_new: unsafe extern "C" fn(
+    rt_get_free_task_slot: unsafe extern "C" fn() -> INT,
+    rt_is_running_exe: unsafe extern "C" fn() -> BOOL,
+    shhash_new: unsafe extern "C" fn(
         arg1: INT,
         arg2: KEY_FUNC,
         arg3: BOOL,
@@ -2581,7 +2580,7 @@ pub struct Api {
         arg5: ppbstg_anchor,
         arg6: pbstg_subpool
     ) -> *mut shhash,
-    pub shhash_new_arg: unsafe extern "C" fn(
+    shhash_new_arg: unsafe extern "C" fn(
         arg1: INT,
         arg2: KEY_FUNC_ARG,
         arg3: BOOL,
@@ -2590,34 +2589,34 @@ pub struct Api {
         arg6: pbstg_subpool,
         arg7: *mut ::std::os::raw::c_void
     ) -> *mut shhash,
-    pub shhash_delete: unsafe extern "C" fn(arg1: *mut shhash),
-    pub shhash_clear: unsafe extern "C" fn(arg1: *mut shhash),
-    pub shhash_get_first: unsafe extern "C" fn(arg1: *mut shhash) -> *mut ::std::os::raw::c_void,
-    pub shhash_get_next: unsafe extern "C" fn(arg1: *mut shhash) -> *mut ::std::os::raw::c_void,
-    pub shhash_insert:
+    shhash_delete: unsafe extern "C" fn(arg1: *mut shhash),
+    shhash_clear: unsafe extern "C" fn(arg1: *mut shhash),
+    shhash_get_first: unsafe extern "C" fn(arg1: *mut shhash) -> *mut ::std::os::raw::c_void,
+    shhash_get_next: unsafe extern "C" fn(arg1: *mut shhash) -> *mut ::std::os::raw::c_void,
+    shhash_insert:
         unsafe extern "C" fn(arg1: *mut shhash, arg2: *mut ::std::os::raw::c_void) -> ::std::os::raw::c_int,
-    pub shhash_search: unsafe extern "C" fn(
+    shhash_search: unsafe extern "C" fn(
         arg1: *mut shhash,
         arg2: *mut ::std::os::raw::c_void
     ) -> *mut ::std::os::raw::c_void,
-    pub shhash_search_unique: unsafe extern "C" fn(
+    shhash_search_unique: unsafe extern "C" fn(
         pThis: *mut shhash,
         key: *mut ::std::os::raw::c_void
     ) -> *mut ::std::os::raw::c_void,
-    pub shhash_searchNext: unsafe extern "C" fn(
+    shhash_searchNext: unsafe extern "C" fn(
         arg1: *mut shhash,
         arg2: *mut ::std::os::raw::c_void
     ) -> *mut ::std::os::raw::c_void,
-    pub shhash_searchSlot:
+    shhash_searchSlot:
         unsafe extern "C" fn(arg1: *mut shhash, arg2: *mut ::std::os::raw::c_void) -> *mut shlist,
-    pub shhash_remove: unsafe extern "C" fn(arg1: *mut shhash) -> *mut ::std::os::raw::c_void,
-    pub shhash_statistics: unsafe extern "C" fn(arg1: *mut shhash, arg2: PHASHSTAT) -> PHASHSTAT,
-    pub shhash_traversal: unsafe extern "C" fn(
+    shhash_remove: unsafe extern "C" fn(arg1: *mut shhash) -> *mut ::std::os::raw::c_void,
+    shhash_statistics: unsafe extern "C" fn(arg1: *mut shhash, arg2: PHASHSTAT) -> PHASHSTAT,
+    shhash_traversal: unsafe extern "C" fn(
         pthis: *mut shhash,
         data: *mut ::std::os::raw::c_void,
         trav_func: PASCALFAR_INT_PROC
     ) -> BOOL,
-    pub ob_add_const_data: unsafe extern "C" fn(
+    ob_add_const_data: unsafe extern "C" fn(
         obthis: POB_THIS,
         conpool: POB_CONPOOL,
         data: *mut ::std::os::raw::c_void,
@@ -2625,26 +2624,26 @@ pub struct Api {
         nitems: UINT,
         len: ULONG
     ) -> OB_CONST_REF,
-    pub ob_looksym_keyfunc: unsafe extern "C" fn(
+    ob_looksym_keyfunc: unsafe extern "C" fn(
         pDataNode: *mut ::std::os::raw::c_void,
         tobthis: *mut ::std::os::raw::c_void
     ) -> LPTSTR,
-    pub ob_looksym_reference:
+    ob_looksym_reference:
         unsafe extern "C" fn(obthis: POB_THIS, look_symtab: POB_LOOK_SYMTAB, name: LPTSTR) -> OB_SYM_ID,
-    pub ob_looksym_delete: unsafe extern "C" fn(obthis: POB_THIS, look_symtab: POB_LOOK_SYMTAB, slot: UINT),
-    pub ob_dynarray_index: unsafe extern "C" fn(
+    ob_looksym_delete: unsafe extern "C" fn(obthis: POB_THIS, look_symtab: POB_LOOK_SYMTAB, slot: UINT),
+    ob_dynarray_index: unsafe extern "C" fn(
         obthis: POB_THIS,
         theArray: *mut tag_OB_DYNARRAY,
         index: ULONG,
         extend: BOOL
     ) -> *mut ::std::os::raw::c_void,
-    pub ob_dynarray_grow: unsafe extern "C" fn(
+    ob_dynarray_grow: unsafe extern "C" fn(
         obthis: POB_THIS,
         theArray: *mut tag_OB_DYNARRAY,
         limit: ULONG,
         initialize: BOOL
     ),
-    pub ob_narray_create_static: unsafe extern "C" fn(
+    ob_narray_create_static: unsafe extern "C" fn(
         obthis: POB_THIS,
         subpool: OB_SUBPOOL,
         num_items: ULONG,
@@ -2657,7 +2656,7 @@ pub struct Api {
         freeData: BOOL,
         initFn: PNARRAY_INIT_FN
     ) -> *mut tag_OB_NARRAY,
-    pub ob_narray_create_dynamic: unsafe extern "C" fn(
+    ob_narray_create_dynamic: unsafe extern "C" fn(
         obthis: POB_THIS,
         subpool: OB_SUBPOOL,
         elmtType: OB_CLASS_HNDL,
@@ -2667,39 +2666,39 @@ pub struct Api {
         freeData: BOOL,
         initFn: PNARRAY_INIT_FN
     ) -> *mut tag_OB_NARRAY,
-    pub ob_set_arraydef: unsafe extern "C" fn(
+    ob_set_arraydef: unsafe extern "C" fn(
         obthis: POB_THIS,
         arraydef: POB_ARRAYDEF,
         no_dims: UINT,
         arr_style: OB_ARRAY_SYMBOL_STYLE::Type,
         bounds: *mut ::std::os::raw::c_long
     ),
-    pub ob_get_array_len: unsafe extern "C" fn(obthis: POB_THIS, arraydef: POB_ARRAYDEF) -> ULONG,
-    pub ob_array_item_init_callback: unsafe extern "C" fn(
+    ob_get_array_len: unsafe extern "C" fn(obthis: POB_THIS, arraydef: POB_ARRAYDEF) -> ULONG,
+    ob_array_item_init_callback: unsafe extern "C" fn(
         obthis: POB_THIS,
         theArray: *mut tag_OB_NARRAY,
         theItem: *mut ::std::os::raw::c_void
     ) -> BOOL,
-    pub ob_init_array: unsafe extern "C" fn(
+    ob_init_array: unsafe extern "C" fn(
         obthis: POB_THIS,
         arrdef: POB_ARRAYDEF,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
         init_data: BOOL
     ) -> POB_ARRAY_INST,
-    pub ob_array_varinfo_nullval: unsafe extern "C" fn(obthis: POB_THIS, array_inst: POB_ARRAY_INST) -> BOOL,
-    pub ob_array_set_varinfo_nullval:
+    ob_array_varinfo_nullval: unsafe extern "C" fn(obthis: POB_THIS, array_inst: POB_ARRAY_INST) -> BOOL,
+    ob_array_set_varinfo_nullval:
         unsafe extern "C" fn(obthis: POB_THIS, array_inst: POB_ARRAY_INST, bNull: BOOL),
-    pub ob_remove_array_data:
+    ob_remove_array_data:
         unsafe extern "C" fn(obthis: POB_THIS, array_inst: POB_ARRAY_INST, IsNullVarInfor: BOOL),
-    pub ob_init_pcode_blk: unsafe extern "C" fn(
+    ob_init_pcode_blk: unsafe extern "C" fn(
         obthis: POB_THIS,
         no_items: UINT,
         no_line_incr: UINT,
         subpool: OB_SUBPOOL
     ) -> POB_PCODE_BLK,
-    pub ob_del_pcode_blk: unsafe extern "C" fn(obthis: POB_THIS, pcode_blk: POB_PCODE_BLK),
-    pub ob_reuse_routine: unsafe extern "C" fn(
+    ob_del_pcode_blk: unsafe extern "C" fn(obthis: POB_THIS, pcode_blk: POB_PCODE_BLK),
+    ob_reuse_routine: unsafe extern "C" fn(
         obthis: POB_THIS,
         routlist: POB_ROUTLIST,
         rout_id: OB_ROUT_ID,
@@ -2707,50 +2706,50 @@ pub struct Api {
         subpool: OB_SUBPOOL,
         clear_pcode: BOOL
     ),
-    pub sh_MAX_DEC: unsafe extern "C" fn() -> *const SH_DEC,
-    pub shMaxDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    pub shMinDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    pub shCompareDec: unsafe extern "C" fn(src1: PSH_DEC, src2: PSH_DEC) -> SHORT,
-    pub shAbsDec: unsafe extern "C" fn(dst: PSH_DEC, src: PSH_DEC) -> PSH_DEC,
-    pub shNegateDec: unsafe extern "C" fn(dst: PSH_DEC, src: PSH_DEC) -> PSH_DEC,
-    pub shRoundDec: unsafe extern "C" fn(dst: PSH_DEC, src: PSH_DEC, n: SHORT) -> PSH_DEC,
-    pub shTruncDec: unsafe extern "C" fn(dst: PSH_DEC, src: PSH_DEC, n: SHORT) -> PSH_DEC,
-    pub shAddDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    pub shSubDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    pub shMultDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    pub shDivDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    pub shModDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    pub shExpDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
-    pub shIntToDec: unsafe extern "C" fn(dst: PSH_DEC, src: SHORT) -> PSH_DEC,
-    pub shDecToInt: unsafe extern "C" fn(dst: *mut SHORT, src: PSH_DEC) -> *mut SHORT,
-    pub shUintToDec: unsafe extern "C" fn(dst: PSH_DEC, src: USHORT) -> PSH_DEC,
-    pub shDecToUint: unsafe extern "C" fn(dst: *mut USHORT, src: PSH_DEC) -> *mut USHORT,
-    pub shByteToDec: unsafe extern "C" fn(dst: PSH_DEC, src: ::std::os::raw::c_uchar) -> PSH_DEC,
-    pub shDecToByte:
+    sh_MAX_DEC: unsafe extern "C" fn() -> *const SH_DEC,
+    shMaxDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
+    shMinDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
+    shCompareDec: unsafe extern "C" fn(src1: PSH_DEC, src2: PSH_DEC) -> SHORT,
+    shAbsDec: unsafe extern "C" fn(dst: PSH_DEC, src: PSH_DEC) -> PSH_DEC,
+    shNegateDec: unsafe extern "C" fn(dst: PSH_DEC, src: PSH_DEC) -> PSH_DEC,
+    shRoundDec: unsafe extern "C" fn(dst: PSH_DEC, src: PSH_DEC, n: SHORT) -> PSH_DEC,
+    shTruncDec: unsafe extern "C" fn(dst: PSH_DEC, src: PSH_DEC, n: SHORT) -> PSH_DEC,
+    shAddDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
+    shSubDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
+    shMultDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
+    shDivDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
+    shModDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
+    shExpDec: unsafe extern "C" fn(dst: PSH_DEC, src1: PSH_DEC, src2: PSH_DEC) -> PSH_DEC,
+    shIntToDec: unsafe extern "C" fn(dst: PSH_DEC, src: SHORT) -> PSH_DEC,
+    shDecToInt: unsafe extern "C" fn(dst: *mut SHORT, src: PSH_DEC) -> *mut SHORT,
+    shUintToDec: unsafe extern "C" fn(dst: PSH_DEC, src: USHORT) -> PSH_DEC,
+    shDecToUint: unsafe extern "C" fn(dst: *mut USHORT, src: PSH_DEC) -> *mut USHORT,
+    shByteToDec: unsafe extern "C" fn(dst: PSH_DEC, src: ::std::os::raw::c_uchar) -> PSH_DEC,
+    shDecToByte:
         unsafe extern "C" fn(dst: *mut ::std::os::raw::c_uchar, src: PSH_DEC) -> *mut ::std::os::raw::c_uchar,
-    pub shLongToDec: unsafe extern "C" fn(dst: PSH_DEC, src: ::std::os::raw::c_long) -> PSH_DEC,
-    pub shDecToLong:
+    shLongToDec: unsafe extern "C" fn(dst: PSH_DEC, src: ::std::os::raw::c_long) -> PSH_DEC,
+    shDecToLong:
         unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_long, src: PSH_DEC) -> *mut ::std::os::raw::c_long,
-    pub shUlongToDec: unsafe extern "C" fn(dst: PSH_DEC, src: ULONG) -> PSH_DEC,
-    pub shDecToUlong: unsafe extern "C" fn(dst: *mut ULONG, src: PSH_DEC) -> *mut ULONG,
-    pub shLonglongToDec: unsafe extern "C" fn(dst: PSH_DEC, src: *mut ::std::os::raw::c_longlong) -> PSH_DEC,
-    pub shDecToLonglong: unsafe extern "C" fn(
+    shUlongToDec: unsafe extern "C" fn(dst: PSH_DEC, src: ULONG) -> PSH_DEC,
+    shDecToUlong: unsafe extern "C" fn(dst: *mut ULONG, src: PSH_DEC) -> *mut ULONG,
+    shLonglongToDec: unsafe extern "C" fn(dst: PSH_DEC, src: *mut ::std::os::raw::c_longlong) -> PSH_DEC,
+    shDecToLonglong: unsafe extern "C" fn(
         dst: *mut ::std::os::raw::c_longlong,
         src: PSH_DEC
     ) -> *mut ::std::os::raw::c_longlong,
-    pub shDecToFloat: unsafe extern "C" fn(dst: *mut f32, src: PSH_DEC) -> *mut f32,
-    pub shFloatToDec: unsafe extern "C" fn(dst: PSH_DEC, src: *mut f32) -> PSH_DEC,
-    pub shDoubleToDec: unsafe extern "C" fn(dst: PSH_DEC, src: *mut f64) -> PSH_DEC,
-    pub shDecToDouble: unsafe extern "C" fn(dst: *mut f64, src: PSH_DEC) -> *mut f64,
-    pub shDecToAscii: unsafe extern "C" fn(dst: LPTSTR, src: PSH_DEC) -> LPTSTR,
-    pub shAsciiToDec: unsafe extern "C" fn(dst: PSH_DEC, src: LPTSTR) -> PSH_DEC,
-    pub shAsciiToDecRnd: unsafe extern "C" fn(dst: PSH_DEC, src: LPTSTR, n: SHORT) -> PSH_DEC,
-    pub shSetDecFractions: unsafe extern "C" fn(d: PSH_DEC, n: SHORT),
-    pub shSetDecNegative: unsafe extern "C" fn(d: PSH_DEC, n: BOOL),
-    pub shDecSetOverflow: unsafe extern "C" fn(dec: PSH_DEC, neg: BOOL) -> BOOL,
-    pub shdtDayName: unsafe extern "C" fn(w_day: ::std::os::raw::c_short, lpName: LPTSTR) -> BOOL,
-    pub shdtDayOfWeek: unsafe extern "C" fn(t: PSH_TIME) -> ::std::os::raw::c_int,
-    pub shdtBuildTime: unsafe extern "C" fn(
+    shDecToFloat: unsafe extern "C" fn(dst: *mut f32, src: PSH_DEC) -> *mut f32,
+    shFloatToDec: unsafe extern "C" fn(dst: PSH_DEC, src: *mut f32) -> PSH_DEC,
+    shDoubleToDec: unsafe extern "C" fn(dst: PSH_DEC, src: *mut f64) -> PSH_DEC,
+    shDecToDouble: unsafe extern "C" fn(dst: *mut f64, src: PSH_DEC) -> *mut f64,
+    shDecToAscii: unsafe extern "C" fn(dst: LPTSTR, src: PSH_DEC) -> LPTSTR,
+    shAsciiToDec: unsafe extern "C" fn(dst: PSH_DEC, src: LPTSTR) -> PSH_DEC,
+    shAsciiToDecRnd: unsafe extern "C" fn(dst: PSH_DEC, src: LPTSTR, n: SHORT) -> PSH_DEC,
+    shSetDecFractions: unsafe extern "C" fn(d: PSH_DEC, n: SHORT),
+    shSetDecNegative: unsafe extern "C" fn(d: PSH_DEC, n: BOOL),
+    shDecSetOverflow: unsafe extern "C" fn(dec: PSH_DEC, neg: BOOL) -> BOOL,
+    shdtDayName: unsafe extern "C" fn(w_day: ::std::os::raw::c_short, lpName: LPTSTR) -> BOOL,
+    shdtDayOfWeek: unsafe extern "C" fn(t: PSH_TIME) -> ::std::os::raw::c_int,
+    shdtBuildTime: unsafe extern "C" fn(
         fTime1: PSH_TIME,
         year: INT,
         mon: ::std::os::raw::c_uchar,
@@ -2760,292 +2759,286 @@ pub struct Api {
         sec: ::std::os::raw::c_uchar,
         msec: ::std::os::raw::c_long
     ),
-    pub shdtDiffDate: unsafe extern "C" fn(fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long,
-    pub shdtDiffTime: unsafe extern "C" fn(fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long,
-    pub shdtDiffMSec: unsafe extern "C" fn(fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long,
-    pub shdtNow: unsafe extern "C" fn(fTime: PSH_TIME),
-    pub shdtParse: unsafe extern "C" fn(
+    shdtDiffDate: unsafe extern "C" fn(fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long,
+    shdtDiffTime: unsafe extern "C" fn(fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long,
+    shdtDiffMSec: unsafe extern "C" fn(fTime1: PSH_TIME, fTime2: PSH_TIME) -> ::std::os::raw::c_long,
+    shdtNow: unsafe extern "C" fn(fTime: PSH_TIME),
+    shdtParse: unsafe extern "C" fn(
         fTime: PSH_TIME,
         sTime: LPTSTR,
         flags: ::std::os::raw::c_int
     ) -> ::std::os::raw::c_int,
-    pub shdtParseEx: unsafe extern "C" fn(
+    shdtParseEx: unsafe extern "C" fn(
         fTime: PSH_TIME,
         sTime: LPTSTR,
         flags: ::std::os::raw::c_int,
         dwCultureFormat: LPTSTR
     ) -> ::std::os::raw::c_int,
-    pub shdtParseStringEx: unsafe extern "C" fn(
+    shdtParseStringEx: unsafe extern "C" fn(
         fTime: PSH_TIME,
         sTime: LPTSTR,
         flags: ::std::os::raw::c_int,
         bStrictly: BOOL
     ) -> ::std::os::raw::c_int,
-    pub shdtParseStringExWithLcid: unsafe extern "C" fn(
+    shdtParseStringExWithLcid: unsafe extern "C" fn(
         fTime: PSH_TIME,
         sTime: LPTSTR,
         flags: ::std::os::raw::c_int,
         bStrictly: BOOL,
         uInLcid: ::std::os::raw::c_int
     ) -> ::std::os::raw::c_int,
-    pub shdtParseToString: unsafe extern "C" fn(fTime: PSH_TIME, sTime: LPTSTR, flags: ::std::os::raw::c_int),
-    pub shdtRelativeDate:
+    shdtParseToString: unsafe extern "C" fn(fTime: PSH_TIME, sTime: LPTSTR, flags: ::std::os::raw::c_int),
+    shdtRelativeDate:
         unsafe extern "C" fn(oDate: PSH_TIME, iDate: PSH_TIME, dayCount: ::std::os::raw::c_long),
-    pub shdtToMJDDate: unsafe extern "C" fn(pDate: PSH_TIME, pMJDDate: *mut f64),
-    pub shdtToMJDTime: unsafe extern "C" fn(pTime: PSH_TIME, pMJDTime: *mut f64),
-    pub shdtToMJDTimestamp: unsafe extern "C" fn(pDateTime: PSH_TIME, pMJDDate: *mut f64, pMJDTime: *mut f64),
-    pub shMJDDateTodt: unsafe extern "C" fn(pDate: PSH_TIME, MJDDate: f64),
-    pub shMJDTimeTodt: unsafe extern "C" fn(pTime: PSH_TIME, MJDTime: f64),
-    pub shMJDTimestampTodt: unsafe extern "C" fn(pDateTime: PSH_TIME, MJDDate: f64, MJDTime: f64),
-    pub shdtString: unsafe extern "C" fn(sdate: LPTSTR, stime: LPTSTR),
-    pub ob_mgr_init: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, stgthis: ppbstg_anchor) -> POB_THIS,
-    pub ob_mgr_init_ex: unsafe extern "C" fn(
+    shdtToMJDDate: unsafe extern "C" fn(pDate: PSH_TIME, pMJDDate: *mut f64),
+    shdtToMJDTime: unsafe extern "C" fn(pTime: PSH_TIME, pMJDTime: *mut f64),
+    shdtToMJDTimestamp: unsafe extern "C" fn(pDateTime: PSH_TIME, pMJDDate: *mut f64, pMJDTime: *mut f64),
+    shMJDDateTodt: unsafe extern "C" fn(pDate: PSH_TIME, MJDDate: f64),
+    shMJDTimeTodt: unsafe extern "C" fn(pTime: PSH_TIME, MJDTime: f64),
+    shMJDTimestampTodt: unsafe extern "C" fn(pDateTime: PSH_TIME, MJDDate: f64, MJDTime: f64),
+    shdtString: unsafe extern "C" fn(sdate: LPTSTR, stime: LPTSTR),
+    ob_mgr_init: unsafe extern "C" fn(dbgthis: *mut SH_DBG_THIS, stgthis: ppbstg_anchor) -> POB_THIS,
+    ob_mgr_init_ex: unsafe extern "C" fn(
         dbgthis: *mut SH_DBG_THIS,
         stgthis: ppbstg_anchor,
         lpstrTypdefPblName: LPTSTR
     ) -> POB_THIS,
-    pub ob_mgr_restart: unsafe extern "C" fn(obthis: POB_THIS),
-    pub ob_mgr_terminate: unsafe extern "C" fn(obthis: POB_THIS),
-    pub ob_free_memory: unsafe extern "C" fn(obthis: POB_THIS, data: *mut ::std::os::raw::c_void),
-    pub ob_free_link_error_list: unsafe extern "C" fn(obthis: POB_THIS),
-    pub ob_get_link_error_list: unsafe extern "C" fn(obthis: POB_THIS) -> *mut ::std::os::raw::c_void,
-    pub ob_enter_critical_section: unsafe extern "C" fn(obthis: POB_THIS),
-    pub ob_leave_critical_section: unsafe extern "C" fn(obthis: POB_THIS),
-    pub ob_alloc_string: unsafe extern "C" fn(obthis: POB_THIS, len: ULONG) -> LPTSTR,
-    pub ob_alloc_blob: unsafe extern "C" fn(obthis: POB_THIS, len: ULONG) -> PSH_BINARY,
-    pub ob_alloc_dec: unsafe extern "C" fn(obthis: POB_THIS) -> PSH_DEC,
-    pub ob_alloc_double: unsafe extern "C" fn(obthis: POB_THIS) -> *mut f64,
-    pub ob_alloc_longlong: unsafe extern "C" fn(obthis: POB_THIS) -> *mut ::std::os::raw::c_longlong,
-    pub ob_alloc_time: unsafe extern "C" fn(obthis: POB_THIS) -> PSH_TIME,
-    pub ob_realloc_string: unsafe extern "C" fn(obthis: POB_THIS, string: LPTSTR, len: ULONG) -> LPTSTR,
-    pub ob_realloc_blob: unsafe extern "C" fn(obthis: POB_THIS, blob: PSH_BINARY, len: ULONG) -> PSH_BINARY,
-    pub ob_dup_string: unsafe extern "C" fn(obthis: POB_THIS, string: LPTSTR) -> LPTSTR,
-    pub ob_dup_blob: unsafe extern "C" fn(obthis: POB_THIS, blob: PSH_BINARY) -> PSH_BINARY,
-    pub ob_dup_dec: unsafe extern "C" fn(obthis: POB_THIS, dec_val: PSH_DEC) -> PSH_DEC,
-    pub ob_dup_double: unsafe extern "C" fn(obthis: POB_THIS, double_val: *mut f64) -> *mut f64,
-    pub ob_dup_longlong: unsafe extern "C" fn(
+    ob_mgr_restart: unsafe extern "C" fn(obthis: POB_THIS),
+    ob_mgr_terminate: unsafe extern "C" fn(obthis: POB_THIS),
+    ob_free_memory: unsafe extern "C" fn(obthis: POB_THIS, data: *mut ::std::os::raw::c_void),
+    ob_free_link_error_list: unsafe extern "C" fn(obthis: POB_THIS),
+    ob_get_link_error_list: unsafe extern "C" fn(obthis: POB_THIS) -> *mut ::std::os::raw::c_void,
+    ob_enter_critical_section: unsafe extern "C" fn(obthis: POB_THIS),
+    ob_leave_critical_section: unsafe extern "C" fn(obthis: POB_THIS),
+    ob_alloc_string: unsafe extern "C" fn(obthis: POB_THIS, len: ULONG) -> LPTSTR,
+    ob_alloc_blob: unsafe extern "C" fn(obthis: POB_THIS, len: ULONG) -> PSH_BINARY,
+    ob_alloc_dec: unsafe extern "C" fn(obthis: POB_THIS) -> PSH_DEC,
+    ob_alloc_double: unsafe extern "C" fn(obthis: POB_THIS) -> *mut f64,
+    ob_alloc_longlong: unsafe extern "C" fn(obthis: POB_THIS) -> *mut ::std::os::raw::c_longlong,
+    ob_alloc_time: unsafe extern "C" fn(obthis: POB_THIS) -> PSH_TIME,
+    ob_realloc_string: unsafe extern "C" fn(obthis: POB_THIS, string: LPTSTR, len: ULONG) -> LPTSTR,
+    ob_realloc_blob: unsafe extern "C" fn(obthis: POB_THIS, blob: PSH_BINARY, len: ULONG) -> PSH_BINARY,
+    ob_dup_string: unsafe extern "C" fn(obthis: POB_THIS, string: LPTSTR) -> LPTSTR,
+    ob_dup_blob: unsafe extern "C" fn(obthis: POB_THIS, blob: PSH_BINARY) -> PSH_BINARY,
+    ob_dup_dec: unsafe extern "C" fn(obthis: POB_THIS, dec_val: PSH_DEC) -> PSH_DEC,
+    ob_dup_double: unsafe extern "C" fn(obthis: POB_THIS, double_val: *mut f64) -> *mut f64,
+    ob_dup_longlong: unsafe extern "C" fn(
         obthis: POB_THIS,
         longlong_val: *mut ::std::os::raw::c_longlong
     ) -> *mut ::std::os::raw::c_longlong,
-    pub ob_dup_time: unsafe extern "C" fn(obthis: POB_THIS, time_val: PSH_TIME) -> PSH_TIME,
-    pub ob_free_value: unsafe extern "C" fn(obthis: POB_THIS, data: *mut ::std::os::raw::c_void),
-    pub ob_create_appl_report: unsafe extern "C" fn(obthis: POB_THIS) -> POB_APPL_REPORT,
-    pub ob_create_object_report: unsafe extern "C" fn(
+    ob_dup_time: unsafe extern "C" fn(obthis: POB_THIS, time_val: PSH_TIME) -> PSH_TIME,
+    ob_free_value: unsafe extern "C" fn(obthis: POB_THIS, data: *mut ::std::os::raw::c_void),
+    ob_create_appl_report: unsafe extern "C" fn(obthis: POB_THIS) -> POB_APPL_REPORT,
+    ob_create_object_report: unsafe extern "C" fn(
         obthis: POB_THIS,
         lib_name: LPTSTR,
         object_name: LPTSTR,
         class_id: OB_CLASS_ID
     ) -> POB_APPL_REPORT,
-    pub ob_free_appl_report: unsafe extern "C" fn(obthis: POB_THIS, appl_report: POB_APPL_REPORT),
-    pub ob_get_mode: unsafe extern "C" fn(obthis: POB_THIS) -> OB_MODE,
-    pub ob_set_mode: unsafe extern "C" fn(obthis: POB_THIS, mode: OB_MODE) -> OB_MODE,
-    pub ob_get_field: unsafe extern "C" fn(
+    ob_free_appl_report: unsafe extern "C" fn(obthis: POB_THIS, appl_report: POB_APPL_REPORT),
+    ob_get_mode: unsafe extern "C" fn(obthis: POB_THIS) -> OB_MODE,
+    ob_set_mode: unsafe extern "C" fn(obthis: POB_THIS, mode: OB_MODE) -> OB_MODE,
+    ob_get_field: unsafe extern "C" fn(
         obthis: POB_THIS,
         obinst: OB_INST_ID,
         field_id: UINT,
         pData: POB_DATA
     ) -> POB_DATA,
-    pub ob_set_field:
-        unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT, pData: POB_DATA),
-    pub ob_get_field_data:
-        unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> POB_DATA,
-    pub ob_get_no_fields: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> ULONG,
-    pub ob_get_parent_obinst: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> OB_INST_ID,
-    pub ob_get_first_user_field: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> ULONG,
-    pub ob_get_field_type:
+    ob_set_field: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT, pData: POB_DATA),
+    ob_get_field_data: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> POB_DATA,
+    ob_get_no_fields: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> ULONG,
+    ob_get_parent_obinst: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> OB_INST_ID,
+    ob_get_first_user_field: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> ULONG,
+    ob_get_field_type:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> OB_CLASS_ID,
-    pub ob_get_int_field: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> INT,
-    pub ob_get_uint_field: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> UINT,
-    pub ob_get_byte_field:
+    ob_get_int_field: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> INT,
+    ob_get_uint_field: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> UINT,
+    ob_get_byte_field:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> ::std::os::raw::c_uchar,
-    pub ob_get_long_field:
+    ob_get_long_field:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> ::std::os::raw::c_long,
-    pub ob_get_ulong_field:
-        unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> ULONG,
-    pub ob_get_float_field:
+    ob_get_ulong_field: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> ULONG,
+    ob_get_float_field:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT, fl: *mut f32) -> *mut f32,
-    pub ob_get_ptr_field: unsafe extern "C" fn(
+    ob_get_ptr_field: unsafe extern "C" fn(
         obthis: POB_THIS,
         obinst: OB_INST_ID,
         field_id: UINT
     ) -> *mut ::std::os::raw::c_void,
-    pub ob_get_inst_field:
+    ob_get_inst_field:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT) -> OB_INST_ID,
-    pub ob_get_array_field: unsafe extern "C" fn(
+    ob_get_array_field: unsafe extern "C" fn(
         obthis: POB_THIS,
         obinst: OB_INST_ID,
         field_id: UINT,
         no_items: *mut UINT
     ) -> *mut ::std::os::raw::c_void,
-    pub ob_array_index: unsafe extern "C" fn(
+    ob_array_index: unsafe extern "C" fn(
         obthis: POB_THIS,
         array_vals: *mut ::std::os::raw::c_void,
         index: ULONG,
         type_: POB_CLASS_ID
     ) -> *mut ::std::os::raw::c_void,
-    pub ob_get_indirect_obdata:
+    ob_get_indirect_obdata:
         unsafe extern "C" fn(obthis: POB_THIS, obInst: OB_INST_ID, obInfo: POB_DATA_INFO) -> POB_DATA,
-    pub ob_array_item: unsafe extern "C" fn(
+    ob_array_item: unsafe extern "C" fn(
         obthis: POB_THIS,
         array_vals: *mut ::std::os::raw::c_void,
         index: ULONG
     ) -> POB_DATA,
-    pub ob_array_get_index_from_subs: unsafe extern "C" fn(
+    ob_array_get_index_from_subs: unsafe extern "C" fn(
         obthis: POB_THIS,
         theArray: OB_ARRAY_ID,
         subs: *mut ::std::os::raw::c_long
     ) -> ULONG,
-    pub ob_array_calc_index: unsafe extern "C" fn(
+    ob_array_calc_index: unsafe extern "C" fn(
         obthis: POB_THIS,
         numDims: UINT,
         bounds: *mut ::std::os::raw::c_long,
         subs: *mut ::std::os::raw::c_long
     ) -> ULONG,
-    pub ob_set_int_field:
+    ob_set_int_field:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT, int_val: INT),
-    pub ob_set_uint_field:
+    ob_set_uint_field:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT, uint_val: UINT),
-    pub ob_set_long_field: unsafe extern "C" fn(
+    ob_set_long_field: unsafe extern "C" fn(
         obthis: POB_THIS,
         obinst: OB_INST_ID,
         field_id: UINT,
         long_val: ::std::os::raw::c_long
     ),
-    pub ob_set_ulong_field:
+    ob_set_ulong_field:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT, ulong_val: ULONG),
-    pub ob_set_float_field:
+    ob_set_float_field:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT, flval: f32),
-    pub ob_set_ptr_field: unsafe extern "C" fn(
+    ob_set_ptr_field: unsafe extern "C" fn(
         obthis: POB_THIS,
         obinst: OB_INST_ID,
         field_id: UINT,
         ptrval: *mut ::std::os::raw::c_void
     ),
-    pub ob_set_array_field: unsafe extern "C" fn(
+    ob_set_array_field: unsafe extern "C" fn(
         obthis: POB_THIS,
         obinst: OB_INST_ID,
         field_id: UINT,
         pArray: *mut ::std::os::raw::c_void
     ),
-    pub ob_set_obinst_field:
+    ob_set_obinst_field:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, field_id: UINT, obinstval: OB_INST_ID),
-    pub ob_set_underlying_object:
+    ob_set_underlying_object:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, obj: *mut ::std::os::raw::c_void),
-    pub ob_get_underlying_object:
+    ob_get_underlying_object:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> *mut ::std::os::raw::c_void,
-    pub ob_is_any_group_locked: unsafe extern "C" fn(obthis: POB_THIS) -> BOOL,
-    pub ob_get_group_lock_count: unsafe extern "C" fn(obthis: POB_THIS) -> UINT,
-    pub ob_is_group_locked: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> BOOL,
-    pub ob_is_group_unlocked: unsafe extern "C" fn(obthis: POB_THIS, obGroupHandle: OB_GROUP_HNDL) -> BOOL,
-    pub ob_is_group_write_locked: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> BOOL,
-    pub ob_lock_group:
-        unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, write_only: BOOL) -> INT,
-    pub ob_unlock_group: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> INT,
-    pub ob_clear_unlocked_groups: unsafe extern "C" fn(obthis: POB_THIS),
-    pub ob_clear_all_other_unlocked_groups: unsafe extern "C" fn(obthis: POB_THIS, obGroupId: OB_GROUP_ID),
-    pub ob_is_ancestor_locked:
+    ob_is_any_group_locked: unsafe extern "C" fn(obthis: POB_THIS) -> BOOL,
+    ob_get_group_lock_count: unsafe extern "C" fn(obthis: POB_THIS) -> UINT,
+    ob_is_group_locked: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> BOOL,
+    ob_is_group_unlocked: unsafe extern "C" fn(obthis: POB_THIS, obGroupHandle: OB_GROUP_HNDL) -> BOOL,
+    ob_is_group_write_locked: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> BOOL,
+    ob_lock_group: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, write_only: BOOL) -> INT,
+    ob_unlock_group: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> INT,
+    ob_clear_unlocked_groups: unsafe extern "C" fn(obthis: POB_THIS),
+    ob_clear_all_other_unlocked_groups: unsafe extern "C" fn(obthis: POB_THIS, obGroupId: OB_GROUP_ID),
+    ob_is_ancestor_locked:
         unsafe extern "C" fn(obthis: POB_THIS, groupid: OB_GROUP_ID, cReadWrite: TCHAR) -> BOOL,
-    pub ob_is_descendent_locked:
+    ob_is_descendent_locked:
         unsafe extern "C" fn(obthis: POB_THIS, groupid: OB_GROUP_ID, cReadWrite: TCHAR) -> BOOL,
-    pub ob_validate_liblist:
+    ob_validate_liblist:
         unsafe extern "C" fn(obThis: POB_THIS, pLibList: *mut LPTSTR, iNumberOfItems: UINT) -> INT,
-    pub ob_set_liblist: unsafe extern "C" fn(
+    ob_set_liblist: unsafe extern "C" fn(
         obthis: POB_THIS,
         lib_list: *mut LPTSTR,
         no_items: UINT,
         bCreateNewLoader: BOOL
     ) -> INT,
-    pub ob_get_liblist: unsafe extern "C" fn(obthis: POB_THIS, no_items: *mut UINT) -> *mut LPTSTR,
-    pub ob_set_default_appl:
-        unsafe extern "C" fn(obthis: POB_THIS, lib_name: LPTSTR, appl_group_name: LPTSTR),
-    pub ob_load_appl_group: unsafe extern "C" fn(obthis: POB_THIS) -> BOOL,
-    pub ob_is_group_in_memory:
+    ob_get_liblist: unsafe extern "C" fn(obthis: POB_THIS, no_items: *mut UINT) -> *mut LPTSTR,
+    ob_set_default_appl: unsafe extern "C" fn(obthis: POB_THIS, lib_name: LPTSTR, appl_group_name: LPTSTR),
+    ob_load_appl_group: unsafe extern "C" fn(obthis: POB_THIS) -> BOOL,
+    ob_is_group_in_memory:
         unsafe extern "C" fn(obthis: POB_THIS, lib_name: LPTSTR, qualified_name: LPTSTR) -> OB_GROUP_HNDL,
-    pub ob_group_declare: unsafe extern "C" fn(
+    ob_group_declare: unsafe extern "C" fn(
         obthis: POB_THIS,
         lib_name: LPTSTR,
         group_name: LPTSTR,
         class_id: OB_CLASS_ID
     ) -> OB_GROUP_HNDL,
-    pub ob_group_reference: unsafe extern "C" fn(
+    ob_group_reference: unsafe extern "C" fn(
         obthis: POB_THIS,
         lib_name: LPTSTR,
         group_name: LPTSTR,
         class_id: OB_CLASS_ID
     ) -> OB_GROUP_HNDL,
-    pub ob_get_group_name: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> LPTSTR,
-    pub ob_get_group_full_name: unsafe extern "C" fn(obthis: POB_THIS, grouphndl: OB_GROUP_HNDL) -> LPTSTR,
-    pub ob_group_save: unsafe extern "C" fn(
+    ob_get_group_name: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> LPTSTR,
+    ob_get_group_full_name: unsafe extern "C" fn(obthis: POB_THIS, grouphndl: OB_GROUP_HNDL) -> LPTSTR,
+    ob_group_save: unsafe extern "C" fn(
         obthis: POB_THIS,
         group_hndl: OB_GROUP_HNDL,
         lib_name: LPTSTR,
         comment: LPTSTR
     ) -> INT,
-    pub ob_group_save_win: unsafe extern "C" fn(
+    ob_group_save_win: unsafe extern "C" fn(
         obthis: POB_THIS,
         group_hndl: OB_GROUP_HNDL,
         lib_name: LPTSTR,
         comment: LPTSTR,
         bSaveNormalize: BOOL
     ) -> INT,
-    pub ob_load_group_source: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> INT,
-    pub ob_rename_group:
+    ob_load_group_source: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> INT,
+    ob_rename_group:
         unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, new_name: LPTSTR) -> INT,
-    pub ob_move_group:
-        unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, lib_name: LPTSTR) -> INT,
-    pub ob_move_group_with_name:
+    ob_move_group: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, lib_name: LPTSTR) -> INT,
+    ob_move_group_with_name:
         unsafe extern "C" fn(obthis: POB_THIS, qual_name: LPTSTR, oldlib: LPTSTR, newlib: LPTSTR) -> INT,
-    pub ob_copy_group_with_name:
+    ob_copy_group_with_name:
         unsafe extern "C" fn(obthis: POB_THIS, qual_name: LPTSTR, oldlib: LPTSTR, newlib: LPTSTR) -> INT,
-    pub ob_copy_group:
+    ob_copy_group:
         unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, new_name: LPTSTR, lib_name: LPTSTR),
-    pub ob_delete_group: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL),
-    pub ob_delete_group_with_name: unsafe extern "C" fn(
+    ob_delete_group: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL),
+    ob_delete_group_with_name: unsafe extern "C" fn(
         obthis: POB_THIS,
         lib_name: LPTSTR,
         group_name: LPTSTR,
         class_id: OB_CLASS_ID
     ) -> INT,
-    pub ob_restore_group: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL),
-    pub ob_save_working_group: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL),
-    pub ob_delete_working_group: unsafe extern "C" fn(obthis: POB_THIS),
-    pub ob_restore_working_group: unsafe extern "C" fn(obthis: POB_THIS),
-    pub ob_open_group_id: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL),
-    pub ob_close_group: unsafe extern "C" fn(obthis: POB_THIS),
-    pub ob_get_group_lib: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> LPTSTR,
-    pub ob_run_garbage_collection: unsafe extern "C" fn(obthis: POB_THIS, force: BOOL) -> INT,
-    pub ob_delete_instlist_shlist: unsafe extern "C" fn(obthis: POB_THIS, instlist: *mut shlist),
-    pub ob_get_group_instlist_as_shlist:
+    ob_restore_group: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL),
+    ob_save_working_group: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL),
+    ob_delete_working_group: unsafe extern "C" fn(obthis: POB_THIS),
+    ob_restore_working_group: unsafe extern "C" fn(obthis: POB_THIS),
+    ob_open_group_id: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL),
+    ob_close_group: unsafe extern "C" fn(obthis: POB_THIS),
+    ob_get_group_lib: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> LPTSTR,
+    ob_run_garbage_collection: unsafe extern "C" fn(obthis: POB_THIS, force: BOOL) -> INT,
+    ob_delete_instlist_shlist: unsafe extern "C" fn(obthis: POB_THIS, instlist: *mut shlist),
+    ob_get_group_instlist_as_shlist:
         unsafe extern "C" fn(obthis: POB_THIS, groupId: OB_GROUP_ID) -> *mut shlist,
-    pub ob_delete_groups_shlist: unsafe extern "C" fn(obthis: POB_THIS, groups: *mut shlist),
-    pub ob_get_groups_shlist: unsafe extern "C" fn(obthis: POB_THIS) -> *mut shlist,
-    pub ob_store_source:
+    ob_delete_groups_shlist: unsafe extern "C" fn(obthis: POB_THIS, groups: *mut shlist),
+    ob_get_groups_shlist: unsafe extern "C" fn(obthis: POB_THIS) -> *mut shlist,
+    ob_store_source:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, source: LPTSTR, len: UINT),
-    pub ob_init_source:
+    ob_init_source:
         unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, source: LPTSTR, len: UINT) -> INT,
-    pub ob_store_global_src:
+    ob_store_global_src:
         unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, source: LPTSTR, len: UINT) -> INT,
-    pub ob_store_namespace_decl_src:
+    ob_store_namespace_decl_src:
         unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, source: LPTSTR, len: UINT) -> INT,
-    pub ob_store_shared_src:
+    ob_store_shared_src:
         unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, source: LPTSTR, len: UINT) -> INT,
-    pub ob_store_prototype_source:
+    ob_store_prototype_source:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, source: LPTSTR, len: UINT),
-    pub ob_store_instvar_source:
+    ob_store_instvar_source:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, source: LPTSTR, len: UINT),
-    pub ob_get_global_src:
+    ob_get_global_src:
         unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, len: *mut UINT) -> LPTSTR,
-    pub ob_get_namespace_decl_src:
+    ob_get_namespace_decl_src:
         unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, len: *mut UINT) -> LPTSTR,
-    pub ob_get_shared_src:
+    ob_get_shared_src:
         unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, len: *mut UINT) -> LPTSTR,
-    pub ob_get_prototype_source:
+    ob_get_prototype_source:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, len: *mut UINT) -> LPTSTR,
-    pub ob_get_instvar_source:
+    ob_get_instvar_source:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, len: *mut UINT) -> LPTSTR,
-    pub ob_get_routine_src:
+    ob_get_routine_src:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, index: OB_VTABLE_ID) -> LPTSTR,
-    pub ob_decl_and_store_routine_src: unsafe extern "C" fn(
+    ob_decl_and_store_routine_src: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         routname: LPTSTR,
@@ -3058,27 +3051,27 @@ pub struct Api {
         source: LPTSTR,
         len: UINT
     ) -> INT,
-    pub ob_store_routine_src: unsafe extern "C" fn(
+    ob_store_routine_src: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         index: OB_VTABLE_ID,
         source: LPTSTR,
         len: UINT
     ),
-    pub ob_store_create_src:
+    ob_store_create_src:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, source: LPTSTR, len: UINT) -> INT,
-    pub ob_store_destroy_src:
+    ob_store_destroy_src:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, source: LPTSTR, len: UINT) -> INT,
-    pub ob_get_function_src:
+    ob_get_function_src:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, index: OB_VTABLE_ID) -> LPTSTR,
-    pub ob_store_function_src: unsafe extern "C" fn(
+    ob_store_function_src: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         index: OB_VTABLE_ID,
         source: LPTSTR,
         len: UINT
     ),
-    pub ob_symbol_search_extended: unsafe extern "C" fn(
+    ob_symbol_search_extended: unsafe extern "C" fn(
         obthis: POB_THIS,
         obClassHandle: OB_CLASS_HNDL,
         iCurrScope: INT,
@@ -3090,7 +3083,7 @@ pub struct Api {
         pbIsPrivateMember: *mut BOOL,
         ppszFullName: *mut LPTSTR
     ) -> BOOL,
-    pub ob_symbol_search: unsafe extern "C" fn(
+    ob_symbol_search: unsafe extern "C" fn(
         obthis: POB_THIS,
         obClassHandle: OB_CLASS_HNDL,
         iCurrScope: INT,
@@ -3100,49 +3093,45 @@ pub struct Api {
         puiLevel: *mut UINT,
         pbIsConstantField: *mut BOOL
     ) -> BOOL,
-    pub ob_class_declare: unsafe extern "C" fn(
+    ob_class_declare: unsafe extern "C" fn(
         obthis: POB_THIS,
         group_hndl: OB_GROUP_HNDL,
         class_name: LPTSTR,
         parent_class: OB_CLASS_ID,
         within_class: OB_CLASS_ID
     ) -> OB_CLASS_HNDL,
-    pub ob_get_full_qualified_typename:
+    ob_get_full_qualified_typename:
         unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, class_id: OB_CLASS_ID) -> LPTSTR,
-    pub ob_class_declare_inh: unsafe extern "C" fn(
+    ob_class_declare_inh: unsafe extern "C" fn(
         obthis: POB_THIS,
         group_hndl: OB_GROUP_HNDL,
         class_name: LPTSTR,
         parent_class: OB_CLASS_HNDL,
         within_class: OB_CLASS_ID
     ) -> OB_CLASS_HNDL,
-    pub ob_class_reference: unsafe extern "C" fn(
+    ob_class_reference: unsafe extern "C" fn(
         obthis: POB_THIS,
         group_hndl: OB_GROUP_HNDL,
         class_name: LPTSTR
     ) -> OB_CLASS_HNDL,
-    pub ob_class_name: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> LPTSTR,
-    pub ob_class_name_not_indirect:
-        unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> LPTSTR,
-    pub ob_get_type_name: unsafe extern "C" fn(obthis: POB_THIS, datanode: POB_DATA) -> LPTSTR,
-    pub ob_classhndl_indirect:
-        unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_CLASS_HNDL,
-    pub ob_get_parent_class:
-        unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_CLASS_HNDL,
-    pub ob_get_within_class:
-        unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_CLASS_HNDL,
-    pub ob_class_delete: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL),
-    pub ob_class_rename:
+    ob_class_name: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> LPTSTR,
+    ob_class_name_not_indirect: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> LPTSTR,
+    ob_get_type_name: unsafe extern "C" fn(obthis: POB_THIS, datanode: POB_DATA) -> LPTSTR,
+    ob_classhndl_indirect: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_CLASS_HNDL,
+    ob_get_parent_class: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_CLASS_HNDL,
+    ob_get_within_class: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_CLASS_HNDL,
+    ob_class_delete: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL),
+    ob_class_rename:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, new_name: LPTSTR) -> INT,
-    pub ob_is_a_system_class: unsafe extern "C" fn(obthis: POB_THIS, class_name: LPTSTR) -> BOOL,
-    pub ob_is_class_inherited: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL,
-    pub ob_is_class_descendant:
+    ob_is_a_system_class: unsafe extern "C" fn(obthis: POB_THIS, class_name: LPTSTR) -> BOOL,
+    ob_is_class_inherited: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL,
+    ob_is_class_descendant:
         unsafe extern "C" fn(obthis: POB_THIS, ancestor: OB_CLASS_HNDL, descendant: OB_CLASS_HNDL) -> BOOL,
-    pub ob_is_inh_from_user_class: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL,
-    pub ob_get_sec_class_ancestor:
+    ob_is_inh_from_user_class: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL,
+    ob_get_sec_class_ancestor:
         unsafe extern "C" fn(obthis: POB_THIS, sec_class: OB_CLASS_HNDL) -> OB_CLASS_HNDL,
-    pub ob_is_class_enum: unsafe extern "C" fn(obThis: POB_THIS, obClassHndl: OB_CLASS_HNDL) -> BOOL,
-    pub ob_new_event: unsafe extern "C" fn(
+    ob_is_class_enum: unsafe extern "C" fn(obThis: POB_THIS, obClassHndl: OB_CLASS_HNDL) -> BOOL,
+    ob_new_event: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         event_name: LPTSTR,
@@ -3155,7 +3144,7 @@ pub struct Api {
         arg_grouping: POB_GROUPTYPE,
         is_external_event: BOOL
     ) -> OB_VTABLE_ID,
-    pub ob_update_event: unsafe extern "C" fn(
+    ob_update_event: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         vtable_id: OB_VTABLE_ID,
@@ -3171,68 +3160,65 @@ pub struct Api {
         no_throws: INT,
         throws_names: *mut LPTSTR
     ) -> INT,
-    pub ob_delete_event:
+    ob_delete_event:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, event_name: LPTSTR) -> INT,
-    pub ob_has_events: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL,
-    pub ob_get_event_token_id: unsafe extern "C" fn(
+    ob_has_events: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL,
+    ob_get_event_token_id: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         event_name: LPTSTR,
         vtable_id: POB_VTABLE_ID
     ) -> OB_EVT_TOKEN_ID,
-    pub ob_get_event_id_from_token: unsafe extern "C" fn(
+    ob_get_event_id_from_token: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         event_token: OB_EVT_TOKEN_ID
     ) -> OB_VTABLE_ID,
-    pub ob_does_event_script_exist:
+    ob_does_event_script_exist:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, event_id: OB_VTABLE_ID) -> BOOL,
-    pub ob_get_routine_name:
+    ob_get_routine_name:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, index: OB_VTABLE_ID) -> LPTSTR,
-    pub ob_delete_routine:
-        unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, index: OB_VTABLE_ID),
-    pub ob_get_curr_routine:
-        unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_VTABLE_ID,
-    pub ob_get_curr_function:
-        unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_VTABLE_ID,
-    pub ob_get_routid_from_vtable_id: unsafe extern "C" fn(
+    ob_delete_routine: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, index: OB_VTABLE_ID),
+    ob_get_curr_routine: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_VTABLE_ID,
+    ob_get_curr_function: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_VTABLE_ID,
+    ob_get_routid_from_vtable_id: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         vtable_id: OB_VTABLE_ID
     ) -> OB_ROUT_ID,
-    pub ob_is_valid_event_index:
+    ob_is_valid_event_index:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, index: OB_VTABLE_ID) -> BOOL,
-    pub ob_has_scripts: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL,
-    pub ob_get_routine_type: unsafe extern "C" fn(
+    ob_has_scripts: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL,
+    ob_get_routine_type: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         index: OB_VTABLE_ID
     ) -> OB_ROUT_TYPE::Type,
-    pub ob_get_function_vtable_ids: unsafe extern "C" fn(
+    ob_get_function_vtable_ids: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         include_dlls: BOOL,
         include_ancestors: BOOL,
         no_items: *mut UINT
     ) -> POB_VTABLE_ID,
-    pub ob_get_function_vtable_ids_for_ide: unsafe extern "C" fn(
+    ob_get_function_vtable_ids_for_ide: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         include_dlls: BOOL,
         include_ancestors: BOOL,
         no_items: *mut UINT
     ) -> POB_VTABLE_ID,
-    pub ob_get_event_vtable_ids: unsafe extern "C" fn(
+    ob_get_event_vtable_ids: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         include_dlls: BOOL,
         no_items: *mut UINT
     ) -> POB_VTABLE_ID,
-    pub ob_get_function_name:
+    ob_get_function_name:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, index: OB_VTABLE_ID) -> LPTSTR,
-    pub ob_delete_function:
+    ob_delete_function:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, index: OB_VTABLE_ID) -> INT,
-    pub ob_find_routine: unsafe extern "C" fn(
+    ob_find_routine: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         routine_type: OB_ROUT_TYPE::Type,
@@ -3246,25 +3232,25 @@ pub struct Api {
         pproto_id: POB_PROTO_ID,
         pvtable_id: POB_VTABLE_ID
     ) -> BOOL,
-    pub ob_get_vtable_id_from_proto_id: unsafe extern "C" fn(
+    ob_get_vtable_id_from_proto_id: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         proto_id: OB_PROTO_ID
     ) -> OB_VTABLE_ID,
-    pub ob_get_dll_func_names: unsafe extern "C" fn(obthis: POB_THIS, no_funcs: *mut UINT) -> *mut LPTSTR,
-    pub ob_get_global_func_names_in_lib:
+    ob_get_dll_func_names: unsafe extern "C" fn(obthis: POB_THIS, no_funcs: *mut UINT) -> *mut LPTSTR,
+    ob_get_global_func_names_in_lib:
         unsafe extern "C" fn(obthis: POB_THIS, no_funcs: *mut UINT, lib_name: LPTSTR) -> *mut LPTSTR,
-    pub ob_get_global_func_index:
+    ob_get_global_func_index:
         unsafe extern "C" fn(obthis: POB_THIS, name: LPTSTR, class_hndl: POB_CLASS_HNDL) -> OB_VTABLE_ID,
-    pub ob_get_func_index_in_lib: unsafe extern "C" fn(
+    ob_get_func_index_in_lib: unsafe extern "C" fn(
         obthis: POB_THIS,
         name: LPTSTR,
         lib_name: LPTSTR,
         class_hndl: POB_CLASS_HNDL
     ) -> OB_VTABLE_ID,
-    pub ob_get_proto_is_external_event:
+    ob_get_proto_is_external_event:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, index: OB_VTABLE_ID) -> BOOL,
-    pub ob_get_protoarg_info: unsafe extern "C" fn(
+    ob_get_protoarg_info: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         vtable_id: OB_VTABLE_ID,
@@ -3272,7 +3258,7 @@ pub struct Api {
         type_name: *mut LPTSTR,
         member_access: POB_MEMBER_ACCESS
     ) -> POB_ARG_INFO,
-    pub ob_get_proto_info: unsafe extern "C" fn(
+    ob_get_proto_info: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         vtable_id: OB_VTABLE_ID,
@@ -3286,18 +3272,18 @@ pub struct Api {
         rout_type: *mut OB_ROUT_TYPE::Type,
         is_inherit: *mut BOOL
     ) -> POB_ARG_INFO,
-    pub ob_get_method_signature:
+    ob_get_method_signature:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, vtable_id: OB_VTABLE_ID) -> LPTSTR,
-    pub ob_was_event_prototype_changed:
+    ob_was_event_prototype_changed:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, event_id: OB_VTABLE_ID) -> BOOL,
-    pub ob_get_proto_name_info: unsafe extern "C" fn(
+    ob_get_proto_name_info: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         func_id: OB_VTABLE_ID,
         name: *mut LPTSTR,
         is_obsolete: *mut BOOL
     ),
-    pub ob_get_proto_throws_info: unsafe extern "C" fn(
+    ob_get_proto_throws_info: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         func_id: OB_VTABLE_ID,
@@ -3305,7 +3291,7 @@ pub struct Api {
         no_throws: *mut UINT,
         group_id: POB_GROUP_ID
     ),
-    pub ob_lookup_routine_by_name: unsafe extern "C" fn(
+    ob_lookup_routine_by_name: unsafe extern "C" fn(
         obthis: POB_THIS,
         obInst: OB_INST_ID,
         lpstrRoutineName: LPTSTR,
@@ -3316,47 +3302,47 @@ pub struct Api {
         ppobArgClassId: *mut POB_CLASS_ID,
         pbVarArgs: *mut BOOL
     ) -> HRESULT,
-    pub ob_get_objnames_of_class:
+    ob_get_objnames_of_class:
         unsafe extern "C" fn(obthis: POB_THIS, class_id: OB_CLASS_ID, no_items: *mut UINT) -> *mut LPTSTR,
-    pub ob_has_object_of_class: unsafe extern "C" fn(obthis: POB_THIS, class_id: OB_CLASS_ID) -> BOOL,
-    pub ob_get_obj_classhndls_of_class: unsafe extern "C" fn(
+    ob_has_object_of_class: unsafe extern "C" fn(obthis: POB_THIS, class_id: OB_CLASS_ID) -> BOOL,
+    ob_get_obj_classhndls_of_class: unsafe extern "C" fn(
         obthis: POB_THIS,
         obClassID: OB_CLASS_ID,
         pNumberOfItems: *mut UINT
     ) -> POB_CLASS_HNDL,
-    pub ob_get_objnames_of_class_in_lib: unsafe extern "C" fn(
+    ob_get_objnames_of_class_in_lib: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_id: OB_CLASS_ID,
         no_items: *mut UINT,
         lib_name: LPTSTR
     ) -> *mut LPTSTR,
-    pub ob_global_reference: unsafe extern "C" fn(
+    ob_global_reference: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_name: LPTSTR,
         group_hndl: POB_GROUP_HNDL
     ) -> OB_CLASS_HNDL,
-    pub ob_global_reference_in_lib: unsafe extern "C" fn(
+    ob_global_reference_in_lib: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_name: LPTSTR,
         lib_name: LPTSTR,
         group_hndl: POB_GROUP_HNDL,
         class_id: OB_CLASS_ID
     ) -> OB_CLASS_HNDL,
-    pub ob_global_reference_of_class: unsafe extern "C" fn(
+    ob_global_reference_of_class: unsafe extern "C" fn(
         obthis: POB_THIS,
         name: LPTSTR,
         grouphndl: POB_GROUP_HNDL,
         of_class: OB_CLASS_ID
     ) -> OB_CLASS_HNDL,
-    pub ob_get_obinst_class_hndl: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> OB_CLASS_HNDL,
-    pub ob_is_a_typedef: unsafe extern "C" fn(obthis: POB_THIS, data: POB_DATA) -> BOOL,
-    pub ob_is_an_enum:
+    ob_get_obinst_class_hndl: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> OB_CLASS_HNDL,
+    ob_is_a_typedef: unsafe extern "C" fn(obthis: POB_THIS, data: POB_DATA) -> BOOL,
+    ob_is_an_enum:
         unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, data_node: POB_DATA) -> BOOL,
-    pub ob_get_system_class: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_CLASS_ID,
-    pub ob_get_obinst_system_class: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> OB_CLASS_ID,
-    pub ob_get_obinst_group_hndl: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> OB_GROUP_HNDL,
-    pub ob_get_obinst_class_name: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> LPTSTR,
-    pub ob_fetch_fields_of_class: unsafe extern "C" fn(
+    ob_get_system_class: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_CLASS_ID,
+    ob_get_obinst_system_class: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> OB_CLASS_ID,
+    ob_get_obinst_group_hndl: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> OB_GROUP_HNDL,
+    ob_get_obinst_class_name: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> LPTSTR,
+    ob_fetch_fields_of_class: unsafe extern "C" fn(
         obthis: POB_THIS,
         in_class: OB_CLASS_HNDL,
         of_class: OB_CLASS_ID,
@@ -3364,15 +3350,15 @@ pub struct Api {
         class_list: *mut POB_CLASS_ID,
         no_items: *mut UINT
     ) -> *mut LPTSTR,
-    pub ob_get_fields_of_class: unsafe extern "C" fn(
+    ob_get_fields_of_class: unsafe extern "C" fn(
         obthis: POB_THIS,
         in_class: OB_CLASS_HNDL,
         of_class: OB_CLASS_ID,
         class_list: *mut POB_CLASS_ID,
         no_items: *mut UINT
     ) -> *mut LPTSTR,
-    pub ob_get_local_var_info: unsafe extern "C" fn(obthis: POB_THIS, no_items: *mut UINT) -> POB_DATA_INFO,
-    pub ob_get_shared_vars_of_class: unsafe extern "C" fn(
+    ob_get_local_var_info: unsafe extern "C" fn(obthis: POB_THIS, no_items: *mut UINT) -> POB_DATA_INFO,
+    ob_get_shared_vars_of_class: unsafe extern "C" fn(
         obthis: POB_THIS,
         group_hndl: OB_GROUP_HNDL,
         return_shared: BOOL,
@@ -3380,91 +3366,91 @@ pub struct Api {
         of_class: OB_CLASS_ID,
         no_items: *mut UINT
     ) -> POB_DATA_INFO,
-    pub ob_get_shared_var_info: unsafe extern "C" fn(
+    ob_get_shared_var_info: unsafe extern "C" fn(
         obthis: POB_THIS,
         group_hndl: OB_GROUP_HNDL,
         return_shared: BOOL,
         return_global: BOOL,
         no_items: *mut UINT
     ) -> POB_DATA_INFO,
-    pub ob_get_global_vars_of_class:
+    ob_get_global_vars_of_class:
         unsafe extern "C" fn(obthis: POB_THIS, of_class: OB_CLASS_ID, no_items: *mut UINT) -> POB_DATA_INFO,
-    pub ob_get_class_field_info: unsafe extern "C" fn(
+    ob_get_class_field_info: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         no_items: *mut UINT
     ) -> POB_DATA_INFO,
-    pub ob_get_enum_info: unsafe extern "C" fn(
+    ob_get_enum_info: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         no_enums: *mut UINT
     ) -> POB_ENUM_INFO,
-    pub ob_get_class_event_info: unsafe extern "C" fn(
+    ob_get_class_event_info: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         no_events: *mut UINT
     ) -> POB_EVENT_INFO,
-    pub ob_get_instance_field_info: unsafe extern "C" fn(
+    ob_get_instance_field_info: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         no_items: *mut UINT
     ) -> POB_DATA_INFO,
-    pub ob_get_obinst_field_info: unsafe extern "C" fn(
+    ob_get_obinst_field_info: unsafe extern "C" fn(
         obthis: POB_THIS,
         obinst: OB_INST_ID,
         no_items: *mut UINT,
         field_filter: BOOL
     ) -> POB_DATA_INFO,
-    pub ob_get_obinst_all_field_info: unsafe extern "C" fn(
+    ob_get_obinst_all_field_info: unsafe extern "C" fn(
         obthis: POB_THIS,
         obinst: OB_INST_ID,
         no_items: *mut UINT,
         field_filter: BOOL
     ) -> POB_DATA_INFO,
-    pub ob_get_classes_within_group: unsafe extern "C" fn(
+    ob_get_classes_within_group: unsafe extern "C" fn(
         obthis: POB_THIS,
         in_group_hndl: OB_GROUP_HNDL,
         of_class_id: OB_CLASS_ID,
         total_items: *mut UINT
     ) -> POB_CLASS_INFO,
-    pub ob_get_enums_within_group: unsafe extern "C" fn(
+    ob_get_enums_within_group: unsafe extern "C" fn(
         obthis: POB_THIS,
         in_group_hndl: OB_GROUP_HNDL,
         total_items: *mut UINT
     ) -> POB_CLASS_INFO,
-    pub ob_get_global_var_data: unsafe extern "C" fn(obthis: POB_THIS, var_name: LPTSTR) -> POB_DATA,
-    pub ob_object_reference_count: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> ULONG,
-    pub ob_named_global_var_info: unsafe extern "C" fn(obthis: POB_THIS, varname: LPTSTR) -> POB_DATA_INFO,
-    pub ob_named_shared_var_info:
+    ob_get_global_var_data: unsafe extern "C" fn(obthis: POB_THIS, var_name: LPTSTR) -> POB_DATA,
+    ob_object_reference_count: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> ULONG,
+    ob_named_global_var_info: unsafe extern "C" fn(obthis: POB_THIS, varname: LPTSTR) -> POB_DATA_INFO,
+    ob_named_shared_var_info:
         unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, varname: LPTSTR) -> POB_DATA_INFO,
-    pub ob_named_special_var_info: unsafe extern "C" fn(obthis: POB_THIS, varname: LPTSTR) -> POB_DATA_INFO,
-    pub ob_named_local_var_info: unsafe extern "C" fn(obthis: POB_THIS, varname: LPTSTR) -> POB_DATA_INFO,
-    pub ob_named_field_info:
+    ob_named_special_var_info: unsafe extern "C" fn(obthis: POB_THIS, varname: LPTSTR) -> POB_DATA_INFO,
+    ob_named_local_var_info: unsafe extern "C" fn(obthis: POB_THIS, varname: LPTSTR) -> POB_DATA_INFO,
+    ob_named_field_info:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID, fieldname: LPTSTR) -> POB_DATA_INFO,
-    pub ob_get_array_info: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> POB_ARRAY_INFO,
-    pub ob_get_array_bounds_string:
+    ob_get_array_info: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> POB_ARRAY_INFO,
+    ob_get_array_bounds_string:
         unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL, data_node: POB_DATA) -> LPTSTR,
-    pub ob_get_array_bounds_string_from_field_info:
+    ob_get_array_bounds_string_from_field_info:
         unsafe extern "C" fn(obthis: POB_THIS, fieldinfo: POB_DATA_INFO) -> LPTSTR,
-    pub ob_get_info_watchpoint:
+    ob_get_info_watchpoint:
         unsafe extern "C" fn(obthis: POB_THIS, info: POB_DATA_INFO) -> *mut ::std::os::raw::c_void,
-    pub ob_compile_lib_entry: unsafe extern "C" fn(
+    ob_compile_lib_entry: unsafe extern "C" fn(
         obthis: POB_THIS,
         lib_name: LPTSTR,
         entry_name: LPTSTR,
         write_source: BOOL
     ) -> INT,
-    pub ob_compile_lib_typedefs: unsafe extern "C" fn(
+    ob_compile_lib_typedefs: unsafe extern "C" fn(
         obthis: POB_THIS,
         lib_name: LPTSTR,
         entry_name: LPTSTR,
         bUpdateModifyTime: BOOL
     ) -> INT,
-    pub ob_compile_lib_entry_3_pass:
+    ob_compile_lib_entry_3_pass:
         unsafe extern "C" fn(obThis: POB_THIS, lpszLibraryName: LPTSTR, lpszEntryName: LPTSTR) -> BOOL,
-    pub ob_compile_lib_scripts:
+    ob_compile_lib_scripts:
         unsafe extern "C" fn(obthis: POB_THIS, lib_name: LPTSTR, entry_name: LPTSTR) -> INT,
-    pub ob_func_search: unsafe extern "C" fn(
+    ob_func_search: unsafe extern "C" fn(
         obthis: POB_THIS,
         name: LPTSTR,
         argtypes: POB_CLASS_ID,
@@ -3472,29 +3458,29 @@ pub struct Api {
         type_: POB_CLASS_ID,
         error: POB_PROTOREF_ERROR
     ) -> POB_FUNCCALL_INFO,
-    pub ob_del_funccall_info: unsafe extern "C" fn(obthis: POB_THIS, funccall_info: POB_FUNCCALL_INFO),
-    pub ob_link_project: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> INT,
-    pub ob_check_for_locked_menu: unsafe extern "C" fn(obthis: POB_THIS),
-    pub ob_create_obinst: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_INST_ID,
-    pub ob_instantiate_child_object: unsafe extern "C" fn(
+    ob_del_funccall_info: unsafe extern "C" fn(obthis: POB_THIS, funccall_info: POB_FUNCCALL_INFO),
+    ob_link_project: unsafe extern "C" fn(obthis: POB_THIS, group_hndl: OB_GROUP_HNDL) -> INT,
+    ob_check_for_locked_menu: unsafe extern "C" fn(obthis: POB_THIS),
+    ob_create_obinst: unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> OB_INST_ID,
+    ob_instantiate_child_object: unsafe extern "C" fn(
         obthis: POB_THIS,
         parent_obinst: OB_INST_ID,
         child_type: OB_CLASS_ID,
         field_id: UINT,
         child_obinst: POB_INST_ID
     ) -> INT,
-    pub ob_instantiate_system_object:
+    ob_instantiate_system_object:
         unsafe extern "C" fn(obthis: POB_THIS, object_type: OB_CLASS_ID, pObint: POB_INST_ID) -> INT,
-    pub ob_destroy_obinst: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> INT,
-    pub ob_set_runtime: unsafe extern "C" fn(obthis: POB_THIS, bInRuntime: BOOL),
-    pub ob_create_executable: unsafe extern "C" fn(
+    ob_destroy_obinst: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> INT,
+    ob_set_runtime: unsafe extern "C" fn(obthis: POB_THIS, bInRuntime: BOOL),
+    ob_create_executable: unsafe extern "C" fn(
         obthis: POB_THIS,
         pExecBlock: POB_EXEC,
         bFreeGroups: BOOL,
         pManifestInfo: LPTSTR
     ) -> INT,
-    pub ob_create_library: unsafe extern "C" fn(obthis: POB_THIS, pExecBlock: POB_EXEC) -> INT,
-    pub ob_create_consolidated_library: unsafe extern "C" fn(
+    ob_create_library: unsafe extern "C" fn(obthis: POB_THIS, pExecBlock: POB_EXEC) -> INT,
+    ob_create_consolidated_library: unsafe extern "C" fn(
         obthis: POB_THIS,
         pTargetLibrary: LPTSTR,
         nSourceLibs: ULONG,
@@ -3507,14 +3493,14 @@ pub struct Api {
         pNumPBD: *mut ULONG,
         ppErrorMessage: *mut LPTSTR
     ) -> INT,
-    pub ob_create_interface_in_library: unsafe extern "C" fn(
+    ob_create_interface_in_library: unsafe extern "C" fn(
         pClassArray: *mut PPBIClassDef,
         ulNumClasses: ULONG,
         lpstrDestLibrary: LPTSTR,
         lpstrLibraryComments: LPTSTR,
         bCreatePbl: BOOL
     ) -> HRESULT,
-    pub ob_create_interface_class: unsafe extern "C" fn(
+    ob_create_interface_class: unsafe extern "C" fn(
         obthis: POB_THIS,
         hSourceClass: OB_CLASS_HNDL,
         lpstrDestClassName: LPTSTR,
@@ -3522,8 +3508,8 @@ pub struct Api {
         lpstrComments: LPTSTR,
         lpstrSourceClassName: LPTSTR
     ) -> HRESULT,
-    pub ob_init_executable: unsafe extern "C" fn(obthis: POB_THIS, executable_name: LPTSTR) -> OB_CLASS_HNDL,
-    pub ob_scan_source_blocks: unsafe extern "C" fn(
+    ob_init_executable: unsafe extern "C" fn(obthis: POB_THIS, executable_name: LPTSTR) -> OB_CLASS_HNDL,
+    ob_scan_source_blocks: unsafe extern "C" fn(
         obthis: POB_THIS,
         source: POB_SOURCE_BLOCK,
         src_len: ULONG,
@@ -3531,345 +3517,334 @@ pub struct Api {
         no_blocks: *mut UINT,
         subpool: OB_SUBPOOL
     ) -> *mut LPTSTR,
-    pub ob_create_launcher: unsafe extern "C" fn(
+    ob_create_launcher: unsafe extern "C" fn(
         obThis: POB_THIS,
         pExecBlock: POB_EXEC,
         pObjectList: *mut ::std::os::raw::c_void
     ) -> INT,
-    pub ob_sanitize_pb_name: unsafe extern "C" fn(
+    ob_sanitize_pb_name: unsafe extern "C" fn(
         obThis: POB_THIS,
         lpszDestName: LPTSTR,
         destLength: ::std::os::raw::c_long,
         lpszNameToSanitize: LPTSTR
     ),
-    pub ob_validate_class: unsafe extern "C" fn(
+    ob_validate_class: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         no_items: *mut UINT
     ) -> POB_CONFLICT_LIST,
-    pub ob_get_orphaned_classes: unsafe extern "C" fn(
+    ob_get_orphaned_classes: unsafe extern "C" fn(
         obthis: POB_THIS,
         in_group_hndl: OB_GROUP_HNDL,
         total_items: *mut UINT
     ) -> POB_CLASS_HNDL,
-    pub ob_validate_type_name:
+    ob_validate_type_name:
         unsafe extern "C" fn(obThis: POB_THIS, obGroupHndl: OB_GROUP_HNDL, TypeName: LPTSTR) -> BOOL,
-    pub ob_convert_to_ver2_source:
+    ob_convert_to_ver2_source:
         unsafe extern "C" fn(obthis: POB_THIS, lib_name: LPTSTR, entry_name: LPTSTR) -> INT,
-    pub ob_is_vers2_obj:
+    ob_is_vers2_obj:
         unsafe extern "C" fn(obthis: POB_THIS, lib_name: LPTSTR, entry_name: LPTSTR, error: *mut INT) -> BOOL,
-    pub ob_build_ordered_compile_list: unsafe extern "C" fn(
+    ob_build_ordered_compile_list: unsafe extern "C" fn(
         obthis: POB_THIS,
         list_type: OB_COMPILE_LIST_TYPE,
         no_items: *mut UINT,
         inconsistency: POB_INCONSISTENCY_TYPE
     ) -> POB_COMPILE_LIST,
-    pub ob_free_ordered_compile_list:
+    ob_free_ordered_compile_list:
         unsafe extern "C" fn(obthis: POB_THIS, compile_list: POB_COMPILE_LIST, no_items: UINT),
-    pub ob_build_hierarchy_list:
+    ob_build_hierarchy_list:
         unsafe extern "C" fn(obthis: POB_THIS, no_items: *mut UINT, type_: OB_CLASS_ID) -> POB_HIERARCHY_LIST,
-    pub ob_free_hierarchy_list:
+    ob_free_hierarchy_list:
         unsafe extern "C" fn(obthis: POB_THIS, hierarchy_list: POB_HIERARCHY_LIST, no_items: UINT),
-    pub ob_clear_instance_ref: unsafe extern "C" fn(obthis: POB_THIS, back_ptr: *mut ::std::os::raw::c_void),
-    pub ob_insert_inst_ref_dbg: unsafe extern "C" fn(
+    ob_clear_instance_ref: unsafe extern "C" fn(obthis: POB_THIS, back_ptr: *mut ::std::os::raw::c_void),
+    ob_insert_inst_ref_dbg: unsafe extern "C" fn(
         obthis: POB_THIS,
         obinst: OB_INST_ID,
         ref_addr: *mut ::std::os::raw::c_void,
         fileName: LPTSTR,
         lineNo: UINT
     ),
-    pub ob_open_typedef_group: unsafe extern "C" fn(
+    ob_open_typedef_group: unsafe extern "C" fn(
         obThis: POB_THIS,
         lpszLibraryName: LPTSTR,
         lpszGroupName: LPTSTR,
         bCreateIfNotFound: BOOL
     ) -> INT,
-    pub ob_save_dll_to_pbd: unsafe extern "C" fn(argc: ::std::os::raw::c_int, argv: *mut LPTSTR) -> INT,
-    pub ob_convert_pbx_to_native_groups:
+    ob_save_dll_to_pbd: unsafe extern "C" fn(argc: ::std::os::raw::c_int, argv: *mut LPTSTR) -> INT,
+    ob_convert_pbx_to_native_groups:
         unsafe extern "C" fn(obthis: POB_THIS, pbl_name: LPCTSTR, dll_name: LPCTSTR) -> INT,
-    pub ob_share_typedef_group: unsafe extern "C" fn(destObThis: POB_THIS, srcObThis: POB_THIS) -> INT,
-    pub ob_unshare_typedef_group: unsafe extern "C" fn(obThis: POB_THIS) -> INT,
-    pub ob_cm_evaluate_expression:
+    ob_share_typedef_group: unsafe extern "C" fn(destObThis: POB_THIS, srcObThis: POB_THIS) -> INT,
+    ob_unshare_typedef_group: unsafe extern "C" fn(obThis: POB_THIS) -> INT,
+    ob_cm_evaluate_expression:
         unsafe extern "C" fn(obthis: POB_THIS, text: LPTSTR, result_data_node: POB_DATA) -> INT,
-    pub ob_entryInheritsFromClass: unsafe extern "C" fn(
+    ob_entryInheritsFromClass: unsafe extern "C" fn(
         obThis: POB_THIS,
         lpszLibraryName: LPTSTR,
         lpszTypeName: LPTSTR,
         lpszEntryName: LPTSTR
     ) -> BOOL,
-    pub ob_get_class_from_name:
+    ob_get_class_from_name:
         unsafe extern "C" fn(obThis: POB_THIS, lpszClassName: LPTSTR, pbIsEnum: *mut BOOL) -> OB_CLASS_HNDL,
-    pub ob_local_global_lv:
+    ob_local_global_lv:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, var_id: OB_SYM_ID) -> POB_DATA,
-    pub ob_local_global_refpkt:
+    ob_local_global_refpkt:
         unsafe extern "C" fn(obthis: POB_THIS, destination: POB_DATA, group: POB_GROUP, var_id: OB_SYM_ID),
-    pub ob_shared_global_lv:
+    ob_shared_global_lv:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, var_id: OB_SYM_ID) -> POB_DATA,
-    pub ob_shared_global_refpkt:
+    ob_shared_global_refpkt:
         unsafe extern "C" fn(obthis: POB_THIS, destination: POB_DATA, group: POB_GROUP, var_id: OB_SYM_ID),
-    pub ob_shared_lv: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, var_id: OB_SYM_ID) -> POB_DATA,
-    pub ob_shared_refpkt:
+    ob_shared_lv: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, var_id: OB_SYM_ID) -> POB_DATA,
+    ob_shared_refpkt:
         unsafe extern "C" fn(obthis: POB_THIS, destination: POB_DATA, group: POB_GROUP, var_id: OB_SYM_ID),
-    pub ob_convert_chararray_to_string: unsafe extern "C" fn(obthis: POB_THIS, data: POB_DATA) -> BOOL,
-    pub ob_class_delete_and_withinclass:
+    ob_convert_chararray_to_string: unsafe extern "C" fn(obthis: POB_THIS, data: POB_DATA) -> BOOL,
+    ob_class_delete_and_withinclass:
         unsafe extern "C" fn(obthis: POB_THIS, class_hndl: OB_CLASS_HNDL, class_id: OB_CLASS_ID),
-    pub ob_find_orphan_class: unsafe extern "C" fn(
+    ob_find_orphan_class: unsafe extern "C" fn(
         obThis: POB_THIS,
         lpszLibraryName: LPTSTR,
         lpszEntryName: LPTSTR,
         bFoundAncestor: BOOL
     ) -> INT,
-    pub ob_nuke_orphan_class:
+    ob_nuke_orphan_class:
         unsafe extern "C" fn(obThis: POB_THIS, lpszLibraryName: LPTSTR, lpszEntryName: LPTSTR) -> BOOL,
-    pub ob_is_ancestor_class_modified:
-        unsafe extern "C" fn(obThis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL,
-    pub ob_rebuild_instance_image: unsafe extern "C" fn(obThis: POB_THIS, class_hndl: OB_CLASS_HNDL),
-    pub ob_build_compile_list:
-        unsafe extern "C" fn(obthis: POB_THIS, no_items: *mut UINT) -> POB_COMPILE_LIST,
-    pub ot_get_next_evaled_arg: unsafe extern "C" fn(obthis: POB_THIS) -> POB_DATA,
-    pub ot_get_next_evaled_arg_no_convert: unsafe extern "C" fn(obthis: POB_THIS) -> POB_DATA,
-    pub ot_get_next_lvalue_arg:
-        unsafe extern "C" fn(obthis: POB_THIS, str_: *mut POT_LVALUE_INFO) -> POB_DATA,
-    pub ot_get_simple_intarg: unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> INT,
-    pub ot_get_simple_longarg:
-        unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> ::std::os::raw::c_long,
-    pub ot_get_intarg: unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> INT,
-    pub ot_get_uintarg: unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> UINT,
-    pub ot_get_longarg: unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> ::std::os::raw::c_long,
-    pub ot_get_ulongarg: unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> ULONG,
-    pub ot_get_decarg: unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> PSH_DEC,
-    pub ot_get_floatarg: unsafe extern "C" fn(obthis: POB_THIS, fl: *mut f32, null: *mut BOOL) -> *mut f32,
-    pub ot_get_doublearg: unsafe extern "C" fn(obthis: POB_THIS, doub: *mut f64, null: *mut BOOL) -> *mut f64,
-    pub ot_get_longlongarg: unsafe extern "C" fn(
+    ob_is_ancestor_class_modified: unsafe extern "C" fn(obThis: POB_THIS, class_hndl: OB_CLASS_HNDL) -> BOOL,
+    ob_rebuild_instance_image: unsafe extern "C" fn(obThis: POB_THIS, class_hndl: OB_CLASS_HNDL),
+    ob_build_compile_list: unsafe extern "C" fn(obthis: POB_THIS, no_items: *mut UINT) -> POB_COMPILE_LIST,
+    ot_get_next_evaled_arg: unsafe extern "C" fn(obthis: POB_THIS) -> POB_DATA,
+    ot_get_next_evaled_arg_no_convert: unsafe extern "C" fn(obthis: POB_THIS) -> POB_DATA,
+    ot_get_next_lvalue_arg: unsafe extern "C" fn(obthis: POB_THIS, str_: *mut POT_LVALUE_INFO) -> POB_DATA,
+    ot_get_simple_intarg: unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> INT,
+    ot_get_simple_longarg: unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> ::std::os::raw::c_long,
+    ot_get_intarg: unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> INT,
+    ot_get_uintarg: unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> UINT,
+    ot_get_longarg: unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> ::std::os::raw::c_long,
+    ot_get_ulongarg: unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> ULONG,
+    ot_get_decarg: unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> PSH_DEC,
+    ot_get_floatarg: unsafe extern "C" fn(obthis: POB_THIS, fl: *mut f32, null: *mut BOOL) -> *mut f32,
+    ot_get_doublearg: unsafe extern "C" fn(obthis: POB_THIS, doub: *mut f64, null: *mut BOOL) -> *mut f64,
+    ot_get_longlongarg: unsafe extern "C" fn(
         obthis: POB_THIS,
         longlong_val: *mut ::std::os::raw::c_longlong,
         null: *mut BOOL
     ) -> *mut ::std::os::raw::c_longlong,
-    pub ot_get_obinstarg:
+    ot_get_obinstarg:
         unsafe extern "C" fn(obthis: POB_THIS, obinst: POB_INST_ID, null: *mut BOOL) -> POB_INST_ID,
-    pub ot_get_valptr_arg:
-        unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> *mut ::std::os::raw::c_void,
-    pub ot_init_arglist: unsafe extern "C" fn(obthis: POB_THIS, nargs: UINT) -> UINT,
-    pub ot_get_valptr: unsafe extern "C" fn(obthis: POB_THIS, data: POB_DATA) -> *mut ::std::os::raw::c_void,
-    pub ot_type_srch: unsafe extern "C" fn(name: LPTSTR) -> INT,
-    pub ot_type_attr: unsafe extern "C" fn(type_: OB_CLASS_ID) -> INT,
-    pub ot_get_class_name:
+    ot_get_valptr_arg: unsafe extern "C" fn(obthis: POB_THIS, null: *mut BOOL) -> *mut ::std::os::raw::c_void,
+    ot_init_arglist: unsafe extern "C" fn(obthis: POB_THIS, nargs: UINT) -> UINT,
+    ot_get_valptr: unsafe extern "C" fn(obthis: POB_THIS, data: POB_DATA) -> *mut ::std::os::raw::c_void,
+    ot_type_srch: unsafe extern "C" fn(name: LPTSTR) -> INT,
+    ot_type_attr: unsafe extern "C" fn(type_: OB_CLASS_ID) -> INT,
+    ot_get_class_name:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID) -> LPTSTR,
-    pub ot_is_array_eq: unsafe extern "C" fn(
+    ot_is_array_eq: unsafe extern "C" fn(
         obthis: POB_THIS,
         array_id1: OB_ARRAY_ID,
         array_id2: OB_ARRAY_ID,
         nullval: *mut BOOL
     ) -> BOOL,
-    pub ot_is_struct_eq: unsafe extern "C" fn(
+    ot_is_struct_eq: unsafe extern "C" fn(
         obthis: POB_THIS,
         data_node1: POB_DATA,
         data_node2: POB_DATA,
         nullval: *mut BOOL
     ) -> BOOL,
-    pub ot_create_obinst_with_name: unsafe extern "C" fn(
+    ot_create_obinst_with_name: unsafe extern "C" fn(
         obthis: POB_THIS,
         lvalue_data: POB_DATA,
         lvalue_info: POT_LVALUE_INFO,
         class_name: LPTSTR,
         nested_obinst: OB_INST_ID
     ) -> OB_INST_ID,
-    pub ot_create_obinst_at_lval: unsafe extern "C" fn(
+    ot_create_obinst_at_lval: unsafe extern "C" fn(
         obthis: POB_THIS,
         lvalue_data: POB_DATA,
         lvalue_info: POT_LVALUE_INFO,
         nested_obinst: OB_INST_ID
     ) -> OB_INST_ID,
-    pub ot_get_curr_obinst_expr:
+    ot_get_curr_obinst_expr:
         unsafe extern "C" fn(obthis: POB_THIS, obinst_buf: POB_INST_ID, nullval: *mut BOOL) -> POB_INST_ID,
-    pub ot_func_call: unsafe extern "C" fn(
+    ot_func_call: unsafe extern "C" fn(
         obthis: POB_THIS,
         funccall_info: POB_FUNCCALL_INFO,
         actual_args: *mut *mut ::std::os::raw::c_void
     ) -> POB_DATA,
-    pub ot_set_return_val: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA),
-    pub ot_set_return_double: unsafe extern "C" fn(obthis: POB_THIS, doub_val: *mut f64, null_val: BOOL),
-    pub ot_set_return_longlong:
+    ot_set_return_val: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA),
+    ot_set_return_double: unsafe extern "C" fn(obthis: POB_THIS, doub_val: *mut f64, null_val: BOOL),
+    ot_set_return_longlong:
         unsafe extern "C" fn(obthis: POB_THIS, longl_val: *mut ::std::os::raw::c_longlong, null_val: BOOL),
-    pub ot_set_return_dec: unsafe extern "C" fn(obthis: POB_THIS, dec_val: PSH_DEC, null_val: BOOL),
-    pub ot_no_return_val: unsafe extern "C" fn(obthis: POB_THIS),
-    pub ot_assign_lvalue_dec:
+    ot_set_return_dec: unsafe extern "C" fn(obthis: POB_THIS, dec_val: PSH_DEC, null_val: BOOL),
+    ot_no_return_val: unsafe extern "C" fn(obthis: POB_THIS),
+    ot_assign_lvalue_dec:
         unsafe extern "C" fn(obthis: POB_THIS, lvalue_data: POB_DATA, val: PSH_DEC, nullval: BOOL),
-    pub ot_assign_lvalue_double:
+    ot_assign_lvalue_double:
         unsafe extern "C" fn(obthis: POB_THIS, lvalue_data: POB_DATA, val: f64, nullval: BOOL),
-    pub ot_assign_lvalue_longlong: unsafe extern "C" fn(
+    ot_assign_lvalue_longlong: unsafe extern "C" fn(
         obthis: POB_THIS,
         lvalue_data: POB_DATA,
         val: ::std::os::raw::c_longlong,
         nullval: BOOL
     ),
-    pub ot_assign_lvalue_blob:
+    ot_assign_lvalue_blob:
         unsafe extern "C" fn(obthis: POB_THIS, lvalue_data: POB_DATA, val: PSH_BINARY, nullval: BOOL),
-    pub ot_assign_lvalue_obinst:
+    ot_assign_lvalue_obinst:
         unsafe extern "C" fn(obthis: POB_THIS, lvalue_data: POB_DATA, val: OB_INST_ID, nullval: BOOL),
-    pub ot_assign_lvalue_array: unsafe extern "C" fn(
+    ot_assign_lvalue_array: unsafe extern "C" fn(
         obthis: POB_THIS,
         lvalue_data: POB_DATA,
         rvalue_array: OB_ARRAY_ID,
         nullval: BOOL
     ),
-    pub ot_assign_lvalue_any: unsafe extern "C" fn(
+    ot_assign_lvalue_any: unsafe extern "C" fn(
         obthis: POB_THIS,
         lvalue_data: POB_DATA,
         rvalue_data: POB_DATA,
         rhs_class_id: OB_CLASS_ID
     ),
-    pub ot_set_local_var: unsafe extern "C" fn(ths: POB_THIS, sym_id: OB_SYM_ID, data_node: POB_DATA) -> INT,
-    pub ot_set_shared_var: unsafe extern "C" fn(
+    ot_set_local_var: unsafe extern "C" fn(ths: POB_THIS, sym_id: OB_SYM_ID, data_node: POB_DATA) -> INT,
+    ot_set_shared_var: unsafe extern "C" fn(
         ths: POB_THIS,
         group_hndl: OB_GROUP_HNDL,
         sym_id: OB_SYM_ID,
         data_node: POB_DATA
     ) -> INT,
-    pub ot_set_obinst_var: unsafe extern "C" fn(
+    ot_set_obinst_var: unsafe extern "C" fn(
         ths: POB_THIS,
         ob_inst_id: OB_INST_ID,
         field_id: UINT,
         data_node: POB_DATA
     ) -> INT,
-    pub ot_set_local_array_item:
+    ot_set_local_array_item:
         unsafe extern "C" fn(ths: POB_THIS, sym_id: OB_SYM_ID, index: UINT, data_node: POB_DATA) -> INT,
-    pub ot_set_shared_array_item: unsafe extern "C" fn(
+    ot_set_shared_array_item: unsafe extern "C" fn(
         ths: POB_THIS,
         group_hndl: OB_GROUP_HNDL,
         sym_id: OB_SYM_ID,
         index: UINT,
         data_node: POB_DATA
     ) -> INT,
-    pub ot_set_obinst_array_item: unsafe extern "C" fn(
+    ot_set_obinst_array_item: unsafe extern "C" fn(
         ths: POB_THIS,
         obinst: OB_INST_ID,
         field_id: UINT,
         index: ULONG,
         new_data: POB_DATA
     ) -> INT,
-    pub ot_get_array_values: unsafe extern "C" fn(
+    ot_get_array_values: unsafe extern "C" fn(
         obthis: POB_THIS,
         arraynode: POB_DATA,
         nitems: *mut UINT
     ) -> *mut ::std::os::raw::c_void,
-    pub ot_reset_array: unsafe extern "C" fn(obthis: POB_THIS, array_node: POB_DATA, nitems: ULONG) -> INT,
-    pub ot_get_local_var:
+    ot_reset_array: unsafe extern "C" fn(obthis: POB_THIS, array_node: POB_DATA, nitems: ULONG) -> INT,
+    ot_get_local_var:
         unsafe extern "C" fn(obthis: POB_THIS, grphndl: OB_GROUP_HNDL, sym_id: OB_SYM_ID) -> POB_DATA,
-    pub ot_get_shared_var:
+    ot_get_shared_var:
         unsafe extern "C" fn(obthis: POB_THIS, grphndl: OB_GROUP_HNDL, sym_id: OB_SYM_ID) -> POB_DATA,
-    pub ot_math_type_convert:
-        unsafe extern "C" fn(class_id1: OB_CLASS_ID, class_id2: OB_CLASS_ID) -> OB_CLASS_ID,
-    pub ot_get_int_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> INT,
-    pub ot_get_uint_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> UINT,
-    pub ot_get_byte_value:
-        unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> ::std::os::raw::c_uchar,
-    pub ot_get_long_value:
-        unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> ::std::os::raw::c_long,
-    pub ot_get_ulong_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> ULONG,
-    pub ot_get_dec_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> PSH_DEC,
-    pub ot_get_float_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> f32,
-    pub ot_get_double_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> f64,
-    pub ot_get_longlong_value:
+    ot_math_type_convert: unsafe extern "C" fn(class_id1: OB_CLASS_ID, class_id2: OB_CLASS_ID) -> OB_CLASS_ID,
+    ot_get_int_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> INT,
+    ot_get_uint_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> UINT,
+    ot_get_byte_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> ::std::os::raw::c_uchar,
+    ot_get_long_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> ::std::os::raw::c_long,
+    ot_get_ulong_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> ULONG,
+    ot_get_dec_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> PSH_DEC,
+    ot_get_float_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> f32,
+    ot_get_double_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> f64,
+    ot_get_longlong_value:
         unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> ::std::os::raw::c_longlong,
-    pub ot_free_val_ptr: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA),
-    pub ot_free_array: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA),
-    pub ot_convert_to_int: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> INT,
-    pub ot_convert_to_uint: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> UINT,
-    pub ot_convert_to_byte:
+    ot_free_val_ptr: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA),
+    ot_free_array: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA),
+    ot_convert_to_int: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> INT,
+    ot_convert_to_uint: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> UINT,
+    ot_convert_to_byte:
         unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> ::std::os::raw::c_uchar,
-    pub ot_convert_to_long:
-        unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> ::std::os::raw::c_long,
-    pub ot_convert_to_ulong: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> ULONG,
-    pub ot_convert_to_dec: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> PSH_DEC,
-    pub ot_convert_to_float: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> f32,
-    pub ot_convert_to_double: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> f64,
-    pub ot_convert_to_longlong:
+    ot_convert_to_long: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> ::std::os::raw::c_long,
+    ot_convert_to_ulong: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> ULONG,
+    ot_convert_to_dec: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> PSH_DEC,
+    ot_convert_to_float: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> f32,
+    ot_convert_to_double: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> f64,
+    ot_convert_to_longlong:
         unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> ::std::os::raw::c_longlong,
-    pub ot_ansi_lower: unsafe extern "C" fn(obthis: POB_THIS, string: LPTSTR) -> LPTSTR,
-    pub ot_ansi_upper: unsafe extern "C" fn(obthis: POB_THIS, string: LPTSTR) -> LPTSTR,
-    pub ot_ansi_strcmp: unsafe extern "C" fn(obthis: POB_THIS, stringOne: LPTSTR, stringTwo: LPTSTR) -> INT,
-    pub ot_get_field_lv:
-        unsafe extern "C" fn(obthis: POB_THIS, obInst: OB_INST_ID, fieldId: UINT) -> POB_DATA,
-    pub ot_get_field_item_lv: unsafe extern "C" fn(
+    ot_ansi_lower: unsafe extern "C" fn(obthis: POB_THIS, string: LPTSTR) -> LPTSTR,
+    ot_ansi_upper: unsafe extern "C" fn(obthis: POB_THIS, string: LPTSTR) -> LPTSTR,
+    ot_ansi_strcmp: unsafe extern "C" fn(obthis: POB_THIS, stringOne: LPTSTR, stringTwo: LPTSTR) -> INT,
+    ot_get_field_lv: unsafe extern "C" fn(obthis: POB_THIS, obInst: OB_INST_ID, fieldId: UINT) -> POB_DATA,
+    ot_get_field_item_lv: unsafe extern "C" fn(
         obthis: POB_THIS,
         obInst: OB_INST_ID,
         fieldId: UINT,
         item_index: ULONG
     ) -> POB_DATA,
-    pub ot_assign_ref_int:
-        unsafe extern "C" fn(obthis: POB_THIS, refpak: POT_REF_PAK, value: INT, nullval: BOOL),
-    pub ot_assign_ref_uint:
+    ot_assign_ref_int: unsafe extern "C" fn(obthis: POB_THIS, refpak: POT_REF_PAK, value: INT, nullval: BOOL),
+    ot_assign_ref_uint:
         unsafe extern "C" fn(obthis: POB_THIS, refpak: POT_REF_PAK, value: UINT, nullval: BOOL),
-    pub ot_assign_ref_byte: unsafe extern "C" fn(
+    ot_assign_ref_byte: unsafe extern "C" fn(
         obthis: POB_THIS,
         refpak: POT_REF_PAK,
         value: ::std::os::raw::c_uchar,
         nullval: BOOL
     ),
-    pub ot_assign_ref_long: unsafe extern "C" fn(
+    ot_assign_ref_long: unsafe extern "C" fn(
         obthis: POB_THIS,
         refpak: POT_REF_PAK,
         value: ::std::os::raw::c_long,
         nullval: BOOL
     ),
-    pub ot_assign_ref_ulong:
+    ot_assign_ref_ulong:
         unsafe extern "C" fn(obthis: POB_THIS, refpak: POT_REF_PAK, value: ULONG, nullval: BOOL),
-    pub ot_assign_ref_dec:
+    ot_assign_ref_dec:
         unsafe extern "C" fn(obthis: POB_THIS, refpak: POT_REF_PAK, value: PSH_DEC, nullval: BOOL),
-    pub ot_assign_ref_float:
+    ot_assign_ref_float:
         unsafe extern "C" fn(obthis: POB_THIS, refpak: POT_REF_PAK, value: f32, nullval: BOOL),
-    pub ot_assign_ref_double:
+    ot_assign_ref_double:
         unsafe extern "C" fn(obthis: POB_THIS, refpak: POT_REF_PAK, value: f64, nullval: BOOL),
-    pub ot_assign_ref_longlong: unsafe extern "C" fn(
+    ot_assign_ref_longlong: unsafe extern "C" fn(
         obthis: POB_THIS,
         refpak: POT_REF_PAK,
         value: ::std::os::raw::c_longlong,
         nullval: BOOL
     ),
-    pub ot_assign_ref_string:
+    ot_assign_ref_string:
         unsafe extern "C" fn(obthis: POB_THIS, refpak: POT_REF_PAK, value: LPTSTR, nullval: BOOL),
-    pub ot_assign_ref_bool:
+    ot_assign_ref_bool:
         unsafe extern "C" fn(obthis: POB_THIS, refpak: POT_REF_PAK, value: BOOL, nullval: BOOL),
-    pub ot_assign_ref_char:
+    ot_assign_ref_char:
         unsafe extern "C" fn(obthis: POB_THIS, refpak: POT_REF_PAK, value: TCHAR, nullval: BOOL),
-    pub ot_assign_ref_blob:
+    ot_assign_ref_blob:
         unsafe extern "C" fn(obthis: POB_THIS, refpak: POT_REF_PAK, value: PSH_BINARY, nullval: BOOL),
-    pub ot_assign_ref_time:
+    ot_assign_ref_time:
         unsafe extern "C" fn(obthis: POB_THIS, refpak: POT_REF_PAK, value: PSH_TIME, nullval: BOOL),
-    pub ot_assign_ref_date:
+    ot_assign_ref_date:
         unsafe extern "C" fn(obthis: POB_THIS, refpak: POT_REF_PAK, value: PSH_TIME, nullval: BOOL),
-    pub ot_assign_ref_datetime:
+    ot_assign_ref_datetime:
         unsafe extern "C" fn(obthis: POB_THIS, refpak: POT_REF_PAK, value: PSH_TIME, nullval: BOOL),
-    pub ot_assign_ref_obinst: unsafe extern "C" fn(
+    ot_assign_ref_obinst: unsafe extern "C" fn(
         obthis: POB_THIS,
         refpak: POT_REF_PAK,
         value: OB_INST_ID,
         nullval: BOOL,
         type_: OB_CLASS_ID
     ) -> INT,
-    pub ot_assign_ref_enum: unsafe extern "C" fn(
+    ot_assign_ref_enum: unsafe extern "C" fn(
         obthis: POB_THIS,
         refpak: POT_REF_PAK,
         value: INT,
         nullval: BOOL,
         type_: OB_CLASS_ID
     ),
-    pub ot_assign_ref_array: unsafe extern "C" fn(
+    ot_assign_ref_array: unsafe extern "C" fn(
         obthis: POB_THIS,
         refpak: POT_REF_PAK,
         value: OB_ARRAY_ID,
         nullval: BOOL,
         type_: OB_CLASS_ID
     ),
-    pub ot_assign_ref_any: unsafe extern "C" fn(
+    ot_assign_ref_any: unsafe extern "C" fn(
         obthis: POB_THIS,
         refpak: POT_REF_PAK,
         rvalue_data: POB_DATA,
         rhs_class_id: OB_CLASS_ID
     ),
-    pub ot_get_nested_obinst: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> OB_INST_ID,
-    pub ot_array_create_bounded: unsafe extern "C" fn(
+    ot_get_nested_obinst: unsafe extern "C" fn(obthis: POB_THIS, obinst: OB_INST_ID) -> OB_INST_ID,
+    ot_array_create_bounded: unsafe extern "C" fn(
         obthis: POB_THIS,
         num_items: ULONG,
         elmtType: OB_CLASS_HNDL,
@@ -3877,59 +3852,55 @@ pub struct Api {
         numDim: USHORT,
         boundsArray: *mut ::std::os::raw::c_long
     ) -> *mut ::std::os::raw::c_void,
-    pub ot_array_create_unbounded: unsafe extern "C" fn(
+    ot_array_create_unbounded: unsafe extern "C" fn(
         obthis: POB_THIS,
         elmtType: OB_CLASS_HNDL,
         varInfo: USHORT
     ) -> *mut ::std::os::raw::c_void,
-    pub ot_array_index:
+    ot_array_index:
         unsafe extern "C" fn(obthis: POB_THIS, array: *mut ::std::os::raw::c_void, index: ULONG) -> POB_DATA,
-    pub ot_array_set_free_data:
+    ot_array_set_free_data:
         unsafe extern "C" fn(obthis: POB_THIS, array: *mut ::std::os::raw::c_void, newValue: BOOL),
-    pub ot_array_free_data:
-        unsafe extern "C" fn(obthis: POB_THIS, array: *mut ::std::os::raw::c_void) -> BOOL,
-    pub ot_array_class_id:
+    ot_array_free_data: unsafe extern "C" fn(obthis: POB_THIS, array: *mut ::std::os::raw::c_void) -> BOOL,
+    ot_array_class_id:
         unsafe extern "C" fn(obthis: POB_THIS, array: *mut ::std::os::raw::c_void) -> OB_CLASS_ID,
-    pub ot_array_class_hndl:
+    ot_array_class_hndl:
         unsafe extern "C" fn(obthis: POB_THIS, array: *mut ::std::os::raw::c_void) -> OB_CLASS_HNDL,
-    pub ot_array_num_dimensions:
+    ot_array_num_dimensions:
         unsafe extern "C" fn(obthis: POB_THIS, array: *mut ::std::os::raw::c_void) -> USHORT,
-    pub ot_array_num_items:
-        unsafe extern "C" fn(obthis: POB_THIS, array: *mut ::std::os::raw::c_void) -> ULONG,
-    pub ot_is_array_unbounded:
-        unsafe extern "C" fn(obthis: POB_THIS, array: *mut ::std::os::raw::c_void) -> BOOL,
-    pub ot_get_arraydef_no_dims:
+    ot_array_num_items: unsafe extern "C" fn(obthis: POB_THIS, array: *mut ::std::os::raw::c_void) -> ULONG,
+    ot_is_array_unbounded: unsafe extern "C" fn(obthis: POB_THIS, array: *mut ::std::os::raw::c_void) -> BOOL,
+    ot_get_arraydef_no_dims:
         unsafe extern "C" fn(obthis: POB_THIS, arrdef: *mut ::std::os::raw::c_void) -> USHORT,
-    pub ot_get_arraydef_style: unsafe extern "C" fn(
+    ot_get_arraydef_style: unsafe extern "C" fn(
         obthis: POB_THIS,
         arrdef: *mut ::std::os::raw::c_void
     ) -> OB_ARRAY_SYMBOL_STYLE::Type,
-    pub ot_get_arraydef_bounds: unsafe extern "C" fn(
+    ot_get_arraydef_bounds: unsafe extern "C" fn(
         obthis: POB_THIS,
         arrdef: *mut ::std::os::raw::c_void
     ) -> *mut ::std::os::raw::c_long,
-    pub ot_get_arraydef_varinfo:
+    ot_get_arraydef_varinfo:
         unsafe extern "C" fn(obthis: POB_THIS, arrdef: *mut ::std::os::raw::c_void) -> OB_INFO_FLAGS,
-    pub ot_get_arraydef_upper_bound: unsafe extern "C" fn(
+    ot_get_arraydef_upper_bound: unsafe extern "C" fn(
         obthis: POB_THIS,
         arrdef: *mut ::std::os::raw::c_void,
         dimension: ::std::os::raw::c_long
     ) -> ::std::os::raw::c_long,
-    pub ot_get_arraydef_lower_bound: unsafe extern "C" fn(
+    ot_get_arraydef_lower_bound: unsafe extern "C" fn(
         obthis: POB_THIS,
         arrdef: *mut ::std::os::raw::c_void,
         dimension: ::std::os::raw::c_long
     ) -> ::std::os::raw::c_long,
-    pub ot_randomize: unsafe extern "C" fn(obthis: POB_THIS, iSeed: UINT),
-    pub ot_rand:
-        unsafe extern "C" fn(obthis: POB_THIS, lLimit: ::std::os::raw::c_long) -> ::std::os::raw::c_long,
-    pub ot_class_compare:
+    ot_randomize: unsafe extern "C" fn(obthis: POB_THIS, iSeed: UINT),
+    ot_rand: unsafe extern "C" fn(obthis: POB_THIS, lLimit: ::std::os::raw::c_long) -> ::std::os::raw::c_long,
+    ot_class_compare:
         unsafe extern "C" fn(obthis: POB_THIS, classHndl1: OB_CLASS_HNDL, classHndl2: OB_CLASS_HNDL) -> BOOL,
-    pub ot_assign_global_var_obinst:
+    ot_assign_global_var_obinst:
         unsafe extern "C" fn(obthis: POB_THIS, szName: LPTSTR, obInst: OB_INST_ID) -> INT,
-    pub ob_class_indirect:
+    ob_class_indirect:
         unsafe extern "C" fn(obthis: POB_THIS, group: *mut POB_GROUP, class_id: POB_CLASS_ID) -> INT,
-    pub ob_add_external_class_ref: unsafe extern "C" fn(
+    ob_add_external_class_ref: unsafe extern "C" fn(
         obthis: POB_THIS,
         name: LPTSTR,
         local_group: POB_GROUP,
@@ -3938,48 +3909,48 @@ pub struct Api {
         refstyle: OB_GLOB_REFSTYLE,
         error: *mut INT
     ) -> OB_CLASS_ID,
-    pub ob_get_local_class: unsafe extern "C" fn(
+    ob_get_local_class: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         name: LPTSTR,
         refstyle: OB_GLOB_REFSTYLE,
         error: *mut INT
     ) -> OB_CLASS_ID,
-    pub ob_get_primary_class:
+    ob_get_primary_class:
         unsafe extern "C" fn(obthis: POB_THIS, group: *mut POB_GROUP, class_id: OB_CLASS_ID) -> OB_CLASS_ID,
-    pub ob_build_qual_sec_class_name:
+    ob_build_qual_sec_class_name:
         unsafe extern "C" fn(obthis: POB_THIS, primary_class_name: LPTSTR, sec_class_name: LPTSTR) -> LPTSTR,
-    pub ob_decl_indirect_sec_class: unsafe extern "C" fn(
+    ob_decl_indirect_sec_class: unsafe extern "C" fn(
         obthis: POB_THIS,
         target_group: POB_GROUP,
         prim_class_name: LPTSTR,
         sec_class_name: LPTSTR,
         error: *mut INT
     ) -> OB_CLASS_ID,
-    pub ob_update_class_ref: unsafe extern "C" fn(
+    ob_update_class_ref: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
         refstyle: OB_GLOB_REFSTYLE,
         is_prim_parent: BOOL
     ),
-    pub ob_update_glob_class_instflag:
+    ob_update_glob_class_instflag:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID, is_instance: BOOL),
-    pub ob_is_class_member_accessable: unsafe extern "C" fn(
+    ob_is_class_member_accessable: unsafe extern "C" fn(
         obthis: POB_THIS,
         member_access: OB_MEMBER_ACCESS::Type,
         access_check_type: OB_MEMBER_ACCESS_TYPE::Type,
         inheritance_level: UINT,
         in_system_routine: BOOL
     ) -> BOOL,
-    pub ob_get_system_func_class: unsafe extern "C" fn(obthis: POB_THIS) -> POB_RUNTIME_CLASS,
-    pub ob_get_global_func_class: unsafe extern "C" fn(
+    ob_get_system_func_class: unsafe extern "C" fn(obthis: POB_THIS) -> POB_RUNTIME_CLASS,
+    ob_get_global_func_class: unsafe extern "C" fn(
         obthis: POB_THIS,
         pGroup: POB_GROUP,
         classId: OB_CLASS_ID,
         module_id: OB_MODULE_ID
     ) -> POB_RUNTIME_CLASS,
-    pub ob_type_declare: unsafe extern "C" fn(
+    ob_type_declare: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         type_name: LPTSTR,
@@ -3990,7 +3961,7 @@ pub struct Api {
         autoinstantiate: BOOL,
         error: *mut INT
     ) -> OB_CLASS_ID,
-    pub ob_type_declare_class: unsafe extern "C" fn(
+    ob_type_declare_class: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         type_name: LPTSTR,
@@ -4001,45 +3972,45 @@ pub struct Api {
         autoinstantiate: BOOL,
         error: *mut INT
     ) -> OB_CLASS_ID,
-    pub ob_type_declare_vtab: unsafe extern "C" fn(
+    ob_type_declare_vtab: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
         parent_class: OB_CLASS_ID,
         error: *mut INT
     ),
-    pub ob_type_reference:
+    ob_type_reference:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, type_name: LPTSTR) -> OB_CLASS_ID,
-    pub ob_get_first_type: unsafe extern "C" fn(
+    ob_get_first_type: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: POB_CLASS_ID,
         style: POB_CLASS_STYLE
     ) -> LPTSTR,
-    pub ob_get_next_type:
+    ob_get_next_type:
         unsafe extern "C" fn(obthis: POB_THIS, class_id: POB_CLASS_ID, style: POB_CLASS_STYLE) -> LPTSTR,
-    pub ob_type_init_process: unsafe extern "C" fn(
+    ob_type_init_process: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
         class_style: OB_CLASS_STYLE::Type
     ),
-    pub ob_type_decl_process: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID),
-    pub ob_get_nested_class:
+    ob_type_decl_process: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID),
+    ob_get_nested_class:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID) -> OB_CLASS_ID,
-    pub ob_get_class_entry: unsafe extern "C" fn(
+    ob_get_class_entry: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: *mut POB_GROUP,
         class_id: OB_CLASS_ID
     ) -> POB_CLASS_ENTRY,
-    pub ob_is_class_indirect:
+    ob_is_class_indirect:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID) -> BOOL,
-    pub ob_fetch_routine: unsafe extern "C" fn(
+    ob_fetch_routine: unsafe extern "C" fn(
         class_entry: POB_CLASS_ENTRY,
         rout_id: OB_ROUT_ID,
         type_: *mut OB_ROUT_TYPE::Type
     ) -> POB_ROUTNODE,
-    pub ob_type_proto_decl: unsafe extern "C" fn(
+    ob_type_proto_decl: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
@@ -4063,7 +4034,7 @@ pub struct Api {
         no_throws: UINT,
         error: *mut INT
     ) -> OB_PROTO_ID,
-    pub ob_type_proto_ref: unsafe extern "C" fn(
+    ob_type_proto_ref: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: *mut POB_GROUP,
         class_id: POB_CLASS_ID,
@@ -4080,21 +4051,20 @@ pub struct Api {
         error: POB_PROTOREF_ERROR,
         bound_exact_match: BOOL
     ) -> OB_MODULE_ID,
-    pub ob_proto_error_upgrade: unsafe extern "C" fn(
+    ob_proto_error_upgrade: unsafe extern "C" fn(
         obthis: POB_THIS,
         currerror: OB_PROTOREF_ERROR::Type,
         newerror: OB_PROTOREF_ERROR::Type
     ) -> OB_PROTOREF_ERROR::Type,
-    pub ob_get_proto_access_type: unsafe extern "C" fn(
+    ob_get_proto_access_type: unsafe extern "C" fn(
         obthis: POB_THIS,
         curr_group: POB_GROUP,
         curr_class_id: OB_CLASS_ID,
         formal_arg_group: POB_GROUP,
         formal_arg_class_id: OB_CLASS_ID
     ) -> OB_MEMBER_ACCESS_TYPE::Type,
-    pub ob_type_process_protos:
-        unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID),
-    pub ob_type_reprocess_protos: unsafe extern "C" fn(
+    ob_type_process_protos: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID),
+    ob_type_reprocess_protos: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
@@ -4104,7 +4074,7 @@ pub struct Api {
         delete_proto_no_args: UINT,
         filter_userprotos: BOOL
     ) -> INT,
-    pub ob_get_type_proto_names: unsafe extern "C" fn(
+    ob_get_type_proto_names: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
@@ -4114,14 +4084,14 @@ pub struct Api {
         nprotos: *mut UINT,
         error: *mut BOOL
     ) -> POB_PROTONAME,
-    pub ob_declare_external_event_type: unsafe extern "C" fn(
+    ob_declare_external_event_type: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
         parent_class: OB_CLASS_ID,
         error: *mut INT
     ),
-    pub ob_get_type_proto_names_for_ide: unsafe extern "C" fn(
+    ob_get_type_proto_names_for_ide: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
@@ -4131,27 +4101,27 @@ pub struct Api {
         nprotos: *mut UINT,
         error: *mut BOOL
     ) -> POB_PROTONAME,
-    pub ob_type_vtable_module_srch: unsafe extern "C" fn(
+    ob_type_vtable_module_srch: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: *mut POB_GROUP,
         class_id: POB_CLASS_ID,
         vtable_id: OB_VTABLE_ID
     ) -> OB_PROTO_ID,
-    pub ob_get_prototype: unsafe extern "C" fn(
+    ob_get_prototype: unsafe extern "C" fn(
         obthis: POB_THIS,
         curr_group: *mut POB_GROUP,
         curr_class_id: POB_CLASS_ID,
         vtable_id: OB_VTABLE_ID
     ) -> POB_PROTOTYPE,
-    pub ob_update_proto_mod_id:
+    ob_update_proto_mod_id:
         unsafe extern "C" fn(obthis: POB_THIS, proto_id: OB_PROTO_ID, mod_id: OB_MODULE_ID),
-    pub ob_update_proto_rout_id:
+    ob_update_proto_rout_id:
         unsafe extern "C" fn(obthis: POB_THIS, proto_id: OB_PROTO_ID, rout_id: OB_ROUT_ID),
-    pub ob_protolist_read:
+    ob_protolist_read:
         unsafe extern "C" fn(obthis: POB_THIS, class_entry: POB_CLASS_ENTRY, subpool: OB_SUBPOOL) -> INT,
-    pub ob_protolist_write:
+    ob_protolist_write:
         unsafe extern "C" fn(obthis: POB_THIS, class_entry: POB_CLASS_ENTRY) -> OB_ERROR::Type,
-    pub ob_prototype_match_for_event: unsafe extern "C" fn(
+    ob_prototype_match_for_event: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         proto: POB_PROTOTYPE,
@@ -4160,7 +4130,7 @@ pub struct Api {
         args: POB_PROTO_ARG,
         no_args: UINT
     ) -> BOOL,
-    pub ob_prototype_search: unsafe extern "C" fn(
+    ob_prototype_search: unsafe extern "C" fn(
         obthis: POB_THIS,
         proto_list: POB_PROTOTYPE,
         no_proto_list: UINT,
@@ -4174,7 +4144,7 @@ pub struct Api {
         no_args: UINT,
         error: POB_PROTO_OVERLOAD_ERROR
     ) -> OB_PROTO_ID,
-    pub ob_proto_overload_search: unsafe extern "C" fn(
+    ob_proto_overload_search: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
@@ -4184,27 +4154,27 @@ pub struct Api {
         args: POB_PROTO_ARG,
         no_args: UINT
     ) -> OB_PROTO_OVERLOAD_ERROR,
-    pub ob_event_module_name: unsafe extern "C" fn(
+    ob_event_module_name: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_entry: POB_CLASS_ENTRY,
         mod_id: OB_MODULE_ID
     ) -> LPTSTR,
-    pub ob_find_first_event: unsafe extern "C" fn(
+    ob_find_first_event: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_hndl: POB_CLASS_HNDL,
         event_name: LPTSTR
     ) -> OB_VTABLE_ID,
-    pub ob_type_event_script_srch: unsafe extern "C" fn(
+    ob_type_event_script_srch: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: *mut POB_GROUP,
         class_id: POB_CLASS_ID,
         name: LPTSTR,
         error: *mut INT
     ) -> OB_MODULE_ID,
-    pub ob_build_proto_vtable:
+    ob_build_proto_vtable:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_entry: POB_CLASS_ENTRY) -> INT,
-    pub ob_type_field_decl: unsafe extern "C" fn(
+    ob_type_field_decl: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         target_class_id: OB_CLASS_ID,
@@ -4216,7 +4186,7 @@ pub struct Api {
         dup_field_type: POB_FIELD_TYPE,
         error: *mut INT
     ) -> OB_SYM_ID,
-    pub ob_type_field_search: unsafe extern "C" fn(
+    ob_type_field_search: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
@@ -4224,7 +4194,7 @@ pub struct Api {
         fieldtype: POB_CLASS_ID,
         actual_field_id: POB_SYM_ID
     ) -> OB_SYM_ID,
-    pub ob_type_field_ref: unsafe extern "C" fn(
+    ob_type_field_ref: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: *mut POB_GROUP,
         class_id: POB_CLASS_ID,
@@ -4240,7 +4210,7 @@ pub struct Api {
         level: *mut UINT,
         error: *mut INT
     ) -> OB_SYM_ID,
-    pub ob_get_type_field_info: unsafe extern "C" fn(
+    ob_get_type_field_info: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
@@ -4248,26 +4218,26 @@ pub struct Api {
         error: *mut INT,
         filter_fields: BOOL
     ) -> POB_TYPEINFO,
-    pub ob_set_field_init_value: unsafe extern "C" fn(
+    ob_set_field_init_value: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
         field_id: OB_SYM_ID,
         value: OB_CONST_REF
     ),
-    pub ob_get_field_init_value: unsafe extern "C" fn(
+    ob_get_field_init_value: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
         field_id: OB_SYM_ID
     ) -> POB_DATA,
-    pub ob_type_field_clear_instvars:
+    ob_type_field_clear_instvars:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID),
-    pub ob_convert_fields_to_const:
+    ob_convert_fields_to_const:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID) -> INT,
-    pub ob_build_instance_image:
+    ob_build_instance_image:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID) -> INT,
-    pub ob_field_decl_indattr_funcs: unsafe extern "C" fn(
+    ob_field_decl_indattr_funcs: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
@@ -4275,22 +4245,22 @@ pub struct Api {
         func_templates: POB_INDATTR_FUNCTMPLT,
         no_template_items: UINT
     ),
-    pub ob_field_get_indattr_funcs: unsafe extern "C" fn(
+    ob_field_get_indattr_funcs: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
         field_id: OB_SYM_ID,
         no_tmplts: *mut UINT
     ) -> POB_INDATTR_FUNCTMPLT,
-    pub ob_field_requires_update_notification: unsafe extern "C" fn(
+    ob_field_requires_update_notification: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
         field_id: OB_SYM_ID
     ) -> BOOL,
-    pub ob_get_field_symtab:
+    ob_get_field_symtab:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID) -> POB_LOOK_SYMTAB,
-    pub ob_enum_entry_decl: unsafe extern "C" fn(
+    ob_enum_entry_decl: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
@@ -4298,8 +4268,8 @@ pub struct Api {
         has_val: BOOL,
         value: INT
     ) -> INT,
-    pub ob_enum_decl_process: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID),
-    pub ob_enum_reference: unsafe extern "C" fn(
+    ob_enum_decl_process: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID),
+    ob_enum_reference: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         enumname: LPTSTR,
@@ -4307,28 +4277,27 @@ pub struct Api {
         class_id: POB_CLASS_ID,
         group_id: POB_GROUP_ID
     ) -> INT,
-    pub ob_get_type_enum_info: unsafe extern "C" fn(
+    ob_get_type_enum_info: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
         nenums: *mut UINT
     ) -> POB_ENUM_INFO,
-    pub ob_is_type_enum:
-        unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID) -> BOOL,
-    pub ob_type_indattr_search: unsafe extern "C" fn(
+    ob_is_type_enum: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID) -> BOOL,
+    ob_type_indattr_search: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: *mut POB_GROUP,
         class_id: POB_CLASS_ID,
         no_tmplts: *mut UINT
     ) -> POB_INDATTR_FUNCTMPLT,
-    pub ob_type_decl_indattr_funcs: unsafe extern "C" fn(
+    ob_type_decl_indattr_funcs: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
         func_templates: POB_INDATTR_FUNCTMPLT,
         no_func_templates: UINT
     ),
-    pub ob_is_an_ancestor: unsafe extern "C" fn(
+    ob_is_an_ancestor: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
@@ -4336,7 +4305,7 @@ pub struct Api {
         of_class_id: OB_CLASS_ID,
         ret: *mut INT
     ) -> BOOL,
-    pub ob_is_an_ancestor_excl: unsafe extern "C" fn(
+    ob_is_an_ancestor_excl: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
@@ -4344,26 +4313,26 @@ pub struct Api {
         of_class_id: OB_CLASS_ID,
         ret: *mut INT
     ) -> BOOL,
-    pub ob_find_type_ancestor: unsafe extern "C" fn(
+    ob_find_type_ancestor: unsafe extern "C" fn(
         obthis: POB_THIS,
         group1: POB_GROUP,
         class_id1: OB_CLASS_ID,
         group2: POB_GROUP,
         class_id2: OB_CLASS_ID
     ) -> INT,
-    pub ob_find_common_ancestor: unsafe extern "C" fn(
+    ob_find_common_ancestor: unsafe extern "C" fn(
         obthis: POB_THIS,
         group1: POB_GROUP,
         class_id1: OB_CLASS_ID,
         group2: *mut POB_GROUP,
         class_id2: OB_CLASS_ID
     ) -> OB_CLASS_ID,
-    pub ob_get_ancestor_system_class:
+    ob_get_ancestor_system_class:
         unsafe extern "C" fn(obthis: POB_THIS, group: *mut POB_GROUP, class_id: OB_CLASS_ID) -> OB_CLASS_ID,
-    pub ob_get_runtime_class:
+    ob_get_runtime_class:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, class_id: OB_CLASS_ID) -> POB_RUNTIME_CLASS,
-    pub ob_get_func_vtable_entry: unsafe extern "C" fn(obinst: OB_INST_ID, offset: ULONG) -> OB_FUNC_FUNC,
-    pub ob_rout_declare: unsafe extern "C" fn(
+    ob_get_func_vtable_entry: unsafe extern "C" fn(obinst: OB_INST_ID, offset: ULONG) -> OB_FUNC_FUNC,
+    ob_rout_declare: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_entry: POB_CLASS_ENTRY,
@@ -4378,19 +4347,19 @@ pub struct Api {
         clear_routine: BOOL,
         error: *mut INT
     ) -> OB_MODULE_ID,
-    pub ob_open_routine: unsafe extern "C" fn(
+    ob_open_routine: unsafe extern "C" fn(
         obthis: POB_THIS,
         class_entry: POB_CLASS_ENTRY,
         module_id: OB_MODULE_ID
     ) -> POB_ROUTNODE,
-    pub ob_close_routine: unsafe extern "C" fn(obthis: POB_THIS),
-    pub ob_func_indirect: unsafe extern "C" fn(
+    ob_close_routine: unsafe extern "C" fn(obthis: POB_THIS),
+    ob_func_indirect: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: *mut POB_GROUP,
         class_entry: *mut POB_CLASS_ENTRY,
         mod_id: POB_MODULE_ID
     ) -> INT,
-    pub ob_local_var_declare: unsafe extern "C" fn(
+    ob_local_var_declare: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         varname: LPTSTR,
@@ -4399,7 +4368,7 @@ pub struct Api {
         type_: OB_CLASS_ID,
         error: *mut INT
     ) -> OB_SYM_ID,
-    pub ob_local_array_declare: unsafe extern "C" fn(
+    ob_local_array_declare: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         varname: LPTSTR,
@@ -4409,7 +4378,7 @@ pub struct Api {
         arrdef: POB_ARRAYDEF,
         error: *mut INT
     ) -> OB_SYM_ID,
-    pub ob_local_var_reference: unsafe extern "C" fn(
+    ob_local_var_reference: unsafe extern "C" fn(
         obthis: POB_THIS,
         varname: LPTSTR,
         type_: POB_CLASS_ID,
@@ -4418,11 +4387,11 @@ pub struct Api {
         init_value: *mut POB_DATA,
         array_def: *mut POB_ARRAYDEF
     ) -> OB_SYM_ID,
-    pub ob_local_set_var:
+    ob_local_set_var:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, var_id: OB_SYM_ID, value: OB_CONST_REF),
-    pub ob_local_set_id_var:
+    ob_local_set_id_var:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, var_id: OB_SYM_ID, value: UINT),
-    pub ob_set_const: unsafe extern "C" fn(
+    ob_set_const: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         value: *mut ::std::os::raw::c_void,
@@ -4430,15 +4399,15 @@ pub struct Api {
         nitems: UINT,
         len: ULONG
     ) -> OB_CONST_REF,
-    pub ob_get_const: unsafe extern "C" fn(
+    ob_get_const: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         const_ref: OB_CONST_REF
     ) -> *mut ::std::os::raw::c_void,
-    pub ob_convert_vars_to_const: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP) -> INT,
-    pub ob_clear_group_objects: unsafe extern "C" fn(obthis: POB_THIS, pGroup: POB_GROUP) -> BOOL,
-    pub ob_init_group_objects: unsafe extern "C" fn(obthis: POB_THIS, pGroup: POB_GROUP),
-    pub shformatDateTimeWeb: unsafe extern "C" fn(
+    ob_convert_vars_to_const: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP) -> INT,
+    ob_clear_group_objects: unsafe extern "C" fn(obthis: POB_THIS, pGroup: POB_GROUP) -> BOOL,
+    ob_init_group_objects: unsafe extern "C" fn(obthis: POB_THIS, pGroup: POB_GROUP),
+    shformatDateTimeWeb: unsafe extern "C" fn(
         pResult: LPTSTR,
         maxLen: ::std::os::raw::c_int,
         prMask: LPTSTR,
@@ -4446,21 +4415,21 @@ pub struct Api {
         flags: ::std::os::raw::c_int,
         cultureInfo: LPMONTHANDDAYNAMESSTRUCT
     ) -> ::std::os::raw::c_long,
-    pub shformatDateTime: unsafe extern "C" fn(
+    shformatDateTime: unsafe extern "C" fn(
         pResult: LPTSTR,
         maxLen: ::std::os::raw::c_int,
         prMask: LPTSTR,
         value: PSH_TIME,
         flags: ::std::os::raw::c_int
     ) -> ::std::os::raw::c_long,
-    pub shformatDecimal: unsafe extern "C" fn(
+    shformatDecimal: unsafe extern "C" fn(
         pResult: LPTSTR,
         maxLen: ::std::os::raw::c_int,
         prFmt: LPTSTR,
         value: *mut ::std::os::raw::c_void,
         flags: ::std::os::raw::c_int
     ) -> ::std::os::raw::c_long,
-    pub shformatDecimalWeb: unsafe extern "C" fn(
+    shformatDecimalWeb: unsafe extern "C" fn(
         pResult: LPTSTR,
         maxLen: ::std::os::raw::c_int,
         prFmt: LPTSTR,
@@ -4468,14 +4437,14 @@ pub struct Api {
         flags: ::std::os::raw::c_int,
         dwCultureFormat: LPTSTR
     ) -> ::std::os::raw::c_long,
-    pub shformatDouble: unsafe extern "C" fn(
+    shformatDouble: unsafe extern "C" fn(
         pResult: LPTSTR,
         maxLen: ::std::os::raw::c_int,
         prMask: LPTSTR,
         value: f64,
         flags: ::std::os::raw::c_int
     ) -> ::std::os::raw::c_long,
-    pub shformatDoubleWeb: unsafe extern "C" fn(
+    shformatDoubleWeb: unsafe extern "C" fn(
         pResult: LPTSTR,
         maxLen: ::std::os::raw::c_int,
         prMask: LPTSTR,
@@ -4483,14 +4452,14 @@ pub struct Api {
         flags: ::std::os::raw::c_int,
         dwCultureFormat: LPTSTR
     ) -> ::std::os::raw::c_long,
-    pub shformatLonglong: unsafe extern "C" fn(
+    shformatLonglong: unsafe extern "C" fn(
         pResult: LPTSTR,
         maxLen: ::std::os::raw::c_int,
         prMask: LPTSTR,
         value: ::std::os::raw::c_longlong,
         flags: ::std::os::raw::c_int
     ) -> ::std::os::raw::c_long,
-    pub shformatLonglongWeb: unsafe extern "C" fn(
+    shformatLonglongWeb: unsafe extern "C" fn(
         pResult: LPTSTR,
         maxLen: ::std::os::raw::c_int,
         prMask: LPTSTR,
@@ -4498,14 +4467,14 @@ pub struct Api {
         flags: ::std::os::raw::c_int,
         dwCultureFormat: LPTSTR
     ) -> ::std::os::raw::c_long,
-    pub shformatReal: unsafe extern "C" fn(
+    shformatReal: unsafe extern "C" fn(
         pResult: LPTSTR,
         maxLen: ::std::os::raw::c_int,
         prMask: LPTSTR,
         pValue: *mut f32,
         flags: ::std::os::raw::c_int
     ) -> ::std::os::raw::c_long,
-    pub shformatRealWeb: unsafe extern "C" fn(
+    shformatRealWeb: unsafe extern "C" fn(
         pResult: LPTSTR,
         maxLen: ::std::os::raw::c_int,
         prMask: LPTSTR,
@@ -4513,64 +4482,63 @@ pub struct Api {
         flags: ::std::os::raw::c_int,
         dwCultureFormat: LPTSTR
     ) -> ::std::os::raw::c_long,
-    pub shformatString: unsafe extern "C" fn(
+    shformatString: unsafe extern "C" fn(
         pResult: LPTSTR,
         maxLen: ::std::os::raw::c_int,
         prMask: LPTSTR,
         value: LPTSTR,
         flags: ::std::os::raw::c_int
     ) -> ::std::os::raw::c_long,
-    pub shformatCmplDateTimeMask: unsafe extern "C" fn(
+    shformatCmplDateTimeMask: unsafe extern "C" fn(
         prMask: LPTSTR,
         psMask: LPTSTR,
         maxLen: ::std::os::raw::c_int
     ) -> ::std::os::raw::c_int,
-    pub shformatCmplDateTimeMaskWeb: unsafe extern "C" fn(
+    shformatCmplDateTimeMaskWeb: unsafe extern "C" fn(
         prMask: LPTSTR,
         psMask: LPTSTR,
         maxLen: ::std::os::raw::c_int,
         dwCultureFormat: LPTSTR
     ) -> ::std::os::raw::c_int,
-    pub shformatCmplNumericMask: unsafe extern "C" fn(
+    shformatCmplNumericMask: unsafe extern "C" fn(
         prMask: LPTSTR,
         psMask: LPTSTR,
         maxLen: ::std::os::raw::c_int
     ) -> ::std::os::raw::c_int,
-    pub shformatCmplNumericMaskWeb: unsafe extern "C" fn(
+    shformatCmplNumericMaskWeb: unsafe extern "C" fn(
         prMask: LPTSTR,
         psMask: LPTSTR,
         maxLen: ::std::os::raw::c_int,
         dwCultureFormat: LPTSTR
     ) -> ::std::os::raw::c_int,
-    pub shformatCmplNumericMaskWebCommasPos: unsafe extern "C" fn(
+    shformatCmplNumericMaskWebCommasPos: unsafe extern "C" fn(
         prMask: LPTSTR,
         psMask: LPTSTR,
         maxLen: ::std::os::raw::c_int,
         dwCultureFormat: LPTSTR
     ) -> ::std::os::raw::c_int,
-    pub shformatCmplStringMask: unsafe extern "C" fn(
+    shformatCmplStringMask: unsafe extern "C" fn(
         prMask: LPTSTR,
         psMask: LPTSTR,
         maxLen: ::std::os::raw::c_int
     ) -> ::std::os::raw::c_int,
-    pub shformatErrorString: unsafe extern "C" fn(errMsg: LPTSTR, err: ::std::os::raw::c_int),
-    pub shregExprCmpl: unsafe extern "C" fn(
+    shformatErrorString: unsafe extern "C" fn(errMsg: LPTSTR, err: ::std::os::raw::c_int),
+    shregExprCmpl: unsafe extern "C" fn(
         pattern: LPTSTR,
         srcPattern: LPTSTR,
         maxLen: ::std::os::raw::c_int
     ) -> ::std::os::raw::c_int,
-    pub shregExprMatch: unsafe extern "C" fn(string: LPTSTR, pattern: LPTSTR) -> ::std::os::raw::c_int,
-    pub shIsValidReal: unsafe extern "C" fn(n: LPTSTR) -> BOOL,
-    pub shNormalizeReal: unsafe extern "C" fn(out: LPTSTR, in_: LPTSTR),
-    pub shNormalizeRealbyLocale: unsafe extern "C" fn(out: LPTSTR, in_: LPTSTR),
-    pub shIsValidRealWeb:
-        unsafe extern "C" fn(n: LPTSTR, paramPeriodChar: TCHAR, paramCommaChar: TCHAR) -> BOOL,
-    pub shNormalizeRealWeb:
+    shregExprMatch: unsafe extern "C" fn(string: LPTSTR, pattern: LPTSTR) -> ::std::os::raw::c_int,
+    shIsValidReal: unsafe extern "C" fn(n: LPTSTR) -> BOOL,
+    shNormalizeReal: unsafe extern "C" fn(out: LPTSTR, in_: LPTSTR),
+    shNormalizeRealbyLocale: unsafe extern "C" fn(out: LPTSTR, in_: LPTSTR),
+    shIsValidRealWeb: unsafe extern "C" fn(n: LPTSTR, paramPeriodChar: TCHAR, paramCommaChar: TCHAR) -> BOOL,
+    shNormalizeRealWeb:
         unsafe extern "C" fn(out: LPTSTR, in_: LPTSTR, paramPeriodChar: TCHAR, paramCommaChar: TCHAR),
-    pub shNormalizeRealbyLocaleWeb:
+    shNormalizeRealbyLocaleWeb:
         unsafe extern "C" fn(out: LPTSTR, in_: LPTSTR, paramPeriodChar: TCHAR, paramCommaChar: TCHAR),
-    pub shIsValidRealNoLocale: unsafe extern "C" fn(n: LPTSTR) -> BOOL,
-    pub ob_add_glbsym_var: unsafe extern "C" fn(
+    shIsValidRealNoLocale: unsafe extern "C" fn(n: LPTSTR) -> BOOL,
+    ob_add_glbsym_var: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         name: LPTSTR,
@@ -4578,7 +4546,7 @@ pub struct Api {
         class_id: OB_CLASS_ID,
         id: OB_SYM_ID
     ) -> OB_SYM_ID,
-    pub ob_add_glbsym_class: unsafe extern "C" fn(
+    ob_add_glbsym_class: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         name: LPTSTR,
@@ -4588,7 +4556,7 @@ pub struct Api {
         class_id: OB_CLASS_ID,
         sys_class_id: OB_CLASS_ID
     ) -> OB_SYM_ID,
-    pub ob_add_glbsym_func: unsafe extern "C" fn(
+    ob_add_glbsym_func: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         name: LPTSTR,
@@ -4596,17 +4564,17 @@ pub struct Api {
         class_id: OB_CLASS_ID,
         mod_id: OB_MODULE_ID
     ) -> OB_SYM_ID,
-    pub rt_set_class_handle:
+    rt_set_class_handle:
         unsafe extern "C" fn(rtthis: POB_THIS, appclasshndl: OB_CLASS_HNDL, appinst: OB_INST_ID),
-    pub rt_init: unsafe extern "C" fn(obthis: POB_THIS, stgthis: ppbstg_anchor) -> POB_THIS,
-    pub rt_start_debug: unsafe extern "C" fn(
+    rt_init: unsafe extern "C" fn(obthis: POB_THIS, stgthis: ppbstg_anchor) -> POB_THIS,
+    rt_start_debug: unsafe extern "C" fn(
         rtthis: POB_THIS,
         rtBreakCallback: *mut RT_BREAK_PROC,
         pUserData: *mut ::std::os::raw::c_void
     ) -> INT,
-    pub rt_stop_debug: unsafe extern "C" fn(rtthis: POB_THIS) -> INT,
-    pub rt_set_pcode_to_line: unsafe extern "C" fn(obthis: POB_THIS, line_no: UINT) -> INT,
-    pub rt_breakpoint: unsafe extern "C" fn(
+    rt_stop_debug: unsafe extern "C" fn(rtthis: POB_THIS) -> INT,
+    rt_set_pcode_to_line: unsafe extern "C" fn(obthis: POB_THIS, line_no: UINT) -> INT,
+    rt_breakpoint: unsafe extern "C" fn(
         rtthis: POB_THIS,
         bSet: BOOL,
         obClassHndl: OB_CLASS_HNDL,
@@ -4616,52 +4584,52 @@ pub struct Api {
         condition: LPTSTR,
         id: ::std::os::raw::c_long
     ) -> PRT_BREAKPOINT,
-    pub rt_create_watchpoint: unsafe extern "C" fn(
+    rt_create_watchpoint: unsafe extern "C" fn(
         rtthis: POB_THIS,
         pdata_info: POB_DATA_INFO,
         watch_type: WATCHPOINT_TYPE::Type,
         item_scope: ::std::os::raw::c_uchar,
         id: ::std::os::raw::c_long
     ) -> *mut ::std::os::raw::c_void,
-    pub rt_find_watchpoint_for_watchid: unsafe extern "C" fn(
+    rt_find_watchpoint_for_watchid: unsafe extern "C" fn(
         rtthis: POB_THIS,
         watchId: ::std::os::raw::c_long
     ) -> *mut ::std::os::raw::c_void,
-    pub rt_delete_watchpoint: unsafe extern "C" fn(rtthis: POB_THIS, watchpt: *mut ::std::os::raw::c_void),
-    pub rt_is_line_executable: unsafe extern "C" fn(
+    rt_delete_watchpoint: unsafe extern "C" fn(rtthis: POB_THIS, watchpt: *mut ::std::os::raw::c_void),
+    rt_is_line_executable: unsafe extern "C" fn(
         rtthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         vtable_id: OB_VTABLE_ID,
         line_no: UINT
     ) -> BOOL,
-    pub rt_closest_executable_line: unsafe extern "C" fn(
+    rt_closest_executable_line: unsafe extern "C" fn(
         rtthis: POB_THIS,
         class_hndl: OB_CLASS_HNDL,
         vtable_id: OB_VTABLE_ID,
         line_no: UINT
     ) -> UINT,
-    pub rt_start_run: unsafe extern "C" fn(rtthis: POB_THIS) -> INT,
-    pub rt_stop_run: unsafe extern "C" fn(rtthis: POB_THIS) -> INT,
-    pub rt_create_obinst: unsafe extern "C" fn(rtthis: POB_THIS, name: LPTSTR, obinst: POB_INST_ID) -> INT,
-    pub rtReturnValGet: unsafe extern "C" fn(rtThis: POB_THIS) -> POB_DATA,
-    pub rtReturnValFree: unsafe extern "C" fn(rtThis: POB_THIS),
-    pub rt_error: unsafe extern "C" fn(rtthis: POB_THIS, iMessageID: INT) -> INT,
-    pub rt_free_error_struct: unsafe extern "C" fn(rtthis: POB_THIS, error_struct: PRT_ERROR_STRUCT),
-    pub rt_error_using_struct: unsafe extern "C" fn(
+    rt_start_run: unsafe extern "C" fn(rtthis: POB_THIS) -> INT,
+    rt_stop_run: unsafe extern "C" fn(rtthis: POB_THIS) -> INT,
+    rt_create_obinst: unsafe extern "C" fn(rtthis: POB_THIS, name: LPTSTR, obinst: POB_INST_ID) -> INT,
+    rtReturnValGet: unsafe extern "C" fn(rtThis: POB_THIS) -> POB_DATA,
+    rtReturnValFree: unsafe extern "C" fn(rtThis: POB_THIS),
+    rt_error: unsafe extern "C" fn(rtthis: POB_THIS, iMessageID: INT) -> INT,
+    rt_free_error_struct: unsafe extern "C" fn(rtthis: POB_THIS, error_struct: PRT_ERROR_STRUCT),
+    rt_error_using_struct: unsafe extern "C" fn(
         rtthis: POB_THIS,
         error_struct: PRT_ERROR_STRUCT,
         exceptionClassName: LPTSTR
     ) -> INT,
-    pub rt_normalize_error_id: unsafe extern "C" fn(obthis: POB_THIS, iMessageID: INT) -> INT,
-    pub ot_handle_exception: unsafe extern "C" fn(
+    rt_normalize_error_id: unsafe extern "C" fn(obthis: POB_THIS, iMessageID: INT) -> INT,
+    ot_handle_exception: unsafe extern "C" fn(
         rtthis: POB_THIS,
         pException_Stack: *mut ::std::os::raw::c_void,
         currDepth: USHORT
     ) -> INT,
-    pub ob_dbg_pop_call_stack_ntimes: unsafe extern "C" fn(obthis: POB_THIS, n: UINT) -> INT,
-    pub ob_dbg_push_call_stack_ntimes: unsafe extern "C" fn(obthis: POB_THIS, n: UINT) -> INT,
-    pub ob_get_current_stack_location: unsafe extern "C" fn(obthis: POB_THIS) -> PRT_BREAKPOINT,
-    pub rtRoutineSearch: unsafe extern "C" fn(
+    ob_dbg_pop_call_stack_ntimes: unsafe extern "C" fn(obthis: POB_THIS, n: UINT) -> INT,
+    ob_dbg_push_call_stack_ntimes: unsafe extern "C" fn(obthis: POB_THIS, n: UINT) -> INT,
+    ob_get_current_stack_location: unsafe extern "C" fn(obthis: POB_THIS) -> PRT_BREAKPOINT,
+    rtRoutineSearch: unsafe extern "C" fn(
         obThis: POB_THIS,
         rtCallInfo: RT_CALL_INFO,
         pchRoutineName: LPTSTR,
@@ -4670,7 +4638,7 @@ pub struct Api {
         obRoutineType: OB_ROUT_TYPE::Type,
         pobRoutineId: POB_VTABLE_ID
     ) -> INT,
-    pub rtRoutineExec: unsafe extern "C" fn(
+    rtRoutineExec: unsafe extern "C" fn(
         obThis: POB_THIS,
         rtCallInfo: RT_CALL_INFO,
         pobdArgArray: POB_DATA,
@@ -4679,7 +4647,7 @@ pub struct Api {
         obRoutineType: OB_ROUT_TYPE::Type,
         bConvert: BOOL
     ) -> RT_EXEC_STATUS::Type,
-    pub rtRoutineExecByName: unsafe extern "C" fn(
+    rtRoutineExecByName: unsafe extern "C" fn(
         obThis: POB_THIS,
         pchRoutineName: LPTSTR,
         rtCallInfo: RT_CALL_INFO,
@@ -4688,59 +4656,57 @@ pub struct Api {
         obRoutineType: OB_ROUT_TYPE::Type,
         bConvert: BOOL
     ) -> RT_EXEC_STATUS::Type,
-    pub rtRoutineExecPosted: unsafe extern "C" fn(pData: *mut ::std::os::raw::c_void) -> RT_EXEC_STATUS::Type,
-    pub rtRoutineInfo: unsafe extern "C" fn(
+    rtRoutineExecPosted: unsafe extern "C" fn(pData: *mut ::std::os::raw::c_void) -> RT_EXEC_STATUS::Type,
+    rtRoutineInfo: unsafe extern "C" fn(
         obThis: POB_THIS,
         rtCallInfo: RT_CALL_INFO,
         obRoutineId: OB_VTABLE_ID,
         pRoutineProtoInfo: PRT_ROUTINE_PROTO_INFO
     ) -> INT,
-    pub rtInitializeInfoForCall:
+    rtInitializeInfoForCall:
         unsafe extern "C" fn(obThis: POB_THIS, pRoutineProtoInfo: PRT_ROUTINE_PROTO_INFO) -> INT,
-    pub rtCleanupInfoAfterCall:
+    rtCleanupInfoAfterCall:
         unsafe extern "C" fn(obThis: POB_THIS, pRoutineProtoInfo: PRT_ROUTINE_PROTO_INFO) -> INT,
-    pub rtRoutineCount: unsafe extern "C" fn(
+    rtRoutineCount: unsafe extern "C" fn(
         obThis: POB_THIS,
         rtCallInfo: RT_CALL_INFO,
         pusRoutineTotal: *mut USHORT,
         pusFuncTotal: *mut USHORT,
         pusEventTotal: *mut USHORT
     ) -> INT,
-    pub rtReferenceArgCreate:
+    rtReferenceArgCreate:
         unsafe extern "C" fn(obThis: POB_THIS, pobdRefArg: POB_DATA, prtRefArgInfo: PRT_REFARG_INFO) -> INT,
-    pub rtReferenceArgFree: unsafe extern "C" fn(obThis: POB_THIS, pobdRefArg: POB_DATA) -> INT,
-    pub rtGetClassDescrip: unsafe extern "C" fn(
+    rtReferenceArgFree: unsafe extern "C" fn(obThis: POB_THIS, pobdRefArg: POB_DATA) -> INT,
+    rtGetClassDescrip: unsafe extern "C" fn(
         obThis: POB_THIS,
         obClassHndl: OB_CLASS_HNDL,
         prtClassDescrip: PRT_CLASS_DESCRIP,
         pobClassIdSystem: POB_CLASS_ID
     ) -> INT,
-    pub rtDataFree: unsafe extern "C" fn(pobThis: POB_THIS, pobdVal: POB_DATA),
-    pub rtDataCopy:
+    rtDataFree: unsafe extern "C" fn(pobThis: POB_THIS, pobdVal: POB_DATA),
+    rtDataCopy:
         unsafe extern "C" fn(pobThis: POB_THIS, pobdDest: POB_DATA, pobdSrc: POB_DATA, AddReference: BOOL),
-    pub rt_hit_level_0: unsafe extern "C" fn(obthis: POB_THIS),
-    pub ob_create_object: unsafe extern "C" fn(
+    rt_hit_level_0: unsafe extern "C" fn(obthis: POB_THIS),
+    ob_create_object: unsafe extern "C" fn(
         obthis: POB_THIS,
         destination: POB_DATA,
         p_group: POB_GROUP,
         class_id: OB_CLASS_ID
     ) -> INT,
-    pub ob_create_object_using: unsafe extern "C" fn(
+    ob_create_object_using: unsafe extern "C" fn(
         obthis: POB_THIS,
         destination: POB_DATA,
         context: POB_RUNTIME_INST,
         class_name: LPTSTR
     ) -> HRESULT,
-    pub ob_copy_rtinst:
-        unsafe extern "C" fn(obthis: POB_THIS, from_rtinst: POB_RUNTIME_INST) -> POB_RUNTIME_INST,
-    pub ob_destroy_rtinst: unsafe extern "C" fn(obthis: POB_THIS, rtinst: POB_RUNTIME_INST) -> INT,
-    pub ob_get_primary_rtinst:
+    ob_copy_rtinst: unsafe extern "C" fn(obthis: POB_THIS, from_rtinst: POB_RUNTIME_INST) -> POB_RUNTIME_INST,
+    ob_destroy_rtinst: unsafe extern "C" fn(obthis: POB_THIS, rtinst: POB_RUNTIME_INST) -> INT,
+    ob_get_primary_rtinst:
         unsafe extern "C" fn(obthis: POB_THIS, rtinst: POB_RUNTIME_INST) -> POB_RUNTIME_INST,
-    pub ob_is_rtinst_autoinstantiate:
-        unsafe extern "C" fn(obthis: POB_THIS, rtinst: POB_RUNTIME_INST) -> BOOL,
-    pub ob_object_compare:
+    ob_is_rtinst_autoinstantiate: unsafe extern "C" fn(obthis: POB_THIS, rtinst: POB_RUNTIME_INST) -> BOOL,
+    ob_object_compare:
         unsafe extern "C" fn(obthis: POB_THIS, rtinst1: POB_RUNTIME_INST, rtinst2: POB_RUNTIME_INST) -> BOOL,
-    pub ob_invoke_static: unsafe extern "C" fn(
+    ob_invoke_static: unsafe extern "C" fn(
         rtinst: POB_RUNTIME_INST,
         context: POB_RUNTIME_CLASS,
         vtableId: OB_VTABLE_ID,
@@ -4748,7 +4714,7 @@ pub struct Api {
         args: POB_DATA,
         result: POB_DATA
     ) -> HRESULT,
-    pub ob_invoke_dynamic: unsafe extern "C" fn(
+    ob_invoke_dynamic: unsafe extern "C" fn(
         rtinst: POB_RUNTIME_INST,
         context: POB_RUNTIME_CLASS,
         routType: OB_ROUT_TYPE::Type,
@@ -4757,14 +4723,14 @@ pub struct Api {
         args: POB_DATA,
         result: POB_DATA
     ) -> HRESULT,
-    pub ob_invoke_staticAsync: unsafe extern "C" fn(
+    ob_invoke_staticAsync: unsafe extern "C" fn(
         rtinst: POB_RUNTIME_INST,
         context: POB_RUNTIME_CLASS,
         vtableId: OB_VTABLE_ID,
         numArgs: USHORT,
         args: POB_DATA
     ) -> HRESULT,
-    pub ob_invoke_dynamicAsync: unsafe extern "C" fn(
+    ob_invoke_dynamicAsync: unsafe extern "C" fn(
         rtinst: POB_RUNTIME_INST,
         context: POB_RUNTIME_CLASS,
         routType: OB_ROUT_TYPE::Type,
@@ -4772,15 +4738,15 @@ pub struct Api {
         numArgs: USHORT,
         args: POB_DATA
     ) -> HRESULT,
-    pub ob_instance_lv:
+    ob_instance_lv:
         unsafe extern "C" fn(obthis: POB_THIS, current_inst: POB_RUNTIME_INST, var_id: OB_SYM_ID) -> POB_DATA,
-    pub ob_instance_fldupdate_refpkt: unsafe extern "C" fn(
+    ob_instance_fldupdate_refpkt: unsafe extern "C" fn(
         obthis: POB_THIS,
         destination: POB_DATA,
         current_inst: POB_RUNTIME_INST,
         var_id: OB_SYM_ID
     ),
-    pub ob_instance_flditemupdate_refpkt: unsafe extern "C" fn(
+    ob_instance_flditemupdate_refpkt: unsafe extern "C" fn(
         obthis: POB_THIS,
         destination: POB_DATA,
         current_inst: POB_RUNTIME_INST,
@@ -4789,34 +4755,32 @@ pub struct Api {
         lvalue: POB_DATA,
         item_index: ULONG
     ),
-    pub ob_instance_simple_refpkt: unsafe extern "C" fn(
+    ob_instance_simple_refpkt: unsafe extern "C" fn(
         obthis: POB_THIS,
         destination: POB_DATA,
         current_inst: POB_RUNTIME_INST,
         var_id: OB_SYM_ID
     ),
-    pub ob_get_group_load_state:
+    ob_get_group_load_state:
         unsafe extern "C" fn(pGroupReference: *mut ::std::os::raw::c_void) -> OB_GROUP_LOAD_STATE,
-    pub ob_get_groupref_group:
-        unsafe extern "C" fn(pGroupReference: *mut ::std::os::raw::c_void) -> POB_GROUP,
-    pub ob_group_get_next_index: unsafe extern "C" fn(obthis: POB_THIS) -> ULONG,
-    pub ob_close_typedef_group: unsafe extern "C" fn(obThis: POB_THIS),
-    pub ob_create_group_structure: unsafe extern "C" fn(obThis: POB_THIS, lpszGroupName: LPTSTR) -> POB_GROUP,
-    pub ob_new_group: unsafe extern "C" fn(
+    ob_get_groupref_group: unsafe extern "C" fn(pGroupReference: *mut ::std::os::raw::c_void) -> POB_GROUP,
+    ob_group_get_next_index: unsafe extern "C" fn(obthis: POB_THIS) -> ULONG,
+    ob_close_typedef_group: unsafe extern "C" fn(obThis: POB_THIS),
+    ob_create_group_structure: unsafe extern "C" fn(obThis: POB_THIS, lpszGroupName: LPTSTR) -> POB_GROUP,
+    ob_new_group: unsafe extern "C" fn(
         obthis: POB_THIS,
         lib_name: LPTSTR,
         qual_group_name: LPTSTR,
         group_lock_state: OB_GROUP_LOCK_STATE,
         group_load_state: OB_GROUP_LOAD_STATE
     ) -> POB_GROUP,
-    pub ob_del_group_structure: unsafe extern "C" fn(obThis: POB_THIS, pGroup: POB_GROUP),
-    pub ob_group_data_srch: unsafe extern "C" fn(obThis: POB_THIS, obGroupHandle: OB_GROUP_HNDL) -> POB_GROUP,
-    pub ob_replace_group:
-        unsafe extern "C" fn(obThis: POB_THIS, obGroupID: OB_GROUP_ID, pNewGroup: POB_GROUP),
-    pub ob_copy_group_shrsym_data: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP),
-    pub ob_get_qualified_name_with_namespace:
+    ob_del_group_structure: unsafe extern "C" fn(obThis: POB_THIS, pGroup: POB_GROUP),
+    ob_group_data_srch: unsafe extern "C" fn(obThis: POB_THIS, obGroupHandle: OB_GROUP_HNDL) -> POB_GROUP,
+    ob_replace_group: unsafe extern "C" fn(obThis: POB_THIS, obGroupID: OB_GROUP_ID, pNewGroup: POB_GROUP),
+    ob_copy_group_shrsym_data: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP),
+    ob_get_qualified_name_with_namespace:
         unsafe extern "C" fn(obThis: POB_THIS, pGroup: POB_GROUP, lpszNamespace: LPTSTR) -> LPTSTR,
-    pub ob_get_source_from_group: unsafe extern "C" fn(
+    ob_get_source_from_group: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         src_type: *mut POB_SOURCE_BLK_TYPE,
@@ -4825,16 +4789,16 @@ pub struct Api {
         ppSrcLastEdit: *mut POB_SRC_LAST_EDIT,
         pNoSrcLastEdit: *mut UINT
     ) -> *mut LPTSTR,
-    pub ob_get_var: unsafe extern "C" fn(
+    ob_get_var: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: *mut POB_GROUP,
         look_symtab: POB_LOOK_SYMTAB,
         var_id: OB_SYM_ID
     ) -> POB_DATA,
-    pub ob_init_var_data: unsafe extern "C" fn(obthis: POB_THIS, var_data: POB_DATA, group: POB_GROUP),
-    pub ob_global_indirect:
+    ob_init_var_data: unsafe extern "C" fn(obthis: POB_THIS, var_data: POB_DATA, group: POB_GROUP),
+    ob_global_indirect:
         unsafe extern "C" fn(obthis: POB_THIS, group: *mut POB_GROUP, glob_id: POB_SYM_ID) -> POB_DATA,
-    pub ob_global_var_declare: unsafe extern "C" fn(
+    ob_global_var_declare: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         varname: LPTSTR,
@@ -4843,7 +4807,7 @@ pub struct Api {
         type_: OB_CLASS_ID,
         error: *mut INT
     ) -> OB_SYM_ID,
-    pub ob_global_array_declare: unsafe extern "C" fn(
+    ob_global_array_declare: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         var: LPTSTR,
@@ -4853,7 +4817,7 @@ pub struct Api {
         arrdef: POB_ARRAYDEF,
         error: *mut INT
     ) -> OB_SYM_ID,
-    pub ob_shared_var_reference: unsafe extern "C" fn(
+    ob_shared_var_reference: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         varname: LPTSTR,
@@ -4863,19 +4827,19 @@ pub struct Api {
         init_value: *mut POB_DATA,
         array_def: *mut POB_ARRAYDEF
     ) -> OB_SYM_ID,
-    pub ob_global_set_var:
+    ob_global_set_var:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, var_id: OB_SYM_ID, value: OB_CONST_REF),
-    pub ob_global_set_id_var:
+    ob_global_set_id_var:
         unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, var_id: OB_SYM_ID, value: UINT),
-    pub ob_get_local_symtab:
+    ob_get_local_symtab:
         unsafe extern "C" fn(obthis: POB_THIS, group: *mut POB_GROUP, var_id: POB_SYM_ID) -> POB_LOOK_SYMTAB,
-    pub ob_get_unconverted_var: unsafe extern "C" fn(
+    ob_get_unconverted_var: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: *mut POB_GROUP,
         var: OB_SYM_ID,
         level: UINT
     ) -> POB_DATA,
-    pub ob_lookup_shared_var_info: unsafe extern "C" fn(
+    ob_lookup_shared_var_info: unsafe extern "C" fn(
         obThis: POB_THIS,
         iGroupID: OB_GROUP_ID,
         iSymbolID: OB_SYM_ID,
@@ -4885,22 +4849,22 @@ pub struct Api {
         init_value: *mut POB_DATA,
         array_def: *mut POB_ARRAYDEF
     ) -> INT,
-    pub ob_clear_shared_vars: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, level: INT),
-    pub ot_eval_expr: unsafe extern "C" fn(
+    ob_clear_shared_vars: unsafe extern "C" fn(obthis: POB_THIS, group: POB_GROUP, level: INT),
+    ot_eval_expr: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_entry: POB_CLASS_ENTRY,
         pcode_blk: POB_PCODE_BLK,
         expr_result_buf: POB_DATA
     ) -> POB_DATA,
-    pub ot_dbg_funccall: unsafe extern "C" fn(
+    ot_dbg_funccall: unsafe extern "C" fn(
         obthis: POB_THIS,
         call_label: LPTSTR,
         group: POB_GROUP,
         class_entry: OB_CLASS_ID,
         name: LPTSTR
     ),
-    pub ot_run_dllfunccall: unsafe extern "C" fn(
+    ot_run_dllfunccall: unsafe extern "C" fn(
         obthis: POB_THIS,
         group: POB_GROUP,
         class_id: OB_CLASS_ID,
@@ -4909,7 +4873,7 @@ pub struct Api {
         no_args: UINT,
         funcproto: POB_PROTOTYPE
     ) -> INT,
-    pub ot_run_rpcfunccall: unsafe extern "C" fn(
+    ot_run_rpcfunccall: unsafe extern "C" fn(
         obthis: POB_THIS,
         rtinst: POB_RUNTIME_INST,
         group: POB_GROUP,
@@ -4920,16 +4884,16 @@ pub struct Api {
         funcproto: POB_PROTOTYPE,
         rpc_funcname: LPTSTR
     ) -> INT,
-    pub ot_get_dll_funcptr_by_name:
+    ot_get_dll_funcptr_by_name:
         unsafe extern "C" fn(obthis: POB_THIS, dllname: LPTSTR, funcname: LPTSTR) -> OS_CALLC_FUNC,
-    pub ot_post_call: unsafe extern "C" fn(
+    ot_post_call: unsafe extern "C" fn(
         obthis: POB_THIS,
         pRuntimeClass: POB_RUNTIME_CLASS,
         vtableId: OB_VTABLE_ID,
         uiNoArgs: UINT,
         args: POB_DATA
     ) -> INT,
-    pub ot_check_types: unsafe extern "C" fn(
+    ot_check_types: unsafe extern "C" fn(
         obthis: POB_THIS,
         group1: POB_GROUP,
         type1: OB_CLASS_ID,
@@ -4939,43 +4903,40 @@ pub struct Api {
         grouping2: OB_GROUPTYPE,
         ancestor_flag: *mut UINT
     ) -> OT_TYPE_CHECK_ERROR::Type,
-    pub ot_type_loc: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> OT_TYPE_LOC::Type,
-    pub ot_init_data_node: unsafe extern "C" fn(
+    ot_type_loc: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> OT_TYPE_LOC::Type,
+    ot_init_data_node: unsafe extern "C" fn(
         obthis: POB_THIS,
         data_node: POB_DATA,
         type_: OB_CLASS_ID,
         varinfo: OB_INFO_FLAGS
     ),
-    pub ot_set_lvalue: unsafe extern "C" fn(
+    ot_set_lvalue: unsafe extern "C" fn(
         obthis: POB_THIS,
         group_id: OB_GROUP_ID,
         lvalue_data: POB_DATA,
         rvalue_data: POB_DATA,
         do_error_check: BOOL
     ) -> INT,
-    pub ot_free_out_node: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA),
-    pub ot_free_inv_meth_args:
+    ot_free_out_node: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA),
+    ot_free_inv_meth_args:
         unsafe extern "C" fn(obthis: POB_THIS, pArrayDataNode: POB_DATA, pFreeFlags: LPTSTR) -> INT,
-    pub ot_copy_array:
-        unsafe extern "C" fn(obthis: POB_THIS, old_array_inst: POB_ARRAY_INST) -> POB_ARRAY_INST,
-    pub ot_get_string_from_chararray:
-        unsafe extern "C" fn(obthis: POB_THIS, arrayinst: POB_ARRAY_INST) -> LPTSTR,
-    pub ot_create_chararray_from_string:
+    ot_copy_array: unsafe extern "C" fn(obthis: POB_THIS, old_array_inst: POB_ARRAY_INST) -> POB_ARRAY_INST,
+    ot_get_string_from_chararray: unsafe extern "C" fn(obthis: POB_THIS, arrayinst: POB_ARRAY_INST) -> LPTSTR,
+    ot_create_chararray_from_string:
         unsafe extern "C" fn(obthis: POB_THIS, string_val: LPTSTR, target_data_node: POB_DATA) -> POB_DATA,
-    pub ot_create_bounded_chararray_from_string: unsafe extern "C" fn(
+    ot_create_bounded_chararray_from_string: unsafe extern "C" fn(
         obthis: POB_THIS,
         string_val: LPTSTR,
         bounds: *mut ::std::os::raw::c_long,
         target_data_node: POB_DATA
     ) -> POB_DATA,
-    pub ot_get_char_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> TCHAR,
-    pub ot_get_string_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> LPTSTR,
-    pub ot_get_string_from_char: unsafe extern "C" fn(obthis: POB_THIS, char_val: TCHAR) -> LPTSTR,
-    pub ot_string_cat: unsafe extern "C" fn(obthis: POB_THIS, string1: LPTSTR, string2: LPTSTR) -> LPTSTR,
-    pub ot_binary_cat:
-        unsafe extern "C" fn(obthis: POB_THIS, bin1: PSH_BINARY, bin2: PSH_BINARY) -> PSH_BINARY,
-    pub ot_halt: unsafe extern "C" fn(obthis: POB_THIS, send_close_event: BOOL) -> INT,
-    pub ot_convert_bounded_to_bounded: unsafe extern "C" fn(
+    ot_get_char_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> TCHAR,
+    ot_get_string_value: unsafe extern "C" fn(obthis: POB_THIS, data_node: POB_DATA) -> LPTSTR,
+    ot_get_string_from_char: unsafe extern "C" fn(obthis: POB_THIS, char_val: TCHAR) -> LPTSTR,
+    ot_string_cat: unsafe extern "C" fn(obthis: POB_THIS, string1: LPTSTR, string2: LPTSTR) -> LPTSTR,
+    ot_binary_cat: unsafe extern "C" fn(obthis: POB_THIS, bin1: PSH_BINARY, bin2: PSH_BINARY) -> PSH_BINARY,
+    ot_halt: unsafe extern "C" fn(obthis: POB_THIS, send_close_event: BOOL) -> INT,
+    ot_convert_bounded_to_bounded: unsafe extern "C" fn(
         obthis: POB_THIS,
         old_array_inst: POB_ARRAY_INST,
         new_class_id: OB_CLASS_ID,
@@ -4984,12 +4945,12 @@ pub struct Api {
         bounds: *mut ::std::os::raw::c_long,
         free_old_array: BOOL
     ) -> POB_ARRAY_INST,
-    pub ot_convert_bounded_to_unbounded: unsafe extern "C" fn(
+    ot_convert_bounded_to_unbounded: unsafe extern "C" fn(
         obthis: POB_THIS,
         old_array_inst: POB_ARRAY_INST,
         new_class_id: OB_CLASS_ID
     ) -> POB_ARRAY_INST,
-    pub ot_convert_unbounded_to_bounded: unsafe extern "C" fn(
+    ot_convert_unbounded_to_bounded: unsafe extern "C" fn(
         obthis: POB_THIS,
         old_array_inst: POB_ARRAY_INST,
         new_class_id: OB_CLASS_ID,
@@ -4997,12 +4958,12 @@ pub struct Api {
         new_ndims: INT,
         bounds: *mut ::std::os::raw::c_long
     ) -> POB_ARRAY_INST,
-    pub ot_convert_unbounded_to_unbounded: unsafe extern "C" fn(
+    ot_convert_unbounded_to_unbounded: unsafe extern "C" fn(
         obthis: POB_THIS,
         old_array_inst: POB_ARRAY_INST,
         new_class_id: OB_CLASS_ID
     ) -> POB_ARRAY_INST,
-    pub ot_convert_any_to_bounded: unsafe extern "C" fn(
+    ot_convert_any_to_bounded: unsafe extern "C" fn(
         obthis: POB_THIS,
         any_node: POB_DATA,
         new_class_id: OB_CLASS_ID,
@@ -5010,19 +4971,19 @@ pub struct Api {
         new_ndims: INT,
         bounds: *mut ::std::os::raw::c_long
     ) -> POB_ARRAY_INST,
-    pub ot_convert_any_to_unbounded: unsafe extern "C" fn(
+    ot_convert_any_to_unbounded: unsafe extern "C" fn(
         obthis: POB_THIS,
         any_node: POB_DATA,
         new_class_id: OB_CLASS_ID
     ) -> POB_ARRAY_INST,
-    pub ot_convert_array_to_object: unsafe extern "C" fn(
+    ot_convert_array_to_object: unsafe extern "C" fn(
         obthis: POB_THIS,
         any_array_inst: POB_ARRAY_INST,
         new_class_id: OB_CLASS_ID
     ) -> POB_RUNTIME_INST,
-    pub ot_build_simple_refpak:
+    ot_build_simple_refpak:
         unsafe extern "C" fn(obthis: POB_THIS, lvalue_data: POB_DATA, group_id: OB_GROUP_ID) -> POT_REF_PAK,
-    pub ot_build_field_refpak: unsafe extern "C" fn(
+    ot_build_field_refpak: unsafe extern "C" fn(
         obthis: POB_THIS,
         group_id: OB_GROUP_ID,
         rtinst: POB_RUNTIME_INST,
@@ -5030,83 +4991,82 @@ pub struct Api {
         item_index: ULONG,
         bTriggerFieldUpdate: BOOL
     ) -> POT_REF_PAK,
-    pub ot_add_any:
+    ot_add_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_sub_any:
+    ot_sub_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_mul_any:
+    ot_mul_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_div_any:
+    ot_div_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_pow_any:
+    ot_pow_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_neg_any: unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA) -> INT,
-    pub ot_eq_any:
+    ot_neg_any: unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA) -> INT,
+    ot_eq_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_ne_any:
+    ot_ne_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_gt_any:
+    ot_gt_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_lt_any:
+    ot_lt_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_ge_any:
+    ot_ge_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_le_any:
+    ot_le_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_and_any:
+    ot_and_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_or_any:
+    ot_or_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_not_any: unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny: POB_DATA) -> INT,
-    pub ot_incr_any: unsafe extern "C" fn(prtThis: POB_THIS, pAny: POB_DATA) -> INT,
-    pub ot_decr_any: unsafe extern "C" fn(prtThis: POB_THIS, pAny: POB_DATA) -> INT,
-    pub ot_mod_any:
+    ot_not_any: unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny: POB_DATA) -> INT,
+    ot_incr_any: unsafe extern "C" fn(prtThis: POB_THIS, pAny: POB_DATA) -> INT,
+    ot_decr_any: unsafe extern "C" fn(prtThis: POB_THIS, pAny: POB_DATA) -> INT,
+    ot_mod_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_min_any:
+    ot_min_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_max_any:
+    ot_max_any:
         unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA, pAny2: POB_DATA) -> INT,
-    pub ot_check_any_exact_type:
+    ot_check_any_exact_type:
         unsafe extern "C" fn(obthis: POB_THIS, any_var: POB_DATA, expected_type: OB_CLASS_ID) -> INT,
-    pub ot_check_any_string_type:
+    ot_check_any_string_type:
         unsafe extern "C" fn(obthis: POB_THIS, any_var: POB_DATA, expected_type: OB_CLASS_ID) -> INT,
-    pub ot_check_any_binary_type:
+    ot_check_any_binary_type:
         unsafe extern "C" fn(obthis: POB_THIS, any_var: POB_DATA, expected_type: OB_CLASS_ID) -> INT,
-    pub ot_check_any_math_type:
+    ot_check_any_math_type:
         unsafe extern "C" fn(obthis: POB_THIS, any_var: POB_DATA, expected_type: OB_CLASS_ID) -> INT,
-    pub ot_check_any_enum_type: unsafe extern "C" fn(
+    ot_check_any_enum_type: unsafe extern "C" fn(
         obthis: POB_THIS,
         any_var: POB_DATA,
         current_group: POB_GROUP,
         expected_type: OB_CLASS_ID
     ) -> INT,
-    pub ot_check_any_object_type: unsafe extern "C" fn(
+    ot_check_any_object_type: unsafe extern "C" fn(
         obthis: POB_THIS,
         any_var: POB_DATA,
         current_group: POB_GROUP,
         expected_type: OB_CLASS_ID
     ) -> INT,
-    pub ot_duplicate_any: unsafe extern "C" fn(pobThis: POB_THIS, pAny: POB_DATA) -> INT,
-    pub ot_abs_any: unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA) -> INT,
-    pub ot_ceiling_any: unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA) -> INT,
-    pub ot_string_to_binary: unsafe extern "C" fn(
+    ot_duplicate_any: unsafe extern "C" fn(pobThis: POB_THIS, pAny: POB_DATA) -> INT,
+    ot_abs_any: unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA) -> INT,
+    ot_ceiling_any: unsafe extern "C" fn(prtThis: POB_THIS, pResult: POB_DATA, pAny1: POB_DATA) -> INT,
+    ot_string_to_binary: unsafe extern "C" fn(
         rtThis: POB_THIS,
         lpStr: LPTSTR,
         EncodingType: ::std::os::raw::c_int,
         bNullTerminated: BOOL
     ) -> PSH_BINARY,
-    pub ot_bytearray_to_binary:
-        unsafe extern "C" fn(rtThis: POB_THIS, array_inst: POB_ARRAY_INST) -> PSH_BINARY,
-    pub ot_any_to_binary: unsafe extern "C" fn(rtThis: POB_THIS, obData: POB_DATA) -> PSH_BINARY,
-    pub ob_set_curr_rtinst_and_return: unsafe extern "C" fn(obthis: POB_THIS, new_rtinst: POB_RUNTIME_INST),
-    pub ob_unset_curr_rtinst_and_return: unsafe extern "C" fn(obthis: POB_THIS),
-    pub ob_open_trace:
+    ot_bytearray_to_binary: unsafe extern "C" fn(rtThis: POB_THIS, array_inst: POB_ARRAY_INST) -> PSH_BINARY,
+    ot_any_to_binary: unsafe extern "C" fn(rtThis: POB_THIS, obData: POB_DATA) -> PSH_BINARY,
+    ob_set_curr_rtinst_and_return: unsafe extern "C" fn(obthis: POB_THIS, new_rtinst: POB_RUNTIME_INST),
+    ob_unset_curr_rtinst_and_return: unsafe extern "C" fn(obthis: POB_THIS),
+    ob_open_trace:
         unsafe extern "C" fn(obthis: POB_THIS, filename: LPTSTR, kind: OB_TIMERKIND) -> OB_ERROR_RETURN,
-    pub ob_close_trace: unsafe extern "C" fn(obthis: POB_THIS) -> OB_ERROR_RETURN,
-    pub ob_begin_trace: unsafe extern "C" fn(obthis: POB_THIS, message: LPTSTR) -> OB_ERROR_RETURN,
-    pub ob_end_trace: unsafe extern "C" fn(obthis: POB_THIS) -> OB_ERROR_RETURN,
-    pub ob_enable_event_trace: unsafe extern "C" fn(obthis: POB_THIS, event: OB_TRACEID) -> OB_ERROR_RETURN,
-    pub ob_disable_event_trace: unsafe extern "C" fn(obthis: POB_THIS, event: OB_TRACEID) -> OB_ERROR_RETURN
+    ob_close_trace: unsafe extern "C" fn(obthis: POB_THIS) -> OB_ERROR_RETURN,
+    ob_begin_trace: unsafe extern "C" fn(obthis: POB_THIS, message: LPTSTR) -> OB_ERROR_RETURN,
+    ob_end_trace: unsafe extern "C" fn(obthis: POB_THIS) -> OB_ERROR_RETURN,
+    ob_enable_event_trace: unsafe extern "C" fn(obthis: POB_THIS, event: OB_TRACEID) -> OB_ERROR_RETURN,
+    ob_disable_event_trace: unsafe extern "C" fn(obthis: POB_THIS, event: OB_TRACEID) -> OB_ERROR_RETURN
 }
 impl Api {
     pub unsafe fn load() -> Result<Self, PBLibraryError> {

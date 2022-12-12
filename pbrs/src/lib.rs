@@ -1,14 +1,18 @@
 #![allow(unused_variables)]
 #![allow(dead_code)]
 
-use pbni::{pbni::*, prelude::*};
+use pbni::{pbx::*, prelude::*, syslib};
 
 struct RustObject {}
 
 #[nonvisualobject(name = "n_cst_test")]
 impl RustObject {
     #[constructor]
-    fn new(session: Session, ctx: ContextObject) -> RustObject { RustObject {} }
+    fn new(session: Session, ctx: ContextObject) -> RustObject {
+        syslib::bindings::foo();
+
+        RustObject {}
+    }
 
     #[method(name = "of_Array")]
     fn of_array(&mut self, mut arg: Array) -> Result<String> {

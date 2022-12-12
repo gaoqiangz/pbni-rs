@@ -1,4 +1,4 @@
-use crate::{pbni::session::Session, pbstr::*};
+use crate::{pbstr::*, pbx::session::Session};
 pub use std::{marker::PhantomData, ptr::NonNull};
 
 #[cfg(feature = "visualobject")]
@@ -295,7 +295,7 @@ impl From<i32> for PBXRESULT {
     fn from(v: i32) -> Self { unsafe { std::mem::transmute(v) } }
 }
 
-impl<T: Default> From<PBXRESULT> for crate::pbni::Result<T> {
+impl<T: Default> From<PBXRESULT> for crate::pbx::Result<T> {
     fn from(pbxr: PBXRESULT) -> Self {
         if pbxr == PBXRESULT::OK {
             Ok(Default::default())
@@ -305,8 +305,8 @@ impl<T: Default> From<PBXRESULT> for crate::pbni::Result<T> {
     }
 }
 
-impl<T> From<crate::pbni::Result<T>> for PBXRESULT {
-    fn from(pbxr: crate::pbni::Result<T>) -> Self {
+impl<T> From<crate::pbx::Result<T>> for PBXRESULT {
+    fn from(pbxr: crate::pbx::Result<T>) -> Self {
         if let Err(e) = pbxr {
             e
         } else {

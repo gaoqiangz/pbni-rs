@@ -1,5 +1,5 @@
 use crate::{
-    pbni::{
+    pbx::{
         bindings::*, invoker::{ObjectEvent, ObjectMethod}, session::AsMethodName, value::FromValueOwned, *
     }, prelude::*
 };

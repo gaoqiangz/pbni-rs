@@ -14,18 +14,18 @@ fn main() {
         println!("cargo:rustc-cdylib-link-arg=/MAPINFO:EXPORTS");
     }
 
+    #[cfg(feature = "pbx")]
+    build_pbx();
+
     #[cfg(feature = "syslib")]
     if std::env::var_os("GEN_SYSLIB") == Some("1".into()) {
         build_syslib();
     }
-
-    #[cfg(feature = "pbni")]
-    build_pbni();
 }
 
 /// 编译`PBNI`
-#[cfg(feature = "pbni")]
-fn build_pbni() {
+#[cfg(feature = "pbx")]
+fn build_pbx() {
     println!("cargo:rerun-if-changed=cpp/bindings.cpp");
 
     let mut cfg = cc::Build::new();
@@ -77,10 +77,10 @@ fn build_syslib() {
         .dynamic_link_require_all(true)
         //.allowlist_var("pbstg_.*")
         .allowlist_function("_PB_(pbstg_|ob_|ot_|rt|sh).*")
-        .blocklist_function("_PB_(pbstg_new_pool_with_size|pbstg_shrink|pbstg_dde_strdup|ob_set_main_obthis|rt_set_current_this|shhash_search_arg|shhash_search_unique_arg|ob_narray_dynamic_item_init_callback|ob_group_is_normalized_window|ob_group_set_normalized_window|ob_add_liblist|ob_reload_group_source|ob_get_runtime_group_hndl|ob_insert_local_inst_ref_dbg|ob_load_pspp_dlls|ot_clear_array_data|ob_get_local_session|ob_lookup_routine_by_signature|ob_type_proto_add|ob_create_proto_throws_list|ob_create_proto_args|ob_proto_overload_search_src|ob_find_type_ancestor_assign|ob_get_pspp_class_name|ob_find_method|shGetRegProfileStringValue|rt_build_exception_using_error|rt_handle_uncaught_exception|rt_populate_error_struct|rt_populate_error_from_stack|rt_call_error_callback|rtRoutineProtoInfoFree|rt_StartJaguarDebug|rt_StopJaguarDebug|rt_JagBreakpointHit|rt_JaguarGetCurrentContext|ot_strict_type_check|ot_generateVarInfo|ot_build_flditemupdate_refpak|rtdb_).*")
+        .blocklist_function("_PB_(pbstg_new_pool_with_size|pbstg_shrink|pbstg_dde_strdup|ob_set_main_obthis|rt_set_current_this|shhash_search_arg|shhash_search_unique_arg|ob_narray_dynamic_item_init_callback|ob_group_is_normalized_window|ob_group_set_normalized_window|ob_add_liblist|ob_reload_group_source|ob_get_runtime_group_hndl|ob_insert_local_inst_ref_dbg|ob_load_pspp_dlls|ot_clear_array_data|ob_get_local_session|ob_lookup_routine_by_signature|ob_type_proto_add|ob_create_proto_throws_list|ob_create_proto_args|ob_proto_overload_search_src|ob_find_type_ancestor_assign|ob_get_pspp_class_name|ob_find_method|shGetRegProfileStringValue|rt_build_exception_using_error|rt_handle_uncaught_exception|rt_populate_error_struct|rt_populate_error_from_stack|rt_call_error_callback|rtRoutineProtoInfoFree|rt_StartJaguarDebug|rt_StopJaguarDebug|rt_JagBreakpointHit|rt_JaguarGetCurrentContext|ot_strict_type_check|ot_generateVarInfo|ot_build_flditemupdate_refpak|rtdb_.*)")
         .generate()
         .unwrap();
 
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
-    bindings.write_to_file(out_path.join("pbvm.rs")).unwrap();
+    bindings.write_to_file(out_path.join("syslib.rs")).unwrap();
 }

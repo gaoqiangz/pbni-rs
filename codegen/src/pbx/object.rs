@@ -12,12 +12,12 @@ pub fn gen_nvo(args: AttributeArgs, input: TokenStream) -> Result<TokenStream> {
     let ident_reg = format_ident!("{}_reg", ident);
 
     let nvo_impl = quote! {
-        impl ::pbni::pbni::NonVisualObject for #ident {
+        impl ::pbni::pbx::NonVisualObject for #ident {
         }
-        #[::pbni::pbni::__private::codegen::constructor]
+        #[::pbni::pbx::__private::codegen::constructor]
         #[allow(non_snake_case)]
         extern "C" fn #ident_reg() {
-            <#ident as ::pbni::pbni::NonVisualObject>::register();
+            <#ident as ::pbni::pbx::NonVisualObject>::register();
         }
     };
 
@@ -33,11 +33,11 @@ pub fn gen_vo(args: AttributeArgs, input: TokenStream) -> Result<TokenStream> {
     let ident_reg = format_ident!("{}_reg", ident);
 
     let nvo_impl = quote! {
-        impl ::pbni::pbni::VisualObject for #ident {
+        impl ::pbni::pbx::VisualObject for #ident {
         }
-        #[::pbni::pbni::__private::codegen::constructor]
+        #[::pbni::pbx::__private::codegen::constructor]
         extern "C" fn #ident_reg() {
-            <#ident as ::pbni::pbni::VisualObject>::register();
+            <#ident as ::pbni::pbx::VisualObject>::register();
         }
     };
 
@@ -86,7 +86,7 @@ pub fn gen_event(args: AttributeArgs, input: TokenStream) -> Result<TokenStream>
             //返回值为Result<T>,传播错误值
             ast.block = parse_quote! {
                 {
-                    use ::pbni::pbni::__private::codegen::{FromValue,ToValue};
+                    use ::pbni::pbx::__private::codegen::{FromValue,ToValue};
                     let invoker = self.context_mut().begin_invoke_event(::pbni::pbstr!(#name))?;
                     #(
                         ToValue::to_value(#fn_arg,&mut invoker.arg(#fn_arg_index))?;
@@ -99,7 +99,7 @@ pub fn gen_event(args: AttributeArgs, input: TokenStream) -> Result<TokenStream>
             //返回值T,不传播错误值,如果发生错误则Panic
             ast.block = parse_quote! {
                 {
-                    use ::pbni::pbni::__private::codegen::{FromValue,ToValue};
+                    use ::pbni::pbx::__private::codegen::{FromValue,ToValue};
                     let invoker = self.context_mut().begin_invoke_event(::pbni::pbstr!(#name)).expect(concat!("begin invoke ",#name));
                     #(
                         ToValue::to_value(#fn_arg,&mut invoker.arg(#fn_arg_index)).expect(concat!("pass argument ",stringify!(#fn_arg)));
@@ -162,12 +162,12 @@ fn gen_object(
         let inherit = Ident::new(&inherit, ident.span());
         quote! {
             #ast
-            impl ::pbni::pbni::UserObject for #ident {
+            impl ::pbni::pbx::UserObject for #ident {
                 const CLASS_NAME: &'static ::pbni::pbstr::PBStr = ::pbni::pbstr!(#cls_name);
-                fn new(session: ::pbni::pbni::Session, ctx: ::pbni::pbni::ContextObject) -> Result<Self> {
-                    ::pbni::pbni::__private::codegen::safe_invoke_ctor(&session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::#ctor(unsafe { session.clone() }, ctx))
+                fn new(session: ::pbni::pbx::Session, ctx: ::pbni::pbx::ContextObject) -> Result<Self> {
+                    ::pbni::pbx::__private::codegen::safe_invoke_ctor(&session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::#ctor(unsafe { session.clone() }, ctx))
                 }
-                fn invoke(&mut self, mid: ::pbni::pbni::MethodId, ci: &::pbni::pbni::CallInfoRef) -> ::pbni::pbni::Result<Option<::pbni::pbni::MethodId>> {
+                fn invoke(&mut self, mid: ::pbni::pbx::MethodId, ci: &::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<Option<::pbni::pbx::MethodId>> {
                     let method_idx_base = if let Some(method_idx_base) = self.#inherit.invoke(mid,ci)? {
                         method_idx_base.value()
                     } else {
@@ -175,12 +175,12 @@ fn gen_object(
                     };
                     #(
                         if mid >= method_idx_base + #method_idx + #method_idx_offset && mid < method_idx_base + #method_idx + #method_idx_offset + #method_overload + 1 {
-                            return ::pbni::pbni::__private::codegen::safe_invoke(
+                            return ::pbni::pbx::__private::codegen::safe_invoke(
                                 ci.session(),
                                 #method_name,
                                 concat!(module_path!(),"::",stringify!(#ident),"::",stringify!(#method_ident)),
                                 file!(),line!(),column!(),
-                                ::std::panic::AssertUnwindSafe(||::pbni::pbni::__private::codegen::method_factory_call(#ident::#method_ident, self, &ci))
+                                ::std::panic::AssertUnwindSafe(||::pbni::pbx::__private::codegen::method_factory_call(#ident::#method_ident, self, &ci))
                             ).map(|_|None);
                         }
                     )*
@@ -189,28 +189,28 @@ fn gen_object(
                             return Ok(None);
                         }
                     )*
-                    //::pbni::pbni::__private::codegen::safe_invoke(ci.session(),&format!("{:?}",mid),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||Err(::pbni::pbni::PBXRESULT::E_NO_REGISTER_FUNCTION))
-                    Ok(Some(unsafe { ::pbni::pbni::MethodId::new(method_idx_base + #last_method_idx) }))
+                    //::pbni::pbx::__private::codegen::safe_invoke(ci.session(),&format!("{:?}",mid),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||Err(::pbni::pbx::PBXRESULT::E_NO_REGISTER_FUNCTION))
+                    Ok(Some(unsafe { ::pbni::pbx::MethodId::new(method_idx_base + #last_method_idx) }))
                 }
             }
         }
     } else {
         quote! {
             #ast
-            impl ::pbni::pbni::UserObject for #ident {
+            impl ::pbni::pbx::UserObject for #ident {
                 const CLASS_NAME: &'static ::pbni::pbstr::PBStr = ::pbni::pbstr!(#cls_name);
-                fn new(session: ::pbni::pbni::Session, ctx: ::pbni::pbni::ContextObject) -> Result<Self> {
-                    ::pbni::pbni::__private::codegen::safe_invoke_ctor(&session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::#ctor(unsafe { session.clone() }, ctx))
+                fn new(session: ::pbni::pbx::Session, ctx: ::pbni::pbx::ContextObject) -> Result<Self> {
+                    ::pbni::pbx::__private::codegen::safe_invoke_ctor(&session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::#ctor(unsafe { session.clone() }, ctx))
                 }
-                fn invoke(&mut self, mid: ::pbni::pbni::MethodId, ci: &::pbni::pbni::CallInfoRef) -> ::pbni::pbni::Result<Option<::pbni::pbni::MethodId>> {
+                fn invoke(&mut self, mid: ::pbni::pbx::MethodId, ci: &::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<Option<::pbni::pbx::MethodId>> {
                     #(
                         if mid >= #method_idx + #method_idx_offset && mid < #method_idx + #method_idx_offset + #method_overload + 1 {
-                            return ::pbni::pbni::__private::codegen::safe_invoke(
+                            return ::pbni::pbx::__private::codegen::safe_invoke(
                                 ci.session(),
                                 #method_name,
                                 concat!(module_path!(),"::",stringify!(#ident),"::",stringify!(#method_ident)),
                                 file!(),line!(),column!(),
-                                ::std::panic::AssertUnwindSafe(||::pbni::pbni::__private::codegen::method_factory_call(#ident::#method_ident, self, ci))
+                                ::std::panic::AssertUnwindSafe(||::pbni::pbx::__private::codegen::method_factory_call(#ident::#method_ident, self, ci))
                             ).map(|_|None);
                         }
                     )*
@@ -219,8 +219,8 @@ fn gen_object(
                             return Ok(None);
                         }
                     )*
-                    //::pbni::pbni::__private::codegen::safe_invoke(ci.session(),&format!("{:?}",mid),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||Err(::pbni::pbni::PBXRESULT::E_NO_REGISTER_FUNCTION))
-                     Ok(Some(unsafe { ::pbni::pbni::MethodId::new(#last_method_idx) }))
+                    //::pbni::pbx::__private::codegen::safe_invoke(ci.session(),&format!("{:?}",mid),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||Err(::pbni::pbx::PBXRESULT::E_NO_REGISTER_FUNCTION))
+                     Ok(Some(unsafe { ::pbni::pbx::MethodId::new(#last_method_idx) }))
                 }
             }
         }
