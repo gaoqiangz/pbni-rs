@@ -31,7 +31,7 @@ impl<'val> Value<'val> {
         }
     }
     pub(crate) fn as_ptr(&self) -> POB_DATA { &*self.inner as *const OB_DATA as _ }
-    pub(crate) fn forget(mut self) { self.inner = ValueInner::Pointer(ptr::null_mut()); }
+    pub(crate) fn forget(mut self) { self.inner = ValueInner::LValue(ptr::null_mut()); }
 
     //pub(crate) fn get_class(&self) -> Option<pbclass> { unsafe { pbvalue_GetClass(self.ptr) } }
 
@@ -1216,8 +1216,8 @@ impl<'val> Value<'val> {
     }
 
     #[inline(always)]
-    fn get_direct_info_flag(&self, shift: u32, mask: OB_INFO_FLAGS) -> OB_INFO_FLAGS {
-        bitfield!(@get self.inner.direct().info,shift,mask)
+    fn get_this_info_flag(&self, shift: u32, mask: OB_INFO_FLAGS) -> OB_INFO_FLAGS {
+        bitfield!(@get self.inner.this().info,shift,mask)
     }
 
     #[inline(always)]
@@ -1225,7 +1225,7 @@ impl<'val> Value<'val> {
 
     #[inline(always)]
     fn get_info_reftype(&self) -> OB_REFTYPE {
-        unsafe { mem::transmute(self.get_direct_info_flag(DATA_REFTYPE_SHIFT, DATA_REFTYPE_MASK) as i32) }
+        unsafe { mem::transmute(self.get_this_info_flag(DATA_REFTYPE_SHIFT, DATA_REFTYPE_MASK) as i32) }
     }
 
     #[inline(always)]
@@ -1305,8 +1305,8 @@ impl Drop for Value<'_> {
 }
 
 enum ValueInner {
-    Pointer(POB_DATA),
-    Reference(POB_DATA /* this */, POB_DATA /* ref */),
+    LValue(POB_DATA),
+    RefValue(POB_DATA /* this */, POB_DATA /* ref */),
     Owned(OB_DATA)
 }
 
@@ -1331,28 +1331,28 @@ impl ValueInner {
                     )
                 },
             };
-            ValueInner::Reference(ptr, refval)
+            ValueInner::RefValue(ptr, refval)
         } else {
-            ValueInner::Pointer(ptr)
+            ValueInner::LValue(ptr)
         }
     }
 
     /// 获取此值的直接对象
     #[inline(always)]
-    fn direct(&self) -> &OB_DATA {
+    fn this(&self) -> &OB_DATA {
         match self {
-            ValueInner::Pointer(ptr) => unsafe { &**ptr },
-            ValueInner::Reference(this_ptr, _) => unsafe { &**this_ptr },
+            ValueInner::LValue(ptr) => unsafe { &**ptr },
+            ValueInner::RefValue(this_ptr, _) => unsafe { &**this_ptr },
             ValueInner::Owned(data) => data
         }
     }
 
     /// 获取此值的直接可变对象
     #[inline(always)]
-    fn direct_mut(&mut self) -> &mut OB_DATA {
+    fn this_mut(&mut self) -> &mut OB_DATA {
         match self {
-            ValueInner::Pointer(ptr) => unsafe { &mut **ptr },
-            ValueInner::Reference(this_ptr, _) => unsafe { &mut **this_ptr },
+            ValueInner::LValue(ptr) => unsafe { &mut **ptr },
+            ValueInner::RefValue(this_ptr, _) => unsafe { &mut **this_ptr },
             ValueInner::Owned(data) => data
         }
     }
@@ -1362,8 +1362,8 @@ impl Deref for ValueInner {
     type Target = OB_DATA;
     fn deref(&self) -> &Self::Target {
         match self {
-            ValueInner::Pointer(ptr) => unsafe { &**ptr },
-            ValueInner::Reference(_, ref_ptr) => unsafe { &**ref_ptr },
+            ValueInner::LValue(ptr) => unsafe { &**ptr },
+            ValueInner::RefValue(_, ref_ptr) => unsafe { &**ref_ptr },
             ValueInner::Owned(data) => data
         }
     }
@@ -1372,8 +1372,8 @@ impl Deref for ValueInner {
 impl DerefMut for ValueInner {
     fn deref_mut(&mut self) -> &mut Self::Target {
         match self {
-            ValueInner::Pointer(ptr) => unsafe { &mut **ptr },
-            ValueInner::Reference(_, ref_ptr) => unsafe { &mut **ref_ptr },
+            ValueInner::LValue(ptr) => unsafe { &mut **ptr },
+            ValueInner::RefValue(_, ref_ptr) => unsafe { &mut **ref_ptr },
             ValueInner::Owned(data) => data
         }
     }
