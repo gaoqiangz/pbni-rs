@@ -1,52 +1,10 @@
-use crate::{pbstr::*, pbx::session::Session};
+pub use crate::{pbx::session::Session, primitive::*};
 pub use std::{marker::PhantomData, ptr::NonNull};
 
 #[cfg(feature = "visualobject")]
 pub use winapi::shared::{minwindef::HINSTANCE, windef::HWND};
 
 pub mod ffi;
-
-pub type pbint = i16;
-pub type pbuint = u16;
-pub type pblong = i32;
-pub type pbulong = u32;
-pub type pblonglong = i64;
-pub type pbbyte = u8;
-pub type pbreal = f32;
-pub type pbdouble = f64;
-
-#[repr(transparent)]
-#[derive(Copy, Clone, PartialEq, Eq, Default)]
-pub struct pbboolean(i16);
-
-impl pbboolean {
-    #[inline]
-    pub fn to_bool(self) -> bool {
-        if self.0 == 1 {
-            true
-        } else {
-            false
-        }
-    }
-}
-
-impl PartialEq<bool> for pbboolean {
-    fn eq(&self, other: &bool) -> bool { self.to_bool() == *other }
-}
-
-impl From<bool> for pbboolean {
-    fn from(b: bool) -> Self {
-        pbboolean(if b {
-            1
-        } else {
-            0
-        })
-    }
-}
-
-impl From<pbboolean> for bool {
-    fn from(b: pbboolean) -> Self { b.to_bool() }
-}
 
 pub fn type_id<T: ?Sized + 'static>() -> u64 {
     use std::any::TypeId;
@@ -208,41 +166,6 @@ impl From<i32> for GroupType {
     fn from(v: i32) -> Self { unsafe { std::mem::transmute(v) } }
 }
 
-#[repr(u16)]
-#[non_exhaustive]
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
-pub enum ValueType {
-    NoType = 0,
-    Int,
-    Long,
-    Real,
-    Double,
-    Decimal,
-    String,
-    Boolean,
-    Any,
-    Uint,
-    Ulong,
-    Blob,
-    Date,
-    Time,
-    DateTime,
-    Dummy1,
-    Dummy2,
-    Dummy3,
-    Char,
-    Dummy4,
-    LongLong,
-    Byte
-}
-
-impl From<pbuint> for ValueType {
-    fn from(v: pbuint) -> Self { unsafe { std::mem::transmute(v) } }
-}
-impl From<i32> for ValueType {
-    fn from(v: i32) -> Self { unsafe { std::mem::transmute(v as u16) } }
-}
-
 #[repr(i32)]
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub enum RoutineType {
@@ -283,7 +206,7 @@ pub enum PBXRESULT {
     E_ARRAY_INDEX_OUTOF_BOUNDS = -100,
 
     //pbni-rs Custom
-    E_NULL_ERROR = -10000
+    E_VALUE_IS_NULL = -10000
 }
 
 impl PBXRESULT {

@@ -15,7 +15,7 @@ pub struct VM {
 }
 
 impl VM {
-    /// 从指定`PBVM`dll路径加载虚拟机对象
+    /// 从指定`PBVM` DLL路径加载虚拟机对象
     pub fn new(file_name: impl AsRef<OsStr>) -> Result<VM> {
         unsafe {
             let lib = Library::new(file_name).map_err(|_| PBXRESULT::E_GET_PBVM_FAILED)?;
@@ -37,7 +37,7 @@ impl VM {
         }
     }
 
-    /// 新建Session对象
+    /// 新建`Session`对象
     pub fn new_session<'a>(
         &'a self,
         applicationName: impl AsPBStr,

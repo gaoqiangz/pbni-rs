@@ -1,8 +1,9 @@
 use crate::{
-    pbx::{bindings::*, *}, prelude::*
+    prelude::*, syslib::{bindings::*, *}
 };
 use std::ptr;
-
+/*
+TODO
 /// 过程调用参数列表对象的引用,此对象可以添加参数
 ///
 /// # Examples
@@ -15,7 +16,7 @@ pub struct Arguments<'args> {
     ci: pbcallinfo,
     count: pbint,
     session: Session,
-    _marker: PhantomData<&'args pbcallinfo>
+    _marker: PhantomData<&'args ()>
 }
 
 impl<'args> Arguments<'args> {
@@ -367,37 +368,35 @@ impl<'args> Arguments<'args> {
         }
     }
 }
+*/
 
 /// 过程调用参数列表对象的引用,此对象不可增加参数
 pub struct ArgumentsRef<'args> {
-    ptr: pbarguments,
-    count: pbint,
+    args: Vec<POB_DATA>,
     session: Session,
-    _marker: PhantomData<&'args pbarguments>
+    _marker: PhantomData<&'args Session>
 }
 
 impl<'args> ArgumentsRef<'args> {
-    pub(crate) unsafe fn from_ptr(ptr: pbarguments, session: Session) -> ArgumentsRef<'args> {
-        let count = ffi::pbargs_GetCount(ptr);
+    pub(crate) unsafe fn from_ptr(session: Session, cnt: i32) -> ArgumentsRef<'args> {
+        let args = (0..cnt).map(|_| API.ot_get_next_evaled_arg_no_convert(session.as_ptr())).collect();
         ArgumentsRef {
-            ptr,
-            count,
+            args,
             session,
             _marker: PhantomData
         }
     }
-    pub(crate) fn clone(&self) -> ArgumentsRef<'args> {
+    pub(crate) unsafe fn clone(&self) -> ArgumentsRef<'args> {
         ArgumentsRef {
-            ptr: self.ptr,
-            count: self.count,
-            session: unsafe { self.session.clone() },
+            args: self.args.clone(),
+            session: self.session.clone(),
             _marker: PhantomData
         }
     }
 
     /// 获取引用元素迭代器
     pub fn iter(&self) -> ArgumentsIter {
-        let args = unsafe { ArgumentsRef::from_ptr(self.ptr, self.session.clone()) };
+        let args = unsafe { self.clone() };
         ArgumentsIter {
             args,
             idx: 0
@@ -405,7 +404,7 @@ impl<'args> ArgumentsRef<'args> {
     }
 
     /// 参数数量
-    pub fn count(&self) -> pbint { self.count }
+    pub fn count(&self) -> pbint { self.args.len() as pbint }
 
     /// 获取参数值
     ///
@@ -416,16 +415,16 @@ impl<'args> ArgumentsRef<'args> {
         if let Ok(val) = self.try_get(index) {
             val
         } else {
-            panic!("arg index {} is out of bound {}", index, self.count)
+            panic!("arg index {} is out of bound {}", index, self.args.len())
         }
     }
 
     /// 尝试获取参数值
     pub fn try_get(&self, index: pbint) -> Result<Value<'args>> {
-        if index < 0 || index >= self.count {
-            return Err(PBXRESULT::E_ARRAY_INDEX_OUTOF_BOUNDS);
+        if index < 0 || index as usize >= self.args.len() {
+            return Err(PBRESULT::E_ARRAY_INDEX_OUTOF_BOUNDS);
         }
-        unsafe { Ok(Value::from_ptr(ffi::pbargs_GetAt(self.ptr, index), self.session.clone())) }
+        unsafe { Ok(Value::from_ptr(self.args[index as usize], self.session.clone())) }
     }
 }
 
@@ -440,15 +439,11 @@ impl<'args> Iterator for ArgumentsIter<'args> {
     fn next(&mut self) -> Option<Self::Item> {
         let idx = self.idx;
         self.idx += 1;
-        if idx < self.args.count() {
-            Some(self.args.get(idx))
-        } else {
-            None
-        }
+        self.args.try_get(idx).ok()
     }
     fn size_hint(&self) -> (usize, Option<usize>) { (0, Some(self.args.count() as usize)) }
 }
-
+/*
 impl<'args> IntoIterator for Arguments<'args> {
     type Item = Value<'args>;
     type IntoIter = ArgumentsIter<'args>;
@@ -461,7 +456,7 @@ impl<'args> IntoIterator for Arguments<'args> {
         }
     }
 }
-
+*/
 impl<'args> IntoIterator for ArgumentsRef<'args> {
     type Item = Value<'args>;
     type IntoIter = ArgumentsIter<'args>;

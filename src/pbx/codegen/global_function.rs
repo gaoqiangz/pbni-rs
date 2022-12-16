@@ -1,6 +1,4 @@
-use crate::{
-    pbstr::*, pbx::{bindings::*, callinfo::FromCallInfo, value::ToValue, *}
-};
+use crate::pbx::{bindings::*, callinfo::FromCallInfo, value::ToValue, *};
 
 /// 全局函数抽象
 #[cfg(feature = "global_function")]
@@ -32,7 +30,7 @@ where
         Ok(param) => f.call(param).to_value(&mut ci.return_value()),
         Err(e) => {
             //发生NULL错误说明参数接收者不支持传NULL值,此时自动转义为返回NULL
-            if e == PBXRESULT::E_NULL_ERROR {
+            if e == PBXRESULT::E_VALUE_IS_NULL {
                 ci.return_value().set_to_null()
             } else {
                 Err(e)

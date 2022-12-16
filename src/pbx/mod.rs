@@ -13,9 +13,7 @@ mod export;
 mod codegen;
 
 pub use arguments::{Arguments, ArgumentsRef};
-pub use bindings::{
-    pbbyte, pbdouble, pbint, pblong, pblonglong, pbreal, pbuint, pbulong, FieldId, MethodId, ValueType, PBXRESULT
-};
+pub use bindings::{FieldId, MethodId, ValueType, PBXRESULT};
 pub use callinfo::{CallInfo, CallInfoRef};
 pub use codegen::{pbargs, throw};
 pub use invoker::Invoker;

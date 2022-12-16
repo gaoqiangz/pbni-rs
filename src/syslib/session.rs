@@ -1,46 +1,67 @@
 use crate::{
-    pbx::{bindings::*, invoker::GlobalFunction, value::FromValueOwned, *}, prelude::*
+    prelude::*, syslib::{
+        bindings::*, value::{FromValueOwned, Value}, *
+    }
 };
 use std::{borrow::Cow, ops::Deref};
 
 /// Session对象
 #[repr(transparent)]
 pub struct Session {
-    ptr: pbsession
+    ptr: POB_THIS
 }
 
 impl Session {
-    pub(crate) unsafe fn from_ptr(ptr: pbsession) -> Session {
+    pub(crate) unsafe fn from_ptr(ptr: POB_THIS) -> Session {
         Session {
             ptr
         }
     }
-    pub(crate) fn as_ptr(&self) -> pbsession { self.ptr }
+    pub(crate) fn as_ptr(&self) -> POB_THIS { self.ptr }
 
-    /// 克隆Session对象
+    /// 克隆`Session`对象
     ///
     /// # Safety
     ///
-    /// 此方法不能延长Session对象的生命周期,因此不能保证克隆后的Session对象始终有效,生命周期将始终与此对象一样
+    /// 此方法不能延长`Session`对象的生命周期,因此不能保证克隆后的`Session`对象始终有效,生命周期将始终与此对象一样
     pub unsafe fn clone(&self) -> Session {
         Session {
             ptr: self.ptr
         }
     }
 
+    //TODO
     /// 判断是否有重启Session的请求 (在PowerScript中调用了`Restart`函数)
-    pub fn restart_requested(&self) -> bool { unsafe { ffi::pbsession_RestartRequested(self.ptr).into() } }
+    //pub fn restart_requested(&self) -> bool { unsafe { ffi::pbsession_RestartRequested(self.ptr).into() } }
 
+    //TODO
     /// 是否创建了可视化对象 (打开了顶层窗口)
-    pub fn has_visual_object(&self) -> bool { unsafe { ffi::pbsession_HasPBVisualObject(self.ptr).into() } }
+    //pub fn has_visual_object(&self) -> bool { unsafe { ffi::pbsession_HasPBVisualObject(self.ptr).into() } }
 
+    /// 重启`Session`
+    pub fn restart(&self) {
+        unsafe {
+            API.ob_mgr_restart(self.ptr);
+        }
+    }
+
+    /// 终止`Session`
+    pub fn terminate(&self) {
+        unsafe {
+            API.ob_mgr_terminate(self.ptr);
+        }
+    }
+
+    //TODO
     /// 处理PB消息
     ///
     /// # Notice
     ///
     /// 开启了消息循环后,需要处理PB的消息以执行PowerScript中的`Post`调用
-    pub fn process_message(&self) -> bool { unsafe { ffi::pbsession_ProcessPBMessage(self.ptr).into() } }
+    //pub fn process_message(&self) -> bool { unsafe { ffi::pbsession_ProcessPBMessage(self.ptr).into() } }
 
+    /*
+    TODO
     /// 获取系统类组
     pub(crate) fn get_system_group(&self) -> pbgroup { unsafe { ffi::pbsession_GetSystemGroup(self.ptr) } }
 
@@ -74,14 +95,17 @@ impl Session {
             }
         }
     }
+    */
 
     /*
         Exception
     */
 
     /// 检查当前是否有异常未处理
-    pub fn has_exception(&self) -> bool { unsafe { ffi::pbsession_HasExceptionThrown(self.ptr).into() } }
+    pub fn has_exception(&self) -> bool { unsafe { !(&*self.ptr).thrown_exception.is_null() } }
 
+    /*
+    TODO
     /// 清除异常
     pub fn clear_exception(&self) {
         unsafe {
@@ -106,11 +130,13 @@ impl Session {
         }
         Ok(())
     }
-
+    */
     /*
         Prop
     */
 
+    /*
+    TODO
     /// 与Session绑定`static`引用参数
     pub fn set_prop<T, D>(&self, name: T, data: &'static D)
     where
@@ -183,11 +209,20 @@ impl Session {
     pub fn remove_prop(&self, name: impl AsPBStr) {
         unsafe { ffi::pbsession_RemoveProp(self.ptr, name.as_pbstr().as_ptr()) }
     }
+    */
+
+    /*
+        Value
+    */
+
+    pub fn new_value(&self) -> Value { unsafe { Value::new(self.clone()) } }
 
     /*
         Enum
     */
 
+    /*
+    TODO
     /// 获取指定名称枚举的值,不区分大小写
     ///
     /// # Examples
@@ -228,24 +263,13 @@ impl Session {
             }
         }
     }
-
-    /*
-        String
     */
-
-    #[inline]
-    pub(crate) unsafe fn get_string_unchecked<'a>(&self, pbstr: pbstring) -> Option<&'a PBStr> {
-        let cstr = ffi::pbsession_GetString(self.ptr, pbstr);
-        if !cstr.is_null() {
-            Some(PBStr::from_ptr_str(cstr))
-        } else {
-            None
-        }
-    }
-
     /*
         Object
     */
+
+    /*
+    TODO
 
     /// 实例化用户自定义对象
     ///
@@ -573,122 +597,84 @@ impl Session {
             Ok(Array::from_ptr(ptr, true, self.clone()))
         }
     }
-
+    */
     /*
         Blob
     */
 
-    pub(crate) fn new_pbblob(&self, bin: impl AsRef<[u8]>) -> pbblob {
+    pub(crate) fn new_pbblob(&self, bin: impl AsRef<[u8]>) -> PSH_BINARY {
         let bin = bin.as_ref();
         assert!(!bin.is_empty());
-        unsafe { ffi::pbsession_NewBlob(self.ptr, bin.as_ptr() as _, bin.len() as pblong) }
+        unsafe {
+            let blb = API.ob_alloc_blob(self.ptr, bin.len() as ULONG);
+            ptr::copy(bin.as_ptr(), blb as *mut u8, bin.len());
+            blb
+        }
     }
-    pub(crate) unsafe fn get_blob_unchecked<'a>(&self, pbbin: pbblob) -> &'a [u8] {
-        let ptr = ffi::pbsession_GetBlob(self.ptr, pbbin);
-        let len = if !ptr.is_null() {
-            ffi::pbsession_GetBlobLength(self.ptr, pbbin)
-        } else {
-            0
-        };
-        std::slice::from_raw_parts(ptr as *const u8, len as usize)
+    pub(crate) unsafe fn get_blob_unchecked<'a>(&self, pbbin: PSH_BINARY) -> &'a [u8] {
+        let pbbin = &*pbbin;
+        std::slice::from_raw_parts(pbbin.data.as_ptr() as *const u8, pbbin.len as usize)
     }
 
     /*
         Date, Time and DateTime
     */
 
-    pub(crate) fn new_pbdate(&self, dt: NaiveDate) -> pbdate {
+    pub(crate) fn new_pbdate(&self, dt: NaiveDate) -> PSH_TIME {
         unsafe {
-            let pbdt = ffi::pbsession_NewDate(self.ptr);
-            let pbxr = ffi::pbsession_SetDate(
-                self.ptr,
-                pbdt,
-                dt.year() as pbint,
-                dt.month() as pbint,
-                dt.day() as pbint
-            );
-            assert!(pbxr == PBXRESULT::OK);
-            pbdt
-        }
-    }
-    pub(crate) fn new_pbtime(&self, tm: NaiveTime) -> pbtime {
-        unsafe {
-            let pbtm = ffi::pbsession_NewTime(self.ptr);
-            let pbxr = ffi::pbsession_SetTime(
-                self.ptr,
-                pbtm,
-                tm.hour() as pbint,
-                tm.minute() as pbint,
-                tm.second() as pbdouble + tm.nanosecond() as pbdouble / 1000_000_000.0
-            );
-            assert!(pbxr == PBXRESULT::OK);
+            let pbtm = &mut *API.ob_alloc_time(self.ptr);
+            pbtm.tm_year = dt.year() as i16;
+            pbtm.tm_mon = dt.month() as u8;
+            pbtm.tm_mday = dt.day() as u8;
             pbtm
         }
     }
-    pub(crate) fn new_pbdatetime(&self, dtt: NaiveDateTime) -> pbdatetime {
+    pub(crate) fn new_pbtime(&self, tm: NaiveTime) -> PSH_TIME {
         unsafe {
-            let pbdtt = ffi::pbsession_NewDateTime(self.ptr);
-            let pbxr = ffi::pbsession_SetDateTime(
-                self.ptr,
-                pbdtt,
-                dtt.year() as pbint,
-                dtt.month() as pbint,
-                dtt.day() as pbint,
-                dtt.hour() as pbint,
-                dtt.minute() as pbint,
-                dtt.second() as pbdouble + dtt.nanosecond() as pbdouble / 1000_000_000.0
-            );
-            assert!(pbxr == PBXRESULT::OK);
-            pbdtt
+            let pbtm = &mut *API.ob_alloc_time(self.ptr);
+            pbtm.tm_hour = tm.hour() as u8;
+            pbtm.tm_min = tm.minute() as u8;
+            pbtm.tm_sec = tm.second() as u8;
+            pbtm.tm_msec = (tm.nanosecond() / 1000) as i32;
+            pbtm
         }
     }
-    pub(crate) unsafe fn get_date_unchecked(&self, pbdt: pbdate) -> NaiveDate {
-        let mut year = 0;
-        let mut month = 0;
-        let mut day = 0;
-        let pbxr = ffi::pbsession_SplitDate(self.ptr, pbdt, &mut year, &mut month, &mut day);
-        assert!(pbxr == PBXRESULT::OK);
-        NaiveDate::from_ymd_opt(year as i32, month as u32, day as u32).unwrap()
+    pub(crate) fn new_pbdatetime(&self, dtt: NaiveDateTime) -> PSH_TIME {
+        unsafe {
+            let pbtm = &mut *API.ob_alloc_time(self.ptr);
+            pbtm.tm_year = dtt.year() as i16;
+            pbtm.tm_mon = dtt.month() as u8;
+            pbtm.tm_mday = dtt.day() as u8;
+            pbtm.tm_hour = dtt.hour() as u8;
+            pbtm.tm_min = dtt.minute() as u8;
+            pbtm.tm_sec = dtt.second() as u8;
+            pbtm.tm_msec = (dtt.nanosecond() / 1000) as i32;
+            pbtm
+        }
     }
-    pub(crate) unsafe fn get_time_unchecked(&self, pbtm: pbtime) -> NaiveTime {
-        let mut hour = 0;
-        let mut minute = 0;
-        let mut second = 0.0;
-        let pbxr = ffi::pbsession_SplitTime(self.ptr, pbtm, &mut hour, &mut minute, &mut second);
-        assert!(pbxr == PBXRESULT::OK);
-        NaiveTime::from_hms_nano_opt(
-            hour as u32,
-            minute as u32,
-            second as u32,
-            ((second - second.trunc()) * 1000_000_000.0) as u32
+    pub(crate) unsafe fn get_date_unchecked(&self, pbtm: PSH_TIME) -> NaiveDate {
+        let pbtm = &*pbtm;
+        NaiveDate::from_ymd_opt(pbtm.tm_year as i32, pbtm.tm_mon as u32, pbtm.tm_mday as u32).unwrap()
+    }
+    pub(crate) unsafe fn get_time_unchecked(&self, pbtm: PSH_TIME) -> NaiveTime {
+        let pbtm = &*pbtm;
+        NaiveTime::from_hms_micro_opt(
+            pbtm.tm_hour as u32,
+            pbtm.tm_min as u32,
+            pbtm.tm_sec as u32,
+            pbtm.tm_msec as u32
         )
         .unwrap()
     }
-    pub(crate) unsafe fn get_datetime_unchecked(&self, pbdtt: pbdatetime) -> NaiveDateTime {
-        let mut year = 0;
-        let mut month = 0;
-        let mut day = 0;
-        let mut hour = 0;
-        let mut minute = 0;
-        let mut second = 0.0;
-        let pbxr = ffi::pbsession_SplitDateTime(
-            self.ptr,
-            pbdtt,
-            &mut year,
-            &mut month,
-            &mut day,
-            &mut hour,
-            &mut minute,
-            &mut second
-        );
-        assert!(pbxr == PBXRESULT::OK);
+    pub(crate) unsafe fn get_datetime_unchecked(&self, pbtm: PSH_TIME) -> NaiveDateTime {
+        let pbtm = &*pbtm;
         NaiveDateTime::new(
-            NaiveDate::from_ymd_opt(year as i32, month as u32, day as u32).unwrap(),
-            NaiveTime::from_hms_nano_opt(
-                hour as u32,
-                minute as u32,
-                second as u32,
-                ((second - second.trunc()) * 1000_000_000.0) as u32
+            NaiveDate::from_ymd_opt(pbtm.tm_year as i32, pbtm.tm_mon as u32, pbtm.tm_mday as u32).unwrap(),
+            NaiveTime::from_hms_micro_opt(
+                pbtm.tm_hour as u32,
+                pbtm.tm_min as u32,
+                pbtm.tm_sec as u32,
+                pbtm.tm_msec as u32
             )
             .unwrap()
         )
@@ -697,27 +683,92 @@ impl Session {
     /*
         Decimal number
     */
-    pub(crate) fn new_pbdec(&self, dec: Decimal) -> pbdec {
+
+    // fields description of SH_DEC structure
+    // flags:
+    // bit offset   desc
+    // 0            sign, 1 is negative
+    // 1            overflow
+    // 2            underflow
+    // 3            divide by zero
+    // 4            undetermined such as 0/0
+    // 5-7          unused
+    // 8-12         precision 0-30, the max digits after zero point is 30. 31 is a special number
+    // 13-15        unused
+    //
+    // v:
+    // v[0] is lowest
+    // v[6] is highest
+    // Supported value
+    //  0.000,000,000,000,000,000,000,000,000,001 to  999,999,999,999,999,999,999,999,999,999
+    //  0
+    // -0.000,000,000,000,000,000,000,000,000,001 to -999,999,999,999,999,999,999,999,999,999
+    //
+    // v: 按原码表示法存储14个字节(112位),最高字节存储符号位
+
+    pub(crate) fn new_pbdec(&self, dec: Decimal) -> PSH_DEC {
         unsafe {
-            let dec = PBString::from_str_unchecked(dec.to_string());
-            let pbdec = ffi::pbsession_NewDecimal(self.ptr);
-            let pbxr = ffi::pbsession_SetDecimal(self.ptr, pbdec, dec.as_ptr());
-            assert!(pbxr == PBXRESULT::OK);
-            pbdec
+            let pbdec = API.ob_alloc_dec(self.ptr);
+            if API.version() >= 110 {
+                let nag = dec.is_sign_negative();
+                let num = if nag {
+                    !dec.mantissa() + 1
+                } else {
+                    dec.mantissa()
+                } as u128;
+                let num = num.to_le_bytes();
+                let pbdec = &mut *pbdec;
+                ptr::copy(
+                    num.as_ptr(),
+                    ptr::addr_of_mut!(pbdec.v) as *mut u8,
+                    DEC_ARRAY_LEN as usize * mem::size_of::<USHORT>()
+                );
+                pbdec.flags =
+                    (nag as USHORT) << DEC_SIGN_SHIFT | (dec.scale() as USHORT) << DEC_PRECISION_SHIFT;
+                pbdec
+            } else {
+                //FIXME
+                //PB11以下版本存储格式不一样,使用字符串转换
+                let decstr = dec.to_string();
+                let decstr = decstr.as_pbstr();
+                API.shAsciiToDec(pbdec, decstr.as_ptr() as LPTSTR)
+            }
         }
     }
-    pub(crate) unsafe fn get_dec_unchecked(&self, pbdec: pbdec) -> Decimal {
-        let cstr = ffi::pbsession_GetDecimalString(self.ptr, pbdec);
-        let str = String::from_pbstr_unchecked(cstr);
-        ffi::pbsession_ReleaseDecimalString(self.ptr, cstr);
-        str.parse().unwrap()
+    pub(crate) unsafe fn get_dec_unchecked(&self, pbdec: PSH_DEC) -> Decimal {
+        if API.version() >= 110 {
+            let pbdec = &*pbdec;
+            let neg = (pbdec.flags & (1 << DEC_SIGN_SHIFT)) != 0;
+            let scale = ((pbdec.flags & 0x1f00) >> DEC_PRECISION_SHIFT) as u32;
+            let mut buf: [u8; mem::size_of::<u128>()] = mem::zeroed();
+            ptr::copy(
+                ptr::addr_of!(pbdec.v) as *const u8,
+                buf.as_mut_ptr(),
+                DEC_ARRAY_LEN as usize * mem::size_of::<USHORT>()
+            );
+            let num = u128::from_le_bytes(buf);
+            let num = if neg {
+                !num + 1
+            } else {
+                num
+            } as i128;
+            Decimal::from_i128_with_scale(num, scale)
+        } else {
+            //FIXME
+            //PB11以下版本存储格式不一样,使用字符串转换
+            let mut buf: [PBChar; 64] = mem::zeroed();
+            API.shDecToAscii(buf.as_mut_ptr(), pbdec);
+            let decstr = PBString::from_vec_with_nul(buf).unwrap().to_string_lossy();
+            decstr.parse().unwrap()
+        }
     }
 }
 
 /*
     Global variable
 */
-
+/*
+TODO
 /// 全局变量ID抽象
 pub trait GlobalVarId {
     fn var_id(&self, session: &Session) -> FieldId;
@@ -2125,7 +2176,9 @@ impl Session {
         }
     }
 }
-
+*/
+/*
+TODO
 /// 拥有所有权的Session对象
 ///
 /// 此对象由[`VM`]创建,`drop`时会释放会话
@@ -2159,7 +2212,7 @@ impl Deref for OwnedSession<'_> {
     type Target = Session;
     fn deref(&self) -> &Self::Target { &self.session }
 }
-
+*/
 /// 栈帧
 ///
 /// 当**直接**从Rust端调用PB代码时一般需要创建栈帧来释放调用阶段产生的临时资源,比如创建的对象
@@ -2181,7 +2234,9 @@ pub struct LocalFrame<'session> {
 impl<'session> LocalFrame<'session> {
     /// 创建栈帧
     pub fn new(session: &Session) -> LocalFrame {
-        unsafe { ffi::pbsession_PushLocalFrame(session.ptr) }
+        unsafe {
+            (&mut *session.ptr).routine_level += 1;
+        }
         LocalFrame {
             session
         }
@@ -2191,21 +2246,21 @@ impl<'session> LocalFrame<'session> {
 }
 
 impl<'session> Drop for LocalFrame<'session> {
-    fn drop(&mut self) { unsafe { ffi::pbsession_PopLocalFrame(self.session.ptr) } }
+    fn drop(&mut self) {
+        unsafe {
+            let obthis = &mut *self.session.ptr;
+            obthis.routine_level -= 1;
+            if obthis.routine_level == 0 {
+                API.rt_hit_level_0(obthis);
+            } else if obthis.response_window_stack.count > 0 {
+                let stack = &*obthis
+                    .response_window_stack
+                    .stack
+                    .offset((obthis.response_window_stack.count - 1) as isize);
+                if stack.routine_level == obthis.routine_level as UINT {
+                    API.rt_hit_level_0(obthis);
+                }
+            }
+        }
+    }
 }
-
-/*
-thread_local! {
-    static SESSION: Cell<Option<Session>> = Cell::new(None)
-}
-
-/// 设置线程当前SESSION对象
-pub(crate) fn set_current_session(session: Session) {
-    SESSION.with(|s| {
-        s.set(Some(session));
-    });
-}
-
-/// 线程当前SESSION对象
-pub fn current_session() -> Option<Session> { SESSION.with(|s| s.get()) }
-*/

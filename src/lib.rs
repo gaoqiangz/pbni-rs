@@ -378,8 +378,7 @@
 #![allow(non_upper_case_globals)]
 #![allow(dead_code)]
 
-//#[macro_use]
-pub mod pbstr;
+pub mod primitive;
 
 #[cfg(feature = "pbx")]
 pub mod pbx;
@@ -388,13 +387,9 @@ pub mod pbx;
 pub mod syslib;
 
 pub mod prelude {
-    #[cfg(feature = "datetime")]
+    pub use crate::primitive::*;
     #[doc(no_inline)]
     pub use chrono::{Datelike, NaiveDate, NaiveDateTime, NaiveTime, Timelike};
-
-    #[cfg(feature = "decimal")]
     #[doc(no_inline)]
     pub use rust_decimal::prelude::*;
-
-    pub use crate::pbstr::{pbstr, pbstring, AsPBStr, FromPBStrPtr, PBChar, PBStr, PBString};
 }

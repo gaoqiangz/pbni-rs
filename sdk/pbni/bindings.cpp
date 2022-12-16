@@ -297,20 +297,20 @@ extern "C"
     pbboolean pbsession_IsNativeObject(IPB_Session *session, pbobject obj) { return session->IsNativeObject(obj); }
     IPBX_UserObject *pbsession_GetNativeInterface(IPB_Session *session, pbobject obj) { return session->GetNativeInterface(obj); }
 
-    //Interface to access Array
-    pbarray pbsession_NewBoundedSimpleArray(IPB_Session *session, pbuint type, pbuint dimensions, PBArrayInfo::ArrayBound *bounds) //bounded array are fixed size, can be multidimension
+    // Interface to access Array
+    pbarray pbsession_NewBoundedSimpleArray(IPB_Session *session, pbuint type, pbuint dimensions, PBArrayInfo::ArrayBound *bounds) // bounded array are fixed size, can be multidimension
     {
         return session->NewBoundedSimpleArray(type, dimensions, bounds);
     }
-    pbarray pbsession_NewUnboundedSimpleArray(IPB_Session *session, pbuint type) //unbounded array are variable size, can only 1 dimension
+    pbarray pbsession_NewUnboundedSimpleArray(IPB_Session *session, pbuint type) // unbounded array are variable size, can only 1 dimension
     {
         return session->NewUnboundedSimpleArray(type);
     }
-    pbarray pbsession_NewBoundedObjectArray(IPB_Session *session, pbclass cls, pbuint dimensions, PBArrayInfo::ArrayBound *bounds) //bounded array are fixed size, can be multidimension
+    pbarray pbsession_NewBoundedObjectArray(IPB_Session *session, pbclass cls, pbuint dimensions, PBArrayInfo::ArrayBound *bounds) // bounded array are fixed size, can be multidimension
     {
         return session->NewBoundedObjectArray(cls, dimensions, bounds);
     }
-    pbarray pbsession_NewUnboundedObjectArray(IPB_Session *session, pbclass cls) //unbounded array are variable size, can only 1 dimension
+    pbarray pbsession_NewUnboundedObjectArray(IPB_Session *session, pbclass cls) // unbounded array are variable size, can only 1 dimension
     {
         return session->NewUnboundedObjectArray(cls);
     }
@@ -360,22 +360,22 @@ extern "C"
     PBXRESULT pbsession_SetLongLongArrayItem(IPB_Session *session, pbarray array, pblong dim[], pblonglong value) { return session->SetLongLongArrayItem(array, dim, value); }
     PBXRESULT pbsession_SetObjectArrayItem(IPB_Session *session, pbarray array, pblong dim[], pbobject value) { return session->SetObjectArrayItem(array, dim, value); }
 
-    //Interface to access String.
+    // Interface to access String.
     pbstring pbsession_NewString(IPB_Session *session, LPCTSTR str) { return session->NewString(str); }
     PBXRESULT pbsession_SetString(IPB_Session *session, pbstring pbstr, LPCTSTR str) { return session->SetString(pbstr, str); }
     pblong pbsession_GetStringLength(IPB_Session *session, pbstring pbstr) { return session->GetStringLength(pbstr); }
-    LPCTSTR pbsession_GetString(IPB_Session *session, pbstring pbstr) //only return the pointer to LPTSTR, don't dup string
+    LPCTSTR pbsession_GetString(IPB_Session *session, pbstring pbstr) // only return the pointer to LPTSTR, don't dup string
     {
         return session->GetString(pbstr);
     }
 
-    //Interface to access Binary.
-    pbblob pbsession_NewBlob(IPB_Session *session, const void *bin, pblong len) //dup the binary
+    // Interface to access Binary.
+    pbblob pbsession_NewBlob(IPB_Session *session, const void *bin, pblong len) // dup the binary
     {
         return session->NewBlob(bin, len);
     }
 
-    PBXRESULT pbsession_SetBlob(IPB_Session *session, pbblob pbbin, const void *bin, pblong len) //dup the binary
+    PBXRESULT pbsession_SetBlob(IPB_Session *session, pbblob pbbin, const void *bin, pblong len) // dup the binary
     {
         return session->SetBlob(pbbin, bin, len);
     }
@@ -383,12 +383,12 @@ extern "C"
     {
         return session->GetBlobLength(pbbin);
     }
-    void *pbsession_GetBlob(IPB_Session *session, pbblob pbbin) //only return the pointer to void, don't dup buffer
+    void *pbsession_GetBlob(IPB_Session *session, pbblob pbbin) // only return the pointer to void, don't dup buffer
     {
         return session->GetBlob(pbbin);
     }
 
-    //Interface to access Date, Time and DateTime.
+    // Interface to access Date, Time and DateTime.
     pbdate pbsession_NewDate(IPB_Session *session)
     {
         return session->NewDate();
@@ -402,7 +402,7 @@ extern "C"
     {
         return session->SetDateTime(dt, year, month, day, hour, minute, second);
     }
-    PBXRESULT pbsession_CopyDateTime(IPB_Session *session, pbdatetime dest, pbdatetime src) //Copy memory
+    PBXRESULT pbsession_CopyDateTime(IPB_Session *session, pbdatetime dest, pbdatetime src) // Copy memory
     {
         return session->CopyDateTime(dest, src);
     }
@@ -424,7 +424,7 @@ extern "C"
     LPCTSTR pbsession_GetDateTimeString(IPB_Session *session, pbdatetime dt) { return session->GetDateTimeString(dt); }
     void pbsession_ReleaseDateTimeString(IPB_Session *session, LPCTSTR str) { session->ReleaseDateTimeString(str); }
 
-    //interface to access decimal number
+    // interface to access decimal number
     pbdec pbsession_NewDecimal(IPB_Session *session) { return session->NewDecimal(); }
     PBXRESULT pbsession_SetDecimal(IPB_Session *session, pbdec dec, LPCTSTR dec_str) { return session->SetDecimal(dec, dec_str); }
     LPCTSTR pbsession_GetDecimalString(IPB_Session *session, pbdec dec) { return session->GetDecimalString(dec); }
@@ -674,5 +674,48 @@ extern "C"
         return pObj->GetSafeContext(type_id);
     }
 }
+
+#pragma endregion
+
+#pragma region exports
+
+/*
+    FIXME
+    导出符号重定向
+    解决解决llvm-msvc 32bit dll编译符号被截断的问题，代替`.def`文件定义符号的做法，以支持与`SystemLibrary`导出符号并存
+*/
+
+#ifdef GLOBALFUNCTION
+
+extern "C" PBXRESULT __cdecl RS_InvokeGlobalFunction(IPB_Session *session, LPCTSTR functionName, PBCallInfo *ci);
+
+PBXEXPORT PBXRESULT PBXCALL PBX_InvokeGlobalFunction(IPB_Session *session, LPCTSTR functionName, PBCallInfo *ci)
+{
+    return RS_InvokeGlobalFunction(session, functionName, ci);
+}
+
+#endif
+
+#ifdef NONVISUALOBEJCT
+
+extern "C" PBXRESULT __cdecl RS_CreateNonVisualObject(IPB_Session *session, pbobject pbobj, LPCTSTR className, IPBX_NonVisualObject **obj);
+
+PBXEXPORT PBXRESULT PBXCALL PBX_CreateNonVisualObject(IPB_Session *session, pbobject pbobj, LPCTSTR className, IPBX_NonVisualObject **obj)
+{
+    return RS_CreateNonVisualObject(session, pbobj, className, obj);
+}
+
+#endif
+
+#ifdef VISUALOBEJCT
+
+extern "C" PBXRESULT __cdecl RS_CreateVisualObject(IPB_Session *session, pbobject pbobj, LPCTSTR className, IPBX_VisualObject **obj);
+
+PBXEXPORT PBXRESULT PBXCALL PBX_CreateVisualObject(IPB_Session *session, pbobject pbobj, LPCTSTR className, IPBX_VisualObject **obj)
+{
+    return RS_CreateVisualObject(session, pbobj, className, obj);
+}
+
+#endif
 
 #pragma endregion

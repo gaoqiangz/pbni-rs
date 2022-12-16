@@ -488,7 +488,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "decimal")]
     pub fn get_var_dec(&self, fid: impl VarId) -> Option<Decimal> {
         let fid = fid.var_id(self);
         assert!(self.get_var_type(fid) == ValueType::Decimal);
@@ -504,7 +503,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "decimal")]
     pub unsafe fn get_var_dec_unchecked(&self, fid: impl VarId) -> Option<Decimal> {
         let mut is_null = Default::default();
         let v = ffi::pbsession_GetDecField(self.session.as_ptr(), self.ptr, fid.var_id(self), &mut is_null);
@@ -653,7 +651,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn get_var_date(&self, fid: impl VarId) -> Option<NaiveDate> {
         let fid = fid.var_id(self);
         assert!(self.get_var_type(fid) == ValueType::Date);
@@ -669,7 +666,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn get_var_date_unchecked(&self, fid: impl VarId) -> Option<NaiveDate> {
         let mut is_null = Default::default();
         let v = ffi::pbsession_GetDateField(self.session.as_ptr(), self.ptr, fid.var_id(self), &mut is_null);
@@ -685,7 +681,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn get_var_time(&self, fid: impl VarId) -> Option<NaiveTime> {
         let fid = fid.var_id(self);
         assert!(self.get_var_type(fid) == ValueType::Time);
@@ -701,7 +696,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn get_var_time_unchecked(&self, fid: impl VarId) -> Option<NaiveTime> {
         let mut is_null = Default::default();
         let v = ffi::pbsession_GetTimeField(self.session.as_ptr(), self.ptr, fid.var_id(self), &mut is_null);
@@ -717,7 +711,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn get_var_datetime(&self, fid: impl VarId) -> Option<NaiveDateTime> {
         let fid = fid.var_id(self);
         assert!(self.get_var_type(fid) == ValueType::DateTime);
@@ -733,7 +726,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn get_var_datetime_unchecked(&self, fid: impl VarId) -> Option<NaiveDateTime> {
         let mut is_null = Default::default();
         let v =
@@ -1105,7 +1097,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "decimal")]
     pub fn set_var_dec(&mut self, fid: impl VarId, value: Decimal) -> Result<()> {
         let fid = fid.var_id(self);
         assert!(self.get_var_type(fid) == ValueType::Decimal);
@@ -1124,7 +1115,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "decimal")]
     pub unsafe fn set_var_dec_unchecked(&mut self, fid: impl VarId, value: Decimal) -> Result<()> {
         ffi::pbsession_SetDecField(
             self.session.as_ptr(),
@@ -1234,7 +1224,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn set_var_date(&mut self, fid: impl VarId, value: NaiveDate) -> Result<()> {
         let fid = fid.var_id(self);
         assert!(self.get_var_type(fid) == ValueType::Date);
@@ -1253,7 +1242,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn set_var_date_unchecked(&mut self, fid: impl VarId, value: NaiveDate) -> Result<()> {
         ffi::pbsession_SetDateField(
             self.session.as_ptr(),
@@ -1269,7 +1257,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn set_var_time(&mut self, fid: impl VarId, value: NaiveTime) -> Result<()> {
         let fid = fid.var_id(self);
         assert!(self.get_var_type(fid) == ValueType::Time);
@@ -1288,7 +1275,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn set_var_time_unchecked(&mut self, fid: impl VarId, value: NaiveTime) -> Result<()> {
         ffi::pbsession_SetTimeField(
             self.session.as_ptr(),
@@ -1304,7 +1290,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn set_var_datetime(&mut self, fid: impl VarId, value: NaiveDateTime) -> Result<()> {
         let fid = fid.var_id(self);
         assert!(self.get_var_type(fid) == ValueType::DateTime);
@@ -1328,7 +1313,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn set_var_datetime_unchecked(&mut self, fid: impl VarId, value: NaiveDateTime) -> Result<()> {
         ffi::pbsession_SetDateTimeField(
             self.session.as_ptr(),
@@ -1799,7 +1783,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "decimal")]
     pub fn get_shared_var_dec(&self, fid: impl VarId) -> Option<Decimal> {
         let fid = fid.var_id(self);
         assert!(self.get_shared_var_type(fid) == ValueType::Decimal);
@@ -1815,7 +1798,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "decimal")]
     pub unsafe fn get_shared_var_dec_unchecked(&self, fid: impl VarId) -> Option<Decimal> {
         let mut is_null = Default::default();
         let v = ffi::pbsession_GetDecSharedVar(
@@ -1983,7 +1965,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn get_shared_var_date(&self, fid: impl VarId) -> Option<NaiveDate> {
         let fid = fid.var_id(self);
         assert!(self.get_shared_var_type(fid) == ValueType::Date);
@@ -1999,7 +1980,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn get_shared_var_date_unchecked(&self, fid: impl VarId) -> Option<NaiveDate> {
         let mut is_null = Default::default();
         let v = ffi::pbsession_GetDateSharedVar(
@@ -2020,7 +2000,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn get_shared_var_time(&self, fid: impl VarId) -> Option<NaiveTime> {
         let fid = fid.var_id(self);
         assert!(self.get_shared_var_type(fid) == ValueType::Time);
@@ -2036,7 +2015,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn get_shared_var_time_unchecked(&self, fid: impl VarId) -> Option<NaiveTime> {
         let mut is_null = Default::default();
         let v = ffi::pbsession_GetTimeSharedVar(
@@ -2057,7 +2035,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn get_shared_var_datetime(&self, fid: impl VarId) -> Option<NaiveDateTime> {
         let fid = fid.var_id(self);
         assert!(self.get_shared_var_type(fid) == ValueType::DateTime);
@@ -2073,7 +2050,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn get_shared_var_datetime_unchecked(&self, fid: impl VarId) -> Option<NaiveDateTime> {
         let mut is_null = Default::default();
         let v = ffi::pbsession_GetDateTimeSharedVar(
@@ -2492,7 +2468,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "decimal")]
     pub fn set_shared_var_dec(&mut self, fid: impl VarId, value: Decimal) -> Result<()> {
         let fid = fid.var_id(self);
         assert!(self.get_shared_var_type(fid) == ValueType::Decimal);
@@ -2516,7 +2491,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "decimal")]
     pub unsafe fn set_shared_var_dec_unchecked(&mut self, fid: impl VarId, value: Decimal) -> Result<()> {
         ffi::pbsession_SetDecSharedVar(
             self.session.as_ptr(),
@@ -2652,7 +2626,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn set_shared_var_date(&mut self, fid: impl VarId, value: NaiveDate) -> Result<()> {
         let fid = fid.var_id(self);
         assert!(self.get_shared_var_type(fid) == ValueType::Date);
@@ -2676,7 +2649,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn set_shared_var_date_unchecked(&mut self, fid: impl VarId, value: NaiveDate) -> Result<()> {
         ffi::pbsession_SetDateSharedVar(
             self.session.as_ptr(),
@@ -2692,7 +2664,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn set_shared_var_time(&mut self, fid: impl VarId, value: NaiveTime) -> Result<()> {
         let fid = fid.var_id(self);
         assert!(self.get_shared_var_type(fid) == ValueType::Time);
@@ -2716,7 +2687,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn set_shared_var_time_unchecked(&mut self, fid: impl VarId, value: NaiveTime) -> Result<()> {
         ffi::pbsession_SetTimeSharedVar(
             self.session.as_ptr(),
@@ -2732,7 +2702,6 @@ impl<'obj> Object<'obj> {
     /// # Panics
     ///
     /// 访问不存在的变量或类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn set_shared_var_datetime(&mut self, fid: impl VarId, value: NaiveDateTime) -> Result<()> {
         let fid = fid.var_id(self);
         assert!(self.get_shared_var_type(fid) == ValueType::DateTime);
@@ -2756,7 +2725,6 @@ impl<'obj> Object<'obj> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn set_shared_var_datetime_unchecked(
         &mut self,
         fid: impl VarId,

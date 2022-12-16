@@ -1,6 +1,83 @@
 use std::{borrow::Cow, ops::Deref};
 use widestring::{WideCStr, WideCString, WideChar};
 
+#[repr(u16)]
+#[non_exhaustive]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub enum ValueType {
+    NoType = 0,
+    Int,
+    Long,
+    Real,
+    Double,
+    Decimal,
+    String,
+    Boolean,
+    Any,
+    Uint,
+    Ulong,
+    Blob,
+    Date,
+    Time,
+    DateTime,
+    Cursor,
+    Proc,
+    Basic,
+    Char,
+    Handle,
+    LongLong,
+    Byte
+}
+
+impl From<pbuint> for ValueType {
+    fn from(v: pbuint) -> Self { unsafe { std::mem::transmute(v) } }
+}
+impl From<i32> for ValueType {
+    fn from(v: i32) -> Self { unsafe { std::mem::transmute(v as u16) } }
+}
+
+pub type pbint = i16;
+pub type pbuint = u16;
+pub type pblong = i32;
+pub type pbulong = u32;
+pub type pblonglong = i64;
+pub type pbbyte = u8;
+pub type pbreal = f32;
+pub type pbdouble = f64;
+
+#[repr(transparent)]
+#[derive(Copy, Clone, PartialEq, Eq, Default)]
+pub struct pbboolean(i16);
+
+impl pbboolean {
+    #[inline]
+    pub fn to_bool(self) -> bool {
+        if self.0 == 1 {
+            true
+        } else {
+            false
+        }
+    }
+}
+
+impl PartialEq<bool> for pbboolean {
+    fn eq(&self, other: &bool) -> bool { self.to_bool() == *other }
+}
+
+impl From<bool> for pbboolean {
+    fn from(b: bool) -> Self {
+        pbboolean(if b {
+            1
+        } else {
+            0
+        })
+    }
+}
+
+impl From<pbboolean> for bool {
+    fn from(b: pbboolean) -> Self { b.to_bool() }
+}
+
 pub type TCHAR = WideChar;
 pub type LPTSTR = *mut WideChar;
 pub type LPCTSTR = *const WideChar;
@@ -60,8 +137,8 @@ macro_rules! pbstr {
     ($str:expr) => {{
         #[allow(unused_unsafe)]
         unsafe {
-            ::core::mem::transmute::<_, &$crate::pbstr::PBStr>(
-                $crate::pbstr::__private::const_utf16::encode_null_terminated!($str) as &[u16]
+            ::core::mem::transmute::<_, &$crate::primitive::PBStr>(
+                $crate::primitive::__private::const_utf16::encode_null_terminated!($str) as &[u16]
             )
         }
     }};
@@ -80,7 +157,7 @@ pub use pbstr;
 #[macro_export]
 macro_rules! pbstring {
     ($str:expr) => {
-        $crate::pbstr!($str).to_ucstring()
+        $crate::primitive::pbstr!($str).to_ucstring()
     };
 }
 pub use pbstring;

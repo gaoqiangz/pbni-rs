@@ -1,6 +1,4 @@
-use crate::{
-    pbstr::*, pbx::{bindings::*, *}
-};
+use crate::pbx::{bindings::*, *};
 use std::collections::HashMap;
 
 #[cfg(feature = "global_function")]
@@ -124,7 +122,7 @@ mod export {
 
     #[cfg(feature = "global_function")]
     #[no_mangle]
-    unsafe extern "stdcall" fn PBX_InvokeGlobalFunction(
+    unsafe extern "C" fn RS_InvokeGlobalFunction(
         session: Session,
         functionName: LPCTSTR,
         ci: pbcallinfo
@@ -141,7 +139,7 @@ mod export {
 
     #[cfg(feature = "nonvisualobject")]
     #[no_mangle]
-    unsafe extern "stdcall" fn PBX_CreateNonVisualObject(
+    unsafe extern "C" fn RS_CreateNonVisualObject(
         session: Session,
         pbobj: pbobject,
         className: LPCTSTR,
@@ -165,7 +163,7 @@ mod export {
 
     #[cfg(feature = "visualobject")]
     #[no_mangle]
-    unsafe extern "stdcall" fn PBX_CreateVisualObject(
+    unsafe extern "C" fn RS_CreateVisualObject(
         session: Session,
         pbobj: pbobject,
         className: LPCTSTR,

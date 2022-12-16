@@ -163,7 +163,7 @@ fn gen_object(
         quote! {
             #ast
             impl ::pbni::pbx::UserObject for #ident {
-                const CLASS_NAME: &'static ::pbni::pbstr::PBStr = ::pbni::pbstr!(#cls_name);
+                const CLASS_NAME: &'static ::pbni::primitive::PBStr = ::pbni::pbstr!(#cls_name);
                 fn new(session: ::pbni::pbx::Session, ctx: ::pbni::pbx::ContextObject) -> Result<Self> {
                     ::pbni::pbx::__private::codegen::safe_invoke_ctor(&session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::#ctor(unsafe { session.clone() }, ctx))
                 }
@@ -198,7 +198,7 @@ fn gen_object(
         quote! {
             #ast
             impl ::pbni::pbx::UserObject for #ident {
-                const CLASS_NAME: &'static ::pbni::pbstr::PBStr = ::pbni::pbstr!(#cls_name);
+                const CLASS_NAME: &'static ::pbni::primitive::PBStr = ::pbni::pbstr!(#cls_name);
                 fn new(session: ::pbni::pbx::Session, ctx: ::pbni::pbx::ContextObject) -> Result<Self> {
                     ::pbni::pbx::__private::codegen::safe_invoke_ctor(&session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::#ctor(unsafe { session.clone() }, ctx))
                 }

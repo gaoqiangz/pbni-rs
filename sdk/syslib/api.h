@@ -20,11 +20,7 @@
 #define NOKANJI
 #define NOCRYPT
 #define NOMCX
-/*
-#ifndef POINTER_64
-#define POINTER_64 __ptr64 // 必须
-#endif
-*/
+
 #include <windows.h>
 #include <comdef.h>
 

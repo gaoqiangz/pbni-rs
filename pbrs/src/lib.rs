@@ -8,11 +8,7 @@ struct RustObject {}
 #[nonvisualobject(name = "n_cst_test")]
 impl RustObject {
     #[constructor]
-    fn new(session: Session, ctx: ContextObject) -> RustObject {
-        syslib::bindings::foo();
-
-        RustObject {}
-    }
+    fn new(session: Session, ctx: ContextObject) -> RustObject { RustObject {} }
 
     #[method(name = "of_Array")]
     fn of_array(&mut self, mut arg: Array) -> Result<String> {

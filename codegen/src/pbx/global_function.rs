@@ -18,7 +18,7 @@ pub fn gen(args: AttributeArgs, input: TokenStream) -> Result<TokenStream> {
         #[allow(non_camel_case_types)]
         struct #ident_st;
         impl ::pbni::pbx::__private::codegen::GlobalFunction for #ident_st {
-            const NAME: &'static ::pbni::pbstr::PBStr = ::pbni::pbstr!(#cls_name);
+            const NAME: &'static ::pbni::primitive::PBStr = ::pbni::pbstr!(#cls_name);
             fn invoke(ci: ::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<()> {
                 ::pbni::pbx::__private::codegen::safe_invoke(
                     ci.session(),

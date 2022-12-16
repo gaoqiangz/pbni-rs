@@ -1,17 +1,16 @@
-use crate::pbstr::PBString;
+use crate::primitive::PBString;
 use libloading::os::windows::{Library, Symbol};
 
 pub struct PBLibrary {
     pbvm: Library,
     pbsys: Library,
-    pbshr: Library
+    pbshr: Library,
+    version: u32
 }
 
 impl PBLibrary {
     pub unsafe fn load() -> Result<Self, PBLibraryError> {
-        use std::{
-            mem::{size_of, size_of_val}, ptr
-        };
+        use std::{mem, ptr};
         use winapi::{
             shared::minwindef::{DWORD, HMODULE, MAX_PATH}, um::{
                 fileapi::GetFullPathNameW, processthreadsapi::GetCurrentProcess, psapi::{EnumProcessModules, GetModuleFileNameExW}, winnt::{LPWSTR, WCHAR}
@@ -21,6 +20,7 @@ impl PBLibrary {
         let mut pbvm = None;
         let mut pbsys = None;
         let mut pbshr = None;
+        let mut version = 0;
 
         let hProcess = GetCurrentProcess();
         let mut hMods: [HMODULE; 1024] = [ptr::null_mut(); 1024];
@@ -28,16 +28,16 @@ impl PBLibrary {
         if EnumProcessModules(
             hProcess,
             hMods.as_mut_ptr(),
-            size_of_val(&hMods) as DWORD,
+            mem::size_of_val(&hMods) as DWORD,
             (&mut cbNeeded) as *mut _
         ) != 1
         {
             return Err("EnumProcessModules failed".into());
         }
-        let cnt = (cbNeeded as usize / size_of::<HMODULE>()).min(hMods.len());
+        let cnt = (cbNeeded as usize / mem::size_of::<HMODULE>()).min(hMods.len());
         for idx in 0..cnt {
-            let mut path: [WCHAR; MAX_PATH] = [0; MAX_PATH];
-            let mut full_name: [WCHAR; MAX_PATH] = [0; MAX_PATH];
+            let mut path: [WCHAR; MAX_PATH] = mem::zeroed();
+            let mut full_name: [WCHAR; MAX_PATH] = mem::zeroed();
             let mut file_name: LPWSTR = ptr::null_mut();
             GetModuleFileNameExW(hProcess, hMods[idx], (&mut path) as *mut _, MAX_PATH as DWORD);
             GetFullPathNameW(
@@ -48,6 +48,16 @@ impl PBLibrary {
             );
             let file_name = PBString::from_ptr_str(file_name).to_string_lossy();
             if file_name[0..4].eq_ignore_ascii_case("PBVM") {
+                if let Some((dig, _)) = file_name[4..].split_once(".") {
+                    if let Ok(ver) = dig.parse() {
+                        version = ver;
+                        if version < 110 {
+                            return Err("PBVM版本号不能低于11".into());
+                        }
+                    } else {
+                        return Err("无效的PBVM版本号".into());
+                    }
+                }
                 pbvm = Some(Library::open_already_loaded(file_name)?);
             } else if file_name[0..5].eq_ignore_ascii_case("PBSYS") {
                 pbsys = Some(Library::open_already_loaded(file_name)?);
@@ -61,12 +71,13 @@ impl PBLibrary {
                 Ok(Self {
                     pbvm,
                     pbsys,
-                    pbshr
+                    pbshr,
+                    version
                 })
             },
-            (None, _, _) => return Err("PBVM DLL NotFound".into()),
-            (_, None, _) => return Err("PBSYS DLL NotFound".into()),
-            (_, _, None) => return Err("PBSHR DLL NotFound".into())
+            (None, _, _) => return Err("PBVM模块未找到".into()),
+            (_, None, _) => return Err("PBSYS模块未找到".into()),
+            (_, _, None) => return Err("PBSHR模块未找到".into())
         }
     }
 
@@ -76,6 +87,8 @@ impl PBLibrary {
             Err(e) => Err(PBLibraryError::FindSymbol(String::from_utf8_lossy(symbol).into_owned(), e))
         }
     }
+
+    pub fn version(&self) -> u32 { self.version }
 }
 
 #[derive(Debug)]

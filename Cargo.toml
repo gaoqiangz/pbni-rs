@@ -34,6 +34,8 @@ pbni-codegen = { path = "codegen" }
 libc = "0.2.80"
 widestring = { version = "0.4.3"}
 const-utf16 = "0.2.1"
+chrono = "0.4.19"
+rust_decimal = "1.10.3"
 
 # feature: global_function, nonvisualobject, visualobject
 pbni-codegen = { version = "0.1.0", optional = true}
@@ -43,12 +45,6 @@ static_init = { version = "1.0.1", optional = true}
 
 # feature: syslib, visualobject
 winapi = { version = "0.3.9", features = ["windef","corecrt","psapi"], optional = true }
-
-# feature: datetime
-chrono = { version = "0.4.19", optional = true }
-
-# feature: decimal
-rust_decimal = { version = "1.10.3", optional = true }
 
 # feature: syslib, vm
 libloading = { version = "0.7.0", optional = true }
@@ -62,15 +58,13 @@ bindgen = { version = "0.63.0", optional = true }
 
 [features]
 default = ["full", "pbx", "syslib"]
-full = ["global_function", "nonvisualobject", "visualobject", "datetime", "decimal"]
+full = ["global_function", "nonvisualobject", "visualobject"]
 
 pbx = ["static_init", "pbni-codegen/pbx"]
 syslib = ["bindgen", "libloading", "winapi", "pbni-codegen/syslib"]
 global_function = ["pbni-codegen/global_function"]
 nonvisualobject = ["pbni-codegen/nonvisualobject"]
 visualobject = ["winapi", "pbni-codegen/visualobject"]
-datetime = ["chrono"]
-decimal = ["rust_decimal"]
 vm = ["libloading"]
 symbol_map = []
 

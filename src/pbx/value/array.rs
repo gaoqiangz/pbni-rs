@@ -326,7 +326,6 @@ impl<'arr> Array<'arr> {
     /// # Panics
     ///
     /// 类型不匹配时会触发Panic
-    #[cfg(feature = "decimal")]
     pub fn get_item_dec(&self, dim: &[pblong]) -> Option<Decimal> {
         self.check_get(dim, ValueType::Decimal);
         unsafe { self.get_item_dec_unchecked(dim) }
@@ -337,7 +336,6 @@ impl<'arr> Array<'arr> {
     /// # Safety
     ///
     /// 索引越界或类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "decimal")]
     pub unsafe fn get_item_dec_unchecked(&self, dim: &[pblong]) -> Option<Decimal> {
         let mut is_null = Default::default();
         let v = ffi::pbsession_GetDecArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
@@ -482,7 +480,6 @@ impl<'arr> Array<'arr> {
     /// # Panics
     ///
     /// 类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn get_item_date(&self, dim: &[pblong]) -> Option<NaiveDate> {
         self.check_get(dim, ValueType::Date);
         unsafe { self.get_item_date_unchecked(dim) }
@@ -493,7 +490,6 @@ impl<'arr> Array<'arr> {
     /// # Safety
     ///
     /// 索引越界或类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn get_item_date_unchecked(&self, dim: &[pblong]) -> Option<NaiveDate> {
         let mut is_null = Default::default();
         let v = ffi::pbsession_GetDateArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
@@ -509,7 +505,6 @@ impl<'arr> Array<'arr> {
     /// # Panics
     ///
     /// 类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn get_item_time(&self, dim: &[pblong]) -> Option<NaiveTime> {
         self.check_get(dim, ValueType::Time);
         unsafe { self.get_item_time_unchecked(dim) }
@@ -520,7 +515,6 @@ impl<'arr> Array<'arr> {
     /// # Safety
     ///
     /// 索引越界或类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn get_item_time_unchecked(&self, dim: &[pblong]) -> Option<NaiveTime> {
         let mut is_null = Default::default();
         let v = ffi::pbsession_GetTimeArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
@@ -536,7 +530,6 @@ impl<'arr> Array<'arr> {
     /// # Panics
     ///
     /// 类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn get_item_datetime(&self, dim: &[pblong]) -> Option<NaiveDateTime> {
         self.check_get(dim, ValueType::DateTime);
         unsafe { self.get_item_datetime_unchecked(dim) }
@@ -547,7 +540,6 @@ impl<'arr> Array<'arr> {
     /// # Safety
     ///
     /// 索引越界或类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn get_item_datetime_unchecked(&self, dim: &[pblong]) -> Option<NaiveDateTime> {
         let mut is_null = Default::default();
         let v =
@@ -812,7 +804,6 @@ impl<'arr> Array<'arr> {
     /// # Panics
     ///
     /// 类型不匹配时会触发Panic
-    #[cfg(feature = "decimal")]
     pub fn set_item_dec(&mut self, dim: &[pblong], value: Decimal) -> Result<()> {
         self.check_set(dim, ValueType::Decimal);
         unsafe {
@@ -831,7 +822,6 @@ impl<'arr> Array<'arr> {
     /// # Safety
     ///
     /// 索引越界或类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "decimal")]
     pub unsafe fn set_item_dec_unchecked(&mut self, dim: &[pblong], value: Decimal) -> Result<()> {
         ffi::pbsession_SetDecArrayItem(
             self.session.as_ptr(),
@@ -902,7 +892,6 @@ impl<'arr> Array<'arr> {
     /// # Panics
     ///
     /// 类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn set_item_date(&mut self, dim: &[pblong], value: NaiveDate) -> Result<()> {
         self.check_set(dim, ValueType::Date);
         unsafe {
@@ -921,7 +910,6 @@ impl<'arr> Array<'arr> {
     /// # Safety
     ///
     /// 索引越界或类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn set_item_date_unchecked(&mut self, dim: &[pblong], value: NaiveDate) -> Result<()> {
         ffi::pbsession_SetDateArrayItem(
             self.session.as_ptr(),
@@ -937,7 +925,6 @@ impl<'arr> Array<'arr> {
     /// # Panics
     ///
     /// 类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn set_item_time(&mut self, dim: &[pblong], value: NaiveTime) -> Result<()> {
         self.check_set(dim, ValueType::Time);
         unsafe {
@@ -956,7 +943,6 @@ impl<'arr> Array<'arr> {
     /// # Safety
     ///
     /// 索引越界或类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn set_item_time_unchecked(&mut self, dim: &[pblong], value: NaiveTime) -> Result<()> {
         ffi::pbsession_SetTimeArrayItem(
             self.session.as_ptr(),
@@ -972,7 +958,6 @@ impl<'arr> Array<'arr> {
     /// # Panics
     ///
     /// 类型不匹配时会触发Panic
-    #[cfg(feature = "datetime")]
     pub fn set_item_datetime(&mut self, dim: &[pblong], value: NaiveDateTime) -> Result<()> {
         self.check_set(dim, ValueType::DateTime);
         unsafe {
@@ -991,7 +976,6 @@ impl<'arr> Array<'arr> {
     /// # Safety
     ///
     /// 索引越界或类型不兼容时可能会出现未定义行为
-    #[cfg(feature = "datetime")]
     pub unsafe fn set_item_datetime_unchecked(&mut self, dim: &[pblong], value: NaiveDateTime) -> Result<()> {
         ffi::pbsession_SetDateTimeArrayItem(
             self.session.as_ptr(),
@@ -1205,17 +1189,12 @@ arr_iter_item!(pbulong, ValueType::Ulong, get_item_ulong_unchecked);
 arr_iter_item!(pblonglong, ValueType::LongLong, get_item_longlong_unchecked);
 arr_iter_item!(pbreal, ValueType::Real, get_item_real_unchecked);
 arr_iter_item!(pbdouble, ValueType::Double, get_item_double_unchecked);
-#[cfg(feature = "decimal")]
 arr_iter_item!(Decimal, ValueType::Decimal, get_item_dec_unchecked);
-#[cfg(feature = "datetime")]
 arr_iter_item!(NaiveDate, ValueType::Date, get_item_date_unchecked);
-#[cfg(feature = "datetime")]
 arr_iter_item!(NaiveTime, ValueType::Time, get_item_time_unchecked);
-#[cfg(feature = "datetime")]
 arr_iter_item!(NaiveDateTime, ValueType::DateTime, get_item_datetime_unchecked);
 arr_iter_item!(bool, ValueType::Boolean, get_item_bool_unchecked);
 arr_iter_item!(pbbyte, ValueType::Byte, get_item_byte_unchecked);
-//arr_iter_item!(PBChar, ValueType::Char, get_item_char_unchecked);
 arr_iter_item!(&'arr PBStr, ValueType::String, get_item_str_unchecked);
 arr_iter_item!(PBString, ValueType::String, get_item_string_unchecked);
 arr_iter_item!(&'arr [u8], ValueType::Blob, get_item_blob_unchecked);
