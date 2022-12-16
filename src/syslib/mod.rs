@@ -26,7 +26,7 @@ pub unsafe extern "stdcall" fn test_syslib(obthis: POB_THIS, arg_cnt: i32) -> DW
     {
         let str_val = str_val.get_string().unwrap();
         let str_rv = format!(
-            "PBArgs: {}, {}, {}",
+            "{}, {}, {}",
             str_val.to_string_lossy(),
             dec_val.get_dec().unwrap(),
             long_val.get_long().unwrap()
