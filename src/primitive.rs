@@ -1,4 +1,4 @@
-use std::{borrow::Cow, ops::Deref};
+use std::{borrow::Cow, mem::transmute, ops::Deref, slice::from_raw_parts};
 use widestring::{WideCStr, WideCString, WideChar};
 
 #[repr(u16)]
@@ -30,10 +30,10 @@ pub enum ValueType {
 }
 
 impl From<pbuint> for ValueType {
-    fn from(v: pbuint) -> Self { unsafe { std::mem::transmute(v) } }
+    fn from(v: pbuint) -> Self { unsafe { transmute(v) } }
 }
 impl From<i32> for ValueType {
-    fn from(v: i32) -> Self { unsafe { std::mem::transmute(v as u16) } }
+    fn from(v: i32) -> Self { unsafe { transmute(v as u16) } }
 }
 
 pub type pbint = i16;
@@ -121,6 +121,26 @@ impl FromPBStrPtr for PBString {
     unsafe fn from_pbstr_unchecked(ptr: LPCTSTR) -> Self { PBStr::from_ptr_str(ptr).to_ucstring() }
 }
 
+/// 数组索引抽象
+pub trait AsArrayIndex {
+    fn as_array_index(&self) -> &[pblong];
+}
+
+impl AsArrayIndex for pblong {
+    #[inline]
+    fn as_array_index(&self) -> &[pblong] { unsafe { from_raw_parts(self as *const pblong, 1) } }
+}
+
+impl AsArrayIndex for &[pblong] {
+    #[inline]
+    fn as_array_index(&self) -> &[pblong] { self }
+}
+
+impl<const N: usize> AsArrayIndex for &[pblong; N] {
+    #[inline]
+    fn as_array_index(&self) -> &[pblong] { &self[..] }
+}
+
 /// 构造PB字符串`&'static PBStr`,编译时生成对应编码格式
 ///
 /// # Exmaples
@@ -137,7 +157,7 @@ macro_rules! pbstr {
     ($str:expr) => {{
         #[allow(unused_unsafe)]
         unsafe {
-            ::core::mem::transmute::<_, &$crate::primitive::PBStr>(
+            ::std::mem::transmute::<_, &$crate::primitive::PBStr>(
                 $crate::primitive::__private::const_utf16::encode_null_terminated!($str) as &[u16]
             )
         }

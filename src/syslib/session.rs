@@ -46,9 +46,9 @@ impl Session {
     }
 
     /// 终止`Session`
-    pub fn terminate(&self) {
+    pub fn halt(&self, close_event: bool) {
         unsafe {
-            API.ob_mgr_terminate(self.ptr);
+            API.ot_halt(self.ptr, close_event as BOOL);
         }
     }
 
@@ -607,7 +607,7 @@ impl Session {
         assert!(!bin.is_empty());
         unsafe {
             let blb = API.ob_alloc_blob(self.ptr, bin.len() as ULONG);
-            ptr::copy(bin.as_ptr(), blb as *mut u8, bin.len());
+            ptr::copy_nonoverlapping(bin.as_ptr(), blb as *mut u8, bin.len());
             blb
         }
     }
@@ -718,7 +718,7 @@ impl Session {
                 } as u128;
                 let num = num.to_le_bytes();
                 let pbdec = &mut *pbdec;
-                ptr::copy(
+                ptr::copy_nonoverlapping(
                     num.as_ptr(),
                     ptr::addr_of_mut!(pbdec.v) as *mut u8,
                     DEC_ARRAY_LEN as usize * mem::size_of::<USHORT>()
@@ -741,7 +741,7 @@ impl Session {
             let neg = (pbdec.flags & (1 << DEC_SIGN_SHIFT)) != 0;
             let scale = ((pbdec.flags & 0x1f00) >> DEC_PRECISION_SHIFT) as u32;
             let mut buf: [u8; mem::size_of::<u128>()] = mem::zeroed();
-            ptr::copy(
+            ptr::copy_nonoverlapping(
                 ptr::addr_of!(pbdec.v) as *const u8,
                 buf.as_mut_ptr(),
                 DEC_ARRAY_LEN as usize * mem::size_of::<USHORT>()

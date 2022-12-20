@@ -1132,7 +1132,7 @@ impl<'val> Value<'val> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_value(&mut self, src: &Value) {
+    pub unsafe fn set_value_unchecked(&mut self, src: &Value) {
         ffi::pbsession_SetValue(self.session.as_ptr(), self.ptr, src.ptr)
     }
 
@@ -1493,13 +1493,13 @@ impl ToValue for Array<'_> {
 }
 impl ToValue for Value<'_> {
     fn to_value(self, val: &mut Value) -> Result<()> {
-        unsafe { val.set_value(&self) };
+        unsafe { val.set_value_unchecked(&self) };
         Ok(())
     }
 }
 impl ToValue for OwnedValue {
     fn to_value(self, val: &mut Value) -> Result<()> {
-        unsafe { val.set_value(&self.value()) };
+        unsafe { val.set_value_unchecked(&self.value()) };
         Ok(())
     }
 }

@@ -112,7 +112,7 @@ impl<'arr> Array<'arr> {
     ///
     /// # Panics
     ///
-    /// 类型不匹配时会触发Panic
+    /// 索引越界或类型不匹配时会触发Panic
     ///
     /// # Examples
     ///
@@ -130,234 +130,43 @@ impl<'arr> Array<'arr> {
     }
 
     /// 获取元素类型
-    pub fn get_item_type(&self, dim: &[pblong]) -> ValueType {
+    ///
+    /// # Panics
+    ///
+    /// 索引越界时会触发Panic
+    pub fn get_item_type(&self, dim: impl AsArrayIndex) -> ValueType {
+        let dim = dim.as_array_index();
         self.check_get_index(dim);
         unsafe { ffi::pbsession_GetArrayItemType(self.session.as_ptr(), self.ptr, dim.as_ptr()) }
     }
 
     /// 判断元素是否为对象类型
-    pub fn is_item_object(&self, _dim: &[pblong]) -> bool { self.is_object }
+    pub fn is_item_object(&self, _dim: impl AsArrayIndex) -> bool { self.is_object }
 
     /// 判断元素是否为NULL
-    pub fn is_item_null(&self, dim: &[pblong]) -> bool {
+    ///
+    /// # Panics
+    ///
+    /// 索引越界时会触发Panic
+    pub fn is_item_null(&self, dim: impl AsArrayIndex) -> bool {
+        let dim = dim.as_array_index();
         self.check_get_index(dim);
         unsafe { ffi::pbsession_IsArrayItemNull(self.session.as_ptr(), self.ptr, dim.as_ptr()).into() }
-    }
-
-    /// 获取`int`类型元素值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_int(&self, dim: &[pblong]) -> Option<pbint> {
-        self.check_get(dim, ValueType::Int);
-        unsafe { self.get_item_int_unchecked(dim) }
-    }
-
-    /// 获取`int`类型元素值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_int_unchecked(&self, dim: &[pblong]) -> Option<pbint> {
-        let mut is_null = Default::default();
-        let v = ffi::pbsession_GetIntArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(v)
-        }
-    }
-
-    /// 获取`uint`类型元素值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_uint(&self, dim: &[pblong]) -> Option<pbuint> {
-        self.check_get(dim, ValueType::Uint);
-        unsafe { self.get_item_uint_unchecked(dim) }
-    }
-
-    /// 获取`uint`类型元素值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_uint_unchecked(&self, dim: &[pblong]) -> Option<pbuint> {
-        let mut is_null = Default::default();
-        let v = ffi::pbsession_GetUintArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(v)
-        }
-    }
-
-    /// 获取`long`类型元素值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_long(&self, dim: &[pblong]) -> Option<pblong> {
-        self.check_get(dim, ValueType::Long);
-        unsafe { self.get_item_long_unchecked(dim) }
-    }
-
-    /// 获取`long`类型元素值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_long_unchecked(&self, dim: &[pblong]) -> Option<pblong> {
-        let mut is_null = Default::default();
-        let v = ffi::pbsession_GetLongArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(v)
-        }
-    }
-
-    /// 获取`ulong`类型元素值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_ulong(&self, dim: &[pblong]) -> Option<pbulong> {
-        self.check_get(dim, ValueType::Ulong);
-        unsafe { self.get_item_ulong_unchecked(dim) }
-    }
-
-    /// 获取`ulong`类型元素值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_ulong_unchecked(&self, dim: &[pblong]) -> Option<pbulong> {
-        let mut is_null = Default::default();
-        let v = ffi::pbsession_GetUlongArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(v)
-        }
-    }
-
-    /// 获取`longlong`类型元素值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_longlong(&self, dim: &[pblong]) -> Option<pblonglong> {
-        self.check_get(dim, ValueType::LongLong);
-        unsafe { self.get_item_longlong_unchecked(dim) }
-    }
-
-    /// 获取`longlong`类型元素值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_longlong_unchecked(&self, dim: &[pblong]) -> Option<pblonglong> {
-        let mut is_null = Default::default();
-        let v =
-            ffi::pbsession_GetLongLongArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(v)
-        }
-    }
-
-    /// 获取`real`类型元素值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_real(&self, dim: &[pblong]) -> Option<pbreal> {
-        self.check_get(dim, ValueType::Real);
-        unsafe { self.get_item_real_unchecked(dim) }
-    }
-
-    /// 获取`real`类型元素值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_real_unchecked(&self, dim: &[pblong]) -> Option<pbreal> {
-        let mut is_null = Default::default();
-        let v = ffi::pbsession_GetRealArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(v)
-        }
-    }
-
-    /// 获取`double`类型元素值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_double(&self, dim: &[pblong]) -> Option<pbdouble> {
-        self.check_get(dim, ValueType::Double);
-        unsafe { self.get_item_double_unchecked(dim) }
-    }
-
-    /// 获取`double`类型元素值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_double_unchecked(&self, dim: &[pblong]) -> Option<pbdouble> {
-        let mut is_null = Default::default();
-        let v =
-            ffi::pbsession_GetDoubleArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(v)
-        }
-    }
-
-    /// 获取`decimal`类型元素值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_dec(&self, dim: &[pblong]) -> Option<Decimal> {
-        self.check_get(dim, ValueType::Decimal);
-        unsafe { self.get_item_dec_unchecked(dim) }
-    }
-
-    /// 获取`decimal`类型元素值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_dec_unchecked(&self, dim: &[pblong]) -> Option<Decimal> {
-        let mut is_null = Default::default();
-        let v = ffi::pbsession_GetDecArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(self.session.get_dec_unchecked(v))
-        }
     }
 
     /// 获取`string`类型元素值
     ///
     /// # Panics
     ///
-    /// 类型不匹配时会触发Panic
+    /// 索引越界或类型不匹配时会触发Panic
     ///
     /// # Safety
     ///
     /// 引用类型不能保证始终有效,详情请阅读[内存安全]说明
     ///
     /// [内存安全]: ./index.html#内存安全
-    pub unsafe fn get_item_str(&self, dim: &[pblong]) -> Option<&'arr PBStr> {
+    pub unsafe fn get_item_str(&self, dim: impl AsArrayIndex) -> Option<&'arr PBStr> {
+        let dim = dim.as_array_index();
         self.check_get(dim, ValueType::String);
         self.get_item_str_unchecked(dim)
     }
@@ -370,7 +179,8 @@ impl<'arr> Array<'arr> {
     /// - 引用类型不能保证始终有效,详情请阅读[内存安全]说明
     ///
     /// [内存安全]: ./index.html#内存安全
-    pub unsafe fn get_item_str_unchecked(&self, dim: &[pblong]) -> Option<&'arr PBStr> {
+    pub unsafe fn get_item_str_unchecked(&self, dim: impl AsArrayIndex) -> Option<&'arr PBStr> {
+        let dim = dim.as_array_index();
         let mut is_null = Default::default();
         let v =
             ffi::pbsession_GetStringArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
@@ -385,8 +195,9 @@ impl<'arr> Array<'arr> {
     ///
     /// # Panics
     ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_string(&self, dim: &[pblong]) -> Option<PBString> {
+    /// 索引越界或类型不匹配时会触发Panic
+    pub fn get_item_string(&self, dim: impl AsArrayIndex) -> Option<PBString> {
+        let dim = dim.as_array_index();
         self.check_get(dim, ValueType::String);
         unsafe { self.get_item_string_unchecked(dim) }
     }
@@ -396,207 +207,24 @@ impl<'arr> Array<'arr> {
     /// # Safety
     ///
     /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_string_unchecked(&self, dim: &[pblong]) -> Option<PBString> {
+    pub unsafe fn get_item_string_unchecked(&self, dim: impl AsArrayIndex) -> Option<PBString> {
+        let dim = dim.as_array_index();
         self.get_item_str_unchecked(dim).map(|v| v.to_ucstring())
-    }
-
-    /// 获取`boolean`类型元素值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_bool(&self, dim: &[pblong]) -> Option<bool> {
-        self.check_get(dim, ValueType::Boolean);
-        unsafe { self.get_item_bool_unchecked(dim) }
-    }
-
-    /// 获取`boolean`类型元素值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_bool_unchecked(&self, dim: &[pblong]) -> Option<bool> {
-        let mut is_null = Default::default();
-        let v = ffi::pbsession_GetBoolArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(v.into())
-        }
-    }
-
-    /// 获取`char`类型元素值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_char(&self, dim: &[pblong]) -> Option<PBChar> {
-        self.check_get(dim, ValueType::Char);
-        unsafe { self.get_item_char_unchecked(dim) }
-    }
-
-    /// 获取`char`类型元素值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_char_unchecked(&self, dim: &[pblong]) -> Option<PBChar> {
-        let mut is_null = Default::default();
-        let v = ffi::pbsession_GetCharArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(v)
-        }
-    }
-
-    /// 获取`byte`类型元素值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_byte(&self, dim: &[pblong]) -> Option<pbbyte> {
-        self.check_get(dim, ValueType::Byte);
-        unsafe { self.get_item_byte_unchecked(dim) }
-    }
-
-    /// 获取`byte`类型元素值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_byte_unchecked(&self, dim: &[pblong]) -> Option<pbbyte> {
-        let mut is_null = Default::default();
-        let v = ffi::pbsession_GetByteArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(v)
-        }
-    }
-
-    /// 获取`byte`类型元素值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_date(&self, dim: &[pblong]) -> Option<NaiveDate> {
-        self.check_get(dim, ValueType::Date);
-        unsafe { self.get_item_date_unchecked(dim) }
-    }
-
-    /// 获取`date`类型元素值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_date_unchecked(&self, dim: &[pblong]) -> Option<NaiveDate> {
-        let mut is_null = Default::default();
-        let v = ffi::pbsession_GetDateArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(self.session.get_date_unchecked(v))
-        }
-    }
-
-    /// 获取`time`类型元素值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_time(&self, dim: &[pblong]) -> Option<NaiveTime> {
-        self.check_get(dim, ValueType::Time);
-        unsafe { self.get_item_time_unchecked(dim) }
-    }
-
-    /// 获取`time`类型元素值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_time_unchecked(&self, dim: &[pblong]) -> Option<NaiveTime> {
-        let mut is_null = Default::default();
-        let v = ffi::pbsession_GetTimeArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(self.session.get_time_unchecked(v))
-        }
-    }
-
-    /// 获取`datetime`类型元素值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_item_datetime(&self, dim: &[pblong]) -> Option<NaiveDateTime> {
-        self.check_get(dim, ValueType::DateTime);
-        unsafe { self.get_item_datetime_unchecked(dim) }
-    }
-
-    /// 获取`datetime`类型元素值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_datetime_unchecked(&self, dim: &[pblong]) -> Option<NaiveDateTime> {
-        let mut is_null = Default::default();
-        let v =
-            ffi::pbsession_GetDateTimeArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(self.session.get_datetime_unchecked(v))
-        }
-    }
-
-    /// 获取`blob`类型元素值的引用
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    ///
-    /// # Safety
-    ///
-    /// 引用类型不能保证始终有效,详情请阅读[内存安全]说明
-    ///
-    /// [内存安全]: ./index.html#内存安全
-    pub fn get_item_blob(&self, dim: &[pblong]) -> Option<&'arr [u8]> {
-        self.check_get(dim, ValueType::Blob);
-        unsafe { self.get_item_blob_unchecked(dim) }
-    }
-
-    /// 获取`blob`类型元素值的引用,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// - 索引越界或类型不兼容时可能会出现未定义行为
-    /// - 引用类型不能保证始终有效,详情请阅读[内存安全]说明
-    ///
-    /// [内存安全]: ./index.html#内存安全
-    pub unsafe fn get_item_blob_unchecked(&self, dim: &[pblong]) -> Option<&'arr [u8]> {
-        let mut is_null = Default::default();
-        let v = ffi::pbsession_GetBlobArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(self.session.get_blob_unchecked(v))
-        }
     }
 
     /// 获取对象类型元素值的引用
     ///
     /// # Panics
     ///
-    /// 类型不匹配时会触发Panic
+    /// 索引越界或类型不匹配时会触发Panic
     ///
     /// # Safety
     ///
     /// 引用类型不能保证始终有效,详情请阅读[内存安全]说明
     ///
     /// [内存安全]: ./index.html#内存安全
-    pub fn get_item_object(&self, dim: &[pblong]) -> Option<Object<'arr>> {
+    pub fn get_item_object(&self, dim: impl AsArrayIndex) -> Option<Object<'arr>> {
+        let dim = dim.as_array_index();
         assert!(self.is_item_object(dim));
         unsafe { self.get_item_object_unchecked(dim) }
     }
@@ -609,7 +237,8 @@ impl<'arr> Array<'arr> {
     /// - 引用类型不能保证始终有效,详情请阅读[内存安全]说明
     ///
     /// [内存安全]: ./index.html#内存安全
-    pub unsafe fn get_item_object_unchecked(&self, dim: &[pblong]) -> Option<Object<'arr>> {
+    pub unsafe fn get_item_object_unchecked(&self, dim: impl AsArrayIndex) -> Option<Object<'arr>> {
+        let dim = dim.as_array_index();
         let mut is_null = Default::default();
         let v =
             ffi::pbsession_GetObjectArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
@@ -624,14 +253,15 @@ impl<'arr> Array<'arr> {
     ///
     /// # Panics
     ///
-    /// 类型不匹配时会触发Panic
+    /// 索引越界时会触发Panic
     ///
     /// # Safety
     ///
     /// 引用类型不能保证始终有效,详情请阅读[内存安全]说明
     ///
     /// [内存安全]: ./index.html#内存安全
-    pub fn get_item_any(&self, dim: &[pblong]) -> Option<Value<'arr>> {
+    pub fn get_item_any(&self, dim: impl AsArrayIndex) -> Option<Value<'arr>> {
+        let dim = dim.as_array_index();
         self.check_get(dim, ValueType::Any);
         unsafe { self.get_item_any_unchecked(dim) }
     }
@@ -640,11 +270,12 @@ impl<'arr> Array<'arr> {
     ///
     /// # Safety
     ///
-    /// - 索引越界或类型不兼容时可能会出现未定义行为
+    /// - 索引越界时可能会出现未定义行为
     /// - 引用类型不能保证始终有效,详情请阅读[内存安全]说明
     ///
     /// [内存安全]: ./index.html#内存安全
-    pub unsafe fn get_item_any_unchecked(&self, dim: &[pblong]) -> Option<Value<'arr>> {
+    pub unsafe fn get_item_any_unchecked(&self, dim: impl AsArrayIndex) -> Option<Value<'arr>> {
+        let dim = dim.as_array_index();
         let mut is_null = Default::default();
         let v = ffi::pbsession_GetPBAnyArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
         if is_null == true {
@@ -654,200 +285,15 @@ impl<'arr> Array<'arr> {
         }
     }
 
-    /// 设置`int`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_int(&mut self, dim: &[pblong], value: pbint) -> Result<()> {
-        self.check_set(dim, ValueType::Int);
-        unsafe { ffi::pbsession_SetIntArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into() }
-    }
-
-    /// 设置`int`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_int_unchecked(&mut self, dim: &[pblong], value: pbint) -> Result<()> {
-        ffi::pbsession_SetIntArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-    }
-
-    /// 设置`uint`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_uint(&mut self, dim: &[pblong], value: pbuint) -> Result<()> {
-        self.check_set(dim, ValueType::Uint);
-        unsafe {
-            ffi::pbsession_SetUintArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-        }
-    }
-
-    /// 设置`uint`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_uint_unchecked(&mut self, dim: &[pblong], value: pbuint) -> Result<()> {
-        ffi::pbsession_SetUintArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-    }
-
-    /// 设置`long`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_long(&mut self, dim: &[pblong], value: pblong) -> Result<()> {
-        self.check_set(dim, ValueType::Long);
-        unsafe {
-            ffi::pbsession_SetLongArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-        }
-    }
-
-    /// 设置`long`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_long_unchecked(&mut self, dim: &[pblong], value: pblong) -> Result<()> {
-        ffi::pbsession_SetLongArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-    }
-
-    /// 设置`ulong`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_ulong(&mut self, dim: &[pblong], value: pbulong) -> Result<()> {
-        self.check_set(dim, ValueType::Ulong);
-        unsafe {
-            ffi::pbsession_SetUlongArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-        }
-    }
-
-    /// 设置`ulong`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_ulong_unchecked(&mut self, dim: &[pblong], value: pbulong) -> Result<()> {
-        ffi::pbsession_SetUlongArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-    }
-
-    /// 设置`longlong`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_longlong(&mut self, dim: &[pblong], value: pblonglong) -> Result<()> {
-        self.check_set(dim, ValueType::LongLong);
-        unsafe {
-            ffi::pbsession_SetLongLongArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-        }
-    }
-
-    /// 设置`longlong`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_longlong_unchecked(&mut self, dim: &[pblong], value: pblonglong) -> Result<()> {
-        ffi::pbsession_SetLongLongArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-    }
-
-    /// 设置`real`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_real(&mut self, dim: &[pblong], value: pbreal) -> Result<()> {
-        self.check_set(dim, ValueType::Real);
-        unsafe {
-            ffi::pbsession_SetRealArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-        }
-    }
-
-    /// 设置`real`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_real_unchecked(&mut self, dim: &[pblong], value: pbreal) -> Result<()> {
-        ffi::pbsession_SetRealArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-    }
-
-    /// 设置`double`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_double(&mut self, dim: &[pblong], value: pbdouble) -> Result<()> {
-        self.check_set(dim, ValueType::Double);
-        unsafe {
-            ffi::pbsession_SetDoubleArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-        }
-    }
-
-    /// 设置`double`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_double_unchecked(&mut self, dim: &[pblong], value: pbdouble) -> Result<()> {
-        ffi::pbsession_SetDoubleArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-    }
-
-    /// 设置`decimal`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_dec(&mut self, dim: &[pblong], value: Decimal) -> Result<()> {
-        self.check_set(dim, ValueType::Decimal);
-        unsafe {
-            ffi::pbsession_SetDecArrayItem(
-                self.session.as_ptr(),
-                self.ptr,
-                dim.as_ptr(),
-                self.session.new_pbdec(value)
-            )
-            .into()
-        }
-    }
-
-    /// 设置`decimal`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_dec_unchecked(&mut self, dim: &[pblong], value: Decimal) -> Result<()> {
-        ffi::pbsession_SetDecArrayItem(
-            self.session.as_ptr(),
-            self.ptr,
-            dim.as_ptr(),
-            self.session.new_pbdec(value)
-        )
-        .into()
-    }
-
     /// 设置`string`类型元素的值
     ///
     /// # Panics
     ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_str(&mut self, dim: &[pblong], value: impl AsPBStr) -> Result<()> {
+    /// 索引越界或类型不匹配时会触发Panic
+    pub fn set_item_str(&mut self, dim: impl AsArrayIndex, value: impl AsPBStr) -> Result<()> {
+        let dim = dim.as_array_index();
         self.check_set(dim, ValueType::String);
-        unsafe {
-            ffi::pbsession_SetStringArrayItem(
-                self.session.as_ptr(),
-                self.ptr,
-                dim.as_ptr(),
-                value.as_pbstr().as_ptr()
-            )
-            .into()
-        }
+        unsafe { self.set_item_str_unchecked(dim, value) }
     }
 
     /// 设置`string`类型元素的值,不检查类型
@@ -855,7 +301,12 @@ impl<'arr> Array<'arr> {
     /// # Safety
     ///
     /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_str_unchecked(&mut self, dim: &[pblong], value: impl AsPBStr) -> Result<()> {
+    pub unsafe fn set_item_str_unchecked(
+        &mut self,
+        dim: impl AsArrayIndex,
+        value: impl AsPBStr
+    ) -> Result<()> {
+        let dim = dim.as_array_index();
         ffi::pbsession_SetStringArrayItem(
             self.session.as_ptr(),
             self.ptr,
@@ -865,204 +316,13 @@ impl<'arr> Array<'arr> {
         .into()
     }
 
-    /// 设置`boolean`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_bool(&mut self, dim: &[pblong], value: bool) -> Result<()> {
-        self.check_set(dim, ValueType::Boolean);
-        unsafe {
-            ffi::pbsession_SetBoolArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value.into())
-                .into()
-        }
-    }
-
-    /// 设置`boolean`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_bool_unchecked(&mut self, dim: &[pblong], value: bool) -> Result<()> {
-        ffi::pbsession_SetBoolArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value.into()).into()
-    }
-
-    /// 设置`date`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_date(&mut self, dim: &[pblong], value: NaiveDate) -> Result<()> {
-        self.check_set(dim, ValueType::Date);
-        unsafe {
-            ffi::pbsession_SetDateArrayItem(
-                self.session.as_ptr(),
-                self.ptr,
-                dim.as_ptr(),
-                self.session.new_pbdate(value)
-            )
-            .into()
-        }
-    }
-
-    /// 设置`date`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_date_unchecked(&mut self, dim: &[pblong], value: NaiveDate) -> Result<()> {
-        ffi::pbsession_SetDateArrayItem(
-            self.session.as_ptr(),
-            self.ptr,
-            dim.as_ptr(),
-            self.session.new_pbdate(value)
-        )
-        .into()
-    }
-
-    /// 设置`time`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_time(&mut self, dim: &[pblong], value: NaiveTime) -> Result<()> {
-        self.check_set(dim, ValueType::Time);
-        unsafe {
-            ffi::pbsession_SetTimeArrayItem(
-                self.session.as_ptr(),
-                self.ptr,
-                dim.as_ptr(),
-                self.session.new_pbtime(value)
-            )
-            .into()
-        }
-    }
-
-    /// 设置`time`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_time_unchecked(&mut self, dim: &[pblong], value: NaiveTime) -> Result<()> {
-        ffi::pbsession_SetTimeArrayItem(
-            self.session.as_ptr(),
-            self.ptr,
-            dim.as_ptr(),
-            self.session.new_pbtime(value)
-        )
-        .into()
-    }
-
-    /// 设置`datetime`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_datetime(&mut self, dim: &[pblong], value: NaiveDateTime) -> Result<()> {
-        self.check_set(dim, ValueType::DateTime);
-        unsafe {
-            ffi::pbsession_SetDateTimeArrayItem(
-                self.session.as_ptr(),
-                self.ptr,
-                dim.as_ptr(),
-                self.session.new_pbdatetime(value)
-            )
-            .into()
-        }
-    }
-
-    /// 设置`datetime`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_datetime_unchecked(&mut self, dim: &[pblong], value: NaiveDateTime) -> Result<()> {
-        ffi::pbsession_SetDateTimeArrayItem(
-            self.session.as_ptr(),
-            self.ptr,
-            dim.as_ptr(),
-            self.session.new_pbdatetime(value)
-        )
-        .into()
-    }
-
-    /// 设置`char`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_char(&mut self, dim: &[pblong], value: PBChar) -> Result<()> {
-        self.check_set(dim, ValueType::Char);
-        unsafe {
-            ffi::pbsession_SetCharArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-        }
-    }
-
-    /// 设置`char`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_char_unchecked(&mut self, dim: &[pblong], value: PBChar) -> Result<()> {
-        ffi::pbsession_SetCharArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-    }
-
-    /// 设置`byte`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_byte(&mut self, dim: &[pblong], value: pbbyte) -> Result<()> {
-        self.check_set(dim, ValueType::Byte);
-        unsafe {
-            ffi::pbsession_SetByteArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-        }
-    }
-
-    /// 设置`byte`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_byte_unchecked(&mut self, dim: &[pblong], value: pbbyte) -> Result<()> {
-        ffi::pbsession_SetByteArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value).into()
-    }
-
-    /// 设置`blob`类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_blob(&mut self, dim: &[pblong], value: impl AsRef<[u8]>) -> Result<()> {
-        self.check_set(dim, ValueType::Blob);
-        unsafe { self.set_item_blob_unchecked(dim, value) }
-    }
-
-    /// 设置`blob`类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_blob_unchecked(&mut self, dim: &[pblong], value: impl AsRef<[u8]>) -> Result<()> {
-        let value = value.as_ref();
-        if value.is_empty() {
-            return Err(PBXRESULT::E_OUTOF_MEMORY);
-        }
-        ffi::pbsession_SetBlobArrayItem(
-            self.session.as_ptr(),
-            self.ptr,
-            dim.as_ptr(),
-            self.session.new_pbblob(value)
-        )
-        .into()
-    }
-
     /// 设置对象类型元素的值
     ///
     /// # Panics
     ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_object(&mut self, dim: &[pblong], value: &Object) -> Result<()> {
+    /// 索引越界或类型不匹配时会触发Panic
+    pub fn set_item_object(&mut self, dim: impl AsArrayIndex, value: &Object) -> Result<()> {
+        let dim = dim.as_array_index();
         assert!(self.is_item_object(dim) || self.info.value_type() == ValueType::Any);
         self.check_set_index(dim);
         unsafe { self.set_item_object_unchecked(dim, value) }
@@ -1073,7 +333,8 @@ impl<'arr> Array<'arr> {
     /// # Safety
     ///
     /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_object_unchecked(&mut self, dim: &[pblong], value: &Object) -> Result<()> {
+    pub unsafe fn set_item_object_unchecked(&mut self, dim: impl AsArrayIndex, value: &Object) -> Result<()> {
+        let dim = dim.as_array_index();
         ffi::pbsession_SetObjectArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value.as_ptr())
             .into()
     }
@@ -1082,9 +343,10 @@ impl<'arr> Array<'arr> {
     ///
     /// # Panics
     ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_item_any(&mut self, dim: &[pblong], value: Value) {
-        self.check_set(dim, ValueType::Any);
+    /// 索引越界或类型不兼容时会触发Panic
+    pub fn set_item_any(&mut self, dim: impl AsArrayIndex, value: Value) {
+        let dim = dim.as_array_index();
+        self.check_set(dim, value.get_type());
         unsafe {
             ffi::pbsession_SetArrayItemValue(self.session.as_ptr(), self.ptr, dim.as_ptr(), value.as_ptr())
         }
@@ -1095,12 +357,18 @@ impl<'arr> Array<'arr> {
     /// # Safety
     ///
     /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_any_unchecked(&mut self, dim: &[pblong], value: Value) {
+    pub unsafe fn set_item_any_unchecked(&mut self, dim: impl AsArrayIndex, value: Value) {
+        let dim = dim.as_array_index();
         ffi::pbsession_SetArrayItemValue(self.session.as_ptr(), self.ptr, dim.as_ptr(), value.as_ptr())
     }
 
     /// 设置元素为NULL
-    pub fn set_item_to_null(&mut self, dim: &[pblong]) {
+    ///
+    /// # Panics
+    ///
+    /// 索引越界时会触发Panic
+    pub fn set_item_to_null(&mut self, dim: impl AsArrayIndex) {
+        let dim = dim.as_array_index();
         self.check_set_index(dim);
         unsafe {
             ffi::pbsession_SetArrayItemToNull(self.session.as_ptr(), self.ptr, dim.as_ptr());
@@ -1108,13 +376,277 @@ impl<'arr> Array<'arr> {
     }
 
     /// 拷贝元素的值
-    pub fn acquire_item_value(&mut self, dim: &[pblong]) -> OwnedValue {
+    pub fn acquire_item_value(&mut self, dim: impl AsArrayIndex) -> OwnedValue {
+        let dim = dim.as_array_index();
         unsafe {
             let new_value =
                 ffi::pbsession_AcquireArrayItemValue(self.session.as_ptr(), self.ptr, dim.as_ptr());
             OwnedValue::from_ptr(new_value, self.session.clone())
         }
     }
+}
+
+macro_rules! impl_array {
+    (@simple
+        $type: ty, $type_check: expr, $type_doc: literal,
+        $getter: ident, $getter_unchecked: ident, $getter_ffi: ident,
+        $setter: ident, $setter_unchecked: ident, $setter_ffi: ident
+    ) => {
+        impl_array!(
+            @simple_getter
+            $type, $type_check, $type_doc,
+            $getter, $getter_unchecked, $getter_ffi
+        );
+        impl_array!(
+            @simple_setter
+            $type, $type_check, $type_doc,
+            $setter, $setter_unchecked, $setter_ffi
+        );
+    };
+    (@simple_getter
+        $type: ty, $type_check: expr, $type_doc: literal,
+        $getter: ident, $getter_unchecked: ident, $getter_ffi: ident
+    ) => {
+        #[doc = "获取"]
+        #[doc = $type_doc]
+        /// 类型元素值
+        ///
+        /// # Panics
+        ///
+        /// 索引越界或类型不匹配时会触发Panic
+        pub fn $getter(&self, dim: impl AsArrayIndex) -> Option<$type> {
+            let dim = dim.as_array_index();
+            self.check_get(dim, $type_check);
+            unsafe { self.$getter_unchecked(dim) }
+        }
+
+        #[doc = "获取"]
+        #[doc = $type_doc]
+        /// 类型元素值,不检查类型
+        ///
+        /// # Safety
+        ///
+        /// 索引越界或类型不兼容时可能会出现未定义行为
+        pub unsafe fn $getter_unchecked(&self, dim: impl AsArrayIndex) -> Option<$type> {
+            let dim = dim.as_array_index();
+            let mut is_null = Default::default();
+            let v = ffi::$getter_ffi(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
+            if is_null == true {
+                None
+            } else {
+                Some(v.into())
+            }
+        }
+    };
+    (@simple_setter
+        $type: ty, $type_check: expr, $type_doc: literal,
+        $setter: ident, $setter_unchecked: ident, $setter_ffi: ident
+    ) => {
+        #[doc = "设置"]
+        #[doc = $type_doc]
+        /// 类型元素的值
+        ///
+        /// # Panics
+        ///
+        /// 索引越界或类型不匹配时会触发Panic
+        pub fn $setter(&mut self, dim: impl AsArrayIndex, value: $type) -> Result<()> {
+            let dim = dim.as_array_index();
+            self.check_set(dim, $type_check);
+            unsafe { self.$setter_unchecked(dim, value) }
+        }
+
+        #[doc = "设置"]
+        #[doc = $type_doc]
+        /// 类型元素的值,不检查类型
+        ///
+        /// # Safety
+        ///
+        /// 索引越界或类型不兼容时可能会出现未定义行为
+        pub unsafe fn $setter_unchecked(&mut self, dim: impl AsArrayIndex, value: $type) -> Result<()> {
+            let dim = dim.as_array_index();
+            ffi::$setter_ffi(self.session.as_ptr(), self.ptr, dim.as_ptr(), value.into()).into()
+        }
+    };
+
+    (@complex
+        $type: ty, $type_check: expr, $type_doc: literal,
+        $getter: ident, $getter_unchecked: ident, $getter_ffi: ident, $getter_acc: ident,
+        $setter: ident, $setter_unchecked: ident, $setter_ffi: ident, $setter_new: ident
+    ) => {
+        impl_array!(
+            @complex_getter
+            $type, $type_check, $type_doc,
+            $getter, $getter_unchecked, $getter_ffi, $getter_acc
+        );
+        impl_array!(
+            @complex_setter
+            $type, $type_check, $type_doc,
+            $setter, $setter_unchecked, $setter_ffi, $setter_new
+        );
+    };
+    (@complex_getter
+        $type: ty, $type_check: expr, $type_doc: literal,
+        $getter: ident, $getter_unchecked: ident, $getter_ffi: ident, $getter_acc: ident
+    ) => {
+        #[doc = "获取"]
+        #[doc = $type_doc]
+        /// 类型元素值
+        ///
+        /// # Panics
+        ///
+        /// 索引越界或类型不匹配时会触发Panic
+        pub fn $getter(&self, dim: impl AsArrayIndex) -> Option<$type> {
+            let dim = dim.as_array_index();
+            self.check_get(dim, $type_check);
+            unsafe { self.$getter_unchecked(dim) }
+        }
+
+        #[doc = "获取"]
+        #[doc = $type_doc]
+        /// 类型元素值,不检查类型
+        ///
+        /// # Safety
+        ///
+        /// 索引越界或类型不兼容时可能会出现未定义行为
+        pub unsafe fn $getter_unchecked(&self, dim: impl AsArrayIndex) -> Option<$type> {
+            let dim = dim.as_array_index();
+            let mut is_null = Default::default();
+            let v = ffi::$getter_ffi(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
+            if is_null == true {
+                None
+            } else {
+                Some(self.session.$getter_acc(v))
+            }
+        }
+    };
+    (@complex_setter
+        $type: ty, $type_check: expr, $type_doc: literal,
+        $setter: ident, $setter_unchecked: ident, $setter_ffi: ident, $setter_new: ident
+    ) => {
+        #[doc = "设置"]
+        #[doc = $type_doc]
+        /// 类型元素的值
+        ///
+        /// # Panics
+        ///
+        /// 索引越界或类型不匹配时会触发Panic
+        pub fn $setter(&mut self, dim: impl AsArrayIndex, value: $type) -> Result<()> {
+            let dim = dim.as_array_index();
+            self.check_set(dim, $type_check);
+            unsafe { self.$setter_unchecked(dim, value) }
+        }
+
+        #[doc = "设置"]
+        #[doc = $type_doc]
+        /// 类型元素的值,不检查类型
+        ///
+        /// # Safety
+        ///
+        /// 索引越界或类型不兼容时可能会出现未定义行为
+        pub unsafe fn $setter_unchecked(&mut self, dim: impl AsArrayIndex, value: $type) -> Result<()> {
+            let dim = dim.as_array_index();
+            ffi::$setter_ffi(self.session.as_ptr(), self.ptr, dim.as_ptr(), self.session.$setter_new(value))
+                .into()
+        }
+    };
+}
+
+impl<'arr> Array<'arr> {
+    impl_array!(
+        @simple
+        pbint, ValueType::Int, "int",
+        get_item_int, get_item_int_unchecked, pbsession_GetIntArrayItem,
+        set_item_int, set_item_int_unchecked, pbsession_SetIntArrayItem
+    );
+    impl_array!(
+        @simple
+        pbuint, ValueType::Uint, "uint",
+        get_item_uint, get_item_uint_unchecked, pbsession_GetUintArrayItem,
+        set_item_uint, set_item_uint_unchecked, pbsession_SetUintArrayItem
+    );
+    impl_array!(
+        @simple
+        pblong, ValueType::Long, "long",
+        get_item_long, get_item_long_unchecked, pbsession_GetLongArrayItem,
+        set_item_long, set_item_long_unchecked, pbsession_SetLongArrayItem
+    );
+    impl_array!(
+        @simple
+        pbulong, ValueType::Ulong, "ulong",
+        get_item_ulong, get_item_ulong_unchecked, pbsession_GetUlongArrayItem,
+        set_item_ulong, set_item_ulong_unchecked, pbsession_SetUlongArrayItem
+    );
+    impl_array!(
+        @simple
+        pblonglong, ValueType::LongLong, "longlong",
+        get_item_longlong, get_item_longlong_unchecked, pbsession_GetLongLongArrayItem,
+        set_item_longlong, set_item_longlong_unchecked, pbsession_SetLongLongArrayItem
+    );
+    impl_array!(
+        @simple
+        pbreal, ValueType::Real, "real",
+        get_item_real, get_item_real_unchecked, pbsession_GetRealArrayItem,
+        set_item_real, set_item_real_unchecked, pbsession_SetRealArrayItem
+    );
+    impl_array!(
+        @simple
+        pbdouble, ValueType::Double, "double",
+        get_item_double, get_item_double_unchecked, pbsession_GetDoubleArrayItem,
+        set_item_double, set_item_double_unchecked, pbsession_SetDoubleArrayItem
+    );
+    impl_array!(
+        @simple
+        pbbyte, ValueType::Byte, "byte",
+        get_item_byte, get_item_byte_unchecked, pbsession_GetByteArrayItem,
+        set_item_byte, set_item_byte_unchecked, pbsession_SetByteArrayItem
+    );
+    impl_array!(
+        @simple
+        bool, ValueType::Boolean, "boolean",
+        get_item_bool, get_item_bool_unchecked, pbsession_GetBoolArrayItem,
+        set_item_bool, set_item_bool_unchecked, pbsession_SetBoolArrayItem
+    );
+    impl_array!(
+        @simple
+        PBChar, ValueType::Char, "char",
+        get_item_char, get_item_char_unchecked, pbsession_GetCharArrayItem,
+        set_item_char, set_item_char_unchecked, pbsession_SetCharArrayItem
+    );
+
+    impl_array!(
+        @complex
+        Decimal, ValueType::Decimal, "decimal",
+        get_item_dec, get_item_dec_unchecked, pbsession_GetDecArrayItem, get_dec_unchecked,
+        set_item_dec, set_item_dec_unchecked, pbsession_SetDecArrayItem, new_pbdec
+    );
+    impl_array!(
+        @complex
+        NaiveDate, ValueType::Date, "date",
+        get_item_date, get_item_date_unchecked, pbsession_GetDateArrayItem, get_date_unchecked,
+        set_item_date, set_item_date_unchecked, pbsession_SetDateArrayItem, new_pbdate
+    );
+    impl_array!(
+        @complex
+        NaiveTime, ValueType::Time, "time",
+        get_item_time, get_item_time_unchecked, pbsession_GetTimeArrayItem, get_time_unchecked,
+        set_item_time, set_item_time_unchecked, pbsession_SetTimeArrayItem, new_pbtime
+    );
+    impl_array!(
+        @complex
+        NaiveDateTime, ValueType::DateTime, "datetime",
+        get_item_datetime, get_item_datetime_unchecked, pbsession_GetDateTimeArrayItem, get_datetime_unchecked,
+        set_item_datetime, set_item_datetime_unchecked, pbsession_SetDateTimeArrayItem, new_pbdatetime
+    );
+    impl_array!(
+        @complex_getter
+        &'arr [u8], ValueType::Blob, "blob",
+        get_item_blob, get_item_blob_unchecked, pbsession_GetBlobArrayItem, get_blob_unchecked
+    );
+    impl_array!(
+        @complex_setter
+        &[u8], ValueType::Blob, "blob",
+        set_item_blob, set_item_blob_unchecked, pbsession_SetBlobArrayItem, new_pbblob
+    );
 }
 
 /// 数组信息
@@ -1146,8 +678,8 @@ impl ArrayInfo {
     /// 获取指定维度的边界
     pub fn bound(&self, dim: pbuint) -> (pblong, pblong) {
         unsafe {
-            assert!(dim < self.ptr.as_ref().numDimensions);
-            let bound = self.ptr.as_ref().bounds.get_unchecked(dim as usize);
+            assert!(dim > 0 && dim <= self.ptr.as_ref().numDimensions);
+            let bound = self.ptr.as_ref().bounds.get_unchecked((dim - 1) as usize);
             (bound.lowerBound, bound.upperBound)
         }
     }
@@ -1167,39 +699,39 @@ pub trait ArrayIterItem<'arr>: Sized {
     fn get_value(arr: &Array<'arr>, index: pblong) -> Option<Self>;
 }
 
-macro_rules! arr_iter_item {
+macro_rules! impl_iter_item {
     ($type: ty, $pbtype: expr, $fn: ident) => {
         impl<'arr> ArrayIterItem<'arr> for $type {
             fn check_type(arr: &Array) -> bool { arr.info.value_type() == $pbtype }
-            fn get_value(arr: &Array<'arr>, index: pblong) -> Option<Self> { unsafe { arr.$fn(&[index]) } }
+            fn get_value(arr: &Array<'arr>, index: pblong) -> Option<Self> { unsafe { arr.$fn(index) } }
         }
     };
     ($type: ty, @object, $fn: ident) => {
         impl<'arr> ArrayIterItem<'arr> for $type {
             fn check_type(arr: &Array) -> bool { arr.is_object }
-            fn get_value(arr: &Array<'arr>, index: pblong) -> Option<Self> { unsafe { arr.$fn(&[index]) } }
+            fn get_value(arr: &Array<'arr>, index: pblong) -> Option<Self> { unsafe { arr.$fn(index) } }
         }
     };
 }
 
-arr_iter_item!(pbint, ValueType::Int, get_item_int_unchecked);
-arr_iter_item!(pbuint, ValueType::Uint, get_item_uint_unchecked);
-arr_iter_item!(pblong, ValueType::Long, get_item_long_unchecked);
-arr_iter_item!(pbulong, ValueType::Ulong, get_item_ulong_unchecked);
-arr_iter_item!(pblonglong, ValueType::LongLong, get_item_longlong_unchecked);
-arr_iter_item!(pbreal, ValueType::Real, get_item_real_unchecked);
-arr_iter_item!(pbdouble, ValueType::Double, get_item_double_unchecked);
-arr_iter_item!(Decimal, ValueType::Decimal, get_item_dec_unchecked);
-arr_iter_item!(NaiveDate, ValueType::Date, get_item_date_unchecked);
-arr_iter_item!(NaiveTime, ValueType::Time, get_item_time_unchecked);
-arr_iter_item!(NaiveDateTime, ValueType::DateTime, get_item_datetime_unchecked);
-arr_iter_item!(bool, ValueType::Boolean, get_item_bool_unchecked);
-arr_iter_item!(pbbyte, ValueType::Byte, get_item_byte_unchecked);
-arr_iter_item!(&'arr PBStr, ValueType::String, get_item_str_unchecked);
-arr_iter_item!(PBString, ValueType::String, get_item_string_unchecked);
-arr_iter_item!(&'arr [u8], ValueType::Blob, get_item_blob_unchecked);
-arr_iter_item!(Object<'arr>, @object, get_item_object_unchecked);
-arr_iter_item!(Value<'arr>, ValueType::Any, get_item_any_unchecked);
+impl_iter_item!(pbint, ValueType::Int, get_item_int_unchecked);
+impl_iter_item!(pbuint, ValueType::Uint, get_item_uint_unchecked);
+impl_iter_item!(pblong, ValueType::Long, get_item_long_unchecked);
+impl_iter_item!(pbulong, ValueType::Ulong, get_item_ulong_unchecked);
+impl_iter_item!(pblonglong, ValueType::LongLong, get_item_longlong_unchecked);
+impl_iter_item!(pbreal, ValueType::Real, get_item_real_unchecked);
+impl_iter_item!(pbdouble, ValueType::Double, get_item_double_unchecked);
+impl_iter_item!(Decimal, ValueType::Decimal, get_item_dec_unchecked);
+impl_iter_item!(NaiveDate, ValueType::Date, get_item_date_unchecked);
+impl_iter_item!(NaiveTime, ValueType::Time, get_item_time_unchecked);
+impl_iter_item!(NaiveDateTime, ValueType::DateTime, get_item_datetime_unchecked);
+impl_iter_item!(bool, ValueType::Boolean, get_item_bool_unchecked);
+impl_iter_item!(pbbyte, ValueType::Byte, get_item_byte_unchecked);
+impl_iter_item!(&'arr PBStr, ValueType::String, get_item_str_unchecked);
+impl_iter_item!(PBString, ValueType::String, get_item_string_unchecked);
+impl_iter_item!(&'arr [u8], ValueType::Blob, get_item_blob_unchecked);
+impl_iter_item!(Object<'arr>, @object, get_item_object_unchecked);
+impl_iter_item!(Value<'arr>, ValueType::Any, get_item_any_unchecked);
 
 /// 一维数组迭代器
 ///

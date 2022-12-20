@@ -32,6 +32,7 @@ pub enum PBRESULT {
     E_INVOKE_WRONG_NUM_ARGS,
     E_ARRAY_INDEX_OUTOF_BOUNDS,
     E_VALUE_IS_NULL,
+    E_OUTOF_MEMORY,
     ObjectError(ffi::OB_ERROR)
 }
 

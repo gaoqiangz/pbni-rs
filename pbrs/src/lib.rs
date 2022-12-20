@@ -12,6 +12,7 @@ impl RustObject {
 
     #[method(name = "of_Array")]
     fn of_array(&mut self, mut arg: Array) -> Result<String> {
+        let a = unsafe { arg.get_item_any_unchecked(&[1]) };
         arg.set_item_long(&[10], 12333223)?;
         let mut s = String::new();
         for item in arg.iter::<pblong>() {

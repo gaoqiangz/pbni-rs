@@ -3,8 +3,8 @@ use crate::{
 };
 use std::ops::{Deref, DerefMut};
 
-//mod array;
-//pub use array::Array;
+mod array;
+pub use array::Array;
 
 /// 值的封装
 pub struct Value<'val> {
@@ -652,6 +652,7 @@ impl<'val> Value<'val> {
             Some(Object::from_ptr(pbvalue_GetObject(self.ptr), self.obthis.clone()))
         }
     }
+    */
 
     /// 获取数组类型值的引用
     ///
@@ -697,10 +698,9 @@ impl<'val> Value<'val> {
         if self.is_null() {
             None
         } else {
-            Some(Array::from_ptr(pbvalue_GetArray(self.ptr), self.is_object(), self.obthis.clone()))
+            Some(Array::from_ptr(self.inner.val.ptr as _, self.is_object(), self.session.clone()))
         }
     }
-    */
 
     /// 获取`blob`类型值的引用
     ///
@@ -1140,6 +1140,10 @@ impl<'val> Value<'val> {
     ///
     /// 类型不兼容时可能会出现未定义行为
     pub unsafe fn set_blob_unchecked(&mut self, v: impl AsRef<[u8]>) -> Result<()> {
+        let v = v.as_ref();
+        if v.is_empty() {
+            return Err(PBRESULT::E_OUTOF_MEMORY);
+        }
         self.set_ptr(self.session.new_pbblob(v) as _, BINARY_TYPE);
         Ok(())
     }
@@ -1167,6 +1171,7 @@ impl<'val> Value<'val> {
         //TODO
         Ok(())
     }
+    */
 
     /// 设置数组类型的值
     ///
@@ -1174,11 +1179,11 @@ impl<'val> Value<'val> {
     ///
     /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
     pub fn set_array(&mut self, v: &Array) -> Result<()> {
-            if self.is_array() {
-                pbvalue_SetArray(self.ptr, v.as_ptr()).into()
-            } else {
-                Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-            }
+        if self.is_array() {
+            unsafe { self.set_array_unchecked(v) }
+        } else {
+            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
+        }
     }
 
     /// 设置数组类型的值,不检查类型
@@ -1187,7 +1192,12 @@ impl<'val> Value<'val> {
     ///
     /// 类型不兼容时可能会出现未定义行为
     pub unsafe fn set_array_unchecked(&mut self, v: &Array) -> Result<()> {
-        pbvalue_SetArray(self.ptr, v.as_ptr()).into()
+        self.set_ptr(
+            API.ot_copy_array(self.session.as_ptr(), v.as_ptr() as _) as _,
+            v.info().value_type() as OB_CLASS_ID
+        );
+        self.set_info_group(OB_GROUPTYPE::OB_ARRAY);
+        Ok(())
     }
 
     /// 从`src`参数拷贝并覆盖现有值
@@ -1195,10 +1205,12 @@ impl<'val> Value<'val> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_value(&mut self, src: &Value) {
-        pbobthis_SetValue(self.obthis.as_ptr(), self.ptr, src.ptr)
+    pub unsafe fn set_value_unchecked(&mut self, src: &Value) {
+        API.rtDataCopy(self.session.as_ptr(), self.as_ptr(), src.as_ptr(), true as BOOL);
     }
 
+    /*
+    TODO
     /// 拷贝并转移所有权,`self`将被消耗
     pub fn acquire(self) -> OwnedValue {
         unsafe {
@@ -1268,6 +1280,11 @@ impl<'val> Value<'val> {
     }
 
     #[inline(always)]
+    fn set_info_group(&mut self, group: OB_GROUPTYPE) {
+        self.set_info_flag(group as OB_INFO_FLAGS, DATA_GROUP_SHIFT, DATA_GROUP_MASK);
+    }
+
+    #[inline(always)]
     fn set_info(&mut self, style: OB_DATASTYLE, typ: OB_CLASS_ID, group: OB_GROUPTYPE) {
         self.inner.info = (((OB_MEMBER_ACCESS::OB_PUBLIC_MEMBER as OB_INFO_FLAGS) << DATA_ACCESS_SHIFT) |
             ((group as OB_INFO_FLAGS) << DATA_GROUP_SHIFT) |
@@ -1289,17 +1306,19 @@ impl<'val> Value<'val> {
     #[inline(always)]
     fn free_val_ptr(&mut self) {
         unsafe {
-            API.ot_free_val_ptr(self.session.as_ptr(), &mut *self.inner as _);
+            if self.get_info_group() == OB_GROUPTYPE::OB_ARRAY {
+                API.ot_free_array(self.session.as_ptr(), self.as_ptr());
+            } else {
+                API.ot_free_val_ptr(self.session.as_ptr(), self.as_ptr());
+            }
         }
     }
 }
 
 impl Drop for Value<'_> {
     fn drop(&mut self) {
-        if let ValueInner::Owned(data) = &self.inner {
-            unsafe {
-                API.ot_free_val_ptr(self.session.as_ptr(), &*data as *const OB_DATA as _);
-            }
+        if matches!(self.inner, ValueInner::Owned(_)) {
+            self.free_val_ptr();
         }
     }
 }
@@ -1337,7 +1356,7 @@ impl ValueInner {
         }
     }
 
-    /// 获取此值的直接对象
+    /// 获取此值的直接引用
     #[inline(always)]
     fn this(&self) -> &OB_DATA {
         match self {
@@ -1347,7 +1366,7 @@ impl ValueInner {
         }
     }
 
-    /// 获取此值的直接可变对象
+    /// 获取此值的直接可变引用
     #[inline(always)]
     fn this_mut(&mut self) -> &mut OB_DATA {
         match self {
@@ -1537,8 +1556,7 @@ impl FromValue<'_> for bool {
         }
     }
 }
-/*
-TODO
+
 impl<'val> FromValue<'val> for &'val [u8] {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
         if let Some(val) = val {
@@ -1557,55 +1575,59 @@ impl FromValue<'_> for Vec<u8> {
         }
     }
 }
+/*
+TODO
 impl<'val> FromValue<'val> for Object<'val> {
-    fn from_value(val: Option<Value<'val>>) -> Result<Self> {
-        if let Some(val) = val {
-            unsafe { val.try_get_object()?.ok_or(PBRESULT::E_NULL_ERROR) }
-        } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
-        }
-    }
+fn from_value(val: Option<Value<'val>>) -> Result<Self> {
+if let Some(val) = val {
+unsafe { val.try_get_object()?.ok_or(PBRESULT::E_NULL_ERROR) }
+} else {
+Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
 }
+}
+}
+*/
 impl<'val> FromValue<'val> for Array<'val> {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
         if let Some(val) = val {
-            unsafe { val.try_get_array()?.ok_or(PBRESULT::E_NULL_ERROR) }
+            unsafe { val.try_get_array()?.ok_or(PBRESULT::E_VALUE_IS_NULL) }
         } else {
             Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
 }
-
+/*
+TODO
 #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
 impl<'val, T: UserObject> FromValue<'val> for &'val T {
-    fn from_value(val: Option<Value<'val>>) -> Result<Self> {
-        if let Some(val) = val {
-            if let Some(obj) = unsafe { val.try_get_object()? } {
-                Ok(unsafe { obj.get_native_ref()? })
-            } else {
-                Err(PBRESULT::E_NULL_ERROR)
-            }
-        } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
-        }
-    }
+fn from_value(val: Option<Value<'val>>) -> Result<Self> {
+if let Some(val) = val {
+if let Some(obj) = unsafe { val.try_get_object()? } {
+Ok(unsafe { obj.get_native_ref()? })
+} else {
+Err(PBRESULT::E_NULL_ERROR)
+}
+} else {
+Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+}
+}
 }
 
 #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
 impl<'val, T: UserObject> FromValue<'val> for &'val mut T {
-    fn from_value(val: Option<Value<'val>>) -> Result<Self> {
-        if let Some(val) = val {
-            if let Some(mut obj) = unsafe { val.try_get_object()? } {
-                Ok(unsafe { obj.get_native_mut()? })
-            } else {
-                Err(PBRESULT::E_NULL_ERROR)
-            }
-        } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
-        }
-    }
+fn from_value(val: Option<Value<'val>>) -> Result<Self> {
+if let Some(val) = val {
+if let Some(mut obj) = unsafe { val.try_get_object()? } {
+Ok(unsafe { obj.get_native_mut()? })
+} else {
+Err(PBRESULT::E_NULL_ERROR)
 }
-
+} else {
+Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+}
+}
+}
+*/
 impl<'val> FromValue<'val> for Value<'val> {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
         if let Some(val) = val {
@@ -1615,20 +1637,22 @@ impl<'val> FromValue<'val> for Value<'val> {
         }
     }
 }
+/*
+TODO
 impl FromValue<'_> for OwnedValue {
-    fn from_value(val: Option<Value>) -> Result<Self> {
-        if let Some(val) = val {
-            Ok(val.acquire())
-        } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
-        }
-    }
+fn from_value(val: Option<Value>) -> Result<Self> {
+if let Some(val) = val {
+Ok(val.acquire())
+} else {
+Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
 }
-
+}
+}
+*/
 impl<'val, T: FromValue<'val>> FromValue<'val> for Option<T> {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
         T::from_value(val).map(Some).or_else(|e| {
-            if e == PBRESULT::E_INVOKE_WRONG_NUM_ARGS || e == PBRESULT::E_NULL_ERROR {
+            if e == PBRESULT::E_INVOKE_WRONG_NUM_ARGS || e == PBRESULT::E_VALUE_IS_NULL {
                 Ok(None)
             } else {
                 Err(e)
@@ -1636,7 +1660,7 @@ impl<'val, T: FromValue<'val>> FromValue<'val> for Option<T> {
         })
     }
 }
-*/
+
 /// 参数值提取,无引用版本
 pub trait FromValueOwned: Sized + for<'val> FromValue<'val> {}
 
@@ -1703,16 +1727,16 @@ TODO
 impl ToValue for Object<'_> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.set_object(&self) }
 }
+*/
 impl ToValue for Array<'_> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.set_array(&self) }
 }
 impl ToValue for Value<'_> {
     fn to_value(self, val: &mut Value) -> Result<()> {
-        unsafe { val.set_value(&self) };
+        unsafe { val.set_value_unchecked(&self) };
         Ok(())
     }
 }
-*/
 
 impl<T: ToValue> ToValue for Option<T> {
     fn to_value(self, val: &mut Value) -> Result<()> {
