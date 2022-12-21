@@ -834,6 +834,13 @@ extern "C" {
         dim: *const pblong,
         isNull: *mut pbboolean
     ) -> pbdec;
+    #[link_name = "pbsession_GetStringArrayItem"]
+    pub fn pbsession_GetStrArrayItem(
+        session: pbsession,
+        array: pbarray,
+        dim: *const pblong,
+        isNull: *mut pbboolean
+    ) -> pbstring;
     pub fn pbsession_GetStringArrayItem(
         session: pbsession,
         array: pbarray,
@@ -876,7 +883,8 @@ extern "C" {
         dim: *const pblong,
         isNull: *mut pbboolean
     ) -> pbtime;
-    pub fn pbsession_GetDateTimeArrayItem(
+    #[link_name = "pbsession_GetDateTimeArrayItem"]
+    pub fn pbsession_GetDatetimeArrayItem(
         session: pbsession,
         array: pbarray,
         dim: *const pblong,
@@ -888,7 +896,8 @@ extern "C" {
         dim: *const pblong,
         isNull: *mut pbboolean
     ) -> PBChar;
-    pub fn pbsession_GetLongLongArrayItem(
+    #[link_name = "pbsession_GetLongLongArrayItem"]
+    pub fn pbsession_GetLonglongArrayItem(
         session: pbsession,
         array: pbarray,
         dim: *const pblong,
@@ -949,6 +958,13 @@ extern "C" {
         dim: *const pblong,
         value: pbstring
     ) -> PBXRESULT;
+    #[link_name = "pbsession_SetStringArrayItem"]
+    pub fn pbsession_SetStrArrayItem(
+        session: pbsession,
+        array: pbarray,
+        dim: *const pblong,
+        value: LPCTSTR
+    ) -> PBXRESULT;
     pub fn pbsession_SetStringArrayItem(
         session: pbsession,
         array: pbarray,
@@ -991,7 +1007,8 @@ extern "C" {
         dim: *const pblong,
         value: pbtime
     ) -> PBXRESULT;
-    pub fn pbsession_SetDateTimeArrayItem(
+    #[link_name = "pbsession_SetDateTimeArrayItem"]
+    pub fn pbsession_SetDatetimeArrayItem(
         session: pbsession,
         array: pbarray,
         dim: *const pblong,
@@ -1003,7 +1020,8 @@ extern "C" {
         dim: *const pblong,
         value: PBChar
     ) -> PBXRESULT;
-    pub fn pbsession_SetLongLongArrayItem(
+    #[link_name = "pbsession_SetLongLongArrayItem"]
+    pub fn pbsession_SetLonglongArrayItem(
         session: pbsession,
         array: pbarray,
         dim: *const pblong,
@@ -1152,15 +1170,20 @@ extern "C" {
     pub fn pbvalue_GetUlong(pVal: pbvalue) -> pbulong;
     pub fn pbvalue_GetReal(pVal: pbvalue) -> pbreal;
     pub fn pbvalue_GetDouble(pVal: pbvalue) -> pbdouble;
-    pub fn pbvalue_GetDecimal(pVal: pbvalue) -> pbdec;
+    #[link_name = "pbvalue_GetDecimal"]
+    pub fn pbvalue_GetDec(pVal: pbvalue) -> pbdec;
     pub fn pbvalue_GetChar(pVal: pbvalue) -> PBChar;
+    #[link_name = "pbvalue_GetString"]
+    pub fn pbvalue_GetStr(pVal: pbvalue) -> pbstring;
     pub fn pbvalue_GetString(pVal: pbvalue) -> pbstring;
     pub fn pbvalue_GetObject(pVal: pbvalue) -> pbobject;
     pub fn pbvalue_GetArray(pVal: pbvalue) -> pbarray;
     pub fn pbvalue_GetTime(pVal: pbvalue) -> pbtime;
     pub fn pbvalue_GetDate(pVal: pbvalue) -> pbdate;
-    pub fn pbvalue_GetDateTime(pVal: pbvalue) -> pbdatetime;
-    pub fn pbvalue_GetLongLong(pVal: pbvalue) -> pblonglong;
+    #[link_name = "pbvalue_GetDateTime"]
+    pub fn pbvalue_GetDatetime(pVal: pbvalue) -> pbdatetime;
+    #[link_name = "pbvalue_GetLongLong"]
+    pub fn pbvalue_GetLonglong(pVal: pbvalue) -> pblonglong;
     pub fn pbvalue_GetBlob(pVal: pbvalue) -> pbblob;
 
     pub fn pbvalue_SetInt(pVal: pbvalue, v: pbint) -> PBXRESULT;
@@ -1170,15 +1193,20 @@ extern "C" {
     pub fn pbvalue_SetUlong(pVal: pbvalue, v: pbulong) -> PBXRESULT;
     pub fn pbvalue_SetReal(pVal: pbvalue, v: pbreal) -> PBXRESULT;
     pub fn pbvalue_SetDouble(pVal: pbvalue, v: pbdouble) -> PBXRESULT;
-    pub fn pbvalue_SetDecimal(pVal: pbvalue, v: pbdec) -> PBXRESULT;
+    #[link_name = "pbvalue_SetDecimal"]
+    pub fn pbvalue_SetDec(pVal: pbvalue, v: pbdec) -> PBXRESULT;
     pub fn pbvalue_SetChar(pVal: pbvalue, v: PBChar) -> PBXRESULT;
     pub fn pbvalue_SetPBString(pVal: pbvalue, v: pbstring) -> PBXRESULT;
+    #[link_name = "pbvalue_SetString"]
+    pub fn pbvalue_SetStr(pVal: pbvalue, v: LPCTSTR) -> PBXRESULT;
     pub fn pbvalue_SetString(pVal: pbvalue, v: LPCTSTR) -> PBXRESULT;
     pub fn pbvalue_SetArray(pVal: pbvalue, v: pbarray) -> PBXRESULT;
     pub fn pbvalue_SetTime(pVal: pbvalue, v: pbtime) -> PBXRESULT;
     pub fn pbvalue_SetDate(pVal: pbvalue, v: pbdate) -> PBXRESULT;
-    pub fn pbvalue_SetDateTime(pVal: pbvalue, v: pbdatetime) -> PBXRESULT;
-    pub fn pbvalue_SetLongLong(pVal: pbvalue, v: pblonglong) -> PBXRESULT;
+    #[link_name = "pbvalue_SetDateTime"]
+    pub fn pbvalue_SetDatetime(pVal: pbvalue, v: pbdatetime) -> PBXRESULT;
+    #[link_name = "pbvalue_SetLongLong"]
+    pub fn pbvalue_SetLonglong(pVal: pbvalue, v: pblonglong) -> PBXRESULT;
     pub fn pbvalue_SetBlob(pVal: pbvalue, v: pbblob) -> PBXRESULT;
     pub fn pbvalue_SetObject(pVal: pbvalue, v: pbobject) -> PBXRESULT;
 

@@ -29,10 +29,10 @@ pub(crate) use bitfield;
 pub enum PBRESULT {
     OK,
     E_MISMATCHED_DATA_TYPE,
-    E_INVOKE_WRONG_NUM_ARGS,
-    E_ARRAY_INDEX_OUTOF_BOUNDS,
+    E_WRONG_NUM_ARGS,
+    E_OUT_OF_BOUNDS,
+    E_OUT_OF_MEMORY,
     E_VALUE_IS_NULL,
-    E_OUTOF_MEMORY,
     ObjectError(ffi::OB_ERROR)
 }
 

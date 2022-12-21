@@ -18,7 +18,8 @@ where
         Err(e) => {
             //发生NULL错误说明参数接收者不支持传NULL值,此时自动转义为返回NULL
             if e == PBXRESULT::E_VALUE_IS_NULL {
-                ci.return_value().set_to_null()
+                ci.return_value().set_to_null();
+                Ok(())
             } else {
                 Err(e)
             }

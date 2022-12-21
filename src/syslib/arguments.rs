@@ -422,7 +422,7 @@ impl<'args> ArgumentsRef<'args> {
     /// 尝试获取参数值
     pub fn try_get(&self, index: pbint) -> Result<Value<'args>> {
         if index < 0 || index as usize >= self.args.len() {
-            return Err(PBRESULT::E_ARRAY_INDEX_OUTOF_BOUNDS);
+            return Err(PBRESULT::E_OUT_OF_BOUNDS);
         }
         unsafe { Ok(Value::from_ptr(self.args[index as usize], self.session.clone())) }
     }

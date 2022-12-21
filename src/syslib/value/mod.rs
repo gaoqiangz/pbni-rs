@@ -62,547 +62,6 @@ impl<'val> Value<'val> {
     /// 判断值是否为只读传递
     pub fn is_readonly(&self) -> bool { self.get_info_reftype() == OB_REFTYPE::OB_ARGUMENT_READONLY }
 
-    /// 获取`int`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_int(&self) -> Option<pbint> { self.try_get_int().unwrap() }
-
-    /// 尝试获取`int`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_int(&self) -> Result<Option<pbint>> {
-        if self.get_type() == ValueType::Int {
-            unsafe { Ok(self.get_int_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`int`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_int_unchecked(&self) -> Option<pbint> {
-        if self.is_null() {
-            None
-        } else {
-            Some(self.inner.val.int_val)
-        }
-    }
-
-    /// 获取`uint`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_uint(&self) -> Option<pbuint> { self.try_get_uint().unwrap() }
-
-    /// 尝试获取`uint`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_uint(&self) -> Result<Option<pbuint>> {
-        if self.get_type() == ValueType::Uint {
-            unsafe { Ok(self.get_uint_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`uint`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_uint_unchecked(&self) -> Option<pbuint> {
-        if self.is_null() {
-            None
-        } else {
-            Some(self.inner.val.uint_val)
-        }
-    }
-
-    /// 获取`long`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_long(&self) -> Option<pblong> { self.try_get_long().unwrap() }
-
-    /// 尝试获取`long`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_long(&self) -> Result<Option<pblong>> {
-        if self.get_type() == ValueType::Long {
-            unsafe { Ok(self.get_long_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`long`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_long_unchecked(&self) -> Option<pblong> {
-        if self.is_null() {
-            None
-        } else {
-            Some(self.inner.val.long_val)
-        }
-    }
-
-    /// 获取`ulong`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_ulong(&self) -> Option<pbulong> { self.try_get_ulong().unwrap() }
-
-    /// 尝试获取`ulong`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_ulong(&self) -> Result<Option<pbulong>> {
-        if self.get_type() == ValueType::Ulong {
-            unsafe { Ok(self.get_ulong_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`ulong`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_ulong_unchecked(&self) -> Option<pbulong> {
-        if self.is_null() {
-            None
-        } else {
-            Some(self.inner.val.ulong_val)
-        }
-    }
-
-    /// 获取`longlong`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_longlong(&self) -> Option<pblonglong> { self.try_get_longlong().unwrap() }
-
-    /// 尝试获取`longlong`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_longlong(&self) -> Result<Option<pblonglong>> {
-        if self.get_type() == ValueType::LongLong {
-            unsafe { Ok(self.get_longlong_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`longlong`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_longlong_unchecked(&self) -> Option<pblonglong> {
-        if self.is_null() {
-            None
-        } else {
-            let val = self.inner.val.ptr as *const pblonglong;
-            Some(*val)
-        }
-    }
-
-    /// 获取`real`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_real(&self) -> Option<pbreal> { self.try_get_real().unwrap() }
-
-    /// 尝试获取`real`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_real(&self) -> Result<Option<pbreal>> {
-        if self.get_type() == ValueType::Real {
-            unsafe { Ok(self.get_real_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`real`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_real_unchecked(&self) -> Option<pbreal> {
-        if self.is_null() {
-            None
-        } else {
-            Some(self.inner.val.fl_val)
-        }
-    }
-
-    /// 获取`double`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_double(&self) -> Option<pbdouble> { self.try_get_double().unwrap() }
-
-    /// 尝试获取`double`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_double(&self) -> Result<Option<pbdouble>> {
-        if self.get_type() == ValueType::Double {
-            unsafe { Ok(self.get_double_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`double`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_double_unchecked(&self) -> Option<pbdouble> {
-        if self.is_null() {
-            None
-        } else {
-            let val = self.inner.val.ptr as *const pbdouble;
-            Some(*val)
-        }
-    }
-
-    /// 获取`decimal`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_dec(&self) -> Option<Decimal> { self.try_get_dec().unwrap() }
-
-    /// 尝试获取`decimal`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_dec(&self) -> Result<Option<Decimal>> {
-        if self.get_type() == ValueType::Decimal {
-            unsafe { Ok(self.get_dec_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`decimal`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_dec_unchecked(&self) -> Option<Decimal> {
-        if self.is_null() {
-            None
-        } else {
-            Some(self.session.get_dec_unchecked(self.inner.val.ptr as _))
-        }
-    }
-
-    /// 获取`boolean`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_bool(&self) -> Option<bool> { self.try_get_bool().unwrap() }
-
-    /// 尝试获取`boolean`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_bool(&self) -> Result<Option<bool>> {
-        if self.get_type() == ValueType::Boolean {
-            unsafe { Ok(self.get_bool_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`boolean`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_bool_unchecked(&self) -> Option<bool> {
-        if self.is_null() {
-            None
-        } else {
-            Some(self.inner.val.int_val != 0)
-        }
-    }
-
-    /// 获取`byte`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_byte(&self) -> Option<pbbyte> { self.try_get_byte().unwrap() }
-
-    /// 尝试获取`byte`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_byte(&self) -> Result<Option<pbbyte>> {
-        if self.get_type() == ValueType::Byte {
-            unsafe { Ok(self.get_byte_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`byte`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_byte_unchecked(&self) -> Option<pbbyte> {
-        if self.is_null() {
-            None
-        } else {
-            Some(self.inner.val.byte_val)
-        }
-    }
-
-    /// 获取`char`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_char(&self) -> Option<PBChar> { self.try_get_char().unwrap() }
-
-    /// 尝试获取`char`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_char(&self) -> Result<Option<PBChar>> {
-        if self.get_type() == ValueType::Char {
-            unsafe { Ok(self.get_char_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`char`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_char_unchecked(&self) -> Option<PBChar> {
-        if self.is_null() {
-            None
-        } else {
-            Some(self.inner.val.int_val as _)
-        }
-    }
-
-    /// 获取`string`类型值的引用
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    ///
-    /// # Safety
-    ///
-    /// 引用类型不能保证始终有效,详情请阅读[内存安全]说明
-    ///
-    /// [内存安全]: ./index.html#内存安全
-    pub unsafe fn get_str(&self) -> Option<&'val PBStr> { self.try_get_str().unwrap() }
-
-    /// 尝试获取`string`类型值的引用
-    ///
-    /// # Safety
-    ///
-    /// 引用类型不能保证始终有效,详情请阅读[内存安全]说明
-    ///
-    /// [内存安全]: ./index.html#内存安全
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub unsafe fn try_get_str(&self) -> Result<Option<&'val PBStr>> {
-        if self.get_type() == ValueType::String {
-            Ok(self.get_str_unchecked())
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`char`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// - 类型不兼容时可能会出现未定义行为
-    /// - 引用类型不能保证始终有效,详情请阅读[内存安全]说明
-    ///
-    /// [内存安全]: ./index.html#内存安全
-    pub unsafe fn get_str_unchecked(&self) -> Option<&'val PBStr> {
-        if self.is_null() {
-            None
-        } else {
-            Some(PBStr::from_ptr_str(self.inner.val.ptr as _))
-        }
-    }
-
-    /// 获取`string`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_string(&self) -> Option<PBString> { self.try_get_string().unwrap() }
-
-    /// 尝试获取`string`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_string(&self) -> Result<Option<PBString>> {
-        if self.get_type() == ValueType::String {
-            unsafe { Ok(self.get_string_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`date`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_date(&self) -> Option<NaiveDate> { self.try_get_date().unwrap() }
-
-    /// 尝试获取`date`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_date(&self) -> Result<Option<NaiveDate>> {
-        if self.get_type() == ValueType::Date {
-            unsafe { Ok(self.get_date_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`date`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_date_unchecked(&self) -> Option<NaiveDate> {
-        if self.is_null() {
-            None
-        } else {
-            Some(self.session.get_date_unchecked(self.inner.val.ptr as _))
-        }
-    }
-
-    /// 获取`time`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_time(&self) -> Option<NaiveTime> { self.try_get_time().unwrap() }
-
-    /// 尝试获取`time`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_time(&self) -> Result<Option<NaiveTime>> {
-        if self.get_type() == ValueType::Time {
-            unsafe { Ok(self.get_time_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`time`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_time_unchecked(&self) -> Option<NaiveTime> {
-        if self.is_null() {
-            None
-        } else {
-            Some(self.session.get_time_unchecked(self.inner.val.ptr as _))
-        }
-    }
-
-    /// 获取`datetime`类型值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_datetime(&self) -> Option<NaiveDateTime> { self.try_get_datetime().unwrap() }
-
-    /// 尝试获取`datetime`类型值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn try_get_datetime(&self) -> Result<Option<NaiveDateTime>> {
-        if self.get_type() == ValueType::DateTime {
-            unsafe { Ok(self.get_datetime_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取`datetime`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_datetime_unchecked(&self) -> Option<NaiveDateTime> {
-        if self.is_null() {
-            None
-        } else {
-            Some(self.session.get_datetime_unchecked(self.inner.val.ptr as _))
-        }
-    }
-
-    /// 获取`string`类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_string_unchecked(&self) -> Option<PBString> {
-        self.get_str_unchecked().map(PBStr::to_ucstring)
-    }
-
     /*
     TODO
     /// 获取对象类型值的引用
@@ -610,26 +69,10 @@ impl<'val> Value<'val> {
     /// # Panics
     ///
     /// 类型不匹配时会触发Panic
-    ///
-    /// # Safety
-    ///
-    /// 引用类型不能保证始终有效,详情请阅读[内存安全]说明
-    ///
-    /// [内存安全]: ./index.html#内存安全
-    pub unsafe fn get_object(&self) -> Option<Object<'val>> { self.try_get_object().unwrap() }
+    pub fn get_object(&self) -> Option<Object<'val>> { self.try_get_object().unwrap() }
 
     /// 尝试获取对象类型值的引用
-    ///
-    /// # Safety
-    ///
-    /// 引用类型不能保证始终有效,详情请阅读[内存安全]说明
-    ///
-    /// [内存安全]: ./index.html#内存安全
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub unsafe fn try_get_object(&self) -> Result<Option<Object<'val>>> {
+    pub fn try_get_object(&self) -> Result<Option<Object<'val>>> {
         if self.is_object() {
             Ok(self.get_object_unchecked())
         } else {
@@ -641,10 +84,7 @@ impl<'val> Value<'val> {
     ///
     /// # Safety
     ///
-    /// - 类型不兼容时可能会出现未定义行为
-    /// - 引用类型不能保证始终有效,详情请阅读[内存安全]说明
-    ///
-    /// [内存安全]: ./index.html#内存安全
+    /// 类型不兼容时可能会出现未定义行为
     pub unsafe fn get_object_unchecked(&self) -> Option<Object<'val>> {
         if self.is_null() {
             None
@@ -659,28 +99,12 @@ impl<'val> Value<'val> {
     /// # Panics
     ///
     /// 类型不匹配时会触发Panic
-    ///
-    /// # Safety
-    ///
-    /// 引用类型不能保证始终有效,详情请阅读[内存安全]说明
-    ///
-    /// [内存安全]: ./index.html#内存安全
-    pub unsafe fn get_array(&self) -> Option<Array<'val>> { self.try_get_array().unwrap() }
+    pub fn get_array(&self) -> Option<Array<'val>> { self.try_get_array().unwrap() }
 
     /// 尝试获取数组类型值的引用
-    ///
-    /// # Safety
-    ///
-    /// 引用类型不能保证始终有效,详情请阅读[内存安全]说明
-    ///
-    /// [内存安全]: ./index.html#内存安全
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub unsafe fn try_get_array(&self) -> Result<Option<Array<'val>>> {
+    pub fn try_get_array(&self) -> Result<Option<Array<'val>>> {
         if self.is_array() {
-            Ok(self.get_array_unchecked())
+            unsafe { Ok(self.get_array_unchecked()) }
         } else {
             Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
         }
@@ -690,10 +114,7 @@ impl<'val> Value<'val> {
     ///
     /// # Safety
     ///
-    /// - 类型不兼容时可能会出现未定义行为
-    /// - 引用类型不能保证始终有效,详情请阅读[内存安全]说明
-    ///
-    /// [内存安全]: ./index.html#内存安全
+    /// 类型不兼容时可能会出现未定义行为
     pub unsafe fn get_array_unchecked(&self) -> Option<Array<'val>> {
         if self.is_null() {
             None
@@ -702,458 +123,12 @@ impl<'val> Value<'val> {
         }
     }
 
-    /// 获取`blob`类型值的引用
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    ///
-    /// # Safety
-    ///
-    /// 引用类型不能保证始终有效,详情请阅读[内存安全]说明
-    ///
-    /// [内存安全]: ./index.html#内存安全
-    pub unsafe fn get_blob(&self) -> Option<&'val [u8]> { self.try_get_blob().unwrap() }
-
-    /// 尝试获取`blob`类型值的引用
-    ///
-    /// # Safety
-    ///
-    /// 引用类型不能保证始终有效,详情请阅读[内存安全]说明
-    ///
-    /// [内存安全]: ./index.html#内存安全
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub unsafe fn try_get_blob(&self) -> Result<Option<&'val [u8]>> {
-        if self.get_type() == ValueType::Blob {
-            Ok(self.get_blob_unchecked())
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取数组`blob`值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// - 类型不兼容时可能会出现未定义行为
-    /// - 引用类型不能保证始终有效,详情请阅读[内存安全]说明
-    ///
-    /// [内存安全]: ./index.html#内存安全
-    pub unsafe fn get_blob_unchecked(&self) -> Option<&'val [u8]> {
-        if self.is_null() {
-            None
-        } else {
-            Some(self.session.get_blob_unchecked(self.inner.val.ptr as _))
-        }
-    }
-
     /// 设置值为NULL
-    pub fn set_to_null(&mut self) -> Result<()> {
-        self.set_info_flag(1, DATA_NULLVAL_SHIFT, DATA_NULLVAL_MASK);
-        Ok(())
-    }
+    pub fn set_to_null(&mut self) { self.set_info_flag(1, DATA_NULLVAL_SHIFT, DATA_NULLVAL_MASK); }
 
-    /// 设置`int`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_int(&mut self, v: pbint) -> Result<()> {
-        if matches!(self.get_type(), ValueType::Int | ValueType::NoType) {
-            unsafe { self.set_int_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`int`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_int_unchecked(&mut self, v: pbint) -> Result<()> {
-        self.free_val_ptr();
-        self.inner.val.int_val = v;
-        self.set_info(OB_DATASTYLE::INT_STYLE, INT_TYPE, OB_GROUPTYPE::OB_SIMPLE);
-        Ok(())
-    }
-
-    /// 设置`uint`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_uint(&mut self, v: pbuint) -> Result<()> {
-        if matches!(self.get_type(), ValueType::Uint | ValueType::NoType) {
-            unsafe { self.set_uint_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`uint`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_uint_unchecked(&mut self, v: pbuint) -> Result<()> {
-        self.free_val_ptr();
-        self.inner.val.uint_val = v;
-        self.set_info(OB_DATASTYLE::INT_STYLE, UINT_TYPE, OB_GROUPTYPE::OB_SIMPLE);
-        Ok(())
-    }
-
-    /// 设置`long`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_long(&mut self, v: pblong) -> Result<()> {
-        if matches!(self.get_type(), ValueType::Long | ValueType::NoType) {
-            unsafe { self.set_long_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`long`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_long_unchecked(&mut self, v: pblong) -> Result<()> {
-        self.free_val_ptr();
-        self.inner.val.long_val = v;
-        self.set_info(OB_DATASTYLE::LONG_STYLE, LONG_TYPE, OB_GROUPTYPE::OB_SIMPLE);
-        Ok(())
-    }
-
-    /// 设置`ulong`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_ulong(&mut self, v: pbulong) -> Result<()> {
-        if matches!(self.get_type(), ValueType::Ulong | ValueType::NoType) {
-            unsafe { self.set_ulong_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`ulong`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_ulong_unchecked(&mut self, v: pbulong) -> Result<()> {
-        self.free_val_ptr();
-        self.inner.val.ulong_val = v;
-        self.set_info(OB_DATASTYLE::LONG_STYLE, ULONG_TYPE, OB_GROUPTYPE::OB_SIMPLE);
-        Ok(())
-    }
-
-    /// 设置`longlong`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_longlong(&mut self, v: pblonglong) -> Result<()> {
-        if matches!(self.get_type(), ValueType::LongLong | ValueType::NoType) {
-            unsafe { self.set_longlong_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`longlong`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_longlong_unchecked(&mut self, v: pblonglong) -> Result<()> {
-        let v = API.ob_dup_longlong(self.session.as_ptr(), &v as *const pblonglong as _);
-        self.set_ptr(v as _, LONGLONG_TYPE);
-        Ok(())
-    }
-
-    /// 设置`real`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_real(&mut self, v: pbreal) -> Result<()> {
-        if matches!(self.get_type(), ValueType::Real | ValueType::NoType) {
-            unsafe { self.set_real_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`real`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_real_unchecked(&mut self, v: pbreal) -> Result<()> {
-        self.free_val_ptr();
-        self.inner.val.fl_val = v;
-        self.set_info(OB_DATASTYLE::FLOAT_STYLE, FLOAT_TYPE, OB_GROUPTYPE::OB_SIMPLE);
-        Ok(())
-    }
-
-    /// 设置`double`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_double(&mut self, v: pbdouble) -> Result<()> {
-        if matches!(self.get_type(), ValueType::Double | ValueType::NoType) {
-            unsafe { self.set_double_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`double`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_double_unchecked(&mut self, v: pbdouble) -> Result<()> {
-        let v = API.ob_dup_double(self.session.as_ptr(), &v as *const pbdouble as _);
-        self.set_ptr(v as _, DOUBLE_TYPE);
-        Ok(())
-    }
-
-    /// 设置`decimal`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_dec(&mut self, v: Decimal) -> Result<()> {
-        if matches!(self.get_type(), ValueType::Decimal | ValueType::NoType) {
-            unsafe { self.set_dec_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`decimal`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_dec_unchecked(&mut self, v: Decimal) -> Result<()> {
-        self.set_ptr(self.session.new_pbdec(v) as _, DEC_TYPE);
-        Ok(())
-    }
-
-    /// 设置`boolean`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_bool(&mut self, v: bool) -> Result<()> {
-        if matches!(self.get_type(), ValueType::Boolean | ValueType::NoType) {
-            unsafe { self.set_bool_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`boolean`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_bool_unchecked(&mut self, v: bool) -> Result<()> {
-        self.free_val_ptr();
-        self.inner.val.int_val = v as _;
-        self.set_info(OB_DATASTYLE::INT_STYLE, BOOL_TYPE, OB_GROUPTYPE::OB_SIMPLE);
-        Ok(())
-    }
-
-    /// 设置`byte`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_byte(&mut self, v: pbbyte) -> Result<()> {
-        if matches!(self.get_type(), ValueType::Byte | ValueType::NoType) {
-            unsafe { self.set_byte_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`byte`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_byte_unchecked(&mut self, v: pbbyte) -> Result<()> {
-        self.free_val_ptr();
-        self.inner.val.int_val = v as _;
-        self.set_info(OB_DATASTYLE::INT_STYLE, BYTE_TYPE, OB_GROUPTYPE::OB_SIMPLE);
-        Ok(())
-    }
-
-    /// 设置`char`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_char(&mut self, v: PBChar) -> Result<()> {
-        if matches!(self.get_type(), ValueType::Char | ValueType::NoType) {
-            unsafe { self.set_char_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`char`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_char_unchecked(&mut self, v: PBChar) -> Result<()> {
-        self.free_val_ptr();
-        self.inner.val.uint_val = v;
-        self.set_info(OB_DATASTYLE::INT_STYLE, CHAR_TYPE, OB_GROUPTYPE::OB_SIMPLE);
-        Ok(())
-    }
-
-    /// 设置`string`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_str(&mut self, v: impl AsPBStr) -> Result<()> {
-        if matches!(self.get_type(), ValueType::String | ValueType::NoType) {
-            unsafe { self.set_str_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`string`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_str_unchecked(&mut self, v: impl AsPBStr) -> Result<()> {
-        let v = v.as_pbstr();
-        let v = API.ob_dup_string(self.session.as_ptr(), v.as_ptr() as _);
-        self.set_ptr(v as _, STRING_TYPE);
-        Ok(())
-    }
-
-    /// 设置`date`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_date(&mut self, v: NaiveDate) -> Result<()> {
-        if matches!(self.get_type(), ValueType::Date | ValueType::NoType) {
-            unsafe { self.set_date_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`date`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_date_unchecked(&mut self, v: NaiveDate) -> Result<()> {
-        self.set_ptr(self.session.new_pbdate(v) as _, DATE_TYPE);
-        Ok(())
-    }
-
-    /// 设置`time`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_time(&mut self, v: NaiveTime) -> Result<()> {
-        if matches!(self.get_type(), ValueType::Time | ValueType::NoType) {
-            unsafe { self.set_time_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`time`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_time_unchecked(&mut self, v: NaiveTime) -> Result<()> {
-        self.set_ptr(self.session.new_pbtime(v) as _, TIME_TYPE);
-        Ok(())
-    }
-
-    /// 设置`datetime`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_datetime(&mut self, v: NaiveDateTime) -> Result<()> {
-        if matches!(self.get_type(), ValueType::DateTime | ValueType::NoType) {
-            unsafe { self.set_datetime_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`datetime`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_datetime_unchecked(&mut self, v: NaiveDateTime) -> Result<()> {
-        self.set_ptr(self.session.new_pbdatetime(v) as _, DATETIME_TYPE);
-        Ok(())
-    }
-
-    /// 设置`blob`类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_blob(&mut self, v: impl AsRef<[u8]>) -> Result<()> {
-        if matches!(self.get_type(), ValueType::Blob | ValueType::NoType) {
-            unsafe { self.set_blob_unchecked(v) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置`blob`类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_blob_unchecked(&mut self, v: impl AsRef<[u8]>) -> Result<()> {
-        let v = v.as_ref();
-        if v.is_empty() {
-            return Err(PBRESULT::E_OUTOF_MEMORY);
-        }
-        self.set_ptr(self.session.new_pbblob(v) as _, BINARY_TYPE);
-        Ok(())
-    }
     /*
     TODO
     /// 设置对象类型的值
-    ///
-    /// # Returns
-    ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
     pub fn set_object(&mut self, v: &Object) -> Result<()> {
         if self.is_object() {
             unsafe { self.set_object_unchecked(v) }
@@ -1175,12 +150,18 @@ impl<'val> Value<'val> {
 
     /// 设置数组类型的值
     ///
-    /// # Returns
+    /// # Panics
     ///
-    /// 类型不匹配时返回`Err(PBRESULT::E_MISMATCHED_DATA_TYPE)`
-    pub fn set_array(&mut self, v: &Array) -> Result<()> {
+    /// 类型不匹配时会触发Panic
+    pub fn set_array(&mut self, value: &Array) { self.try_set_array(value).unwrap(); }
+
+    /// 设置数组类型的值
+    pub fn try_set_array(&mut self, value: &Array) -> Result<()> {
         if self.is_array() {
-            unsafe { self.set_array_unchecked(v) }
+            unsafe {
+                self.set_array_unchecked(value);
+            }
+            Ok(())
         } else {
             Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
         }
@@ -1191,22 +172,44 @@ impl<'val> Value<'val> {
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_array_unchecked(&mut self, v: &Array) -> Result<()> {
+    pub unsafe fn set_array_unchecked(&mut self, value: &Array) {
         self.set_ptr(
-            API.ot_copy_array(self.session.as_ptr(), v.as_ptr() as _) as _,
-            v.info().value_type() as OB_CLASS_ID
+            API.ot_copy_array(self.session.as_ptr(), value.as_ptr() as _) as _,
+            value.info().value_type() as OB_CLASS_ID
         );
         self.set_info_group(OB_GROUPTYPE::OB_ARRAY);
-        Ok(())
     }
 
-    /// 从`src`参数拷贝并覆盖现有值
+    /// 从参数拷贝并覆盖现有值
+    ///
+    /// # Panics
+    ///
+    /// 类型不匹配时会触发Panic
+    pub fn set_value(&mut self, value: &Value) { self.try_set_value(value).unwrap(); }
+
+    /// 从参数拷贝并覆盖现有值
+    pub fn try_set_value(&mut self, value: &Value) -> Result<()> {
+        if self.get_type() == value.get_type() &&
+            self.get_type_kind() == value.get_type_kind() &&
+            self.get_info_group() == value.get_info_group() &&
+            self.get_info_style() == value.get_info_style()
+        {
+            unsafe {
+                self.set_value_unchecked(value);
+            }
+            Ok(())
+        } else {
+            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
+        }
+    }
+
+    /// 从参数拷贝并覆盖现有值
     ///
     /// # Safety
     ///
     /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_value_unchecked(&mut self, src: &Value) {
-        API.rtDataCopy(self.session.as_ptr(), self.as_ptr(), src.as_ptr(), true as BOOL);
+    pub unsafe fn set_value_unchecked(&mut self, value: &Value) {
+        API.rtDataCopy(self.session.as_ptr(), self.as_ptr(), value.as_ptr(), true as BOOL);
     }
 
     /*
@@ -1315,6 +318,340 @@ impl<'val> Value<'val> {
     }
 }
 
+macro_rules! impl_value {
+    /*
+        简单类型
+    */
+    (
+        @simple
+        $type_name: ty, $type: ty, $type_check: pat,
+        $field: ident, $field_style: expr, $field_type: expr
+    ) => {
+        impl_value!(
+            @simple_getter
+            $type_name, $type, $type_check,
+            $field
+        );
+        impl_value!(
+            @simple_setter
+            $type_name, $type, $type_check,
+            $field, $field_style, $field_type
+        );
+    };
+    (
+        @simple_getter
+        $type_name: ty, $type: ty, $type_check: pat,
+        $field: ident
+    ) => {
+        impl_value!(
+            @checked_getter
+            $type_name, $type, $type_check
+        );
+        ::paste::paste! {
+            #[doc = "获取`" $type_name "`类型值,不检查类型"]
+            ///
+            /// # Safety
+            ///
+            /// 类型不兼容时可能会出现未定义行为
+            pub unsafe fn [<get_ $type_name _unchecked>](&self) -> Option<$type> {
+                if self.is_null() {
+                    None
+                } else {
+                    Some(impl_value!(@simple_get_val self.inner.val.$field, $type_name) as _)
+                }
+            }
+        }
+    };
+    (
+        @simple_setter
+        $type_name: ty, $type: ty, $type_check: pat,
+        $field: ident, $field_style: expr, $field_type: expr
+    ) => {
+        impl_value!(
+            @checked_setter
+            $type_name, $type, $type_check
+        );
+        ::paste::paste! {
+            #[doc = "设置`" $type_name "`类型值,不检查类型"]
+            ///
+            /// # Safety
+            ///
+            /// 类型不兼容时可能会出现未定义行为
+            pub unsafe fn [<set_ $type_name _unchecked>](&mut self, value: $type) {
+                self.free_val_ptr();
+                self.inner.val.$field = impl_value!(@simple_set_val value, $type_name) as _;
+                self.set_info($field_style, $field_type, OB_GROUPTYPE::OB_SIMPLE);
+            }
+        }
+    };
+    (@simple_get_val $value: expr, bool) => {
+        if $value == 1 {
+            true
+        } else {
+            false
+        }
+    };
+    (@simple_get_val $value: expr, $type_name: ty) => {
+        $value
+    };
+    (@simple_set_val $value: expr, bool) => {
+        if $value {
+            1
+        } else {
+            0
+        }
+    };
+    (@simple_set_val $value: expr, $type_name: ty) => {
+        $value
+    };
+
+    /*
+        复杂类型
+    */
+    (
+        @complex
+        $type_name: ty, $type: ty, $type_check: pat,
+        $field_type: expr
+    ) => {
+        impl_value!(
+            @complex_getter
+            $type_name, $type, $type_check
+        );
+        impl_value!(
+            @complex_setter
+            $type_name, $type, $type_check,
+            $field_type
+        );
+    };
+    (
+        @complex_getter
+        $type_name: ty, $type: ty, $type_check: pat
+    ) => {
+        impl_value!(
+            @checked_getter
+            $type_name, $type, $type_check
+        );
+        ::paste::paste! {
+            #[doc = "获取`" $type_name "`类型值,不检查类型"]
+            ///
+            /// # Safety
+            ///
+            /// 类型不兼容时可能会出现未定义行为
+            pub unsafe fn [<get_ $type_name _unchecked>](&self) -> Option<$type> {
+                if self.is_null() {
+                    None
+                } else {
+                    Some(impl_value!(@complex_get_val self.session, self.inner.val.ptr, $type_name))
+                }
+            }
+        }
+    };
+    (
+        @complex_setter
+        $type_name: ty, $type: ty, $type_check: pat,
+        $field_type: expr
+    ) => {
+        impl_value!(
+            @checked_setter
+            $type_name, $type, $type_check
+        );
+        ::paste::paste! {
+            #[doc = "设置`" $type_name "`类型值,不检查类型"]
+            ///
+            /// # Safety
+            ///
+            /// 类型不兼容时可能会出现未定义行为
+            pub unsafe fn [<set_ $type_name _unchecked>](&mut self, value: $type) {
+                self.set_ptr(impl_value!(@complex_set_val self.session, value, $type_name) as _, $field_type);
+            }
+        }
+    };
+    (@complex_get_val $session: expr, $value: expr, longlong) => {
+        *($value as *const pblonglong)
+    };
+    (@complex_get_val $session: expr, $value: expr, double) => {
+        *($value as *const pbdouble)
+    };
+    (@complex_get_val $session: expr, $value: expr, str) => {
+        PBStr::from_ptr_str($value as _)
+    };
+    (@complex_get_val $session: expr, $value: expr, string) => {
+        PBString::from_ptr_str($value as _)
+    };
+    (@complex_get_val $session: expr, $value: expr, $type_name: ty) => {
+        ::paste::paste! {
+            $session.[<get_ $type_name _unchecked>]($value as _)
+        }
+    };
+    (@complex_set_val $session: expr, $value: expr, longlong) => {
+        API.ob_dup_longlong($session.as_ptr(), &$value as *const pblonglong as _)
+    };
+    (@complex_set_val $session: expr, $value: expr, double) => {
+        API.ob_dup_double($session.as_ptr(), &$value as *const pbdouble as _)
+    };
+    (@complex_set_val $session: expr, $value: expr, str) => {
+        API.ob_dup_string($session.as_ptr(), $value.as_pbstr().as_ptr() as _)
+    };
+    (@complex_set_val $session: expr, $value: expr, $type_name: ty) => {
+        ::paste::paste! {
+            $session.[<new_pb $type_name>]($value)
+        }
+    };
+
+    /*
+        通用类型检查接口
+    */
+    (
+        @checked_getter
+        $type_name: ty, $type: ty, $type_check: pat
+    ) => {
+        ::paste::paste! {
+            #[doc = "获取`" $type_name "`类型值"]
+            ///
+            /// # Panics
+            ///
+            /// 类型不匹配时会触发Panic
+            pub fn [<get_ $type_name>](&self) -> Option<$type> {
+                self.[<try_get_ $type_name>]().unwrap()
+            }
+
+            #[doc = "获取`" $type_name "`类型值"]
+            pub fn [<try_get_ $type_name>](&self) -> Result<Option<$type>> {
+                if matches!(self.get_type(), $type_check) {
+                    unsafe {
+                        Ok(self.[<get_ $type_name _unchecked>]())
+                    }
+                } else {
+                    Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
+                }
+            }
+        }
+    };
+    (
+        @checked_setter
+        $type_name: ty, $type: ty, $type_check: pat
+    ) => {
+        ::paste::paste! {
+            #[doc = "设置`" $type_name "`类型值"]
+            ///
+            /// # Panics
+            ///
+            /// 类型不匹配时会触发Panic
+            pub fn [<set_ $type_name>](&mut self, value: $type) {
+                self.[<try_set_ $type_name>](value).unwrap();
+            }
+
+            #[doc = "设置`" $type_name "`类型值"]
+            pub fn [<try_set_ $type_name>](&mut self, value: $type) -> Result<()> {
+                if matches!(self.get_type(), $type_check | ValueType::NoType) {
+                    unsafe {
+                        self.[<set_ $type_name _unchecked>](value);
+                    }
+                    Ok(())
+                } else {
+                    return Err(PBRESULT::E_MISMATCHED_DATA_TYPE);
+                }
+            }
+        }
+    };
+}
+
+impl<'val> Value<'val> {
+    impl_value!(
+        @simple
+        int, pbint, ValueType::Int,
+        int_val, OB_DATASTYLE::INT_STYLE, INT_TYPE
+    );
+    impl_value!(
+        @simple
+        uint, pbuint, ValueType::Uint,
+        uint_val, OB_DATASTYLE::INT_STYLE, UINT_TYPE
+    );
+    impl_value!(
+        @simple
+        long, pblong, ValueType::Long,
+        long_val, OB_DATASTYLE::LONG_STYLE, LONG_TYPE
+    );
+    impl_value!(
+        @simple
+        ulong, pbulong, ValueType::Ulong,
+        ulong_val, OB_DATASTYLE::LONG_STYLE, ULONG_TYPE
+    );
+    impl_value!(
+        @simple
+        real, pbreal, ValueType::Real,
+        fl_val, OB_DATASTYLE::FLOAT_STYLE, FLOAT_TYPE
+    );
+    impl_value!(
+        @simple
+        byte, pbbyte, ValueType::Byte,
+        uint_val, OB_DATASTYLE::INT_STYLE, BYTE_TYPE
+    );
+    impl_value!(
+        @simple
+        bool, bool, ValueType::Boolean,
+        int_val, OB_DATASTYLE::INT_STYLE, BOOL_TYPE
+    );
+    impl_value!(
+        @simple
+        char, PBChar, ValueType::Char,
+        uint_val, OB_DATASTYLE::INT_STYLE, CHAR_TYPE
+    );
+
+    impl_value!(
+        @complex
+        longlong, pblonglong, ValueType::LongLong,
+        LONGLONG_TYPE
+    );
+    impl_value!(
+        @complex
+        double, pbdouble, ValueType::Double,
+        DOUBLE_TYPE
+    );
+    impl_value!(
+        @complex
+        dec, Decimal, ValueType::Decimal,
+        DEC_TYPE
+    );
+    impl_value!(
+        @complex
+        date, NaiveDate, ValueType::Date,
+        DATE_TYPE
+    );
+    impl_value!(
+        @complex
+        time, NaiveTime, ValueType::Time,
+        TIME_TYPE
+    );
+    impl_value!(
+        @complex
+        datetime, NaiveDateTime, ValueType::DateTime,
+        DATETIME_TYPE
+    );
+    impl_value!(
+        @complex_getter
+        blob, &'val [u8], ValueType::Blob
+    );
+    impl_value!(
+        @complex_setter
+        blob, &[u8], ValueType::Blob,
+        BINARY_TYPE
+    );
+    impl_value!(
+        @complex_getter
+        str, &'val PBStr, ValueType::String
+    );
+    impl_value!(
+        @complex_getter
+        string, PBString, ValueType::String
+    );
+    impl_value!(
+        @complex_setter
+        str, impl AsPBStr, ValueType::String,
+        STRING_TYPE
+    );
+}
+
 impl Drop for Value<'_> {
     fn drop(&mut self) {
         if matches!(self.inner, ValueInner::Owned(_)) {
@@ -1335,6 +672,7 @@ impl ValueInner {
         let data = &*ptr;
         if bitfield!(@get data.info,DATA_REFTYPE_SHIFT, DATA_REFTYPE_MASK) == OB_REFTYPE::OB_ARGUMENT_REF as _
         {
+            //解引用参数
             let refpak = &*(data.val.ptr as POT_REF_PAK);
             let refval = match refpak.style {
                 OT_REFPAK_STYLE::OT_SIMPLE_REF => refpak.ref_.simple.lvalue,
@@ -1408,16 +746,16 @@ impl FromValue<'_> for () {
         if let Some(_) = val {
             Ok(())
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
 impl<'val> FromValue<'val> for &'val PBStr {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
         if let Some(val) = val {
-            unsafe { val.try_get_str()?.ok_or(PBRESULT::E_VALUE_IS_NULL) }
+            val.try_get_str()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1426,7 +764,7 @@ impl FromValue<'_> for PBString {
         if let Some(val) = val {
             val.try_get_string()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1435,7 +773,7 @@ impl FromValue<'_> for String {
         if let Some(val) = val {
             val.try_get_string()?.map(|v| v.to_string_lossy()).ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1444,7 +782,7 @@ impl FromValue<'_> for pbint {
         if let Some(val) = val {
             val.try_get_int()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1453,7 +791,7 @@ impl FromValue<'_> for pbuint {
         if let Some(val) = val {
             val.try_get_uint()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1462,7 +800,7 @@ impl FromValue<'_> for pblong {
         if let Some(val) = val {
             val.try_get_long()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1471,7 +809,7 @@ impl FromValue<'_> for pbulong {
         if let Some(val) = val {
             val.try_get_ulong()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1480,7 +818,7 @@ impl FromValue<'_> for pblonglong {
         if let Some(val) = val {
             val.try_get_longlong()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1489,7 +827,7 @@ impl FromValue<'_> for pbdouble {
         if let Some(val) = val {
             val.try_get_double()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1498,7 +836,7 @@ impl FromValue<'_> for pbreal {
         if let Some(val) = val {
             val.try_get_real()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1507,7 +845,7 @@ impl FromValue<'_> for Decimal {
         if let Some(val) = val {
             val.try_get_dec()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1516,7 +854,7 @@ impl FromValue<'_> for NaiveDate {
         if let Some(val) = val {
             val.try_get_date()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1525,7 +863,7 @@ impl FromValue<'_> for NaiveTime {
         if let Some(val) = val {
             val.try_get_time()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1534,7 +872,7 @@ impl FromValue<'_> for NaiveDateTime {
         if let Some(val) = val {
             val.try_get_datetime()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1543,7 +881,7 @@ impl FromValue<'_> for pbbyte {
         if let Some(val) = val {
             val.try_get_byte()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1552,7 +890,7 @@ impl FromValue<'_> for bool {
         if let Some(val) = val {
             val.try_get_bool()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1560,18 +898,18 @@ impl FromValue<'_> for bool {
 impl<'val> FromValue<'val> for &'val [u8] {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
         if let Some(val) = val {
-            unsafe { val.try_get_blob()?.ok_or(PBRESULT::E_VALUE_IS_NULL) }
+            val.try_get_blob()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
 impl FromValue<'_> for Vec<u8> {
     fn from_value(val: Option<Value>) -> Result<Self> {
         if let Some(val) = val {
-            unsafe { val.try_get_blob()?.ok_or(PBRESULT::E_VALUE_IS_NULL).map(Vec::from) }
+            val.try_get_blob()?.ok_or(PBRESULT::E_VALUE_IS_NULL).map(Vec::from)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1590,9 +928,9 @@ Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
 impl<'val> FromValue<'val> for Array<'val> {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
         if let Some(val) = val {
-            unsafe { val.try_get_array()?.ok_or(PBRESULT::E_VALUE_IS_NULL) }
+            val.try_get_array()?.ok_or(PBRESULT::E_VALUE_IS_NULL)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1633,7 +971,7 @@ impl<'val> FromValue<'val> for Value<'val> {
         if let Some(val) = val {
             Ok(val)
         } else {
-            Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
+            Err(PBRESULT::E_WRONG_NUM_ARGS)
         }
     }
 }
@@ -1652,7 +990,7 @@ Err(PBRESULT::E_INVOKE_WRONG_NUM_ARGS)
 impl<'val, T: FromValue<'val>> FromValue<'val> for Option<T> {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
         T::from_value(val).map(Some).or_else(|e| {
-            if e == PBRESULT::E_INVOKE_WRONG_NUM_ARGS || e == PBRESULT::E_VALUE_IS_NULL {
+            if e == PBRESULT::E_WRONG_NUM_ARGS || e == PBRESULT::E_VALUE_IS_NULL {
                 Ok(None)
             } else {
                 Err(e)
@@ -1675,67 +1013,64 @@ impl ToValue for () {
     fn to_value(self, _: &mut Value) -> Result<()> { Ok(()) }
 }
 impl<T: AsPBStr> ToValue for T {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_str(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_str(self) }
 }
 impl ToValue for pbint {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_int(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_int(self) }
 }
 impl ToValue for pbuint {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_uint(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_uint(self) }
 }
 impl ToValue for pblong {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_long(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_long(self) }
 }
 impl ToValue for pbulong {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_ulong(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_ulong(self) }
 }
 impl ToValue for pblonglong {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_longlong(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_longlong(self) }
 }
 impl ToValue for pbdouble {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_double(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_double(self) }
 }
 impl ToValue for pbreal {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_real(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_real(self) }
 }
 impl ToValue for Decimal {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_dec(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_dec(self) }
 }
 impl ToValue for NaiveDate {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_date(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_date(self) }
 }
 impl ToValue for NaiveTime {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_time(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_time(self) }
 }
 impl ToValue for NaiveDateTime {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_datetime(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_datetime(self) }
 }
 impl ToValue for pbbyte {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_byte(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_byte(self) }
 }
 impl ToValue for bool {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_bool(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_bool(self) }
 }
 impl ToValue for &[u8] {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_blob(self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_blob(self) }
 }
 impl ToValue for Vec<u8> {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_blob(self.as_slice()) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_blob(self.as_slice()) }
 }
 /*
 TODO
 impl ToValue for Object<'_> {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_object(&self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_object(&self) }
 }
 */
 impl ToValue for Array<'_> {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.set_array(&self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_array(&self) }
 }
 impl ToValue for Value<'_> {
-    fn to_value(self, val: &mut Value) -> Result<()> {
-        unsafe { val.set_value_unchecked(&self) };
-        Ok(())
-    }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_value(&self) }
 }
 
 impl<T: ToValue> ToValue for Option<T> {
@@ -1743,7 +1078,8 @@ impl<T: ToValue> ToValue for Option<T> {
         if let Some(v) = self {
             T::to_value(v, val)
         } else {
-            val.set_to_null()
+            val.set_to_null();
+            Ok(())
         }
     }
 }

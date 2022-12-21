@@ -35,16 +35,22 @@ pub unsafe extern "stdcall" fn test_syslib(obthis: POB_THIS, arg_cnt: i32) -> DW
             long_val.get_long().unwrap(),
             arr_val
         );
-        rv.set_str(str_rv).unwrap();
+        rv.set_str(str_rv);
     }
 
-    str_val.set_str("Rust").unwrap();
-    dec_val.set_dec(Decimal::from_f64(3223.13232f64).unwrap()).unwrap();
-    long_val.set_long(1010313).unwrap();
-    arr_val.set_item_str(1, "d").unwrap();
-    arr_val.set_item_str(2, "e").unwrap();
-    arr_val.set_item_str(3, "f").unwrap();
-    arr_val.set_item_str(4, "g").unwrap();
+    str_val.set_str("Rust");
+    dec_val.set_dec(Decimal::from_f64(3223.13232f64).unwrap());
+    long_val.set_long(1010313);
+    arr_val.set_item_str(1, "d");
+    arr_val.set_item_str(2, "e");
+    arr_val.set_item_str(3, "f");
+    arr_val.set_item_str(4, "g");
+
+    {
+        let mut tmp = session.new_value();
+        tmp.set_str("new_value");
+        arr_val.set_item_value(5, tmp);
+    }
 
     API.ot_set_return_val(obthis, rv.as_ptr());
     rv.forget();

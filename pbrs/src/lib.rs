@@ -12,8 +12,7 @@ impl RustObject {
 
     #[method(name = "of_Array")]
     fn of_array(&mut self, mut arg: Array) -> Result<String> {
-        let a = unsafe { arg.get_item_any_unchecked(&[1]) };
-        arg.set_item_long(&[10], 12333223)?;
+        arg.set_item_long(&[10], 12333223);
         let mut s = String::new();
         for item in arg.iter::<pblong>() {
             s += &format!("item: {:?}\n", item);
@@ -51,8 +50,8 @@ impl ParentObject {
     #[method(overload = 1)]
     fn of_test<'a>(&mut self, session: Session, a: &'a PBStr, b: Option<&'a PBStr>) -> Result<&'a PBStr> {
         let invoker = session.begin_invoke_function(("MessageBox", "ISS"))?;
-        invoker.arg(0).set_str("title")?;
-        invoker.arg(1).set_str("content")?;
+        invoker.arg(0).set_str("title");
+        invoker.arg(1).set_str("content");
         invoker.invoke()?;
         Ok(if let Some(b) = b {
             b
@@ -125,7 +124,7 @@ fn global_function_test(
     obj.set_var_str("is_test", "我爱RUST")?;
     let is_test = obj.get_var_string("is_test");
     let invoker = obj.begin_invoke_method("of_test")?;
-    invoker.arg(0).set_str("call from rust to")?;
+    invoker.arg(0).set_str("call from rust to");
     let rv = invoker.invoke()?.get_string();
 
     Ok(())
