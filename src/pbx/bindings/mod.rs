@@ -208,7 +208,8 @@ pub enum PBXRESULT {
     E_ARRAY_INDEX_OUTOF_BOUNDS = -100,
 
     //pbni-rs Custom
-    E_VALUE_IS_NULL = -10000
+    E_VALUE_IS_NULL = -10000,
+    E_INVALID_FIELD_ID = -10001
 }
 
 impl PBXRESULT {

@@ -100,8 +100,8 @@ impl Session {
     /// ```
     pub fn throw_exception(&self, exstr: impl AsPBStr) -> Result<()> {
         let mut ex = self.new_system_object(pbstr!("PBXRuntimeError"))?;
-        unsafe { ex.set_var_str_unchecked(pbstr!("text"), exstr)? };
         unsafe {
+            ex.set_var_str_unchecked(pbstr!("text"), exstr);
             ffi::pbsession_ThrowException(self.ptr, ex.as_ptr());
         }
         Ok(())

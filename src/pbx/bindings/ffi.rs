@@ -349,6 +349,13 @@ extern "C" {
         fid: FieldId,
         isNull: *mut pbboolean
     ) -> pbdec;
+    #[link_name = "pbsession_GetStringField"]
+    pub fn pbsession_GetStrField(
+        session: pbsession,
+        obj: pbobject,
+        fid: FieldId,
+        isNull: *mut pbboolean
+    ) -> pbstring;
     pub fn pbsession_GetStringField(
         session: pbsession,
         obj: pbobject,
@@ -391,7 +398,8 @@ extern "C" {
         fid: FieldId,
         isNull: *mut pbboolean
     ) -> pbtime;
-    pub fn pbsession_GetDateTimeField(
+    #[link_name = "pbsession_GetDateTimeField"]
+    pub fn pbsession_GetDatetimeField(
         session: pbsession,
         obj: pbobject,
         fid: FieldId,
@@ -409,7 +417,8 @@ extern "C" {
         fid: FieldId,
         isNull: *mut pbboolean
     ) -> pbbyte;
-    pub fn pbsession_GetLongLongField(
+    #[link_name = "pbsession_GetLongLongField"]
+    pub fn pbsession_GetLonglongField(
         session: pbsession,
         obj: pbobject,
         fid: FieldId,
@@ -427,7 +436,8 @@ extern "C" {
         fid: FieldId,
         isNull: *mut pbboolean
     ) -> pbarray;
-    pub fn pbsession_GetPBAnyField(
+    #[link_name = "pbsession_GetPBAnyField"]
+    pub fn pbsession_GetAnyField(
         session: pbsession,
         obj: pbobject,
         fid: FieldId,
@@ -459,6 +469,13 @@ extern "C" {
         obj: pbobject,
         fid: FieldId,
         value: pbstring
+    ) -> PBXRESULT;
+    #[link_name = "pbsession_SetStringField"]
+    pub fn pbsession_SetStrField(
+        session: pbsession,
+        obj: pbobject,
+        fid: FieldId,
+        value: LPCTSTR
     ) -> PBXRESULT;
     pub fn pbsession_SetStringField(
         session: pbsession,
@@ -502,7 +519,8 @@ extern "C" {
         fid: FieldId,
         value: pbtime
     ) -> PBXRESULT;
-    pub fn pbsession_SetDateTimeField(
+    #[link_name = "pbsession_SetDateTimeField"]
+    pub fn pbsession_SetDatetimeField(
         session: pbsession,
         obj: pbobject,
         fid: FieldId,
@@ -520,7 +538,8 @@ extern "C" {
         fid: FieldId,
         value: pbbyte
     ) -> PBXRESULT;
-    pub fn pbsession_SetLongLongField(
+    #[link_name = "pbsession_SetLongLongField"]
+    pub fn pbsession_SetLonglongField(
         session: pbsession,
         obj: pbobject,
         fid: FieldId,
@@ -577,6 +596,13 @@ extern "C" {
         fid: FieldId,
         isNull: *mut pbboolean
     ) -> pbdec;
+    #[link_name = "pbsession_GetStringSharedVar"]
+    pub fn pbsession_GetStrSharedVar(
+        session: pbsession,
+        group: pbgroup,
+        fid: FieldId,
+        isNull: *mut pbboolean
+    ) -> pbstring;
     pub fn pbsession_GetStringSharedVar(
         session: pbsession,
         group: pbgroup,
@@ -619,7 +645,8 @@ extern "C" {
         fid: FieldId,
         isNull: *mut pbboolean
     ) -> pbtime;
-    pub fn pbsession_GetDateTimeSharedVar(
+    #[link_name = "pbsession_GetDateTimeSharedVar"]
+    pub fn pbsession_GetDatetimeSharedVar(
         session: pbsession,
         group: pbgroup,
         fid: FieldId,
@@ -637,7 +664,8 @@ extern "C" {
         fid: FieldId,
         isNull: *mut pbboolean
     ) -> pbbyte;
-    pub fn pbsession_GetLongLongSharedVar(
+    #[link_name = "pbsession_GetLongLongSharedVar"]
+    pub fn pbsession_GetLonglongSharedVar(
         session: pbsession,
         group: pbgroup,
         fid: FieldId,
@@ -655,7 +683,8 @@ extern "C" {
         fid: FieldId,
         isNull: *mut pbboolean
     ) -> pbarray;
-    pub fn pbsession_GetPBAnySharedVar(
+    #[link_name = "pbsession_GetPBAnySharedVar"]
+    pub fn pbsession_GetAnySharedVar(
         session: pbsession,
         group: pbgroup,
         fid: FieldId,
@@ -697,6 +726,13 @@ extern "C" {
         group: pbgroup,
         fid: FieldId,
         value: pbstring
+    ) -> PBXRESULT;
+    #[link_name = "pbsession_SetStringSharedVar"]
+    pub fn pbsession_SetStrSharedVar(
+        session: pbsession,
+        group: pbgroup,
+        fid: FieldId,
+        value: LPCTSTR
     ) -> PBXRESULT;
     pub fn pbsession_SetStringSharedVar(
         session: pbsession,
@@ -740,7 +776,8 @@ extern "C" {
         fid: FieldId,
         value: pbtime
     ) -> PBXRESULT;
-    pub fn pbsession_SetDateTimeSharedVar(
+    #[link_name = "pbsession_SetDateTimeSharedVar"]
+    pub fn pbsession_SetDatetimeSharedVar(
         session: pbsession,
         group: pbgroup,
         fid: FieldId,
@@ -758,7 +795,8 @@ extern "C" {
         fid: FieldId,
         value: pbbyte
     ) -> PBXRESULT;
-    pub fn pbsession_SetLongLongSharedVar(
+    #[link_name = "pbsession_SetLongLongSharedVar"]
+    pub fn pbsession_SetLonglongSharedVar(
         session: pbsession,
         group: pbgroup,
         fid: FieldId,

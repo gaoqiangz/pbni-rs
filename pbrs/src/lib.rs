@@ -121,7 +121,7 @@ fn global_function_test(
     let f = String::from_utf8_lossy(f).into_owned();
 
     let mut obj = session.new_object("n_cst_pbtest")?;
-    obj.set_var_str("is_test", "我爱RUST")?;
+    obj.set_var_str("is_test", "我爱RUST");
     let is_test = obj.get_var_string("is_test");
     let invoker = obj.begin_invoke_method("of_test")?;
     invoker.arg(0).set_str("call from rust to");

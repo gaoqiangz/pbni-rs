@@ -4,7 +4,6 @@ mod vm;
 mod session;
 mod callinfo;
 mod value;
-mod object;
 mod invoker;
 mod arguments;
 #[cfg(any(feature = "global_function", feature = "nonvisualobject", feature = "visualobject"))]
@@ -17,21 +16,22 @@ pub use bindings::{FieldId, MethodId, ValueType, PBXRESULT};
 pub use callinfo::{CallInfo, CallInfoRef};
 pub use codegen::{pbargs, throw};
 pub use invoker::Invoker;
-pub use object::{ContextObject, Object, SharedObject};
 pub use session::{LocalFrame, OwnedSession, Session};
-pub use value::{Array, OwnedValue, Value};
+pub use value::{
+    array::Array, object::{ContextObject, Object, SharedObject}, OwnedValue, Value
+};
 
 #[cfg(feature = "vm")]
 pub use vm::VM;
 
 #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
-pub use object::UserObject;
+pub use value::object::UserObject;
 
 #[cfg(feature = "nonvisualobject")]
-pub use object::NonVisualObject;
+pub use value::object::NonVisualObject;
 
 #[cfg(feature = "visualobject")]
-pub use object::VisualObject;
+pub use value::object::VisualObject;
 
 #[cfg(any(feature = "global_function", feature = "nonvisualobject", feature = "visualobject"))]
 pub use pbni_codegen::{
