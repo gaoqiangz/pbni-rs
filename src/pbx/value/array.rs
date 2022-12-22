@@ -86,137 +86,6 @@ impl<'arr> Array<'arr> {
         unsafe { Ok(ffi::pbsession_IsArrayItemNull(self.session.as_ptr(), self.ptr, dim.as_ptr()).into()) }
     }
 
-    /// 获取对象类型元素值的引用
-    ///
-    /// # Panics
-    ///
-    /// 索引越界或类型不匹配时会触发Panic
-    pub fn get_item_object(&self, dim: impl AsArrayIndex) -> Option<Object<'arr>> {
-        self.try_get_item_object(dim).unwrap()
-    }
-
-    /// 获取对象类型元素值的引用
-    pub fn try_get_item_object(&self, dim: impl AsArrayIndex) -> Result<Option<Object<'arr>>> {
-        let dim = dim.as_array_index();
-        if !self.is_item_object(dim) {
-            return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
-        }
-        unsafe { Ok(self.get_item_object_unchecked(dim)) }
-    }
-
-    /// 获取对象类型元素值的引用,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_item_object_unchecked(&self, dim: impl AsArrayIndex) -> Option<Object<'arr>> {
-        let dim = dim.as_array_index();
-        let mut is_null = Default::default();
-        let v =
-            ffi::pbsession_GetObjectArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(Object::from_ptr(v, self.session.clone()))
-        }
-    }
-
-    /// 获取`any`类型元素值的引用
-    ///
-    /// # Panics
-    ///
-    /// 索引越界时会触发Panic
-    pub fn get_item_any(&self, dim: impl AsArrayIndex) -> Option<Value<'arr>> {
-        self.try_get_item_any(dim).unwrap()
-    }
-
-    /// 获取`any`类型元素值的引用
-    pub fn try_get_item_any(&self, dim: impl AsArrayIndex) -> Result<Option<Value<'arr>>> {
-        let dim = dim.as_array_index();
-        self.check_get(dim, ValueType::Any)?;
-        unsafe { Ok(self.get_item_any_unchecked(dim)) }
-    }
-
-    /// 获取`any`类型元素值的引用,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界时可能会出现未定义行为
-    pub unsafe fn get_item_any_unchecked(&self, dim: impl AsArrayIndex) -> Option<Value<'arr>> {
-        let dim = dim.as_array_index();
-        let mut is_null = Default::default();
-        let v = ffi::pbsession_GetPBAnyArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
-        if is_null == true {
-            None
-        } else {
-            Some(Value::from_ptr(v, self.session.clone()))
-        }
-    }
-
-    /// 设置对象类型元素的值
-    ///
-    /// # Panics
-    ///
-    /// 索引越界或类型不匹配时会触发Panic
-    pub fn set_item_object(&mut self, dim: impl AsArrayIndex, value: &Object) {
-        self.try_set_item_object(dim, value).unwrap();
-    }
-
-    /// 设置对象类型元素的值
-    pub fn try_set_item_object(&mut self, dim: impl AsArrayIndex, value: &Object) -> Result<()> {
-        let dim = dim.as_array_index();
-        self.check_set_index(dim)?;
-        if !self.is_item_object(dim) && self.info.value_type() != ValueType::Any {
-            return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
-        }
-        unsafe {
-            self.set_item_object_unchecked(dim, value);
-        }
-        Ok(())
-    }
-
-    /// 设置对象类型元素的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_object_unchecked(&mut self, dim: impl AsArrayIndex, value: &Object) {
-        let dim = dim.as_array_index();
-        assert_eq!(
-            ffi::pbsession_SetObjectArrayItem(self.session.as_ptr(), self.ptr, dim.as_ptr(), value.as_ptr()),
-            PBXRESULT::OK
-        );
-    }
-
-    /// 设置`any`类型元素的值,`value`参数将被消耗
-    ///
-    /// # Panics
-    ///
-    /// 索引越界或类型不兼容时会触发Panic
-    pub fn set_item_any(&mut self, dim: impl AsArrayIndex, value: Value) {
-        self.try_set_item_any(dim, value).unwrap();
-    }
-
-    /// 设置`any`类型元素的值,`value`参数将被消耗
-    pub fn try_set_item_any(&mut self, dim: impl AsArrayIndex, value: Value) -> Result<()> {
-        let dim = dim.as_array_index();
-        self.check_set(dim, value.get_type())?;
-        unsafe {
-            self.set_item_any_unchecked(dim, value);
-        }
-        Ok(())
-    }
-
-    /// 设置`any`类型元素的值,`value`参数将被消耗
-    ///
-    /// # Safety
-    ///
-    /// 索引越界或类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_item_any_unchecked(&mut self, dim: impl AsArrayIndex, value: Value) {
-        let dim = dim.as_array_index();
-        ffi::pbsession_SetArrayItemValue(self.session.as_ptr(), self.ptr, dim.as_ptr(), value.as_ptr())
-    }
-
     /// 设置元素为NULL
     ///
     /// # Panics
@@ -229,9 +98,19 @@ impl<'arr> Array<'arr> {
         let dim = dim.as_array_index();
         self.check_set_index(dim)?;
         unsafe {
-            ffi::pbsession_SetArrayItemToNull(self.session.as_ptr(), self.ptr, dim.as_ptr());
+            self.set_item_to_null_unchecked(dim);
         }
         Ok(())
+    }
+
+    /// 设置元素为NULL
+    ///
+    /// # Safety
+    ///
+    /// 索引越界时可能会出现未定义行为
+    pub unsafe fn set_item_to_null_unchecked(&mut self, dim: impl AsArrayIndex) {
+        let dim = dim.as_array_index();
+        ffi::pbsession_SetArrayItemToNull(self.session.as_ptr(), self.ptr, dim.as_ptr());
     }
 
     /// 拷贝元素的值
@@ -318,6 +197,10 @@ impl<'arr> Array<'arr> {
         }
     }
 }
+
+/*
+    Getter/Setter
+*/
 
 macro_rules! impl_array {
     /*
@@ -420,7 +303,7 @@ macro_rules! impl_array {
                 if is_null == true {
                     None
                 } else {
-                    impl_array!(@complex_get_val self.session, v, $type_name)
+                    impl_array!(@complex_get_val self, v, $type_name)
                 }
             }
         }
@@ -441,27 +324,39 @@ macro_rules! impl_array {
             /// 索引越界或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_item_ $type_name _unchecked>](&mut self, dim: impl AsArrayIndex, value: $type) {
                 let dim = dim.as_array_index();
-                assert_eq!(ffi::[<pbsession_Set $type_name:camel ArrayItem>](self.session.as_ptr(), self.ptr, dim.as_ptr(), impl_array!(@complex_set_val self.session, value, $type_name)), PBXRESULT::OK);
+                impl_array!(@complex_set_val self, dim, value, $type_name);
             }
         }
     };
-    (@complex_get_val $session: expr, $value: expr, str) => {
-        $session.get_string_unchecked($value)
+    (@complex_get_val $self: expr, $value: expr, str) => {
+        $self.session.get_string_unchecked($value)
     };
-    (@complex_get_val $session: expr, $value: expr, string) => {
-        $session.get_string_unchecked($value).map(PBStr::to_ucstring)
+    (@complex_get_val $self: expr, $value: expr, string) => {
+        $self.session.get_string_unchecked($value).map(PBStr::to_ucstring)
     };
-    (@complex_get_val $session: expr, $value: expr, $type_name: ty) => {
+    (@complex_get_val $self: expr, $value: expr, object) => {
+        Some(Object::from_ptr($value, $self.session.clone()))
+    };
+    (@complex_get_val $self: expr, $value: expr, any) => {
+        Some(Value::from_ptr($value, $self.session.clone()))
+    };
+    (@complex_get_val $self: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {
-            Some($session.[<get_ $type_name _unchecked>]($value))
+            Some($self.session.[<get_ $type_name _unchecked>]($value))
         }
     };
-    (@complex_set_val $session: expr, $value: expr, str) => {
-        $value.as_pbstr().as_ptr()
+    (@complex_set_val $self: expr, $dim: expr, $value: expr, str) => {
+        assert_eq!(ffi::pbsession_SetStrArrayItem($self.session.as_ptr(), $self.ptr, $dim.as_ptr(), $value.as_pbstr().as_ptr()), PBXRESULT::OK);
     };
-    (@complex_set_val $session: expr, $value: expr, $type_name: ty) => {
+    (@complex_set_val $self: expr, $dim: expr, $value: expr, object) => {
+        assert_eq!(ffi::pbsession_SetObjectArrayItem($self.session.as_ptr(), $self.ptr, $dim.as_ptr(), $value.as_ptr()), PBXRESULT::OK);
+    };
+    (@complex_set_val $self: expr, $dim: expr, $value: expr, any) => {
+        ffi::pbsession_SetArrayItemValue($self.session.as_ptr(), $self.ptr, $dim.as_ptr(), $value.as_ptr());
+    };
+    (@complex_set_val $self: expr, $dim: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {
-            $session.[<new_pb $type_name>]($value)
+            assert_eq!(ffi::[<pbsession_Set $type_name:camel ArrayItem>]($self.session.as_ptr(), $self.ptr, $dim.as_ptr(), $self.session.[<new_pb $type_name>]($value)), PBXRESULT::OK);
         }
     };
 
@@ -485,7 +380,7 @@ macro_rules! impl_array {
             #[doc = "获取`" $type_name "`类型元素值"]
             pub fn [<try_get_item_ $type_name>](&self, dim: impl AsArrayIndex) -> Result<Option<$type>> {
                 let dim = dim.as_array_index();
-                self.check_get(dim, $type_check)?;
+                impl_array!(@check_type_get self, dim, $type_check, $type_name);
                 unsafe {
                     Ok(self.[<get_item_ $type_name _unchecked>](dim))
                 }
@@ -513,13 +408,33 @@ macro_rules! impl_array {
             /// 索引越界或类型不匹配时会触发Panic
             pub fn [<try_set_item_ $type_name>](&mut self, dim: impl AsArrayIndex, value: $type) -> Result<()> {
                 let dim = dim.as_array_index();
-                self.check_set(dim, $type_check)?;
+                impl_array!(@check_type_set self, dim, value, $type_check, $type_name);
                 unsafe {
                     self.[<set_item_ $type_name _unchecked>](dim, value);
                 }
                 Ok(())
             }
         }
+    };
+    (@check_type_get $self: expr, $dim: expr, $type_check: expr, object) => {
+        if !$self.is_item_object($dim) {
+            return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
+        }
+    };
+    (@check_type_get $self: expr, $dim: expr, $type_check: expr, $type_name: ty) => {
+        $self.check_get($dim, $type_check)?;
+    };
+    (@check_type_set $self: expr, $dim: expr, $value: expr, $type_check: expr, object) => {
+        $self.check_set_index($dim)?;
+        if !$self.is_item_object($dim) && $self.info.value_type() != ValueType::Any {
+            return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
+        }
+    };
+    (@check_type_set $self: expr, $dim: expr, $value: expr, $type_check: expr, any) => {
+        $self.check_set($dim, $value.get_type())?;
+    };
+    (@check_type_set $self: expr, $dim: expr, $value: expr, $type_check: expr, $type_name: ty) => {
+        $self.check_set($dim, $type_check)?;
     };
 
 }
@@ -601,6 +516,22 @@ impl<'arr> Array<'arr> {
     impl_array!(
         @complex_setter
         str, impl AsPBStr, ValueType::String
+    );
+    impl_array!(
+        @complex_getter
+        object, Object<'arr>, ValueType::NoType
+    );
+    impl_array!(
+        @complex_setter
+        object, &Object, ValueType::NoType
+    );
+    impl_array!(
+        @complex_getter
+        any, Value<'arr>, ValueType::Any
+    );
+    impl_array!(
+        @complex_setter
+        any, Value, ValueType::Any
     );
 }
 

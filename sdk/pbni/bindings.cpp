@@ -500,7 +500,7 @@ extern "C"
 template <class T>
 class UserObject : public T
 {
-    static const INT32 MAGIC_CODE = 0x494E5352;
+    static const UINT32 MAGIC_CODE = 0x494E5352;
 
 public:
     typedef PBXRESULT DestroyHandler(
@@ -511,27 +511,38 @@ public:
         pbobject obj,
         pbmethodID mid,
         PBCallInfo *ci);
+    typedef void *GetInheritPtrHandler(
+        void *ctx,
+        UINT64 type_id);
 
 public:
-    UserObject(void *ctx, INT64 type_id, DestroyHandler *pDestroyHandler, InvokeHandler *pInvokeHandler)
+    UserObject(void *ctx, UINT64 type_id, DestroyHandler *pDestroyHandler, InvokeHandler *pInvokeHandler, GetInheritPtrHandler *pGetInheritPtrHandler)
         : _ctx(ctx),
           _magic(MAGIC_CODE),
           _type_id(type_id),
           _pDestroyHandler(pDestroyHandler),
-          _pInvokeHandler(pInvokeHandler)
+          _pInvokeHandler(pInvokeHandler),
+          _pGetInheritPtrHandler(pGetInheritPtrHandler)
     {
     }
-    virtual ~UserObject() override{};
-
-    void *GetSafeContext(INT64 type_id) const
+    virtual ~UserObject() override
     {
-        return (this->_magic == MAGIC_CODE && this->_type_id == type_id) ? this->_ctx : NULL;
+        this->_magic = 0;
+        this->_type_id = 0;
+    };
+
+    void *GetSafeContext(UINT64 type_id) const
+    {
+        if (this->_magic != MAGIC_CODE)
+            return NULL;
+        return this->_type_id == type_id ? this->_ctx : this->_pGetInheritPtrHandler(this->_ctx, type_id);
     }
 
 private:
     virtual void Destroy() override
     {
         this->_pDestroyHandler(this->_ctx);
+        this->_ctx = NULL;
         delete this;
     }
 
@@ -547,18 +558,19 @@ private:
 private:
     DestroyHandler *_pDestroyHandler;
     InvokeHandler *_pInvokeHandler;
+    GetInheritPtrHandler *_pGetInheritPtrHandler;
 
 protected:
     void *_ctx;
-    INT32 _magic;
-    INT64 _type_id;
+    UINT32 _magic;
+    UINT64 _type_id;
 };
 
 class NonVisualObject : public UserObject<IPBX_NonVisualObject>
 {
 public:
-    NonVisualObject(void *ctx, INT64 type_id, DestroyHandler *pDestroyHandler, InvokeHandler *pInvokeHandler)
-        : UserObject(ctx, type_id, pDestroyHandler, pInvokeHandler)
+    NonVisualObject(void *ctx, UINT64 type_id, DestroyHandler *pDestroyHandler, InvokeHandler *pInvokeHandler, GetInheritPtrHandler *pGetInheritPtrHandler)
+        : UserObject(ctx, type_id, pDestroyHandler, pInvokeHandler, pGetInheritPtrHandler)
     {
     }
 };
@@ -586,13 +598,14 @@ public:
 
 public:
     VisualObject(void *ctx,
-                 INT64 type_id,
+                 UINT64 type_id,
                  LPCTSTR lpcsClsName,
                  UserObject::DestroyHandler *pDestroyHandler,
                  UserObject::InvokeHandler *pInvokeHandler,
+                 GetInheritPtrHandler *pGetInheritPtrHandler,
                  CreateControlHandler pCreateControlHandler,
                  GetEventIDHandler pGetEventIDHandler)
-        : UserObject(ctx, type_id, pDestroyHandler, pInvokeHandler),
+        : UserObject(ctx, type_id, pDestroyHandler, pInvokeHandler, pGetInheritPtrHandler),
           _pCreateControlHandler(pCreateControlHandler),
           _pGetEventIDHandler(pGetEventIDHandler),
           _clsName(lpcsClsName)
@@ -641,33 +654,35 @@ extern "C"
     struct NVOM
     {
         void *ctx;
-        INT64 type_id;
+        UINT64 type_id;
         NonVisualObject::DestroyHandler *destroy;
         NonVisualObject::InvokeHandler *invoke;
+        NonVisualObject::GetInheritPtrHandler *getInheritPtr;
     };
 
     IPBX_NonVisualObject *NewNonVisualObject(const NVOM *om)
     {
-        return new NonVisualObject(om->ctx, om->type_id, om->destroy, om->invoke);
+        return new NonVisualObject(om->ctx, om->type_id, om->destroy, om->invoke, om->getInheritPtr);
     }
 
     struct VOM
     {
         void *ctx;
-        INT64 type_id;
+        UINT64 type_id;
         LPCTSTR cls_name;
         VisualObject::DestroyHandler *destroy;
         VisualObject::InvokeHandler *invoke;
+        VisualObject::GetInheritPtrHandler *getInheritPtr;
         VisualObject::CreateControlHandler *create_control;
         VisualObject::GetEventIDHandler *get_event_id;
     };
 
     IPBX_VisualObject *NewVisualObject(const VOM *om)
     {
-        return new VisualObject(om->ctx, om->type_id, om->cls_name, om->destroy, om->invoke, om->create_control, om->get_event_id);
+        return new VisualObject(om->ctx, om->type_id, om->cls_name, om->destroy, om->invoke, om->getInheritPtr, om->create_control, om->get_event_id);
     }
 
-    void *GetSafeContext(const UserObject<IPBX_UserObject> *pObj, INT64 type_id)
+    void *GetSafeContext(const UserObject<IPBX_UserObject> *pObj, UINT64 type_id)
     {
         if (!pObj)
             return NULL;

@@ -42,7 +42,8 @@ pub struct NVOM<T: Sized> {
     pub ctx: NonNull<T>,
     pub type_id: u64,
     pub destory: unsafe extern "C" fn(NonNull<T>),
-    pub invoke: unsafe extern "C" fn(NonNull<T>, Session, pbobject, MethodId, pbcallinfo) -> PBXRESULT
+    pub invoke: unsafe extern "C" fn(NonNull<T>, Session, pbobject, MethodId, pbcallinfo) -> PBXRESULT,
+    pub get_inherit_ptr: unsafe extern "C" fn(NonNull<T>, type_id: u64) -> *const ()
 }
 
 #[cfg(feature = "visualobject")]
@@ -53,6 +54,7 @@ pub struct VOM<T: Sized> {
     pub cls_name: LPCTSTR,
     pub destory: unsafe extern "C" fn(NonNull<T>),
     pub invoke: unsafe extern "C" fn(NonNull<T>, Session, pbobject, MethodId, pbcallinfo) -> PBXRESULT,
+    pub get_inherit_ptr: unsafe extern "C" fn(NonNull<T>, type_id: u64) -> *const (),
     pub create_control:
         unsafe extern "C" fn(NonNull<T>, u32, LPCTSTR, u32, i32, i32, i32, i32, HWND, HINSTANCE) -> HWND,
     pub get_event_id: unsafe extern "C" fn(NonNull<T>, HWND, u16, u32, u32) -> i32

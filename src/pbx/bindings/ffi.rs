@@ -915,7 +915,8 @@ extern "C" {
         dim: *const pblong,
         isNull: *mut pbboolean
     ) -> pbbyte;
-    pub fn pbsession_GetPBAnyArrayItem(
+    #[link_name = "pbsession_GetPBAnyArrayItem"]
+    pub fn pbsession_GetAnyArrayItem(
         session: pbsession,
         array: pbarray,
         dim: *const pblong,

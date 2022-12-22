@@ -192,6 +192,13 @@ fn gen_object(
                     //::pbni::pbx::__private::codegen::safe_invoke(ci.session(),&format!("{:?}",mid),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||Err(::pbni::pbx::PBXRESULT::E_NO_REGISTER_FUNCTION))
                     Ok(Some(unsafe { ::pbni::pbx::MethodId::new(method_idx_base + #last_method_idx) }))
                 }
+                unsafe fn get_inherit_ptr(&self, type_id: u64) -> *const () {
+                    if ::pbni::pbx::__private::codegen::type_id::<Self>() == type_id {
+                        self as *const Self as _
+                    } else {
+                        self.#inherit.get_inherit_ptr(type_id)
+                    }
+                }
             }
         }
     } else {
@@ -221,6 +228,13 @@ fn gen_object(
                     )*
                     //::pbni::pbx::__private::codegen::safe_invoke(ci.session(),&format!("{:?}",mid),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||Err(::pbni::pbx::PBXRESULT::E_NO_REGISTER_FUNCTION))
                      Ok(Some(unsafe { ::pbni::pbx::MethodId::new(#last_method_idx) }))
+                }
+                unsafe fn get_inherit_ptr(&self, type_id: u64) -> *const () {
+                    if ::pbni::pbx::__private::codegen::type_id::<Self>() == type_id {
+                        self as *const Self as _
+                    } else {
+                        ::std::ptr::null()
+                    }
                 }
             }
         }

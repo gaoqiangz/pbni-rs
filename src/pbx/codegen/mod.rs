@@ -55,6 +55,7 @@ pub mod __private {
     use crate::pbx::{bindings::*, *};
     use std::panic::{self, UnwindSafe};
 
+    pub use crate::pbx::bindings::type_id;
     pub use value::{FromValue, FromValueOwned, ToValue};
 
     #[cfg(feature = "global_function")]

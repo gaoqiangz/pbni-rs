@@ -3061,7 +3061,7 @@ impl DerefMut for ContextObject {
     fn deref_mut(&mut self) -> &mut Self::Target { &mut self.obj }
 }
 
-/// 用户自定义对象抽象
+/// PB用户对象抽象
 #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
 pub trait UserObject: Sized + 'static {
     /// 类名(小写)
@@ -3077,16 +3077,23 @@ pub trait UserObject: Sized + 'static {
     /// - 调用的方法ID被处理后返回`Ok(None)`
     /// - 调用的方法ID未处理则返回`Ok(Some(mid))`,`mid`为最后一个方法ID的偏移,此设计用于实现继承
     fn invoke(&mut self, mid: MethodId, ci: &CallInfoRef) -> Result<Option<MethodId>>;
+
+    /// 获取父类指针
+    ///
+    /// # Design
+    ///
+    /// 实现运行时实例指针协变 `&Child -> &Parent`
+    unsafe fn get_inherit_ptr(&self, type_id: u64) -> *const ();
 }
 
-/// 不可视对象
+/// PB不可视对象
 #[cfg(feature = "nonvisualobject")]
 pub trait NonVisualObject: UserObject {
     /// 注册
     fn register() { export::register_nonvisualobject::<Self>() }
 }
 
-/// 可视对象
+/// PB可视对象
 #[cfg(feature = "visualobject")]
 pub trait VisualObject: UserObject {
     /// 窗口类名

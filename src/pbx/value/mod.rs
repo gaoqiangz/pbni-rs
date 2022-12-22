@@ -45,154 +45,8 @@ impl<'val> Value<'val> {
     /// 判断值是否为只读传递
     pub fn is_readonly(&self) -> bool { unsafe { ffi::pbvalue_IsReadOnly(self.ptr).into() } }
 
-    /// 获取对象类型值的引用
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_object(&self) -> Option<Object<'val>> { self.try_get_object().unwrap() }
-
-    /// 尝试获取对象类型值的引用
-    pub fn try_get_object(&self) -> Result<Option<Object<'val>>> {
-        if self.is_object() {
-            unsafe { Ok(self.get_object_unchecked()) }
-        } else {
-            Err(PBXRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取对象类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_object_unchecked(&self) -> Option<Object<'val>> {
-        if self.is_null() {
-            None
-        } else {
-            Some(Object::from_ptr(ffi::pbvalue_GetObject(self.ptr), self.session.clone()))
-        }
-    }
-
-    /// 获取数组类型值的引用
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_array(&self) -> Option<Array<'val>> { self.try_get_array().unwrap() }
-
-    /// 尝试获取数组类型值的引用
-    pub fn try_get_array(&self) -> Result<Option<Array<'val>>> {
-        if self.is_array() {
-            unsafe { Ok(self.get_array_unchecked()) }
-        } else {
-            Err(PBXRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取数组类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_array_unchecked(&self) -> Option<Array<'val>> {
-        if self.is_null() {
-            None
-        } else {
-            Some(Array::from_ptr(ffi::pbvalue_GetArray(self.ptr), self.is_object(), self.session.clone()))
-        }
-    }
-
     /// 设置值为NULL
     pub fn set_to_null(&mut self) { unsafe { assert_eq!(ffi::pbvalue_SetToNull(self.ptr), PBXRESULT::OK) } }
-
-    /// 设置对象类型的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_object(&mut self, value: &Object) { self.try_set_object(value).unwrap(); }
-
-    /// 设置对象类型的值
-    pub fn try_set_object(&mut self, value: &Object) -> Result<()> {
-        if self.is_object() {
-            unsafe {
-                self.set_object_unchecked(value);
-            }
-            Ok(())
-        } else {
-            Err(PBXRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置对象类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_object_unchecked(&mut self, v: &Object) {
-        assert_eq!(ffi::pbvalue_SetObject(self.ptr, v.as_ptr()), PBXRESULT::OK);
-    }
-
-    /// 设置数组类型的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_array(&mut self, value: &Array) { self.try_set_array(value).unwrap(); }
-
-    /// 设置数组类型的值
-    pub fn try_set_array(&mut self, value: &Array) -> Result<()> {
-        if self.is_array() {
-            unsafe {
-                self.set_array_unchecked(value);
-            }
-            Ok(())
-        } else {
-            Err(PBXRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置数组类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_array_unchecked(&mut self, v: &Array) {
-        assert_eq!(ffi::pbvalue_SetArray(self.ptr, v.as_ptr()), PBXRESULT::OK);
-    }
-
-    /// 从参数拷贝并覆盖现有值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_value(&mut self, value: &Value) { self.try_set_value(value).unwrap(); }
-
-    /// 从参数拷贝并覆盖现有值
-    pub fn try_set_value(&mut self, value: &Value) -> Result<()> {
-        if self.get_type() == value.get_type() &&
-            self.is_object() == value.is_object() &&
-            self.is_array() == value.is_array() &&
-            self.is_enum() == value.is_enum()
-        {
-            unsafe {
-                self.set_value_unchecked(value);
-            }
-            Ok(())
-        } else {
-            Err(PBXRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 从参数拷贝并覆盖现有值
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_value_unchecked(&mut self, src: &Value) {
-        ffi::pbsession_SetValue(self.session.as_ptr(), self.ptr, src.ptr)
-    }
 
     /// 拷贝并转移所有权,`self`将被消耗
     pub fn acquire(self) -> OwnedValue {
@@ -202,6 +56,10 @@ impl<'val> Value<'val> {
         }
     }
 }
+
+/*
+    Getter/Setter
+*/
 
 macro_rules! impl_value {
     /*
@@ -233,7 +91,7 @@ macro_rules! impl_value {
             ///
             /// # Safety
             ///
-            /// 索引越界或类型不兼容时可能会出现未定义行为
+            /// 类型不兼容时可能会出现未定义行为
             pub unsafe fn [<get_ $type_name _unchecked>](&self) -> Option<$type> {
                 if self.is_null() {
                     None
@@ -257,7 +115,7 @@ macro_rules! impl_value {
             ///
             /// # Safety
             ///
-            /// 索引越界或类型不兼容时可能会出现未定义行为
+            /// 类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_ $type_name _unchecked>](&mut self, value: $type) {
                 assert_eq!(ffi::[<pbvalue_Set $type_name:camel>](self.ptr, value.into()), PBXRESULT::OK);
             }
@@ -293,13 +151,13 @@ macro_rules! impl_value {
             ///
             /// # Safety
             ///
-            /// 索引越界或类型不兼容时可能会出现未定义行为
+            /// 类型不兼容时可能会出现未定义行为
             pub unsafe fn [<get_ $type_name _unchecked>](&self) -> Option<$type> {
                 if self.is_null() {
                     None
                 } else {
                     let v = ffi::[<pbvalue_Get $type_name:camel>](self.ptr);
-                    impl_value!(@complex_get_val self.session, v, $type_name)
+                    impl_value!(@complex_get_val self, v, $type_name)
                 }
             }
         }
@@ -317,29 +175,44 @@ macro_rules! impl_value {
             ///
             /// # Safety
             ///
-            /// 索引越界或类型不兼容时可能会出现未定义行为
+            /// 类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_ $type_name _unchecked>](&mut self, value: $type) {
-                assert_eq!(ffi::[<pbvalue_Set $type_name:camel>](self.ptr, impl_value!(@complex_set_val self.session, value, $type_name)), PBXRESULT::OK);
+                impl_value!(@complex_set_val self, value, $type_name);
             }
         }
     };
-    (@complex_get_val $session: expr, $value: expr, str) => {
-        $session.get_string_unchecked($value)
+    (@complex_get_val $self: expr, $value: expr, str) => {
+        $self.session.get_string_unchecked($value)
     };
-    (@complex_get_val $session: expr, $value: expr, string) => {
-        $session.get_string_unchecked($value).map(PBStr::to_ucstring)
+    (@complex_get_val $self: expr, $value: expr, string) => {
+        $self.session.get_string_unchecked($value).map(PBStr::to_ucstring)
     };
-    (@complex_get_val $session: expr, $value: expr, $type_name: ty) => {
+    (@complex_get_val $self: expr, $value: expr, array) => {
+        Some(Array::from_ptr($value, $self.is_object(), $self.session.clone()))
+    };
+    (@complex_get_val $self: expr, $value: expr, object) => {
+        Some(Object::from_ptr($value, $self.session.clone()))
+    };
+    (@complex_get_val $self: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {
-            Some($session.[<get_ $type_name _unchecked>]($value))
+            Some($self.session.[<get_ $type_name _unchecked>]($value))
         }
     };
-    (@complex_set_val $session: expr, $value: expr, str) => {
-        $value.as_pbstr().as_ptr()
+    (@complex_set_val $self: expr, $value: expr, str) => {
+        assert_eq!(ffi::pbvalue_SetStr($self.ptr, $value.as_pbstr().as_ptr()), PBXRESULT::OK);
     };
-    (@complex_set_val $session: expr, $value: expr, $type_name: ty) => {
+    (@complex_set_val $self: expr, $value: expr, array) => {
+        assert_eq!(ffi::pbvalue_SetArray($self.ptr, $value.as_ptr()), PBXRESULT::OK);
+    };
+    (@complex_set_val $self: expr, $value: expr, object) => {
+        assert_eq!(ffi::pbvalue_SetObject($self.ptr, $value.as_ptr()), PBXRESULT::OK);
+    };
+    (@complex_set_val $self: expr, $value: expr, value) => {
+        ffi::pbsession_SetValue($self.session.as_ptr(), $self.ptr, $value.ptr);
+    };
+    (@complex_set_val $self: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {
-            $session.[<new_pb $type_name>]($value)
+            assert_eq!(ffi::[<pbvalue_Set $type_name:camel>]($self.ptr, $self.session.[<new_pb $type_name>]($value)), PBXRESULT::OK);
         }
     };
 
@@ -355,14 +228,14 @@ macro_rules! impl_value {
             ///
             /// # Panics
             ///
-            /// 索引越界或类型不匹配时会触发Panic
+            /// 类型不匹配时会触发Panic
             pub fn [<get_ $type_name>](&self) -> Option<$type> {
                 self.[<try_get_ $type_name>]().unwrap()
             }
 
             #[doc = "获取`" $type_name "`类型值"]
             pub fn [<try_get_ $type_name>](&self) -> Result<Option<$type>> {
-                if matches!(self.get_type(), $type_check) {
+                if impl_value!(@check_type_get self, $type_check, $type_name) {
                     unsafe {
                         Ok(self.[<get_ $type_name _unchecked>]())
                     }
@@ -381,14 +254,14 @@ macro_rules! impl_value {
             ///
             /// # Panics
             ///
-            /// 索引越界或类型不匹配时会触发Panic
+            /// 类型不匹配时会触发Panic
             pub fn [<set_ $type_name>](&mut self, value: $type) {
                 self.[<try_set_ $type_name>](value).unwrap()
             }
 
             #[doc = "设置`" $type_name "`类型值"]
             pub fn [<try_set_ $type_name>](&mut self, value: $type) -> Result<()> {
-                if matches!(self.get_type(), $type_check) {
+                if impl_value!(@check_type_set self, value, $type_check, $type_name) {
                     unsafe {
                         self.[<set_ $type_name _unchecked>](value);
                     }
@@ -398,6 +271,30 @@ macro_rules! impl_value {
                 }
             }
         }
+    };
+    (@check_type_get $self: expr, $type_check: pat, array) => {
+        $self.is_array()
+    };
+    (@check_type_get $self: expr, $type_check: pat, object) => {
+        $self.is_object()
+    };
+    (@check_type_get $self: expr, $type_check: pat, $type_name: ty) => {
+        matches!($self.get_type(), $type_check)
+    };
+    (@check_type_set $self: expr, $value: expr, $type_check: pat, array) => {
+        $self.is_array()
+    };
+    (@check_type_set $self: expr, $value: expr, $type_check: pat, object) => {
+        $self.is_object()
+    };
+    (@check_type_set $self: expr, $value: expr, $type_check: pat, value) => {
+        $self.get_type() == $value.get_type() &&
+        $self.is_object() == $value.is_object() &&
+        $self.is_array() == $value.is_array() &&
+        $self.is_enum() == $value.is_enum()
+    };
+    (@check_type_set $self: expr, $value: expr, $type_check: pat, $type_name: ty) => {
+        matches!($self.get_type(), $type_check | ValueType::NoType)
     };
 }
 
@@ -478,6 +375,26 @@ impl<'val> Value<'val> {
     impl_value!(
         @complex_setter
         str, impl AsPBStr, ValueType::String
+    );
+    impl_value!(
+        @complex_getter
+        array, Array<'val>, ValueType::NoType
+    );
+    impl_value!(
+        @complex_setter
+        array, &Array, ValueType::NoType
+    );
+    impl_value!(
+        @complex_getter
+        object, Object<'val>, ValueType::NoType
+    );
+    impl_value!(
+        @complex_setter
+        object, &Object, ValueType::NoType
+    );
+    impl_value!(
+        @complex_setter
+        value, &Value, ValueType::NoType
     );
 }
 

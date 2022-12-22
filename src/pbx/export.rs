@@ -32,7 +32,8 @@ pub fn register_nonvisualobject<T: NonVisualObject>() {
                 ctx: NonNull::new_unchecked(Box::into_raw(obj)),
                 type_id: type_id::<T>(),
                 destory: handler::destroy,
-                invoke: handler::invoke
+                invoke: handler::invoke,
+                get_inherit_ptr: handler::get_inherit_ptr
             };
             Ok(ffi::NewNonVisualObject(&om as *const NVOM<T> as _))
         }
@@ -60,6 +61,7 @@ pub fn register_visualobject<T: VisualObject>() {
                 cls_name: T::WINDOW_CLASS_NAME.as_ptr(),
                 destory: handler::destroy,
                 invoke: handler::invoke,
+                get_inherit_ptr: handler::get_inherit_ptr,
                 create_control: handler::create_control,
                 get_event_id: handler::get_event_id
             };
@@ -86,6 +88,9 @@ mod handler {
     ) -> PBXRESULT {
         let ci = CallInfoRef::from_ptr(ci, session);
         ctx.as_mut().invoke(mid, &ci).into()
+    }
+    pub unsafe extern "C" fn get_inherit_ptr<T: UserObject>(ctx: NonNull<T>, type_id: u64) -> *const () {
+        ctx.as_ref().get_inherit_ptr(type_id)
     }
     #[cfg(feature = "visualobject")]
     pub unsafe extern "C" fn create_control<T: VisualObject>(

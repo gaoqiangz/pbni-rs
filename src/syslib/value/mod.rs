@@ -94,35 +94,6 @@ impl<'val> Value<'val> {
     }
     */
 
-    /// 获取数组类型值的引用
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn get_array(&self) -> Option<Array<'val>> { self.try_get_array().unwrap() }
-
-    /// 尝试获取数组类型值的引用
-    pub fn try_get_array(&self) -> Result<Option<Array<'val>>> {
-        if self.is_array() {
-            unsafe { Ok(self.get_array_unchecked()) }
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 获取数组类型值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn get_array_unchecked(&self) -> Option<Array<'val>> {
-        if self.is_null() {
-            None
-        } else {
-            Some(Array::from_ptr(self.inner.val.ptr as _, self.is_object(), self.session.clone()))
-        }
-    }
-
     /// 设置值为NULL
     pub fn set_to_null(&mut self) { self.set_info_flag(1, DATA_NULLVAL_SHIFT, DATA_NULLVAL_MASK); }
 
@@ -148,70 +119,6 @@ impl<'val> Value<'val> {
     }
     */
 
-    /// 设置数组类型的值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_array(&mut self, value: &Array) { self.try_set_array(value).unwrap(); }
-
-    /// 设置数组类型的值
-    pub fn try_set_array(&mut self, value: &Array) -> Result<()> {
-        if self.is_array() {
-            unsafe {
-                self.set_array_unchecked(value);
-            }
-            Ok(())
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 设置数组类型的值,不检查类型
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_array_unchecked(&mut self, value: &Array) {
-        self.set_ptr(
-            API.ot_copy_array(self.session.as_ptr(), value.as_ptr() as _) as _,
-            value.info().value_type() as OB_CLASS_ID
-        );
-        self.set_info_group(OB_GROUPTYPE::OB_ARRAY);
-    }
-
-    /// 从参数拷贝并覆盖现有值
-    ///
-    /// # Panics
-    ///
-    /// 类型不匹配时会触发Panic
-    pub fn set_value(&mut self, value: &Value) { self.try_set_value(value).unwrap(); }
-
-    /// 从参数拷贝并覆盖现有值
-    pub fn try_set_value(&mut self, value: &Value) -> Result<()> {
-        if self.get_type() == value.get_type() &&
-            self.get_type_kind() == value.get_type_kind() &&
-            self.get_info_group() == value.get_info_group() &&
-            self.get_info_style() == value.get_info_style()
-        {
-            unsafe {
-                self.set_value_unchecked(value);
-            }
-            Ok(())
-        } else {
-            Err(PBRESULT::E_MISMATCHED_DATA_TYPE)
-        }
-    }
-
-    /// 从参数拷贝并覆盖现有值
-    ///
-    /// # Safety
-    ///
-    /// 类型不兼容时可能会出现未定义行为
-    pub unsafe fn set_value_unchecked(&mut self, value: &Value) {
-        API.rtDataCopy(self.session.as_ptr(), self.as_ptr(), value.as_ptr(), true as BOOL);
-    }
-
     /*
     TODO
     /// 拷贝并转移所有权,`self`将被消耗
@@ -224,7 +131,7 @@ impl<'val> Value<'val> {
     */
 }
 
-impl<'val> Value<'val> {
+impl Value<'_> {
     #[inline(always)]
     fn get_info_flag(&self, shift: u32, mask: OB_INFO_FLAGS) -> OB_INFO_FLAGS {
         bitfield!(@get self.inner.info,shift,mask)
@@ -317,6 +224,10 @@ impl<'val> Value<'val> {
         }
     }
 }
+
+/*
+    Getter/Setter
+*/
 
 macro_rules! impl_value {
     /*
@@ -441,7 +352,7 @@ macro_rules! impl_value {
                 if self.is_null() {
                     None
                 } else {
-                    Some(impl_value!(@complex_get_val self.session, self.inner.val.ptr, $type_name))
+                    Some(impl_value!(@complex_get_val self, self.inner.val.ptr, $type_name))
                 }
             }
         }
@@ -462,39 +373,51 @@ macro_rules! impl_value {
             ///
             /// 类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_ $type_name _unchecked>](&mut self, value: $type) {
-                self.set_ptr(impl_value!(@complex_set_val self.session, value, $type_name) as _, $field_type);
+                impl_value!(@complex_set_val self, value, $field_type, $type_name);
             }
         }
     };
-    (@complex_get_val $session: expr, $value: expr, longlong) => {
+    (@complex_get_val $self: expr, $value: expr, longlong) => {
         *($value as *const pblonglong)
     };
-    (@complex_get_val $session: expr, $value: expr, double) => {
+    (@complex_get_val $self: expr, $value: expr, double) => {
         *($value as *const pbdouble)
     };
-    (@complex_get_val $session: expr, $value: expr, str) => {
+    (@complex_get_val $self: expr, $value: expr, str) => {
         PBStr::from_ptr_str($value as _)
     };
-    (@complex_get_val $session: expr, $value: expr, string) => {
+    (@complex_get_val $self: expr, $value: expr, string) => {
         PBString::from_ptr_str($value as _)
     };
-    (@complex_get_val $session: expr, $value: expr, $type_name: ty) => {
+    (@complex_get_val $self: expr, $value: expr, array) => {
+        Array::from_ptr($value as _, $self.is_object(), $self.session.clone())
+    };
+    (@complex_get_val $self: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {
-            $session.[<get_ $type_name _unchecked>]($value as _)
+            $self.session.[<get_ $type_name _unchecked>]($value as _)
         }
     };
-    (@complex_set_val $session: expr, $value: expr, longlong) => {
-        API.ob_dup_longlong($session.as_ptr(), &$value as *const pblonglong as _)
+    (@complex_set_val $self: expr, $value: expr, $field_type: expr, longlong) => {
+        $self.set_ptr(API.ob_dup_longlong($self.session.as_ptr(), &$value as *const pblonglong as _) as _, $field_type);
     };
-    (@complex_set_val $session: expr, $value: expr, double) => {
-        API.ob_dup_double($session.as_ptr(), &$value as *const pbdouble as _)
+    (@complex_set_val $self: expr, $value: expr, $field_type: expr, double) => {
+        $self.set_ptr(API.ob_dup_double($self.session.as_ptr(), &$value as *const pbdouble as _) as _, $field_type);
     };
-    (@complex_set_val $session: expr, $value: expr, str) => {
-        API.ob_dup_string($session.as_ptr(), $value.as_pbstr().as_ptr() as _)
+    (@complex_set_val $self: expr, $value: expr, $field_type: expr, str) => {
+        $self.set_ptr(API.ob_dup_string($self.session.as_ptr(), $value.as_pbstr().as_ptr() as _) as _, $field_type);
     };
-    (@complex_set_val $session: expr, $value: expr, $type_name: ty) => {
+    (@complex_set_val $self: expr, $value: expr, $field_type: expr, array) => {
+        {
+            $self.set_ptr(API.ot_copy_array($self.session.as_ptr(), $value.as_ptr() as _) as _, $value.info().value_type() as OB_CLASS_ID);
+            $self.set_info_group(OB_GROUPTYPE::OB_ARRAY);
+        }
+    };
+    (@complex_set_val $self: expr, $value: expr, $field_type: expr, value) => {
+        API.rtDataCopy($self.session.as_ptr(), $self.as_ptr(), $value.as_ptr(), true as BOOL);
+    };
+    (@complex_set_val $self: expr, $value: expr, $field_type: expr, $type_name: ty) => {
         ::paste::paste! {
-            $session.[<new_pb $type_name>]($value)
+            $self.set_ptr($self.session.[<new_pb $type_name>]($value) as _, $field_type);
         }
     };
 
@@ -517,7 +440,7 @@ macro_rules! impl_value {
 
             #[doc = "获取`" $type_name "`类型值"]
             pub fn [<try_get_ $type_name>](&self) -> Result<Option<$type>> {
-                if matches!(self.get_type(), $type_check) {
+                if impl_value!(@check_type_get self, $type_check, $type_name) {
                     unsafe {
                         Ok(self.[<get_ $type_name _unchecked>]())
                     }
@@ -543,7 +466,7 @@ macro_rules! impl_value {
 
             #[doc = "设置`" $type_name "`类型值"]
             pub fn [<try_set_ $type_name>](&mut self, value: $type) -> Result<()> {
-                if matches!(self.get_type(), $type_check | ValueType::NoType) {
+                if impl_value!(@check_type_set self, value, $type_check, $type_name) {
                     unsafe {
                         self.[<set_ $type_name _unchecked>](value);
                     }
@@ -553,6 +476,24 @@ macro_rules! impl_value {
                 }
             }
         }
+    };
+    (@check_type_get $self: expr, $type_check: pat, array) => {
+        $self.is_array()
+    };
+    (@check_type_get $self: expr, $type_check: pat, $type_name: ty) => {
+        matches!($self.get_type(), $type_check)
+    };
+    (@check_type_set $self: expr, $value: expr, $type_check: pat, array) => {
+        $self.is_array()
+    };
+    (@check_type_set $self: expr, $value: expr, $type_check: pat, value) => {
+        $self.get_type() == $value.get_type() &&
+        $self.get_type_kind() == $value.get_type_kind() &&
+        $self.get_info_group() == $value.get_info_group() &&
+        $self.get_info_style() == $value.get_info_style()
+    };
+    (@check_type_set $self: expr, $value: expr, $type_check: pat, $type_name: ty) => {
+        matches!($self.get_type(), $type_check | ValueType::NoType)
     };
 }
 
@@ -649,6 +590,20 @@ impl<'val> Value<'val> {
         @complex_setter
         str, impl AsPBStr, ValueType::String,
         STRING_TYPE
+    );
+    impl_value!(
+        @complex_getter
+        array, Array<'val>, ValueType::NoType
+    );
+    impl_value!(
+        @complex_setter
+        array, &Array, ValueType::NoType,
+        NO_TYPE
+    );
+    impl_value!(
+        @complex_setter
+        value, &Value, ValueType::NoType,
+        NO_TYPE
     );
 }
 

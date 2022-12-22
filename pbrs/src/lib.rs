@@ -10,16 +10,16 @@ impl RustObject {
     #[constructor]
     fn new(session: Session, ctx: ContextObject) -> RustObject { RustObject {} }
 
-    #[method(name = "of_Array")]
+    #[method]
     fn of_array(&mut self, mut arg: Array) -> Result<String> {
-        arg.set_item_long(&[10], 12333223);
+        arg.set_item_long(10, 12333223);
         let mut s = String::new();
         for item in arg.iter::<pblong>() {
             s += &format!("item: {:?}\n", item);
         }
         Ok(s)
     }
-    #[method(name = "of_Invoke")]
+    #[method]
     fn of_invoke(&mut self, mut obj: Object) -> Result<String> {
         let rv = obj.invoke_method("of_Test", pbargs!["abcd", 123])?;
         Ok(rv)
@@ -61,10 +61,7 @@ impl ParentObject {
     }
     #[method(name = "of_hello", overload = 1)]
     fn hello(&self, arg: String, b: Option<String>) -> String { format!("hello {},{:?}", arg, b) }
-    //fn of_hello2(&mut self, a: String, b: String) -> String { format!("hello {}, {}", a, b) }
-    #[method(name = "of_foo")]
-    fn of_foo(&self, obj: &Self) -> Result<String> { Ok(format!("fooxxx {:?}", obj.foo)) }
-    #[method(name = "of_SetFoo")]
+    #[method]
     fn of_setfoo(&mut self, arg: &PBStr) -> bool {
         self.foo = Some(arg.to_owned());
         true
@@ -96,9 +93,12 @@ impl ChildObject {
             }
         }
     }
-    #[method(name = "of_child_hello")]
+    #[method]
     fn of_hello(&self, arg: String) -> Result<String> { Ok(format!("child hello {}", arg)) }
 }
+
+#[global_function(name = "gf_test_inherit")]
+fn test_inherit(parent: &ParentObject) -> Result<String> { Ok(format!("parent foo {:?}", parent.foo)) }
 
 #[global_function(name = "gf_bitor")]
 fn bit_or(session: Session, a: pblong, b: pblong) -> pblong { a | b }

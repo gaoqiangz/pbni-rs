@@ -117,7 +117,7 @@ impl<'arr> Array<'arr> {
     }
     */
 
-    /// 获取`any`类型元素值的引用
+    /// 获取`value`类型元素值的引用
     ///
     /// # Panics
     ///
@@ -126,14 +126,14 @@ impl<'arr> Array<'arr> {
         self.try_get_item_value(dim).unwrap()
     }
 
-    /// 获取`any`类型元素值的引用
+    /// 获取`value`类型元素值的引用
     pub fn try_get_item_value(&self, dim: impl AsArrayIndex) -> Result<Value<'arr>> {
         let dim = dim.as_array_index();
         self.check_get(dim, ValueType::Any)?;
         unsafe { Ok(self.get_item_value_unchecked(dim)) }
     }
 
-    /// 获取`any`类型元素值的引用,不检查类型
+    /// 获取`value`类型元素值的引用,不检查类型
     ///
     /// # Safety
     ///
@@ -212,10 +212,19 @@ impl<'arr> Array<'arr> {
         let dim = dim.as_array_index();
         self.check_set_index(dim)?;
         unsafe {
-            let mut item = self.get_item_value_unchecked(dim);
-            item.set_to_null();
+            self.set_item_to_null_unchecked(dim);
         }
         Ok(())
+    }
+
+    /// 设置元素为NULL
+    ///
+    /// # Safety
+    ///
+    /// 索引越界时可能会出现未定义行为
+    pub unsafe fn set_item_to_null_unchecked(&mut self, dim: impl AsArrayIndex) {
+        let mut item = self.get_item_value_unchecked(dim);
+        item.set_to_null();
     }
 
     /*
@@ -303,6 +312,10 @@ impl<'arr> Array<'arr> {
         }
     }
 }
+
+/*
+    Getter/Setter
+*/
 
 macro_rules! impl_array {
     (
