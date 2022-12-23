@@ -183,7 +183,8 @@ macro_rules! impl_value {
     };
     (@complex_set_val $self: expr, $value: expr, $field_type: expr, array) => {
         {
-            $self.set_ptr(API.ot_copy_array($self.session.as_ptr(), $value.as_ptr() as _) as _, $value.info().value_type() as OB_CLASS_ID);
+            $self.set_ptr($value.as_ptr() as _, $value.info().value_type() as OB_CLASS_ID);
+            //$self.set_ptr(API.ot_copy_array($self.session.as_ptr(), $value.as_ptr() as _) as _, $value.info().value_type() as OB_CLASS_ID);
             $self.set_info_group(OB_GROUPTYPE::OB_ARRAY);
         }
     };
@@ -372,7 +373,7 @@ impl<'val> Value<'val> {
     );
     impl_value!(
         @complex_setter
-        array, &Array, ValueType::NoType,
+        array, Array, ValueType::NoType,
         NO_TYPE
     );
     impl_value!(

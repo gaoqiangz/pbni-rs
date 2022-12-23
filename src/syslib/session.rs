@@ -136,88 +136,6 @@ impl Session {
     */
 
     /*
-    TODO
-    /// 与Session绑定`static`引用参数
-    pub fn set_prop<T, D>(&self, name: T, data: &'static D)
-    where
-        T: AsPBStr,
-        D: Sized
-    {
-        self.set_prop_ptr(name, data as *const D)
-    }
-
-    /// 与Session绑定指针参数
-    pub fn set_prop_ptr<T, D>(&self, name: T, data: *const D)
-    where
-        T: AsPBStr,
-        D: Sized
-    {
-        unsafe { ffi::pbsession_SetProp(self.ptr, name.as_pbstr().as_ptr(), data as _) }
-    }
-
-    /// 获取Session绑定的指针参数
-    pub fn get_prop_ptr<T, D>(&self, name: T) -> *const D
-    where
-        T: AsPBStr,
-        D: Sized
-    {
-        unsafe { ffi::pbsession_GetProp(self.ptr, name.as_pbstr().as_ptr()) as *const D }
-    }
-    /// 获取Session绑定的引用参数
-    ///
-    ///
-    /// # Safety
-    ///
-    /// 引用的生命周期由调用处提供,需要开发者自行保证期有效性
-    pub unsafe fn get_prop_ref<'a, T, D>(&self, name: T) -> Option<&'a D>
-    where
-        T: AsPBStr,
-        D: Sized
-    {
-        let ptr: *const D = self.get_prop_ptr(name);
-        if ptr.is_null() {
-            None
-        } else {
-            Some(&*ptr)
-        }
-    }
-
-    /// 获取Session绑定的可变引用参数
-    ///
-    ///
-    /// # Safety
-    ///
-    /// 引用的生命周期由调用处提供,需要开发者自行保证期有效性
-    pub unsafe fn get_prop_mut<'a, T, D>(&self, name: T) -> Option<&'a mut D>
-    where
-        T: AsPBStr,
-        D: Sized
-    {
-        let ptr: *const D = self.get_prop_ptr(name);
-        if ptr.is_null() {
-            None
-        } else {
-            Some(&mut *(ptr as *mut D))
-        }
-    }
-
-    /// 解绑Session参数
-    ///
-    /// # Notice
-    ///
-    /// 如果绑定的参数内存是由`Box`分配的,那么需要在解绑前正确释放内存
-    pub fn remove_prop(&self, name: impl AsPBStr) {
-        unsafe { ffi::pbsession_RemoveProp(self.ptr, name.as_pbstr().as_ptr()) }
-    }
-    */
-
-    /*
-        Value
-    */
-
-    pub fn new_value(&self) -> Value { unsafe { Value::new(self.clone()) } }
-
-    /*
         Enum
     */
 
@@ -264,6 +182,14 @@ impl Session {
         }
     }
     */
+
+    /*
+        Value
+    */
+
+    /// 创建一个新值
+    pub fn new_value(&self) -> Value<'static> { unsafe { Value::new(self.clone()) } }
+
     /*
         Object
     */
@@ -318,6 +244,7 @@ impl Session {
         let cls_name = cls_name.as_pbstr();
         self.new_user_object(cls_name.as_ref()).or_else(|_| self.new_system_object(cls_name))
     }
+    */
 
     /*
         Array
@@ -339,12 +266,19 @@ impl Session {
     /// ```
     pub fn new_array<'a>(&'a self, item_type: ValueType) -> Result<Array<'a>> {
         unsafe {
-            let ptr = ffi::pbsession_NewUnboundedSimpleArray(self.ptr, item_type)
-                .ok_or(PBXRESULT::E_INVALID_ARGUMENT)?;
+            let ty = OB_CLASS_HNDL {
+                group_hndl: (&*self.ptr).appclshndl.group_hndl,
+                class_id: item_type as OB_CLASS_ID
+            };
+            let ptr = API.ot_array_create_unbounded(self.ptr, ty, Value::info_flag());
+            if ptr.is_null() {
+                return Err(PBRESULT::E_INVALID_ARGUMENT);
+            }
             Ok(Array::from_ptr(ptr, false, self.clone()))
         }
     }
 
+    /*
     /// 实例化定长标量多维数组
     ///
     /// # Parameters
@@ -391,7 +325,8 @@ impl Session {
             Ok(Array::from_ptr(ptr, false, self.clone()))
         }
     }
-
+    */
+    /*
     /// 实例化变长用户自定义对象一维数组
     ///
     /// # Parameters

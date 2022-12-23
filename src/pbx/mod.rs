@@ -10,17 +10,14 @@ mod arguments;
 mod userobject;
 #[cfg(any(feature = "global_function", feature = "nonvisualobject", feature = "visualobject"))]
 mod export;
-#[doc(hidden)]
 mod codegen;
 
 pub use arguments::{Arguments, ArgumentsRef};
-pub use bindings::{FieldId, MethodId, ValueType, PBXRESULT};
+pub use bindings::PBXRESULT;
 pub use callinfo::{CallInfo, CallInfoRef};
-pub use codegen::{pbargs, throw};
+pub use codegen::{pbx_args, pbx_throw};
 pub use invoker::Invoker;
 pub use session::{LocalFrame, OwnedSession, Session};
-#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
-pub use userobject::*;
 pub use value::{
     array::Array, object::{ContextObject, Object, SharedObject}, OwnedValue, Value
 };

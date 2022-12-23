@@ -21,7 +21,7 @@ impl RustObject {
     }
     #[method]
     fn of_invoke(&mut self, mut obj: Object) -> Result<String> {
-        let rv = obj.invoke_method("of_Test", pbargs!["abcd", 123])?;
+        let rv = obj.invoke_method("of_Test", pbx_args!["abcd", 123])?;
         Ok(rv)
     }
 }
@@ -124,7 +124,11 @@ fn global_function_test(
     obj.set_field_str("is_test", "我爱RUST");
     let is_test = obj.get_field_string("is_test");
     let invoker = obj.begin_invoke_method("of_test")?;
-    invoker.arg(0).set_str("call from rust to");
+    //invoker.arg(0).set_str("call from rust to");
+    let mut arg = session.new_array(ValueType::String)?;
+    arg.set_item_str(1, "a");
+    arg.set_item_str(2, "b");
+    invoker.arg(0).set_array(&arg);
     let rv = invoker.invoke()?.get_string();
 
     Ok(())

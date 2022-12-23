@@ -1,4 +1,6 @@
-use crate::pbx::{bindings::*, *};
+use crate::{
+    pbx::{bindings::*, *}, primitive::*
+};
 
 /// PB用户对象抽象
 #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]

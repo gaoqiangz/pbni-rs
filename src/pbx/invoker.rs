@@ -1,4 +1,6 @@
-use crate::pbx::{bindings::*, *};
+use crate::{
+    pbx::{bindings::*, *}, primitive::*
+};
 
 /// 全局函数调用参数
 pub struct GlobalFunction<'session> {

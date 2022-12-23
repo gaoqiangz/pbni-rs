@@ -4,6 +4,7 @@ use crate::{
 use std::ops::{Deref, DerefMut};
 
 mod impls;
+pub mod object;
 pub mod array;
 
 use array::Array;
@@ -24,7 +25,7 @@ impl<'val> Value<'val> {
             _marker: PhantomData
         }
     }
-    pub(crate) unsafe fn new(session: Session) -> Value<'val> {
+    pub(crate) unsafe fn new(session: Session) -> Value<'static> {
         let inner = ValueInner::new();
         Value {
             inner,
@@ -224,6 +225,18 @@ impl Value<'_> {
                 API.ot_free_val_ptr(self.session.as_ptr(), self.as_ptr());
             }
         }
+    }
+
+    pub(crate) fn info_flag() -> OB_INFO_FLAGS {
+        let style = OB_DATASTYLE::PTR_STYLE;
+        let group = OB_GROUPTYPE::OB_SIMPLE;
+        (((OB_MEMBER_ACCESS::OB_PUBLIC_MEMBER as OB_INFO_FLAGS) << DATA_ACCESS_SHIFT) |
+            ((group as OB_INFO_FLAGS) << DATA_GROUP_SHIFT) |
+            (0 << DATA_FIELDTYPE_SHIFT) |
+            ((style as OB_INFO_FLAGS) << DATA_STYLE_SHIFT) |
+            ((OB_STATUS::USED as OB_INFO_FLAGS) << DATA_STATUS_SHIFT) |
+            ((OB_REFTYPE::OB_DIRECT_REF as OB_INFO_FLAGS) << DATA_REFTYPE_SHIFT) |
+            (0 << DATA_TYPEARGS_SHIFT)) as OB_INFO_FLAGS
     }
 }
 
@@ -642,7 +655,7 @@ impl ToValue for Object<'_> {
 }
 */
 impl ToValue for Array<'_> {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_array(&self) }
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_array(self) }
 }
 impl ToValue for Value<'_> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_value(&self) }

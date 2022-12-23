@@ -38,6 +38,35 @@ impl<'arr> Array<'arr> {
         unsafe { API.ot_array_num_items(self.session.as_ptr(), self.ptr) as pblong }
     }
 
+    /// 增长动态数组长度
+    ///
+    /// # Panics
+    ///
+    /// 固定长度数组将会触发Panic
+    ///
+    /// # Description
+    ///
+    /// - `new_size`大于当前长度时将创建元素并初始化
+    /// - `new_size`少于当前长度时不做任何操作
+    pub fn reserve(&mut self, new_size: pbulong) { self.try_reserve(new_size).unwrap(); }
+
+    /// 增长动态数组长度
+    ///
+    /// # Description
+    ///
+    /// - `new_size`大于当前长度时将创建元素并初始化
+    /// - `new_size`少于当前长度时不做任何操作
+    pub fn try_reserve(&mut self, new_size: pbulong) -> Result<()> {
+        if self.info().bounded() {
+            return Err(PBRESULT::E_OUT_OF_MEMORY);
+        }
+        unsafe {
+            let arr_inst = &*(self.ptr as POB_ARRAY_INST);
+            API.ob_dynarray_grow(self.session.as_ptr(), arr_inst.data as _, new_size, 1);
+        }
+        Ok(())
+    }
+
     /// 获取元素迭代器,仅支持一维数组
     ///
     /// # Panics

@@ -167,7 +167,7 @@ fn gen_object(
                 fn new(session: ::pbni::pbx::Session, ctx: ::pbni::pbx::ContextObject) -> Result<Self> {
                     ::pbni::pbx::__private::codegen::safe_invoke_ctor(&session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::#ctor(unsafe { session.clone() }, ctx))
                 }
-                fn invoke(&mut self, mid: ::pbni::pbx::MethodId, ci: &::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<Option<::pbni::pbx::MethodId>> {
+                fn invoke(&mut self, mid: ::pbni::primitive::MethodId, ci: &::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<Option<::pbni::primitive::MethodId>> {
                     let method_idx_base = if let Some(method_idx_base) = self.#inherit.invoke(mid,ci)? {
                         method_idx_base.value()
                     } else {
@@ -190,7 +190,7 @@ fn gen_object(
                         }
                     )*
                     //::pbni::pbx::__private::codegen::safe_invoke(ci.session(),&format!("{:?}",mid),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||Err(::pbni::pbx::PBXRESULT::E_NO_REGISTER_FUNCTION))
-                    Ok(Some(unsafe { ::pbni::pbx::MethodId::new(method_idx_base + #last_method_idx) }))
+                    Ok(Some(unsafe { ::pbni::primitive::MethodId::new(method_idx_base + #last_method_idx) }))
                 }
                 fn get_inherit_ptr(&self, type_id: u64) -> *const () {
                     if ::pbni::pbx::__private::codegen::type_id::<Self>() == type_id {
@@ -209,7 +209,7 @@ fn gen_object(
                 fn new(session: ::pbni::pbx::Session, ctx: ::pbni::pbx::ContextObject) -> Result<Self> {
                     ::pbni::pbx::__private::codegen::safe_invoke_ctor(&session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::#ctor(unsafe { session.clone() }, ctx))
                 }
-                fn invoke(&mut self, mid: ::pbni::pbx::MethodId, ci: &::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<Option<::pbni::pbx::MethodId>> {
+                fn invoke(&mut self, mid: ::pbni::primitive::MethodId, ci: &::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<Option<::pbni::primitive::MethodId>> {
                     #(
                         if mid >= #method_idx + #method_idx_offset && mid < #method_idx + #method_idx_offset + #method_overload + 1 {
                             return ::pbni::pbx::__private::codegen::safe_invoke(
@@ -227,7 +227,7 @@ fn gen_object(
                         }
                     )*
                     //::pbni::pbx::__private::codegen::safe_invoke(ci.session(),&format!("{:?}",mid),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||Err(::pbni::pbx::PBXRESULT::E_NO_REGISTER_FUNCTION))
-                     Ok(Some(unsafe { ::pbni::pbx::MethodId::new(#last_method_idx) }))
+                     Ok(Some(unsafe { ::pbni::primitive::MethodId::new(#last_method_idx) }))
                 }
                 fn get_inherit_ptr(&self, type_id: u64) -> *const () {
                     if ::pbni::pbx::__private::codegen::type_id::<Self>() == type_id {

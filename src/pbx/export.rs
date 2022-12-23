@@ -1,4 +1,6 @@
-use crate::pbx::{bindings::*, *};
+use crate::{
+    pbx::{bindings::*, *}, primitive::*
+};
 use std::collections::HashMap;
 
 #[cfg(feature = "global_function")]

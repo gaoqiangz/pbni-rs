@@ -1,4 +1,6 @@
-use crate::pbx::{bindings::*, value::FromValue, *};
+use crate::{
+    pbx::{bindings::*, value::FromValue, *}, primitive::*
+};
 
 /// 过程调用上下文
 pub struct CallInfo {

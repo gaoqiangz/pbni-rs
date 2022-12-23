@@ -9,12 +9,12 @@ mod method;
 /// # Examples
 ///
 /// ```
-/// let rv: pbint = obj.invoke_method("of_Test", pbargs!["abcd", 123]).unwrap();
-/// let rv: pbint = obj.trigger_event("onTest", pbargs!["abcd", 123]).unwrap();
-/// let rv: pbint = session.invoke_function("gf_Test", pbargs!["abcd", 123]).unwrap();
+/// let rv: pbint = obj.invoke_method("of_Test", pbx_args!["abcd", 123]).unwrap();
+/// let rv: pbint = obj.trigger_event("onTest", pbx_args!["abcd", 123]).unwrap();
+/// let rv: pbint = session.invoke_function("gf_Test", pbx_args!["abcd", 123]).unwrap();
 /// ```
 #[macro_export]
-macro_rules! pbargs {
+macro_rules! pbx_args {
     [$($arg:expr),*] => {{
         |args| -> Result<()> {
             let mut idx = 0;
@@ -26,7 +26,7 @@ macro_rules! pbargs {
         }
     }};
 }
-pub use pbargs;
+pub use pbx_args;
 
 /// 抛出PB异常,包含调用处的位置信息,用法与[`format!`]相同
 ///
@@ -35,7 +35,7 @@ pub use pbargs;
 /// # Examples
 ///
 /// ```
-/// throw(session,"this is a {}!","exception");
+/// pbx_throw!(session,"this is a {}!","exception");
 /// ```
 ///
 /// Exception:
@@ -45,10 +45,10 @@ pub use pbargs;
 /// at <module_path> (<file>:<line>:<column>)
 /// ```
 #[macro_export]
-macro_rules! throw {
+macro_rules! pbx_throw {
     ($session:ident,$($arg:tt)*) => {{ $session.throw_exception(format!("{}\r\nat {} ({}:{}:{})",format_args!($($arg)*),module_path!(),file!(),line!(),column!())) }};
 }
-pub use throw;
+pub use pbx_throw;
 
 #[doc(hidden)]
 pub mod __private {

@@ -28,6 +28,7 @@ pub(crate) use bitfield;
 #[allow(non_camel_case_types)]
 pub enum PBRESULT {
     OK,
+    E_INVALID_ARGUMENT,
     E_MISMATCHED_DATA_TYPE,
     E_WRONG_NUM_ARGS,
     E_OUT_OF_BOUNDS,

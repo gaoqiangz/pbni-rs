@@ -1,4 +1,6 @@
-use crate::pbx::{bindings::*, callinfo::FromCallInfo, value::ToValue, *};
+use crate::{
+    pbx::{bindings::*, callinfo::FromCallInfo, value::ToValue, *}, primitive::*
+};
 
 /// 全局函数抽象
 #[cfg(feature = "global_function")]
