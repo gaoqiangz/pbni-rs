@@ -379,6 +379,7 @@
 #![allow(dead_code)]
 
 pub mod primitive;
+mod comm;
 
 #[cfg(feature = "pbx")]
 pub mod pbx;

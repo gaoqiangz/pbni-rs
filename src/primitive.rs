@@ -1,4 +1,4 @@
-use std::{borrow::Cow, mem::transmute, ops::Deref, slice::from_raw_parts};
+use std::{borrow::Cow, mem::transmute, ops::Deref};
 use widestring::{WideCStr, WideCString, WideChar};
 
 #[repr(u16)]
@@ -121,24 +121,62 @@ impl FromPBStrPtr for PBString {
     unsafe fn from_pbstr_unchecked(ptr: LPCTSTR) -> Self { PBStr::from_ptr_str(ptr).to_ucstring() }
 }
 
-/// 数组索引抽象
-pub trait AsArrayIndex {
-    fn as_array_index(&self) -> &[pblong];
+/// 函数ID
+#[repr(transparent)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct MethodId(u16);
+
+impl MethodId {
+    /// 创建一个函数ID
+    ///
+    /// # Safety
+    ///
+    /// 指定无效的函数ID可能导致未定义行为
+    pub unsafe fn new(id: u16) -> MethodId { MethodId(id) }
+
+    /// 函数ID的值
+    pub fn value(self) -> u16 { self.0 }
+
+    pub(crate) fn is_undefined(self) -> bool {
+        const kUndefinedMethodID: u16 = 0xffff;
+        self.0 == kUndefinedMethodID
+    }
 }
 
-impl AsArrayIndex for pblong {
-    #[inline]
-    fn as_array_index(&self) -> &[pblong] { unsafe { from_raw_parts(self as *const pblong, 1) } }
+impl PartialEq<u16> for MethodId {
+    fn eq(&self, other: &u16) -> bool { self.0.eq(other) }
+}
+impl PartialOrd<u16> for MethodId {
+    fn partial_cmp(&self, other: &u16) -> Option<std::cmp::Ordering> { self.0.partial_cmp(other) }
 }
 
-impl AsArrayIndex for &[pblong] {
-    #[inline]
-    fn as_array_index(&self) -> &[pblong] { self }
+/// 字段ID
+#[repr(transparent)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct FieldId(u16);
+
+impl FieldId {
+    /// 创建一个字段ID
+    ///
+    /// # Safety
+    ///
+    /// 指定无效的字段ID可能导致未定义行为
+    pub unsafe fn new(id: u16) -> FieldId { FieldId(id) }
+
+    /// 字段ID的值
+    pub fn value(self) -> u16 { self.0 }
+
+    pub(crate) fn is_undefined(self) -> bool {
+        const kUndefinedFieldID: u16 = 0xffff;
+        self.0 == kUndefinedFieldID
+    }
 }
 
-impl<const N: usize> AsArrayIndex for &[pblong; N] {
-    #[inline]
-    fn as_array_index(&self) -> &[pblong] { &self[..] }
+impl PartialEq<u16> for FieldId {
+    fn eq(&self, other: &u16) -> bool { self.0.eq(other) }
+}
+impl PartialOrd<u16> for FieldId {
+    fn partial_cmp(&self, other: &u16) -> Option<std::cmp::Ordering> { self.0.partial_cmp(other) }
 }
 
 /// 构造PB字符串`&'static PBStr`,编译时生成对应编码格式

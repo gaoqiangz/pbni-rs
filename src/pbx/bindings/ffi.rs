@@ -74,6 +74,8 @@ extern "C" {
     pub fn pbsession_GetDoubleGlobalVar(session: pbsession, fid: FieldId, isNull: *mut pbboolean)
     -> pbdouble;
     pub fn pbsession_GetDecGlobalVar(session: pbsession, fid: FieldId, isNull: *mut pbboolean) -> pbdec;
+    #[link_name = "pbsession_GetStringGlobalVar"]
+    pub fn pbsession_GetStrGlobalVar(session: pbsession, fid: FieldId, isNull: *mut pbboolean) -> pbstring;
     pub fn pbsession_GetStringGlobalVar(session: pbsession, fid: FieldId, isNull: *mut pbboolean)
     -> pbstring;
     pub fn pbsession_GetBoolGlobalVar(session: pbsession, fid: FieldId, isNull: *mut pbboolean) -> pbboolean;
@@ -82,14 +84,16 @@ extern "C" {
     pub fn pbsession_GetBlobGlobalVar(session: pbsession, fid: FieldId, isNull: *mut pbboolean) -> pbblob;
     pub fn pbsession_GetDateGlobalVar(session: pbsession, fid: FieldId, isNull: *mut pbboolean) -> pbdate;
     pub fn pbsession_GetTimeGlobalVar(session: pbsession, fid: FieldId, isNull: *mut pbboolean) -> pbtime;
-    pub fn pbsession_GetDateTimeGlobalVar(
+    #[link_name = "pbsession_GetDateTimeGlobalVar"]
+    pub fn pbsession_GetDatetimeGlobalVar(
         session: pbsession,
         fid: FieldId,
         isNull: *mut pbboolean
     ) -> pbdatetime;
     pub fn pbsession_GetCharGlobalVar(session: pbsession, fid: FieldId, isNull: *mut pbboolean) -> PBChar;
     pub fn pbsession_GetByteGlobalVar(session: pbsession, fid: FieldId, isNull: *mut pbboolean) -> pbbyte;
-    pub fn pbsession_GetLongLongGlobalVar(
+    #[link_name = "pbsession_GetLongLongGlobalVar"]
+    pub fn pbsession_GetLonglongGlobalVar(
         session: pbsession,
         fid: FieldId,
         isNull: *mut pbboolean
@@ -97,7 +101,8 @@ extern "C" {
     pub fn pbsession_GetObjectGlobalVar(session: pbsession, fid: FieldId, isNull: *mut pbboolean)
     -> pbobject;
     pub fn pbsession_GetArrayGlobalVar(session: pbsession, fid: FieldId, isNull: *mut pbboolean) -> pbarray;
-    pub fn pbsession_GetPBAnyGlobalVar(session: pbsession, fid: FieldId, isNull: *mut pbboolean) -> pbvalue;
+    #[link_name = "pbsession_GetPBAnyGlobalVar"]
+    pub fn pbsession_GetAnyGlobalVar(session: pbsession, fid: FieldId, isNull: *mut pbboolean) -> pbvalue;
 
     pub fn pbsession_SetIntGlobalVar(session: pbsession, fid: FieldId, value: pbint) -> PBXRESULT;
     pub fn pbsession_SetLongGlobalVar(session: pbsession, fid: FieldId, value: pblong) -> PBXRESULT;
@@ -105,6 +110,8 @@ extern "C" {
     pub fn pbsession_SetDoubleGlobalVar(session: pbsession, fid: FieldId, value: pbdouble) -> PBXRESULT;
     pub fn pbsession_SetDecGlobalVar(session: pbsession, fid: FieldId, value: pbdec) -> PBXRESULT;
     pub fn pbsession_SetPBStringGlobalVar(session: pbsession, fid: FieldId, value: pbstring) -> PBXRESULT;
+    #[link_name = "pbsession_SetStringGlobalVar"]
+    pub fn pbsession_SetStrGlobalVar(session: pbsession, fid: FieldId, value: LPCTSTR) -> PBXRESULT;
     pub fn pbsession_SetStringGlobalVar(session: pbsession, fid: FieldId, value: LPCTSTR) -> PBXRESULT;
     pub fn pbsession_SetBoolGlobalVar(session: pbsession, fid: FieldId, value: pbboolean) -> PBXRESULT;
     pub fn pbsession_SetUintGlobalVar(session: pbsession, fid: FieldId, value: pbuint) -> PBXRESULT;
@@ -112,10 +119,12 @@ extern "C" {
     pub fn pbsession_SetBlobGlobalVar(session: pbsession, fid: FieldId, value: pbblob) -> PBXRESULT;
     pub fn pbsession_SetDateGlobalVar(session: pbsession, fid: FieldId, value: pbdate) -> PBXRESULT;
     pub fn pbsession_SetTimeGlobalVar(session: pbsession, fid: FieldId, value: pbtime) -> PBXRESULT;
-    pub fn pbsession_SetDateTimeGlobalVar(session: pbsession, fid: FieldId, value: pbdatetime) -> PBXRESULT;
+    #[link_name = "pbsession_SetDateTimeGlobalVar"]
+    pub fn pbsession_SetDatetimeGlobalVar(session: pbsession, fid: FieldId, value: pbdatetime) -> PBXRESULT;
     pub fn pbsession_SetCharGlobalVar(session: pbsession, fid: FieldId, value: PBChar) -> PBXRESULT;
     pub fn pbsession_SetByteGlobalVar(session: pbsession, fid: FieldId, value: pbbyte) -> PBXRESULT;
-    pub fn pbsession_SetLongLongGlobalVar(session: pbsession, fid: FieldId, value: pblonglong) -> PBXRESULT;
+    #[link_name = "pbsession_SetLongLongGlobalVar"]
+    pub fn pbsession_SetLonglongGlobalVar(session: pbsession, fid: FieldId, value: pblonglong) -> PBXRESULT;
     pub fn pbsession_SetObjectGlobalVar(session: pbsession, fid: FieldId, value: pbobject) -> PBXRESULT;
     pub fn pbsession_SetArrayGlobalVar(session: pbsession, fid: FieldId, pbarray: pbarray) -> PBXRESULT;
 
@@ -1179,7 +1188,13 @@ extern "C" {
     pub fn pbsession_AcquireValue(session: pbsession, value: pbvalue) -> pbvalue;
     pub fn pbsession_AcquireArrayItemValue(session: pbsession, arr: pbarray, dim: *const pblong) -> pbvalue;
     pub fn pbsession_SetValue(session: pbsession, dest: pbvalue, src: pbvalue);
-    pub fn pbsession_SetArrayItemValue(session: pbsession, arr: pbarray, dim: *const pblong, src: pbvalue);
+    #[link_name = "pbsession_SetArrayItemValue"]
+    pub fn pbsession_SetAnyArrayItem(
+        session: pbsession,
+        arr: pbarray,
+        dim: *const pblong,
+        src: pbvalue
+    ) -> PBXRESULT;
     pub fn pbsession_ReleaseValue(session: pbsession, value: pbvalue);
 
 }

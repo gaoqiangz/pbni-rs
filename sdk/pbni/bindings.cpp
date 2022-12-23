@@ -437,7 +437,11 @@ extern "C"
     IPB_Value *pbsession_AcquireValue(IPB_Session *session, IPB_Value *value) { return session->AcquireValue(value); }
     IPB_Value *pbsession_AcquireArrayItemValue(IPB_Session *session, pbarray arr, pblong dim[]) { return session->AcquireArrayItemValue(arr, dim); }
     void pbsession_SetValue(IPB_Session *session, IPB_Value *dest, IPB_Value *src) { session->SetValue(dest, src); }
-    void pbsession_SetArrayItemValue(IPB_Session *session, pbarray arr, pblong dim[], IPB_Value *src) { session->SetArrayItemValue(arr, dim, src); }
+    PBXRESULT pbsession_SetArrayItemValue(IPB_Session *session, pbarray arr, pblong dim[], IPB_Value *src)
+    {
+        session->SetArrayItemValue(arr, dim, src);
+        return PBX_OK;
+    }
     void pbsession_ReleaseValue(IPB_Session *session, IPB_Value *value) { session->ReleaseValue(value); }
 
     void pbsession_SetProp(IPB_Session *session, LPCTSTR name, void *data) { session->SetProp(name, data); }

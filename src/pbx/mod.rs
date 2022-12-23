@@ -6,6 +6,8 @@ mod callinfo;
 mod value;
 mod invoker;
 mod arguments;
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+mod userobject;
 #[cfg(any(feature = "global_function", feature = "nonvisualobject", feature = "visualobject"))]
 mod export;
 #[doc(hidden)]
@@ -17,6 +19,8 @@ pub use callinfo::{CallInfo, CallInfoRef};
 pub use codegen::{pbargs, throw};
 pub use invoker::Invoker;
 pub use session::{LocalFrame, OwnedSession, Session};
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+pub use userobject::*;
 pub use value::{
     array::Array, object::{ContextObject, Object, SharedObject}, OwnedValue, Value
 };
@@ -24,14 +28,12 @@ pub use value::{
 #[cfg(feature = "vm")]
 pub use vm::VM;
 
-#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
-pub use value::object::UserObject;
-
 #[cfg(feature = "nonvisualobject")]
-pub use value::object::NonVisualObject;
-
+pub use userobject::NonVisualObject;
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+pub use userobject::UserObject;
 #[cfg(feature = "visualobject")]
-pub use value::object::VisualObject;
+pub use userobject::VisualObject;
 
 #[cfg(any(feature = "global_function", feature = "nonvisualobject", feature = "visualobject"))]
 pub use pbni_codegen::{

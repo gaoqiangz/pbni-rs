@@ -1,6 +1,5 @@
 pub use crate::{pbx::session::Session, primitive::*};
 pub use std::{marker::PhantomData, ptr::NonNull};
-
 #[cfg(feature = "visualobject")]
 pub use winapi::shared::{minwindef::HINSTANCE, windef::HWND};
 
@@ -70,7 +69,6 @@ pub type pbcallinfo = NonNull<_PBCallInfo>;
 
 #[repr(C)]
 pub struct _PBArrayInfo {
-    // OUT variable, automatically set by GetArrayInfo(), don't set manually
     pub arrayType: ArrayType,
     pub itemGroup: pbgroup,
     pub valueType: ValueType,
@@ -90,64 +88,6 @@ pub enum ArrayType {
 pub struct ArrayBound {
     pub upperBound: pblong,
     pub lowerBound: pblong
-}
-
-/// 函数ID
-#[repr(transparent)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub struct MethodId(u16);
-
-impl MethodId {
-    /// 创建一个函数ID
-    ///
-    /// # Safety
-    ///
-    /// 指定无效的函数ID可能导致未定义行为
-    pub unsafe fn new(id: u16) -> MethodId { MethodId(id) }
-
-    /// 函数ID的值
-    pub fn value(self) -> u16 { self.0 }
-
-    pub(crate) fn is_undefined(self) -> bool {
-        const kUndefinedMethodID: u16 = 0xffff;
-        self.0 == kUndefinedMethodID
-    }
-}
-
-impl PartialEq<u16> for MethodId {
-    fn eq(&self, other: &u16) -> bool { self.0.eq(other) }
-}
-impl PartialOrd<u16> for MethodId {
-    fn partial_cmp(&self, other: &u16) -> Option<std::cmp::Ordering> { self.0.partial_cmp(other) }
-}
-
-/// 字段ID
-#[repr(transparent)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub struct FieldId(u16);
-
-impl FieldId {
-    /// 创建一个字段ID
-    ///
-    /// # Safety
-    ///
-    /// 指定无效的字段ID可能导致未定义行为
-    pub unsafe fn new(id: u16) -> FieldId { FieldId(id) }
-
-    /// 字段ID的值
-    pub fn value(self) -> u16 { self.0 }
-
-    pub(crate) fn is_undefined(self) -> bool {
-        const kUndefinedFieldID: u16 = 0xffff;
-        self.0 == kUndefinedFieldID
-    }
-}
-
-impl PartialEq<u16> for FieldId {
-    fn eq(&self, other: &u16) -> bool { self.0.eq(other) }
-}
-impl PartialOrd<u16> for FieldId {
-    fn partial_cmp(&self, other: &u16) -> Option<std::cmp::Ordering> { self.0.partial_cmp(other) }
 }
 
 #[repr(i32)]
