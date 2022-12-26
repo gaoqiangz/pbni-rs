@@ -58,8 +58,8 @@ cc = "1.0.62"
 bindgen = { version = "0.63.0", optional = true }
 
 [features]
-default = ["full", "pbx", "syslib"]
-full = ["global_function", "nonvisualobject", "visualobject"]
+default = ["full"]
+full = ["pbx", "syslib", "global_function", "nonvisualobject", "visualobject"]
 
 pbx = ["static_init", "pbni-codegen/pbx"]
 syslib = ["bindgen", "libloading", "winapi", "pbni-codegen/syslib"]
