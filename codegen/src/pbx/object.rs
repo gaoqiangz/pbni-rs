@@ -338,7 +338,7 @@ impl ImplBlock {
                 }
             }
         }
-        let ctor = ctor.ok_or_else(|| Error::new_spanned(ast, "Constructor not found"))?;
+        let ctor = ctor.unwrap_or_else(|| format_ident!("new"));
         Ok(ImplBlock {
             ident,
             ctor,
