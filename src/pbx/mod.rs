@@ -32,10 +32,14 @@ pub use userobject::UserObject;
 #[cfg(feature = "visualobject")]
 pub use userobject::VisualObject;
 
-#[cfg(any(feature = "global_function", feature = "nonvisualobject", feature = "visualobject"))]
-pub use pbni_codegen::{
-    pbx_constructor as constructor, pbx_event as event, pbx_global_function as global_function, pbx_method as method, pbx_nonvisualobject as nonvisualobject, pbx_visualobject as visualobject
-};
+#[cfg(feature = "global_function")]
+pub use pbni_codegen::pbx_global_function as global_function;
+#[cfg(feature = "nonvisualobject")]
+pub use pbni_codegen::pbx_nonvisualobject as nonvisualobject;
+#[cfg(feature = "visualobject")]
+pub use pbni_codegen::pbx_visualobject as visualobject;
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+pub use pbni_codegen::{pbx_constructor as constructor, pbx_event as event, pbx_method as method};
 
 pub type Result<T> = ::std::result::Result<T, PBXRESULT>;
 
