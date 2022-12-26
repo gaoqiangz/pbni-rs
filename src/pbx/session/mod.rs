@@ -355,17 +355,18 @@ impl Session {
         dims: &[(pblong, pblong)]
     ) -> Result<Array<'a>> {
         unsafe {
-            let dims: Vec<ArrayBound> = dims
-                .iter()
-                .map(|&(lowerBound, upperBound)| {
-                    ArrayBound {
-                        lowerBound,
-                        upperBound
-                    }
-                })
-                .collect();
+            let mut bounds = Vec::with_capacity(dims.len());
+            for (lower, upper) in dims {
+                if upper < lower {
+                    return Err(PBXRESULT::E_ARRAY_INDEX_OUTOF_BOUNDS);
+                }
+                bounds.push(ArrayBound {
+                    lowerBound: *lower,
+                    upperBound: *upper
+                });
+            }
             let ptr =
-                ffi::pbsession_NewBoundedSimpleArray(self.ptr, item_type, dims.len() as u16, dims.as_ptr())
+                ffi::pbsession_NewBoundedSimpleArray(self.ptr, item_type, dims.len() as u16, bounds.as_ptr())
                     .ok_or(PBXRESULT::E_INVALID_ARGUMENT)?;
             Ok(Array::from_ptr(ptr, false, self.clone()))
         }

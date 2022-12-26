@@ -11,12 +11,18 @@ impl RustObject {
     fn new(session: Session, ctx: ContextObject) -> RustObject { RustObject {} }
 
     #[method]
-    fn of_array(&mut self, mut arg: Array) -> Result<String> {
+    fn of_array(&mut self, mut arg: Array, session: Session) -> Result<String> {
         arg.set_item_long(10, 12333223);
         let mut s = String::new();
         for item in arg.iter::<pblong>() {
             s += &format!("item: {:?}\n", item);
         }
+
+        let mut new_arr = session.new_array(ValueType::String)?;
+        for i in 1..1024 * 1024 {
+            new_arr.set_item_str(i as pblong, "abcd");
+        }
+
         Ok(s)
     }
     #[method]

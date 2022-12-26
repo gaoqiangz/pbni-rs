@@ -55,10 +55,23 @@ pub unsafe extern "stdcall" fn test_syslib(obthis: POB_THIS, arg_cnt: i32) -> DW
         new_arr.set_item_value(5, tmp);
     }
 
+    {
+        let mut new_arr = session.new_array(ValueType::String).unwrap();
+        new_arr.reserve(1024 * 1024);
+        arr_val.set_array(new_arr);
+    }
+
     arr_val.set_array(new_arr);
 
     API.ot_set_return_val(obthis, rv.as_ptr());
     rv.forget();
+
+    let mut new_arr = session.new_array(ValueType::String).unwrap();
+    new_arr.reserve(1024 * 1024);
+
+    let mut arr = session.new_bounded_array(ValueType::Int, &[(1, 5), (2, 10)]).unwrap();
+    //arr[1,2] = 123
+    arr.set_item_int(&[1, 2], 123);
 
     1
 }

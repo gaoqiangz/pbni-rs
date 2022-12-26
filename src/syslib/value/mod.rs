@@ -211,39 +211,28 @@ impl Value<'_> {
 
     #[inline(always)]
     fn set_ptr(&mut self, val: LPVOID, typ: OB_CLASS_ID) {
-        self.free_val_ptr();
+        self.free();
         self.inner.val.ptr = val;
         self.set_info(OB_DATASTYLE::PTR_STYLE, typ, OB_GROUPTYPE::OB_SIMPLE);
     }
 
     #[inline(always)]
-    fn free_val_ptr(&mut self) {
+    fn free(&mut self) {
         unsafe {
-            if self.get_info_group() == OB_GROUPTYPE::OB_ARRAY {
+            /*if self.get_info_group() == OB_GROUPTYPE::OB_ARRAY {
                 API.ot_free_array(self.session.as_ptr(), self.as_ptr());
             } else {
                 API.ot_free_val_ptr(self.session.as_ptr(), self.as_ptr());
-            }
+            }*/
+            API.ot_free_out_node(self.session.as_ptr(), self.as_ptr());
         }
-    }
-
-    pub(crate) fn info_flag() -> OB_INFO_FLAGS {
-        let style = OB_DATASTYLE::PTR_STYLE;
-        let group = OB_GROUPTYPE::OB_SIMPLE;
-        (((OB_MEMBER_ACCESS::OB_PUBLIC_MEMBER as OB_INFO_FLAGS) << DATA_ACCESS_SHIFT) |
-            ((group as OB_INFO_FLAGS) << DATA_GROUP_SHIFT) |
-            (0 << DATA_FIELDTYPE_SHIFT) |
-            ((style as OB_INFO_FLAGS) << DATA_STYLE_SHIFT) |
-            ((OB_STATUS::USED as OB_INFO_FLAGS) << DATA_STATUS_SHIFT) |
-            ((OB_REFTYPE::OB_DIRECT_REF as OB_INFO_FLAGS) << DATA_REFTYPE_SHIFT) |
-            (0 << DATA_TYPEARGS_SHIFT)) as OB_INFO_FLAGS
     }
 }
 
 impl Drop for Value<'_> {
     fn drop(&mut self) {
         if matches!(self.inner, ValueInner::Owned(_)) {
-            self.free_val_ptr();
+            self.free();
         }
     }
 }

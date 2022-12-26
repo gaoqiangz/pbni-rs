@@ -10,7 +10,7 @@ mod item;
 ///
 /// 数组函数的`dims`参数可指定不同维度的索引: `&[dim_1_index,dim_2_index,...]`
 pub struct Array<'arr> {
-    ptr: OB_ARRAY_ID,
+    inner: ArrayInner,
     info: ArrayInfo,
     is_object: bool,
     session: Session,
@@ -20,22 +20,35 @@ pub struct Array<'arr> {
 impl<'arr> Array<'arr> {
     pub(crate) unsafe fn from_ptr(ptr: OB_ARRAY_ID, is_object: bool, session: Session) -> Array<'arr> {
         let info = ArrayInfo::new(ptr, session.clone());
+        let inner = ArrayInner::Borrowed(ptr);
         Array {
-            ptr,
+            inner,
             info,
             is_object,
             session,
             _marker: PhantomData
         }
     }
-    pub(crate) fn as_ptr(&self) -> OB_ARRAY_ID { self.ptr }
+    pub(crate) unsafe fn take_ptr(ptr: OB_ARRAY_ID, is_object: bool, session: Session) -> Array<'arr> {
+        let info = ArrayInfo::new(ptr, session.clone());
+        let inner = ArrayInner::Owned(ptr);
+        Array {
+            inner,
+            info,
+            is_object,
+            session,
+            _marker: PhantomData
+        }
+    }
+    pub(crate) fn as_ptr(&self) -> OB_ARRAY_ID { self.inner.as_ptr() }
+    pub(crate) fn forget(mut self) { self.inner = ArrayInner::Borrowed(ptr::null_mut()); }
 
     /// 获取数组信息
     pub fn info(&self) -> &ArrayInfo { &self.info }
 
     /// 获取数组长度(仅一维数组有效)
     pub fn len(&self) -> pblong {
-        unsafe { API.ot_array_num_items(self.session.as_ptr(), self.ptr) as pblong }
+        unsafe { API.ot_array_num_items(self.session.as_ptr(), self.as_ptr()) as pblong }
     }
 
     /// 增长动态数组长度
@@ -61,7 +74,7 @@ impl<'arr> Array<'arr> {
             return Err(PBRESULT::E_OUT_OF_MEMORY);
         }
         unsafe {
-            let arr_inst = &*(self.ptr as POB_ARRAY_INST);
+            let arr_inst = &*(self.as_ptr() as POB_ARRAY_INST);
             API.ob_dynarray_grow(self.session.as_ptr(), arr_inst.data as _, new_size, 1);
         }
         Ok(())
@@ -86,6 +99,44 @@ impl<'arr> Array<'arr> {
         }
         assert!(T::check_type(self), "type mismatched");
         ArrayIter::new(self)
+    }
+}
+
+impl Clone for Array<'_> {
+    fn clone(&self) -> Array<'static> {
+        unsafe {
+            Array::from_ptr(
+                API.ot_copy_array(self.session.as_ptr(), self.as_ptr() as _) as _,
+                self.is_object,
+                self.session.clone()
+            )
+        }
+    }
+}
+
+impl Drop for Array<'_> {
+    fn drop(&mut self) {
+        if let ArrayInner::Owned(ptr) = &self.inner {
+            unsafe {
+                API.ob_remove_array_data(self.session.as_ptr(), *ptr as _, 1);
+                API.ob_free_memory(self.session.as_ptr(), *ptr as _);
+            }
+        }
+    }
+}
+
+enum ArrayInner {
+    Borrowed(OB_ARRAY_ID),
+    Owned(OB_ARRAY_ID)
+}
+
+impl ArrayInner {
+    #[inline(always)]
+    fn as_ptr(&self) -> OB_ARRAY_ID {
+        match self {
+            ArrayInner::Borrowed(ptr) => *ptr,
+            ArrayInner::Owned(ptr) => *ptr
+        }
     }
 }
 

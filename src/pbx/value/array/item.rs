@@ -89,7 +89,7 @@ impl<'arr> Array<'arr> {
                 return Err(PBXRESULT::E_ARRAY_INDEX_OUTOF_BOUNDS);
             }
             for (dim, &idx) in dim.iter().enumerate() {
-                let (lower, upper) = self.info.bound(dim as pbuint);
+                let (lower, upper) = self.info.bound(dim as pbuint + 1);
                 if idx < lower || idx > upper {
                     return Err(PBXRESULT::E_ARRAY_INDEX_OUTOF_BOUNDS);
                 }

@@ -64,7 +64,7 @@ macro_rules! impl_value {
             ///
             /// 类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_ $type_name _unchecked>](&mut self, value: $type) {
-                self.free_val_ptr();
+                self.free();
                 self.inner.val.$field = impl_value!(@simple_set_val value, $type_name) as _;
                 self.set_info($field_style, $field_type, OB_GROUPTYPE::OB_SIMPLE);
             }
@@ -184,8 +184,8 @@ macro_rules! impl_value {
     (@complex_set_val $self: expr, $value: expr, $field_type: expr, array) => {
         {
             $self.set_ptr($value.as_ptr() as _, $value.info().value_type() as OB_CLASS_ID);
-            //$self.set_ptr(API.ot_copy_array($self.session.as_ptr(), $value.as_ptr() as _) as _, $value.info().value_type() as OB_CLASS_ID);
             $self.set_info_group(OB_GROUPTYPE::OB_ARRAY);
+            $value.forget();
         }
     };
     (@complex_set_val $self: expr, $value: expr, $field_type: expr, value) => {

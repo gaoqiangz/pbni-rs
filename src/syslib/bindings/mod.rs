@@ -22,6 +22,25 @@ macro_rules! bitfield {
 }
 pub(crate) use bitfield;
 
+pub fn array_var_info(item_type: ValueType) -> OB_CLASS_ID {
+    let style = match item_type {
+        ValueType::Long | ValueType::Ulong => OB_DATASTYLE::LONG_STYLE,
+        ValueType::Int | ValueType::Uint | ValueType::Byte | ValueType::Char | ValueType::Boolean => {
+            OB_DATASTYLE::INT_STYLE
+        },
+        ValueType::Real => OB_DATASTYLE::FLOAT_STYLE,
+        _ => OB_DATASTYLE::PTR_STYLE
+    };
+    let group = OB_GROUPTYPE::OB_SIMPLE;
+    (((OB_MEMBER_ACCESS::OB_PUBLIC_MEMBER as OB_INFO_FLAGS) << DATA_ACCESS_SHIFT) |
+        ((group as OB_INFO_FLAGS) << DATA_GROUP_SHIFT) |
+        (0 << DATA_FIELDTYPE_SHIFT) |
+        ((style as OB_INFO_FLAGS) << DATA_STYLE_SHIFT) |
+        ((OB_STATUS::USED as OB_INFO_FLAGS) << DATA_STATUS_SHIFT) |
+        ((OB_REFTYPE::OB_DIRECT_REF as OB_INFO_FLAGS) << DATA_REFTYPE_SHIFT) |
+        (0 << DATA_TYPEARGS_SHIFT)) as OB_INFO_FLAGS
+}
+
 /// 返回值错误码
 #[non_exhaustive]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]

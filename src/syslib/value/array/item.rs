@@ -16,7 +16,8 @@ impl<'arr> Array<'arr> {
         let dim = dim.as_array_index();
         self.check_get_index(dim)?;
         unsafe {
-            let idx = API.ob_array_get_index_from_subs(self.session.as_ptr(), self.ptr, dim.as_ptr() as _);
+            let idx =
+                API.ob_array_get_index_from_subs(self.session.as_ptr(), self.as_ptr(), dim.as_ptr() as _);
             let v = API.ot_array_index(self.session.as_ptr(), self.as_ptr(), idx);
             if v.is_null() {
                 return Err(PBRESULT::E_OUT_OF_BOUNDS);
@@ -87,7 +88,7 @@ impl<'arr> Array<'arr> {
     /// 索引越界时可能会出现未定义行为
     pub unsafe fn get_item_value_unchecked(&self, dim: impl AsArrayIndex) -> Value<'arr> {
         let dim = dim.as_array_index();
-        let idx = API.ob_array_get_index_from_subs(self.session.as_ptr(), self.ptr, dim.as_ptr() as _);
+        let idx = API.ob_array_get_index_from_subs(self.session.as_ptr(), self.as_ptr(), dim.as_ptr() as _);
         let v = API.ot_array_index(self.session.as_ptr(), self.as_ptr(), idx);
         if v.is_null() {
             panic!("invalid item: {:?}", dim);
@@ -211,7 +212,7 @@ impl<'arr> Array<'arr> {
                 return Err(PBRESULT::E_OUT_OF_BOUNDS);
             }
             for (dim, &idx) in dim.iter().enumerate() {
-                let (lower, upper) = self.info.bound(dim as pbuint);
+                let (lower, upper) = self.info.bound(dim as pbuint + 1);
                 if idx < lower || idx > upper {
                     return Err(PBRESULT::E_OUT_OF_BOUNDS);
                 }
