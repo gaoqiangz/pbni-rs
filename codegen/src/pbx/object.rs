@@ -336,8 +336,6 @@ impl ImplBlock {
                         }))
                     }
                 }
-            } else {
-                return Err(Error::new_spanned(item, "Not supported item"));
             }
         }
         let ctor = ctor.ok_or_else(|| Error::new_spanned(ast, "Constructor not found"))?;
