@@ -231,10 +231,13 @@ macro_rules! impl_value {
         $self.is_object() || $self.get_type() == ValueType::NoType
     };
     (@check_type_set $self: expr, $value: expr, $type_check: pat, value) => {
-        $self.get_type() == $value.get_type() &&
-        $self.is_object() == $value.is_object() &&
-        $self.is_array() == $value.is_array() &&
-        $self.is_enum() == $value.is_enum()
+        $self.get_type() == ValueType::NoType ||
+        (
+            $self.get_type() == $value.get_type() &&
+            $self.is_object() == $value.is_object() &&
+            $self.is_array() == $value.is_array() &&
+            $self.is_enum() == $value.is_enum()
+        )
     };
     (@check_type_set $self: expr, $value: expr, $type_check: pat, $type_name: ty) => {
         matches!($self.get_type(), $type_check | ValueType::NoType)

@@ -263,10 +263,13 @@ macro_rules! impl_value {
         $self.is_array() || $self.get_type() == ValueType::NoType
     };
     (@check_type_set $self: expr, $value: expr, $type_check: pat, value) => {
-        $self.get_type() == $value.get_type() &&
-        $self.get_type_kind() == $value.get_type_kind() &&
-        $self.get_info_group() == $value.get_info_group() &&
-        $self.get_info_style() == $value.get_info_style()
+        $self.get_type() == ValueType::NoType ||
+        (
+            $self.get_type() == $value.get_type() &&
+            $self.get_type_kind() == $value.get_type_kind() &&
+            $self.get_info_group() == $value.get_info_group() &&
+            $self.get_info_style() == $value.get_info_style()
+        )
     };
     (@check_type_set $self: expr, $value: expr, $type_check: pat, $type_name: ty) => {
         matches!($self.get_type(), $type_check | ValueType::NoType)
