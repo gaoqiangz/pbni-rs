@@ -46,7 +46,7 @@ pub use pbx_args;
 /// ```
 #[macro_export]
 macro_rules! pbx_throw {
-    ($session:ident,$($arg:tt)*) => {{ $session.throw_exception(format!("{}\r\nat {} ({}:{}:{})",format_args!($($arg)*),module_path!(),file!(),line!(),column!())) }};
+    ($session:expr, $($arg:tt)*) => { $session.throw_exception(format!("{}\r\nat {} ({}:{}:{})",format_args!($($arg)*),module_path!(),file!(),line!(),column!())).unwrap() };
 }
 pub use pbx_throw;
 
