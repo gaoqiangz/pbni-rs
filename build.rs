@@ -6,6 +6,8 @@ fn main() {
         return;
     }
 
+    println!("cargo:rerun-if-changed=build.rs");
+
     //生成map文件
     #[cfg(feature = "symbol_map")]
     {
@@ -18,9 +20,7 @@ fn main() {
     build_pbx();
 
     #[cfg(feature = "syslib")]
-    if std::env::var_os("GEN_SYSLIB") == Some("1".into()) {
-        build_syslib();
-    }
+    build_syslib();
 }
 
 /// 编译`PBNI`
@@ -49,6 +49,10 @@ fn build_pbx() {
 /// 编译`SystemLibrary`
 #[cfg(feature = "syslib")]
 fn build_syslib() {
+    if std::env::var_os("GEN_SYSLIB") != Some("1".into()) {
+        return;
+    }
+
     let bindings = bindgen::builder()
         .header("sdk/syslib/api.h")
         .clang_args(["-x", "c++", "-std=c++14"])
