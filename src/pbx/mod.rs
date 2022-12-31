@@ -19,7 +19,7 @@ pub use codegen::{pbx_args, pbx_throw};
 pub use invoker::Invoker;
 pub use session::{LocalFrame, OwnedSession, Session};
 pub use value::{
-    array::Array, object::{ContextObject, Object, SharedObject}, OwnedValue, Value
+    array::Array, object::{ContextObject, Object, SharedObject}, FromValue, OwnedValue, ToValue, Value
 };
 
 #[cfg(feature = "vm")]
