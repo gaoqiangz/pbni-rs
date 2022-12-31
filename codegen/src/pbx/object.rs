@@ -120,11 +120,11 @@ fn gen_object(
     inherit: Option<String>,
     input: TokenStream
 ) -> Result<(Ident, TokenStream2)> {
-    let ast = parse::<ItemImpl>(input)?;
-    let block = ImplBlock::parse(&ast)?;
+    let body = parse::<ItemImpl>(input)?;
+    let block = ImplBlock::parse(&body)?;
     let ident = block.ident;
     let cls_name = cls_name.unwrap_or_else(|| ident.to_string()).to_ascii_lowercase();
-    let ctor = block.ctor;
+    let inherit = inherit.map(|name| Ident::new(&name, ident.span()));
 
     let mut method_ident = Vec::new();
     let mut method_name = Vec::new();
@@ -157,85 +157,93 @@ fn gen_object(
         overload_cc += overload;
         last_method_idx = (idx + overload_cc + overload + 1).into();
     }
-
-    let output = if let Some(inherit) = inherit {
-        let inherit = Ident::new(&inherit, ident.span());
+    let new_impl = if let Some(ctor) = block.ctor {
         quote! {
-            #ast
-            impl ::pbni::pbx::UserObject for #ident {
-                const CLASS_NAME: &'static ::pbni::primitive::PBStr = ::pbni::pbstr!(#cls_name);
-                fn new(session: ::pbni::pbx::Session, ctx: ::pbni::pbx::ContextObject) -> Result<Self> {
-                    ::pbni::pbx::__private::codegen::safe_invoke_ctor(&session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::#ctor(unsafe { session.clone() }, ctx))
+            ::pbni::pbx::__private::codegen::safe_invoke_ctor(&session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::#ctor(unsafe { session.clone() }, ctx))
+        }
+    } else {
+        quote! {
+            ::pbni::pbx::__private::codegen::safe_invoke_ctor(&session,concat!(stringify!(#ident),"::default"),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::default())
+        }
+    };
+    let invoke_impl = if let Some(inherit) = &inherit {
+        quote! {
+            let method_idx_base = if let Some(method_idx_base) = self.#inherit.invoke(mid,ci)? {
+                method_idx_base.value()
+            } else {
+                return Ok(None);
+            };
+            #(
+                if mid >= method_idx_base + #method_idx + #method_idx_offset && mid < method_idx_base + #method_idx + #method_idx_offset + #method_overload + 1 {
+                    return ::pbni::pbx::__private::codegen::safe_invoke(
+                        ci.session(),
+                        #method_name,
+                        concat!(module_path!(),"::",stringify!(#ident),"::",stringify!(#method_ident)),
+                        file!(),line!(),column!(),
+                        ::std::panic::AssertUnwindSafe(||::pbni::pbx::__private::codegen::method_factory_call(#ident::#method_ident, self, &ci))
+                    ).map(|_|None);
                 }
-                fn invoke(&mut self, mid: ::pbni::primitive::MethodId, ci: &::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<Option<::pbni::primitive::MethodId>> {
-                    let method_idx_base = if let Some(method_idx_base) = self.#inherit.invoke(mid,ci)? {
-                        method_idx_base.value()
-                    } else {
-                        return Ok(None);
-                    };
-                    #(
-                        if mid >= method_idx_base + #method_idx + #method_idx_offset && mid < method_idx_base + #method_idx + #method_idx_offset + #method_overload + 1 {
-                            return ::pbni::pbx::__private::codegen::safe_invoke(
-                                ci.session(),
-                                #method_name,
-                                concat!(module_path!(),"::",stringify!(#ident),"::",stringify!(#method_ident)),
-                                file!(),line!(),column!(),
-                                ::std::panic::AssertUnwindSafe(||::pbni::pbx::__private::codegen::method_factory_call(#ident::#method_ident, self, &ci))
-                            ).map(|_|None);
-                        }
-                    )*
-                    #(
-                        if mid >= method_idx_base + #event_idx + #event_idx_offset && mid < method_idx_base + #event_idx + #event_idx_offset + 1 {
-                            return Ok(None);
-                        }
-                    )*
-                    //::pbni::pbx::__private::codegen::safe_invoke(ci.session(),&format!("{:?}",mid),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||Err(::pbni::pbx::PBXRESULT::E_NO_REGISTER_FUNCTION))
-                    Ok(Some(unsafe { ::pbni::primitive::MethodId::new(method_idx_base + #last_method_idx) }))
+            )*
+            #(
+                if mid >= method_idx_base + #event_idx + #event_idx_offset && mid < method_idx_base + #event_idx + #event_idx_offset + 1 {
+                    return Ok(None);
                 }
-                fn get_inherit_ptr(&self, type_id: u64) -> *const () {
-                    if ::pbni::pbx::__private::codegen::type_id::<Self>() == type_id {
-                        self as *const Self as _
-                    } else {
-                        self.#inherit.get_inherit_ptr(type_id)
-                    }
+            )*
+            //::pbni::pbx::__private::codegen::safe_invoke(ci.session(),&format!("{:?}",mid),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||Err(::pbni::pbx::PBXRESULT::E_NO_REGISTER_FUNCTION))
+            Ok(Some(unsafe { ::pbni::primitive::MethodId::new(method_idx_base + #last_method_idx) }))
+        }
+    } else {
+        quote! {
+            #(
+                if mid >= #method_idx + #method_idx_offset && mid < #method_idx + #method_idx_offset + #method_overload + 1 {
+                    return ::pbni::pbx::__private::codegen::safe_invoke(
+                        ci.session(),
+                        #method_name,
+                        concat!(module_path!(),"::",stringify!(#ident),"::",stringify!(#method_ident)),
+                        file!(),line!(),column!(),
+                        ::std::panic::AssertUnwindSafe(||::pbni::pbx::__private::codegen::method_factory_call(#ident::#method_ident, self, ci))
+                    ).map(|_|None);
                 }
+            )*
+            #(
+                if mid >= #event_idx + #event_idx_offset && mid < #event_idx + #event_idx_offset + 1 {
+                    return Ok(None);
+                }
+            )*
+            //::pbni::pbx::__private::codegen::safe_invoke(ci.session(),&format!("{:?}",mid),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||Err(::pbni::pbx::PBXRESULT::E_NO_REGISTER_FUNCTION))
+            Ok(Some(unsafe { ::pbni::primitive::MethodId::new(#last_method_idx) }))
+        }
+    };
+    let get_inherit_ptr_impl = if let Some(inherit) = &inherit {
+        quote! {
+            if ::pbni::pbx::__private::codegen::type_id::<Self>() == type_id {
+                self as *const Self as _
+            } else {
+                self.#inherit.get_inherit_ptr(type_id)
             }
         }
     } else {
         quote! {
-            #ast
-            impl ::pbni::pbx::UserObject for #ident {
-                const CLASS_NAME: &'static ::pbni::primitive::PBStr = ::pbni::pbstr!(#cls_name);
-                fn new(session: ::pbni::pbx::Session, ctx: ::pbni::pbx::ContextObject) -> Result<Self> {
-                    ::pbni::pbx::__private::codegen::safe_invoke_ctor(&session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::#ctor(unsafe { session.clone() }, ctx))
-                }
-                fn invoke(&mut self, mid: ::pbni::primitive::MethodId, ci: &::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<Option<::pbni::primitive::MethodId>> {
-                    #(
-                        if mid >= #method_idx + #method_idx_offset && mid < #method_idx + #method_idx_offset + #method_overload + 1 {
-                            return ::pbni::pbx::__private::codegen::safe_invoke(
-                                ci.session(),
-                                #method_name,
-                                concat!(module_path!(),"::",stringify!(#ident),"::",stringify!(#method_ident)),
-                                file!(),line!(),column!(),
-                                ::std::panic::AssertUnwindSafe(||::pbni::pbx::__private::codegen::method_factory_call(#ident::#method_ident, self, ci))
-                            ).map(|_|None);
-                        }
-                    )*
-                    #(
-                        if mid >= #event_idx + #event_idx_offset && mid < #event_idx + #event_idx_offset + 1 {
-                            return Ok(None);
-                        }
-                    )*
-                    //::pbni::pbx::__private::codegen::safe_invoke(ci.session(),&format!("{:?}",mid),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||Err(::pbni::pbx::PBXRESULT::E_NO_REGISTER_FUNCTION))
-                     Ok(Some(unsafe { ::pbni::primitive::MethodId::new(#last_method_idx) }))
-                }
-                fn get_inherit_ptr(&self, type_id: u64) -> *const () {
-                    if ::pbni::pbx::__private::codegen::type_id::<Self>() == type_id {
-                        self as *const Self as _
-                    } else {
-                        ::std::ptr::null()
-                    }
-                }
+            if ::pbni::pbx::__private::codegen::type_id::<Self>() == type_id {
+                self as *const Self as _
+            } else {
+                ::std::ptr::null()
+            }
+        }
+    };
+
+    let output = quote! {
+        #body
+        impl ::pbni::pbx::UserObject for #ident {
+            const CLASS_NAME: &'static ::pbni::primitive::PBStr = ::pbni::pbstr!(#cls_name);
+            fn new(session: ::pbni::pbx::Session, ctx: ::pbni::pbx::ContextObject) -> Result<Self> {
+                #new_impl
+            }
+            fn invoke(&mut self, mid: ::pbni::primitive::MethodId, ci: &::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<Option<::pbni::primitive::MethodId>> {
+                #invoke_impl
+            }
+            fn get_inherit_ptr(&self, type_id: u64) -> *const () {
+                #get_inherit_ptr_impl
             }
         }
     };
@@ -293,7 +301,7 @@ impl AttrArgs {
 /// `impl`块定义
 struct ImplBlock {
     ident: Ident,
-    ctor: Ident,
+    ctor: Option<Ident>,
     items: Vec<Item>
 }
 
@@ -338,7 +346,6 @@ impl ImplBlock {
                 }
             }
         }
-        let ctor = ctor.unwrap_or_else(|| format_ident!("new"));
         Ok(ImplBlock {
             ident,
             ctor,
