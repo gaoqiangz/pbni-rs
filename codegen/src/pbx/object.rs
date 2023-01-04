@@ -105,7 +105,7 @@ pub fn gen_event(args: AttributeArgs, input: TokenStream) -> Result<TokenStream>
                         ToValue::to_value(#fn_arg,&mut invoker.arg(#fn_arg_index)).expect(concat!("pass argument ",stringify!(#fn_arg)));
                     )*
                     let rv = invoker.trigger().expect(concat!("invoke ",#name));
-                    FromValue::from_value(Some(rv)).expect(concat!("mismatched return type ",#name));
+                    FromValue::from_value(Some(rv)).expect(concat!("mismatched return type ",#name))
                 }
             };
         }
