@@ -41,6 +41,15 @@ impl<'obj> Object<'obj> {
         }
     }
     pub(crate) fn get_class(&self) -> pbclass { self.cls }
+    pub(crate) unsafe fn clone(&self) -> Object<'obj> {
+        Object {
+            ptr: self.ptr,
+            group: self.group.clone(),
+            cls: self.cls,
+            session: self.session.clone(),
+            _marker: PhantomData
+        }
+    }
 
     /// 是否为原生对象 (由pbni-rs导出的对象)
     /// FIXME: 始终返回false?
@@ -161,6 +170,17 @@ impl ContextObject {
     pub(crate) unsafe fn from_ptr(ptr: pbobject, session: &Session) -> ContextObject {
         ContextObject {
             obj: Object::from_ptr(ptr, session.clone())
+        }
+    }
+
+    /// 克隆对象
+    ///
+    /// # Safety
+    ///
+    /// 此方法不能延长对象的生命周期,因此不能保证克隆后的对象始终有效,生命周期将始终与此对象一样
+    pub unsafe fn clone(&self) -> ContextObject {
+        ContextObject {
+            obj: self.obj.clone()
         }
     }
 }
