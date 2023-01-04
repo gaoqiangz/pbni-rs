@@ -32,6 +32,22 @@ pub trait UserObject: Sized + 'static {
 pub trait NonVisualObject: UserObject {
     /// 注册
     fn register() { crate::pbx::export::register_nonvisualobject::<Self>() }
+
+    /// 创建PB对象
+    fn new_object(session: &Session) -> Result<Object> { session.new_user_object(Self::CLASS_NAME) }
+
+    /// 创建PB对象并在`modify`回调中修改
+    fn new_object_modify<F>(session: &Session, modify: F) -> Result<Object>
+    where
+        F: FnOnce(&mut Self)
+    {
+        let mut obj = session.new_user_object(Self::CLASS_NAME)?;
+        {
+            let obj = unsafe { obj.get_native_mut::<Self>()? };
+            modify(obj);
+        }
+        Ok(obj)
+    }
 }
 
 /// PB可视对象
