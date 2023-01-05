@@ -9,15 +9,18 @@ use syn::{
 pub fn gen_nvo(args: AttributeArgs, input: TokenStream) -> Result<TokenStream> {
     let args = AttrArgs::parse(args)?;
     let (ident, mut output) = gen_object(args.name, args.inherit, input)?;
-    let ident_reg = format_ident!("{}_reg", ident);
+    let ident_ctor = format_ident!("__ctor_{}", ident);
+    let ident_ctor_mod = format_ident!("__priv_{}", ident);
 
     let nvo_impl = quote! {
-        impl ::pbni::pbx::NonVisualObject for #ident {
-        }
-        #[::pbni::pbx::__private::codegen::constructor]
+        impl ::pbni::pbx::NonVisualObject for #ident { }
+        #[doc(hidden)]
         #[allow(non_snake_case)]
-        extern "C" fn #ident_reg() {
-            <#ident as ::pbni::pbx::NonVisualObject>::register();
+        mod #ident_ctor_mod {
+            #[::pbni::pbx::__private::codegen::constructor]
+            extern "C" fn #ident_ctor() {
+                <super::#ident as ::pbni::pbx::NonVisualObject>::register();
+            }
         }
     };
 
@@ -30,18 +33,22 @@ pub fn gen_nvo(args: AttributeArgs, input: TokenStream) -> Result<TokenStream> {
 pub fn gen_vo(args: AttributeArgs, input: TokenStream) -> Result<TokenStream> {
     let args = AttrArgs::parse(args)?;
     let (ident, mut output) = gen_object(args.name, args.inherit, input)?;
-    let ident_reg = format_ident!("{}_reg", ident);
+    let ident_ctor = format_ident!("__ctor_{}", ident);
+    let ident_ctor_mod = format_ident!("__priv_{}", ident);
 
-    let nvo_impl = quote! {
-        impl ::pbni::pbx::VisualObject for #ident {
-        }
-        #[::pbni::pbx::__private::codegen::constructor]
-        extern "C" fn #ident_reg() {
-            <#ident as ::pbni::pbx::VisualObject>::register();
+    let vo_impl = quote! {
+        impl ::pbni::pbx::VisualObject for #ident { }
+        #[doc(hidden)]
+        #[allow(non_snake_case)]
+        mod #ident_ctor_mod {
+            #[::pbni::pbx::__private::codegen::constructor]
+            extern "C" fn #ident_ctor() {
+                <super::#ident as ::pbni::pbx::VisualObject>::register();
+            }
         }
     };
 
-    output.extend(nvo_impl);
+    output.extend(vo_impl);
 
     Ok(output.into())
 }

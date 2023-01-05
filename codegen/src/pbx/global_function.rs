@@ -8,31 +8,34 @@ pub fn gen(args: AttributeArgs, input: TokenStream) -> Result<TokenStream> {
     let ast = parse::<ItemFn>(input)?;
     let ident = ast.sig.ident.clone();
     let ident_st = format_ident!("{}_st", ident);
-    let ident_reg = format_ident!("{}_reg", ident);
+    let ident_ctor = format_ident!("__ctor_{}", ident);
+    let ident_ctor_mod = format_ident!("__priv_{}", ident);
     let name = args.name.unwrap_or_else(|| ident.to_string());
     let cls_name = name.to_ascii_lowercase();
 
     let output = quote! {
         #ast
         #[doc(hidden)]
+        #[allow(non_snake_case)]
         #[allow(non_camel_case_types)]
-        struct #ident_st;
-        impl ::pbni::pbx::__private::codegen::GlobalFunction for #ident_st {
-            const NAME: &'static ::pbni::primitive::PBStr = ::pbni::pbstr!(#cls_name);
-            fn invoke(ci: ::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<()> {
-                ::pbni::pbx::__private::codegen::safe_invoke(
-                    ci.session(),
-                    stringify!(#name),
-                    concat!(module_path!(),"::",stringify!(#ident)),
-                    file!(),line!(),column!(),
-                    ||::pbni::pbx::__private::codegen::global_function_factory_call(#ident, &ci)
-                )
+        mod #ident_ctor_mod {
+            struct #ident_st;
+            impl ::pbni::pbx::__private::codegen::GlobalFunction for #ident_st {
+                const NAME: &'static ::pbni::primitive::PBStr = ::pbni::pbstr!(#cls_name);
+                fn invoke(ci: ::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<()> {
+                    ::pbni::pbx::__private::codegen::safe_invoke(
+                        ci.session(),
+                        stringify!(#name),
+                        concat!(module_path!(),"::",stringify!(#ident)),
+                        file!(),line!(),column!(),
+                        ||::pbni::pbx::__private::codegen::global_function_factory_call(super::#ident, &ci)
+                    )
+                }
             }
-        }
-        #[::pbni::pbx::__private::codegen::constructor]
-        extern "C" fn #ident_reg() {
-            use ::pbni::pbx::__private::codegen::GlobalFunction;
-            <#ident_st as GlobalFunction>::register();
+            #[::pbni::pbx::__private::codegen::constructor]
+            extern "C" fn #ident_ctor() {
+                <#ident_st as ::pbni::pbx::__private::codegen::GlobalFunction>::register();
+            }
         }
     };
 
