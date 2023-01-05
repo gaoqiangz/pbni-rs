@@ -109,6 +109,11 @@ impl AsPBStr for &str {
 impl AsPBStr for Cow<'_, PBStr> {
     fn as_pbstr(&self) -> Cow<'_, PBStr> { self.as_ref().into() }
 }
+impl AsPBStr for Cow<'_, str> {
+    fn as_pbstr(&self) -> Cow<'_, PBStr> {
+        PBString::from_str(self).expect("incompatible utf-8 string").into()
+    }
+}
 
 pub trait FromPBStrPtr {
     unsafe fn from_pbstr_unchecked(ptr: LPCTSTR) -> Self;
