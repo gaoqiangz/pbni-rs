@@ -85,7 +85,7 @@ impl<'ci> CallInfoRef<'ci> {
     pub(crate) fn clone(&self) -> CallInfoRef<'ci> {
         CallInfoRef {
             ptr: self.ptr,
-            session: unsafe { self.session.clone() },
+            session: self.session.clone(),
             _marker: PhantomData
         }
     }
@@ -152,7 +152,7 @@ impl<'ci> FromArg<'ci> for ArgumentsRef<'ci> {
 }
 impl FromArg<'_> for Session {
     fn from_arg(ci: &CallInfoRef, _: &ArgumentsRef, _: &mut pbint, _: &mut bool) -> Result<Session> {
-        Ok(unsafe { ci.session().clone() })
+        Ok(ci.session().clone())
     }
 }
 

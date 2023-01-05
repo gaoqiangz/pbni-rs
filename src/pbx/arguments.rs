@@ -390,7 +390,7 @@ impl<'args> ArgumentsRef<'args> {
         ArgumentsRef {
             ptr: self.ptr,
             count: self.count,
-            session: unsafe { self.session.clone() },
+            session: self.session.clone(),
             _marker: PhantomData
         }
     }
