@@ -172,17 +172,6 @@ impl ContextObject {
             obj: Object::from_ptr(ptr, session.clone())
         }
     }
-
-    /// 克隆对象
-    ///
-    /// # Safety
-    ///
-    /// 此方法不能延长对象的生命周期,因此不能保证克隆后的对象始终有效,生命周期将始终与此对象一样
-    pub unsafe fn clone(&self) -> ContextObject {
-        ContextObject {
-            obj: self.obj.clone()
-        }
-    }
 }
 
 impl Deref for ContextObject {
