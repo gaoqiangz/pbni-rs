@@ -7,6 +7,7 @@ mod global_var;
 mod global_func;
 
 /// Session对象
+#[derive(Clone)]
 #[repr(transparent)]
 pub struct Session {
     ptr: pbsession
@@ -19,17 +20,6 @@ impl Session {
         }
     }
     pub(crate) fn as_ptr(&self) -> pbsession { self.ptr }
-
-    /// 克隆Session对象
-    ///
-    /// # Safety
-    ///
-    /// 此方法不能延长Session对象的生命周期,因此不能保证克隆后的Session对象始终有效,生命周期将始终与此对象一样
-    pub unsafe fn clone(&self) -> Session {
-        Session {
-            ptr: self.ptr
-        }
-    }
 
     /// 判断是否有重启Session的请求 (在PowerScript中调用了`Restart`函数)
     pub fn restart_requested(&self) -> bool { unsafe { ffi::pbsession_RestartRequested(self.ptr).into() } }
@@ -217,11 +207,7 @@ impl Session {
     /// let val = session.get_enum_item_value("Aligment","Center");
     /// let name = session.get_enum_item_name("Aligment",val); //center
     /// ```
-    pub fn get_enum_item_name<'a>(
-        &'a self,
-        enum_name: impl AsPBStr,
-        item_value: pblong
-    ) -> Option<&'a PBStr> {
+    pub fn get_enum_item_name<'a>(&self, enum_name: impl AsPBStr, item_value: pblong) -> Option<&'a PBStr> {
         unsafe {
             let cstr = ffi::pbsession_GetEnumItemName(self.ptr, enum_name.as_pbstr().as_ptr(), item_value);
             if cstr.is_null() {
@@ -257,7 +243,7 @@ impl Session {
     /// ```
     /// let obj = session.new_user_object("n_cst_object");
     /// ```
-    pub fn new_user_object<'a>(&'a self, cls_name: impl AsPBStr) -> Result<Object<'a>> {
+    pub fn new_user_object<'a>(&self, cls_name: impl AsPBStr) -> Result<Object<'a>> {
         unsafe {
             let cls_name = cls_name.as_pbstr();
             let group = self
@@ -276,7 +262,7 @@ impl Session {
     /// ```
     /// let obj = session.new_system_object("datastore");
     /// ```
-    pub fn new_system_object<'a>(&'a self, cls_name: impl AsPBStr) -> Result<Object<'a>> {
+    pub fn new_system_object<'a>(&self, cls_name: impl AsPBStr) -> Result<Object<'a>> {
         unsafe {
             let group = self.get_system_group();
             let cls = self.find_class(group, cls_name).ok_or(PBXRESULT::E_NO_SUCH_CLASS)?;
@@ -293,7 +279,7 @@ impl Session {
     /// let obj = session.new_object("n_cst_object");
     /// let obj = session.new_object("datastore");
     /// ```
-    pub fn new_object<'a>(&'a self, cls_name: impl AsPBStr) -> Result<Object<'a>> {
+    pub fn new_object<'a>(&self, cls_name: impl AsPBStr) -> Result<Object<'a>> {
         let cls_name = cls_name.as_pbstr();
         self.new_user_object(cls_name.as_ref()).or_else(|_| self.new_system_object(cls_name))
     }
@@ -316,7 +302,7 @@ impl Session {
     /// //arr[1] = 123
     /// arr.set_item_int(&[1],123);
     /// ```
-    pub fn new_array<'a>(&'a self, item_type: ValueType) -> Result<Array<'a>> {
+    pub fn new_array<'a>(&self, item_type: ValueType) -> Result<Array<'a>> {
         unsafe {
             let ptr = ffi::pbsession_NewUnboundedSimpleArray(self.ptr, item_type)
                 .ok_or(PBXRESULT::E_INVALID_ARGUMENT)?;
@@ -350,7 +336,7 @@ impl Session {
     /// arr.set_item_int(&[1,2],123);
     /// ```
     pub fn new_bounded_array<'a>(
-        &'a self,
+        &self,
         item_type: ValueType,
         dims: &[(pblong, pblong)]
     ) -> Result<Array<'a>> {
@@ -387,7 +373,7 @@ impl Session {
     /// let obj = session.new_user_object("n_cst_test").unwrap();
     /// arr.set_item_object(&[1],&obj);
     /// ```
-    pub fn new_user_object_array<'a>(&'a self, cls_name: impl AsPBStr) -> Result<Array<'a>> {
+    pub fn new_user_object_array<'a>(&self, cls_name: impl AsPBStr) -> Result<Array<'a>> {
         let cls_name = cls_name.as_pbstr();
         let group =
             self.find_group(cls_name.as_ref(), GroupType::UserObject).ok_or(PBXRESULT::E_NO_SUCH_CLASS)?;
@@ -410,7 +396,7 @@ impl Session {
     /// let obj = session.new_user_object("datastore").unwrap();
     /// arr.set_item_object(&[1],&obj);
     /// ```
-    pub fn new_system_object_array<'a>(&'a self, cls_name: impl AsPBStr) -> Result<Array<'a>> {
+    pub fn new_system_object_array<'a>(&self, cls_name: impl AsPBStr) -> Result<Array<'a>> {
         let group = self.get_system_group();
         let cls = self.find_class(group, cls_name).ok_or(PBXRESULT::E_NO_SUCH_CLASS)?;
         self.new_object_array_impl(cls)
@@ -431,12 +417,12 @@ impl Session {
     /// let obj = session.new_user_object("datastore").unwrap();
     /// arr.set_item_object(&[1],&obj);
     /// ```
-    pub fn new_object_array<'a>(&'a self, cls_name: impl AsPBStr) -> Result<Array<'a>> {
+    pub fn new_object_array<'a>(&self, cls_name: impl AsPBStr) -> Result<Array<'a>> {
         let cls_name = cls_name.as_pbstr();
         self.new_user_object_array(cls_name.as_ref()).or_else(|_| self.new_system_object_array(cls_name))
     }
 
-    fn new_object_array_impl<'a>(&'a self, cls: pbclass) -> Result<Array<'a>> {
+    fn new_object_array_impl<'a>(&self, cls: pbclass) -> Result<Array<'a>> {
         unsafe {
             let ptr =
                 ffi::pbsession_NewUnboundedObjectArray(self.ptr, cls).ok_or(PBXRESULT::E_INVALID_ARGUMENT)?;
@@ -472,7 +458,7 @@ impl Session {
     /// arr.set_item_object(&[1,2],&obj);
     /// ```
     pub fn new_bounded_user_object_array<'a>(
-        &'a self,
+        &self,
         cls_name: impl AsPBStr,
         dims: &[(pblong, pblong)]
     ) -> Result<Array<'a>> {
@@ -511,7 +497,7 @@ impl Session {
     /// arr.set_item_object(&[1,2],&obj);
     /// ```
     pub fn new_bounded_system_object_array<'a>(
-        &'a self,
+        &self,
         cls_name: impl AsPBStr,
         dims: &[(pblong, pblong)]
     ) -> Result<Array<'a>> {
@@ -548,7 +534,7 @@ impl Session {
     /// arr.set_item_object(&[1,2],&obj);
     /// ```
     pub fn new_bounded_object_array<'a>(
-        &'a self,
+        &self,
         cls_name: impl AsPBStr,
         dims: &[(pblong, pblong)]
     ) -> Result<Array<'a>> {
@@ -558,7 +544,7 @@ impl Session {
     }
 
     fn new_bounded_object_array_impl<'a>(
-        &'a self,
+        &self,
         cls: pbclass,
         dims: &[(pblong, pblong)]
     ) -> Result<Array<'a>> {
