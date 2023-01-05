@@ -34,10 +34,10 @@ pub trait NonVisualObject: UserObject {
     fn register() { crate::pbx::export::register_nonvisualobject::<Self>() }
 
     /// 创建PB对象
-    fn new_object(session: &Session) -> Result<Object> { session.new_user_object(Self::CLASS_NAME) }
+    fn new_object<'a>(session: &Session) -> Result<Object<'a>> { session.new_user_object(Self::CLASS_NAME) }
 
     /// 创建PB对象并在`modify`回调中修改
-    fn new_object_modify<F>(session: &Session, modify: F) -> Result<Object>
+    fn new_object_modify<'a, F>(session: &Session, modify: F) -> Result<Object<'a>>
     where
         F: FnOnce(&mut Self)
     {
