@@ -6,6 +6,7 @@ use crate::{
 use std::{borrow::Cow, ops::Deref};
 
 /// Session对象
+#[derive(Clone, Copy)]
 #[repr(transparent)]
 pub struct Session {
     ptr: POB_THIS
@@ -18,17 +19,6 @@ impl Session {
         }
     }
     pub(crate) fn as_ptr(&self) -> POB_THIS { self.ptr }
-
-    /// 克隆`Session`对象
-    ///
-    /// # Safety
-    ///
-    /// 此方法不能延长`Session`对象的生命周期,因此不能保证克隆后的`Session`对象始终有效,生命周期将始终与此对象一样
-    pub unsafe fn clone(&self) -> Session {
-        Session {
-            ptr: self.ptr
-        }
-    }
 
     //TODO
     /// 判断是否有重启Session的请求 (在PowerScript中调用了`Restart`函数)
@@ -757,19 +747,19 @@ impl Deref for OwnedSession<'_> {
 ///
 /// ```
 /// //创建栈帧
-/// let frame = LocalFrame::new(&session);
+/// let frame = LocalFrame::new(session);
 /// //手动退出栈帧
 /// //pop调用不是必须的,变量drop时会自动退出
 /// frame.pop();
 /// ```
 #[must_use]
-pub struct LocalFrame<'session> {
-    session: &'session Session
+pub struct LocalFrame {
+    session: Session
 }
 
-impl<'session> LocalFrame<'session> {
+impl LocalFrame {
     /// 创建栈帧
-    pub fn new(session: &Session) -> LocalFrame {
+    pub fn new(session: Session) -> LocalFrame {
         unsafe {
             (&mut *session.ptr).routine_level += 1;
         }
@@ -781,7 +771,7 @@ impl<'session> LocalFrame<'session> {
     pub fn pop(self) {}
 }
 
-impl<'session> Drop for LocalFrame<'session> {
+impl Drop for LocalFrame {
     fn drop(&mut self) {
         unsafe {
             let obthis = &mut *self.session.ptr;
