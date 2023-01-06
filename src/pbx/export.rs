@@ -6,10 +6,27 @@ use std::collections::HashMap;
 #[cfg(feature = "global_function")]
 use crate::pbx::codegen::global_function::GlobalFunction;
 
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+use crate::pbx::userobject::UserObjectWrap;
+
 #[cfg(feature = "global_function")]
 #[static_init::dynamic]
-static mut GLOBAL_FUNCTION_HANDLERS: HashMap<&'static PBStr, fn(CallInfoRef<'_>) -> Result<()>> =
+static mut GLOBAL_FUNCTION_HANDLERS: HashMap<&'static PBStr, fn(ci: CallInfoRef<'_>) -> Result<()>> =
     HashMap::new();
+
+#[cfg(feature = "nonvisualobject")]
+#[static_init::dynamic]
+static mut NVO_HANDLERS: HashMap<
+    &'static PBStr,
+    fn(session: Session, object: Object) -> Result<pbuserobject>
+> = HashMap::new();
+
+#[cfg(feature = "visualobject")]
+#[static_init::dynamic]
+static mut VO_HANDLERS: HashMap<
+    &'static PBStr,
+    fn(session: Session, object: Object) -> Result<bindings::pbuserobject>
+> = HashMap::new();
 
 /// 注册全局函数回调接口
 #[cfg(feature = "global_function")]
@@ -19,25 +36,19 @@ pub fn register_global_function<T: GlobalFunction>() {
 }
 
 #[cfg(feature = "nonvisualobject")]
-#[static_init::dynamic]
-static mut NVO_HANDLERS: HashMap<
-    &'static PBStr,
-    fn(session: Session, obj: ContextObject) -> Result<pbuserobject>
-> = HashMap::new();
-
-#[cfg(feature = "nonvisualobject")]
 pub fn register_nonvisualobject<T: NonVisualObject>() {
-    fn new<T: NonVisualObject>(session: Session, ctx: ContextObject) -> Result<bindings::pbuserobject> {
-        let obj = Box::new(T::new(session, ctx)?);
+    fn new<T: NonVisualObject>(session: Session, object: Object) -> Result<bindings::pbuserobject> {
+        let pbobject = object.as_ptr();
+        let obj = Box::new(UserObjectWrap::new(T::new(session, object)?, session.as_ptr(), pbobject));
         unsafe {
-            let om = NVOM::<T> {
+            let om = NVOM::<UserObjectWrap<T>> {
                 ctx: NonNull::new_unchecked(Box::into_raw(obj)),
                 type_id: type_id::<T>(),
                 destory: handler::destroy,
                 invoke: handler::invoke,
                 get_inherit_ptr: handler::get_inherit_ptr
             };
-            Ok(ffi::NewNonVisualObject(&om as *const NVOM<T> as _))
+            Ok(ffi::NewNonVisualObject(&om as *const NVOM<UserObjectWrap<T>> as _))
         }
     }
 
@@ -46,18 +57,12 @@ pub fn register_nonvisualobject<T: NonVisualObject>() {
 }
 
 #[cfg(feature = "visualobject")]
-#[static_init::dynamic]
-static mut VO_HANDLERS: HashMap<
-    &'static PBStr,
-    fn(session: Session, obj: ContextObject) -> Result<bindings::pbuserobject>
-> = HashMap::new();
-
-#[cfg(feature = "visualobject")]
 pub fn register_visualobject<T: VisualObject>() {
-    fn new<T: VisualObject>(session: Session, ctx: ContextObject) -> Result<bindings::pbuserobject> {
-        let obj = Box::new(T::new(session, ctx)?);
+    fn new<T: VisualObject>(session: Session, object: Object) -> Result<bindings::pbuserobject> {
+        let pbobject = object.as_ptr();
+        let obj = Box::new(UserObjectWrap::new(T::new(session, object)?, session.as_ptr(), pbobject));
         unsafe {
-            let om = VOM::<T> {
+            let om = VOM::<UserObjectWrap<T>> {
                 ctx: NonNull::new_unchecked(Box::into_raw(obj)),
                 type_id: type_id::<T>(),
                 cls_name: T::WINDOW_CLASS_NAME.as_ptr(),
@@ -67,7 +72,7 @@ pub fn register_visualobject<T: VisualObject>() {
                 create_control: handler::create_control,
                 get_event_id: handler::get_event_id
             };
-            Ok(ffi::NewVisualObject(&om as *const VOM<T> as _))
+            Ok(ffi::NewVisualObject(&om as *const VOM<UserObjectWrap<T>> as _))
         }
     }
 
@@ -80,9 +85,12 @@ pub fn register_visualobject<T: VisualObject>() {
 mod handler {
     use super::*;
 
-    pub unsafe extern "C" fn destroy<T: UserObject>(ctx: NonNull<T>) { drop(Box::from_raw(ctx.as_ptr())); }
+    pub unsafe extern "C" fn destroy<T: UserObject>(ctx: NonNull<UserObjectWrap<T>>) {
+        drop(Box::from_raw(ctx.as_ptr()));
+    }
+
     pub unsafe extern "C" fn invoke<T: UserObject>(
-        mut ctx: NonNull<T>,
+        mut ctx: NonNull<UserObjectWrap<T>>,
         session: Session,
         _obj: pbobject,
         mid: MethodId,
@@ -91,12 +99,17 @@ mod handler {
         let ci = CallInfoRef::from_ptr(ci, session);
         ctx.as_mut().invoke(mid, &ci).into()
     }
-    pub unsafe extern "C" fn get_inherit_ptr<T: UserObject>(ctx: NonNull<T>, type_id: u64) -> *const () {
+
+    pub unsafe extern "C" fn get_inherit_ptr<T: UserObject>(
+        ctx: NonNull<UserObjectWrap<T>>,
+        type_id: u64
+    ) -> *const () {
         ctx.as_ref().get_inherit_ptr(type_id)
     }
+
     #[cfg(feature = "visualobject")]
     pub unsafe extern "C" fn create_control<T: VisualObject>(
-        mut ctx: NonNull<T>,
+        mut ctx: NonNull<UserObjectWrap<T>>,
         dwExStyle: u32,
         window_name: LPCTSTR,
         dwStyle: u32,
@@ -110,9 +123,10 @@ mod handler {
         let window_name = PBStr::from_ptr_str(window_name);
         ctx.as_mut().create_control(dwExStyle, window_name, dwStyle, x, y, width, height, parent, instance)
     }
+
     #[cfg(feature = "visualobject")]
     pub unsafe extern "C" fn get_event_id<T: VisualObject>(
-        ctx: NonNull<T>,
+        ctx: NonNull<UserObjectWrap<T>>,
         hwnd: HWND,
         msg: u16,
         wparam: u32,
@@ -155,8 +169,8 @@ mod export {
         let className = PBStr::from_ptr_str(className);
         let map = NVO_HANDLERS.read();
         if let Some(handler) = map.get(className) {
-            let pbobj = ContextObject::from_ptr(pbobj, &session);
-            match handler(session, pbobj) {
+            let object = Object::from_ptr(pbobj, session);
+            match handler(session, object) {
                 Ok(ptr) => {
                     *obj.as_mut() = ptr;
                     PBXRESULT::OK
@@ -179,8 +193,8 @@ mod export {
         let className = PBStr::from_ptr_str(className);
         let map = VO_HANDLERS.read();
         if let Some(handler) = map.get(className) {
-            let pbobj = ContextObject::from_ptr(pbobj, &session);
-            match handler(session, pbobj) {
+            let object = Object::from_ptr(pbobj, session);
+            match handler(session, object) {
                 Ok(ptr) => {
                     *obj.as_mut() = ptr;
                     PBXRESULT::OK

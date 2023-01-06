@@ -94,7 +94,8 @@ pub fn gen_event(args: AttributeArgs, input: TokenStream) -> Result<TokenStream>
             ast.block = parse_quote! {
                 {
                     use ::pbni::pbx::__private::codegen::{FromValue,ToValue};
-                    let invoker = self.context_mut().begin_invoke_event(::pbni::pbstr!(#name))?;
+                    let mut object = self.get_object();
+                    let invoker = object.begin_invoke_event(::pbni::pbstr!(#name))?;
                     #(
                         ToValue::to_value(#fn_arg,&mut invoker.arg(#fn_arg_index))?;
                     )*
@@ -107,7 +108,8 @@ pub fn gen_event(args: AttributeArgs, input: TokenStream) -> Result<TokenStream>
             ast.block = parse_quote! {
                 {
                     use ::pbni::pbx::__private::codegen::{FromValue,ToValue};
-                    let invoker = self.context_mut().begin_invoke_event(::pbni::pbstr!(#name)).expect(concat!("begin invoke ",#name));
+                    let mut object = self.get_object();
+                    let invoker = object.begin_invoke_event(::pbni::pbstr!(#name)).expect(concat!("begin invoke ",#name));
                     #(
                         ToValue::to_value(#fn_arg,&mut invoker.arg(#fn_arg_index)).expect(concat!("pass argument ",stringify!(#fn_arg)));
                     )*
@@ -166,11 +168,11 @@ fn gen_object(
     }
     let new_impl = if let Some(ctor) = block.ctor {
         quote! {
-            ::pbni::pbx::__private::codegen::safe_invoke_ctor(&session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::#ctor(unsafe { session.clone() }, ctx))
+            ::pbni::pbx::__private::codegen::safe_invoke_ctor(session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::#ctor(session, ctx))
         }
     } else {
         quote! {
-            ::pbni::pbx::__private::codegen::safe_invoke_ctor(&session,concat!(stringify!(#ident),"::default"),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::default())
+            ::pbni::pbx::__private::codegen::safe_invoke_ctor(session,concat!(stringify!(#ident),"::default"),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::default())
         }
     };
     let invoke_impl = if let Some(inherit) = &inherit {
@@ -243,7 +245,7 @@ fn gen_object(
         #body
         impl ::pbni::pbx::UserObject for #ident {
             const CLASS_NAME: &'static ::pbni::primitive::PBStr = ::pbni::pbstr!(#cls_name);
-            fn new(session: ::pbni::pbx::Session, ctx: ::pbni::pbx::ContextObject) -> Result<Self> {
+            fn new(session: ::pbni::pbx::Session, ctx: ::pbni::pbx::Object) -> Result<Self> {
                 #new_impl
             }
             fn invoke(&mut self, mid: ::pbni::primitive::MethodId, ci: &::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<Option<::pbni::primitive::MethodId>> {

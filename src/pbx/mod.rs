@@ -18,7 +18,7 @@ pub use callinfo::{CallInfo, CallInfoRef};
 pub use codegen::{pbx_args, pbx_throw};
 pub use session::{LocalFrame, OwnedSession, Session};
 pub use value::{
-    array::Array, object::{ContextObject, Object, SharedObject}, FromValue, OwnedValue, ToValue, Value
+    array::Array, object::{Object, SharedObject}, FromValue, OwnedValue, ToValue, Value
 };
 
 #[cfg(feature = "vm")]
@@ -26,10 +26,10 @@ pub use vm::VM;
 
 #[cfg(feature = "nonvisualobject")]
 pub use userobject::NonVisualObject;
-#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
-pub use userobject::UserObject;
 #[cfg(feature = "visualobject")]
 pub use userobject::VisualObject;
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+pub use userobject::{AliveState, UserObject};
 
 #[cfg(feature = "global_function")]
 pub use pbni_codegen::pbx_global_function as global_function;

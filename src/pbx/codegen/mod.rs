@@ -69,7 +69,7 @@ pub mod __private {
 
     /// 函数调用,捕获Panic和返回值错误,自动转换为PB异常
     pub fn safe_invoke<F>(
-        session: &Session,
+        session: Session,
         source: &str,
         module: &str,
         file: &str,
@@ -143,7 +143,7 @@ pub mod __private {
     /// 构造函数调用,捕获Panic和返回值错误,自动转换为PB异常
     #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
     pub fn safe_invoke_ctor<F, R>(
-        session: &Session,
+        session: Session,
         source: &str,
         module: &str,
         file: &str,

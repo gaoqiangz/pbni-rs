@@ -35,7 +35,7 @@ impl CallInfo {
     }
 
     /// 获取关联的`Session`
-    pub fn session(&self) -> &Session { &self.session }
+    pub fn session(&self) -> Session { self.session }
 
     /// 获取指定参数
     ///
@@ -91,7 +91,7 @@ impl<'ci> CallInfoRef<'ci> {
     }
 
     /// 获取关联的`Session`
-    pub fn session(&self) -> &Session { &self.session }
+    pub fn session(&self) -> Session { self.session }
 
     /// 获取指定参数
     ///

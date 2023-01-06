@@ -1,4 +1,5 @@
 #![allow(unused_imports)]
+#![allow(dead_code)]
 
 use proc_macro::TokenStream;
 
@@ -95,19 +96,13 @@ pub fn pbx_global_function(args: TokenStream, input: TokenStream) -> TokenStream
 /// - Rust(pbx-rs)
 ///
 /// ```no_run
-/// struct RustObject {
-///     session: Session,
-///     ctx: ContextObject
-/// }
+/// struct RustObject { }
 ///
 /// #[nonvisualobject(name = "n_pbx")]
 /// impl RustObject {
 ///     #[constructor]
-///     fn new(session: Session, ctx: ContextObject) -> RustObject {
-///         RustObject {
-///             session,
-///             ctx
-///         }
+///     fn new(session: Session, pbobject: Object) -> RustObject {
+///         RustObject { }
 ///     }
 ///     #[method(name="of_Hello")]
 ///     fn hello(&self, world: String) -> String {
@@ -122,7 +117,7 @@ pub fn pbx_global_function(args: TokenStream, input: TokenStream) -> TokenStream
 /// #[nonvisualobject(name = "n_pbx_child", inherit = "parent")]
 /// impl RustChildObject {
 ///     #[constructor]
-///     fn new(session: Session, ctx: ContextObject) -> RustChildObject {
+///     fn new(session: Session, pbobject: Object) -> RustChildObject {
 ///         RustChildObject {
 ///             parent : RustObject {
 ///                 session,
@@ -158,19 +153,13 @@ pub fn pbx_nonvisualobject(args: TokenStream, input: TokenStream) -> TokenStream
 /// # Examples
 ///
 /// ```no_run
-/// struct RustObject {
-///     session: Session,
-///     ctx: ContextObject
-/// }
+/// struct RustObject { }
 ///
 /// #[visualobject(name = "u_canvas")]
 /// impl RustObject {
 ///     #[constructor]
-///     fn new(session: Session, ctx: ContextObject) -> RustObject {
-///         RustObject {
-///             session,
-///             ctx
-///         }
+///     fn new(session: Session, pbobject: Object) -> RustObject {
+///         RustObject { }
 ///     }
 ///     #[method(name="of_Hello")]
 ///     fn hello(&self, world: String) -> String {
@@ -186,11 +175,15 @@ pub fn pbx_visualobject(args: TokenStream, input: TokenStream) -> TokenStream {
 
 /// 标记对象的构造函数
 ///
+/// # Notice
+///
+/// 未指定构造函数时默认使用`Default::default`函数构造对象（要求对象实现`Default trait`）
+///
 /// # Examples
 ///
 /// ```no_run
 /// #[constructor]
-/// fn new(session: Session, ctx: ContextObject) -> RustObject {
+/// fn new(session: Session, pbobject: Object) -> RustObject {
 ///     RustObject {
 ///         session,
 ///         ctx
@@ -226,30 +219,16 @@ pub fn pbx_method(args: TokenStream, input: TokenStream) -> TokenStream { pbx::m
 ///
 /// - `name`: 映射的PB事件名 (默认为Rust函数名)
 ///
-/// # Required
-///
-/// 自动生成事件代码,需要对象实现`context_mut`方法:
-///
 /// # Examples
 ///
 /// ```no_run
-/// struct RustObject {
-///     session: Session,
-///     ctx: ContextObject
-/// }
-///
-/// impl RustObject {
-///     fn context_mut(&mut self) -> &mut ContextObject { &mut self.ctx }
-/// }
+/// struct RustObject { }
 ///
 /// #[nonvisualobject(name = "n_pbx")]
 /// impl RustObject {
 ///     #[constructor]
-///     fn new(session: Session, ctx: ContextObject) -> RustObject {
-///         RustObject {
-///             session,
-///             ctx
-///         }
+///     fn new(session: Session, pbobject: Object) -> RustObject {
+///         RustObject { }
 ///     }
 ///     #[event(name="onFire")]
 ///     fn on_fire(&mut self) {}

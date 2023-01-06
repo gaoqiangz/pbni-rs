@@ -9,7 +9,7 @@ mod global_var;
 mod global_func;
 
 /// Session对象
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 #[repr(transparent)]
 pub struct Session {
     ptr: pbsession
@@ -748,7 +748,7 @@ impl Deref for OwnedSession<'_> {
 ///
 /// ```
 /// //创建栈帧
-/// let frame = LocalFrame::new(&session);
+/// let frame = LocalFrame::new(session);
 /// //手动退出栈帧
 /// //pop调用不是必须的,变量drop时会自动退出
 /// frame.pop();
@@ -760,7 +760,7 @@ pub struct LocalFrame {
 
 impl LocalFrame {
     /// 创建栈帧
-    pub fn new(session: &Session) -> LocalFrame {
+    pub fn new(session: Session) -> LocalFrame {
         unsafe { ffi::pbsession_PushLocalFrame(session.ptr) }
         LocalFrame {
             session: session.ptr

@@ -1,5 +1,5 @@
 use crate::{
-    pbx::{bindings::*, value::FromValueOwned, *}, prelude::*
+    pbx::{bindings::*, userobject::UserObjectWrap, value::FromValueOwned, *}, prelude::*
 };
 use std::{
     cell::Cell, ops::{Deref, DerefMut}
@@ -83,7 +83,7 @@ impl<'obj> Object<'obj> {
         if ctx.is_null() {
             return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
         } else {
-            Ok(&*(ctx as *const T))
+            Ok(&*(ctx as *const UserObjectWrap<T>))
         }
     }
 
@@ -106,6 +106,7 @@ impl<'obj> Object<'obj> {
         /*if !self.is_native() {
             return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
         }*/
+
         let obj = ffi::pbsession_GetNativeInterface(self.session.as_ptr(), self.ptr);
         if obj.is_none() {
             return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
@@ -114,7 +115,7 @@ impl<'obj> Object<'obj> {
         if ctx.is_null() {
             return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
         } else {
-            Ok(&mut *(ctx as *mut T))
+            Ok(&mut *(ctx as *mut UserObjectWrap<T>))
         }
     }
 
@@ -159,26 +160,4 @@ impl DerefMut for SharedObject {
 
 impl From<Object<'_>> for SharedObject {
     fn from(obj: Object) -> Self { unsafe { Self::from_ptr(obj.ptr, obj.session) } }
-}
-
-/// Rust对象绑定的PB对象
-pub struct ContextObject {
-    obj: Object<'static>
-}
-
-impl ContextObject {
-    pub(crate) unsafe fn from_ptr(ptr: pbobject, session: &Session) -> ContextObject {
-        ContextObject {
-            obj: Object::from_ptr(ptr, session.clone())
-        }
-    }
-}
-
-impl Deref for ContextObject {
-    type Target = Object<'static>;
-    fn deref(&self) -> &Self::Target { &self.obj }
-}
-
-impl DerefMut for ContextObject {
-    fn deref_mut(&mut self) -> &mut Self::Target { &mut self.obj }
 }

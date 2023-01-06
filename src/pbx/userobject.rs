@@ -1,6 +1,9 @@
 use crate::{
     pbx::{bindings::*, *}, primitive::*
 };
+use std::{
+    ops::{Deref, DerefMut}, sync::{Arc, Weak}
+};
 
 /// PB用户对象抽象
 #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
@@ -9,7 +12,7 @@ pub trait UserObject: Sized + 'static {
     const CLASS_NAME: &'static PBStr;
 
     /// 创建对象
-    fn new(session: Session, ctx: ContextObject) -> Result<Self>;
+    fn new(session: Session, ctx: Object) -> Result<Self>;
 
     /// 接口调用
     ///
@@ -25,6 +28,33 @@ pub trait UserObject: Sized + 'static {
     ///
     /// 实现运行时实例指针协变 `&Child -> &Parent`
     fn get_inherit_ptr(&self, type_id: u64) -> *const ();
+
+    /// 获取`Session`
+    #[inline]
+    fn get_session(&self) -> Session {
+        unsafe {
+            let wrap = &*(self as *const Self as *const UserObjectWrap<Self>);
+            Session::from_ptr(wrap.pbsession)
+        }
+    }
+
+    /// 获取关联的PB对象
+    #[inline]
+    fn get_object(&mut self) -> Object {
+        unsafe {
+            let wrap = &*(self as *const Self as *const UserObjectWrap<Self>);
+            Object::from_ptr(wrap.pbobject, Session::from_ptr(wrap.pbsession))
+        }
+    }
+
+    /// 存活状态
+    #[inline]
+    fn get_alive_state(&self) -> AliveState {
+        unsafe {
+            let wrap = &*(self as *const Self as *const UserObjectWrap<Self>);
+            AliveState(Arc::downgrade(&wrap.alive))
+        }
+    }
 }
 
 /// PB不可视对象
@@ -34,10 +64,10 @@ pub trait NonVisualObject: UserObject {
     fn register() { crate::pbx::export::register_nonvisualobject::<Self>() }
 
     /// 创建PB对象
-    fn new_object<'a>(session: &Session) -> Result<Object<'a>> { session.new_user_object(Self::CLASS_NAME) }
+    fn new_object<'a>(session: Session) -> Result<Object<'a>> { session.new_user_object(Self::CLASS_NAME) }
 
     /// 创建PB对象并在`modify`回调中修改
-    fn new_object_modify<'a, F>(session: &Session, modify: F) -> Result<Object<'a>>
+    fn new_object_modify<'a, F>(session: Session, modify: F) -> Result<Object<'a>>
     where
         F: FnOnce(&mut Self)
     {
@@ -76,4 +106,53 @@ pub trait VisualObject: UserObject {
 
     /// 注册
     fn register() { crate::pbx::export::register_visualobject::<Self>() }
+}
+
+/// PB用户对象封装
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+#[repr(C)]
+pub struct UserObjectWrap<T: UserObject> {
+    object: T, //NOTE 必须在第一个字段
+    pbsession: pbsession,
+    pbobject: pbobject,
+    alive: Arc<()>
+}
+
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+impl<T: UserObject> UserObjectWrap<T> {
+    pub fn new(object: T, pbsession: pbsession, pbobject: pbobject) -> Self {
+        UserObjectWrap {
+            object,
+            pbsession,
+            pbobject,
+            alive: Arc::new(())
+        }
+    }
+}
+
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+impl<T: UserObject> Deref for UserObjectWrap<T> {
+    type Target = T;
+
+    #[inline(always)]
+    fn deref(&self) -> &Self::Target { &self.object }
+}
+
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+impl<T: UserObject> DerefMut for UserObjectWrap<T> {
+    #[inline(always)]
+    fn deref_mut(&mut self) -> &mut Self::Target { &mut self.object }
+}
+
+/// PB用户对象存活状态
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+#[derive(Clone)]
+pub struct AliveState(Weak<()>);
+
+impl AliveState {
+    /// 是否存活
+    pub fn is_alive(&self) -> bool { self.0.strong_count() != 0 }
+
+    /// 是否死亡
+    pub fn is_dead(&self) -> bool { self.0.strong_count() == 0 }
 }

@@ -407,12 +407,6 @@ impl ToValue for Object<'_> {
 impl ToValue for &Object<'_> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_object(self) }
 }
-impl ToValue for ContextObject {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_object(&self) }
-}
-impl ToValue for &ContextObject {
-    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_object(self) }
-}
 impl ToValue for Array<'_> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_array(&self) }
 }

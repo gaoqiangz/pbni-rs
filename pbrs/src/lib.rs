@@ -8,7 +8,7 @@ struct RustObject {}
 #[nonvisualobject(name = "n_cst_test")]
 impl RustObject {
     #[constructor]
-    fn new(session: Session, ctx: ContextObject) -> RustObject { RustObject {} }
+    fn new(session: Session, object: Object) -> RustObject { RustObject {} }
 
     #[method]
     fn of_array(&mut self, mut arg: Array, session: Session) -> Result<String> {
@@ -33,23 +33,14 @@ impl RustObject {
 }
 
 struct ParentObject {
-    session: Session,
-    ctx: ContextObject,
     foo: Option<PBString>
-}
-
-impl ParentObject {
-    fn context(&self) -> &ContextObject { &self.ctx }
-    fn context_mut(&mut self) -> &mut ContextObject { &mut self.ctx }
 }
 
 #[nonvisualobject(name = "n_cst_parent")]
 impl ParentObject {
     #[constructor]
-    fn new_pbobject(session: Session, ctx: ContextObject) -> ParentObject {
+    fn new_pbobject(session: Session, object: Object) -> ParentObject {
         ParentObject {
-            session,
-            ctx,
             foo: None
         }
     }
@@ -75,8 +66,9 @@ impl ParentObject {
     #[method(name = "of_trigger")]
     fn trigger(&mut self, arg: &PBStr) -> Result<String> {
         self.ontest(arg)?;
-        let eid = self.ctx.get_event_id(("ontest", "LS"));
-        let mid = self.ctx.get_method_id("of_test");
+        let object = self.get_object();
+        let eid = object.get_event_id(("ontest", "LS"));
+        let mid = object.get_method_id("of_test");
         Ok(format!("eid: {:?}, mid: {:?}", eid, mid))
     }
     #[event(name = "ontest")]
@@ -90,11 +82,9 @@ struct ChildObject {
 #[nonvisualobject(name = "n_cst_child", inherit = "parent")]
 impl ChildObject {
     #[constructor]
-    fn new_pbobject(session: Session, ctx: ContextObject) -> ChildObject {
+    fn new_pbobject(session: Session, object: Object) -> ChildObject {
         ChildObject {
             parent: ParentObject {
-                session,
-                ctx,
                 foo: None
             }
         }
