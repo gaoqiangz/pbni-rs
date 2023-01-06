@@ -20,14 +20,14 @@ pub trait UserObject: Sized + 'static {
     ///
     /// - 调用的方法ID被处理后返回`Ok(None)`
     /// - 调用的方法ID未处理则返回`Ok(Some(mid))`,`mid`为最后一个方法ID的偏移,此设计用于实现继承
-    fn invoke(&mut self, mid: MethodId, ci: &CallInfoRef) -> Result<Option<MethodId>>;
+    fn invoke(this: &mut Self, mid: MethodId, ci: &CallInfoRef) -> Result<Option<MethodId>>;
 
     /// 获取父类指针
     ///
     /// # Design
     ///
     /// 实现运行时实例指针协变 `&Child -> &Parent`
-    fn get_inherit_ptr(&self, type_id: u64) -> *const ();
+    fn get_inherit_ptr(this: &Self, type_id: u64) -> *const ();
 
     /// 获取`Session`
     #[inline]
@@ -89,7 +89,7 @@ pub trait VisualObject: UserObject {
 
     /// 创建窗口
     fn create_control(
-        &mut self,
+        this: &mut Self,
         dwExStyle: u32,
         window_name: &PBStr,
         dwStyle: u32,
@@ -102,7 +102,7 @@ pub trait VisualObject: UserObject {
     ) -> HWND;
 
     /// 窗口消息与PB事件ID映射
-    fn get_event_id(&self, hwnd: HWND, msg: u16, wparam: u32, lparam: u32) -> Option<i32> { None }
+    fn get_event_id(this: &Self, hwnd: HWND, msg: u16, wparam: u32, lparam: u32) -> Option<i32> { None }
 
     /// 注册
     fn register() { crate::pbx::export::register_visualobject::<Self>() }

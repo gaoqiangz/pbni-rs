@@ -66,7 +66,7 @@ impl ParentObject {
     #[method(name = "of_trigger")]
     fn trigger(&mut self, arg: &PBStr) -> Result<String> {
         self.ontest(arg)?;
-        let object = self.get_object();
+        let object = ParentObject::get_object(self);
         let eid = object.get_event_id(("ontest", "LS"));
         let mid = object.get_method_id("of_test");
         Ok(format!("eid: {:?}, mid: {:?}", eid, mid))

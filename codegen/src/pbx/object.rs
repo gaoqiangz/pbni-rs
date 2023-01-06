@@ -94,7 +94,7 @@ pub fn gen_event(args: AttributeArgs, input: TokenStream) -> Result<TokenStream>
             ast.block = parse_quote! {
                 {
                     use ::pbni::pbx::__private::codegen::{FromValue,ToValue};
-                    let mut object = self.get_object();
+                    let mut object = ::pbni::pbx::UserObject::get_object(self);
                     let invoker = object.begin_invoke_event(::pbni::pbstr!(#name))?;
                     #(
                         ToValue::to_value(#fn_arg,&mut invoker.arg(#fn_arg_index))?;
@@ -108,7 +108,7 @@ pub fn gen_event(args: AttributeArgs, input: TokenStream) -> Result<TokenStream>
             ast.block = parse_quote! {
                 {
                     use ::pbni::pbx::__private::codegen::{FromValue,ToValue};
-                    let mut object = self.get_object();
+                    let mut object = ::pbni::pbx::UserObject::get_object(self);
                     let invoker = object.begin_invoke_event(::pbni::pbstr!(#name)).expect(concat!("begin invoke ",#name));
                     #(
                         ToValue::to_value(#fn_arg,&mut invoker.arg(#fn_arg_index)).expect(concat!("pass argument ",stringify!(#fn_arg)));
@@ -177,7 +177,7 @@ fn gen_object(
     };
     let invoke_impl = if let Some(inherit) = &inherit {
         quote! {
-            let method_idx_base = if let Some(method_idx_base) = self.#inherit.invoke(mid,ci)? {
+            let method_idx_base = if let Some(method_idx_base) = ::pbni::pbx::UserObject::invoke(&mut this.#inherit,mid,ci)? {
                 method_idx_base.value()
             } else {
                 return Ok(None);
@@ -189,7 +189,7 @@ fn gen_object(
                         #method_name,
                         concat!(module_path!(),"::",stringify!(#ident),"::",stringify!(#method_ident)),
                         file!(),line!(),column!(),
-                        ::std::panic::AssertUnwindSafe(||::pbni::pbx::__private::codegen::method_factory_call(#ident::#method_ident, self, &ci))
+                        ::std::panic::AssertUnwindSafe(||::pbni::pbx::__private::codegen::method_factory_call(#ident::#method_ident, this, &ci))
                     ).map(|_|None);
                 }
             )*
@@ -210,7 +210,7 @@ fn gen_object(
                         #method_name,
                         concat!(module_path!(),"::",stringify!(#ident),"::",stringify!(#method_ident)),
                         file!(),line!(),column!(),
-                        ::std::panic::AssertUnwindSafe(||::pbni::pbx::__private::codegen::method_factory_call(#ident::#method_ident, self, ci))
+                        ::std::panic::AssertUnwindSafe(||::pbni::pbx::__private::codegen::method_factory_call(#ident::#method_ident, this, ci))
                     ).map(|_|None);
                 }
             )*
@@ -226,15 +226,15 @@ fn gen_object(
     let get_inherit_ptr_impl = if let Some(inherit) = &inherit {
         quote! {
             if ::pbni::pbx::__private::codegen::type_id::<Self>() == type_id {
-                self as *const Self as _
+                this as *const Self as _
             } else {
-                self.#inherit.get_inherit_ptr(type_id)
+                ::pbni::pbx::UserObject::get_inherit_ptr(&this.#inherit, type_id)
             }
         }
     } else {
         quote! {
             if ::pbni::pbx::__private::codegen::type_id::<Self>() == type_id {
-                self as *const Self as _
+                this as *const Self as _
             } else {
                 ::std::ptr::null()
             }
@@ -248,10 +248,10 @@ fn gen_object(
             fn new(session: ::pbni::pbx::Session, ctx: ::pbni::pbx::Object) -> Result<Self> {
                 #new_impl
             }
-            fn invoke(&mut self, mid: ::pbni::primitive::MethodId, ci: &::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<Option<::pbni::primitive::MethodId>> {
+            fn invoke(this: &mut Self, mid: ::pbni::primitive::MethodId, ci: &::pbni::pbx::CallInfoRef) -> ::pbni::pbx::Result<Option<::pbni::primitive::MethodId>> {
                 #invoke_impl
             }
-            fn get_inherit_ptr(&self, type_id: u64) -> *const () {
+            fn get_inherit_ptr(this: &Self, type_id: u64) -> *const () {
                 #get_inherit_ptr_impl
             }
         }

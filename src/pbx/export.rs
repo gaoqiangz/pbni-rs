@@ -97,14 +97,14 @@ mod handler {
         ci: pbcallinfo
     ) -> PBXRESULT {
         let ci = CallInfoRef::from_ptr(ci, session);
-        ctx.as_mut().invoke(mid, &ci).into()
+        <T as UserObject>::invoke(ctx.as_mut(), mid, &ci).into()
     }
 
     pub unsafe extern "C" fn get_inherit_ptr<T: UserObject>(
         ctx: NonNull<UserObjectWrap<T>>,
         type_id: u64
     ) -> *const () {
-        ctx.as_ref().get_inherit_ptr(type_id)
+        <T as UserObject>::get_inherit_ptr(ctx.as_ref(), type_id)
     }
 
     #[cfg(feature = "visualobject")]
@@ -121,7 +121,18 @@ mod handler {
         instance: HINSTANCE
     ) -> HWND {
         let window_name = PBStr::from_ptr_str(window_name);
-        ctx.as_mut().create_control(dwExStyle, window_name, dwStyle, x, y, width, height, parent, instance)
+        <T as VisualObject>::create_control(
+            ctx.as_mut(),
+            dwExStyle,
+            window_name,
+            dwStyle,
+            x,
+            y,
+            width,
+            height,
+            parent,
+            instance
+        )
     }
 
     #[cfg(feature = "visualobject")]
@@ -133,7 +144,7 @@ mod handler {
         lparam: u32
     ) -> i32 {
         const PB_NULL: i32 = -1;
-        ctx.as_ref().get_event_id(hwnd, msg, wparam, lparam).unwrap_or(PB_NULL)
+        <T as VisualObject>::get_event_id(ctx.as_ref(), hwnd, msg, wparam, lparam).unwrap_or(PB_NULL)
     }
 }
 
