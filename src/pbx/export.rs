@@ -5,7 +5,6 @@ use std::collections::HashMap;
 
 #[cfg(feature = "global_function")]
 use crate::pbx::codegen::global_function::GlobalFunction;
-
 #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
 use crate::pbx::userobject::UserObjectWrap;
 

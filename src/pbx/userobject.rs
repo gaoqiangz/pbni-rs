@@ -149,6 +149,7 @@ impl<T: UserObject> DerefMut for UserObjectWrap<T> {
 #[derive(Clone)]
 pub struct AliveState(Weak<()>);
 
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
 impl AliveState {
     /// 是否存活
     pub fn is_alive(&self) -> bool { self.0.strong_count() != 0 }
