@@ -16,7 +16,6 @@ pub use arguments::{Arguments, ArgumentsRef};
 pub use bindings::PBXRESULT;
 pub use callinfo::{CallInfo, CallInfoRef};
 pub use codegen::{pbx_args, pbx_throw};
-pub use invoker::Invoker;
 pub use session::{LocalFrame, OwnedSession, Session};
 pub use value::{
     array::Array, object::{ContextObject, Object, SharedObject}, FromValue, OwnedValue, ToValue, Value

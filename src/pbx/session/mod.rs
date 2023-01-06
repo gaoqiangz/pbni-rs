@@ -1,5 +1,7 @@
 use crate::{
-    pbx::{bindings::*, invoker::GlobalFunction, value::FromValueOwned, *}, prelude::*
+    pbx::{
+        bindings::*, invoker::{GlobalFunction, Invoker}, value::FromValueOwned, *
+    }, prelude::*
 };
 use std::ops::Deref;
 
@@ -752,24 +754,24 @@ impl Deref for OwnedSession<'_> {
 /// frame.pop();
 /// ```
 #[must_use]
-pub struct LocalFrame<'session> {
-    session: &'session Session
+pub struct LocalFrame {
+    session: pbsession
 }
 
-impl<'session> LocalFrame<'session> {
+impl LocalFrame {
     /// 创建栈帧
     pub fn new(session: &Session) -> LocalFrame {
         unsafe { ffi::pbsession_PushLocalFrame(session.ptr) }
         LocalFrame {
-            session
+            session: session.ptr
         }
     }
     /// 手动退出栈帧
     pub fn pop(self) {}
 }
 
-impl<'session> Drop for LocalFrame<'session> {
-    fn drop(&mut self) { unsafe { ffi::pbsession_PopLocalFrame(self.session.ptr) } }
+impl Drop for LocalFrame {
+    fn drop(&mut self) { unsafe { ffi::pbsession_PopLocalFrame(self.session) } }
 }
 
 /*

@@ -2,7 +2,7 @@
 //!
 use super::*;
 use crate::{
-    comm::*, pbx::invoker::{ObjectEvent, ObjectMethod}
+    comm::*, pbx::invoker::{Invoker, ObjectEvent, ObjectMethod}
 };
 
 /*
@@ -117,7 +117,7 @@ impl<'obj> Object<'obj> {
     ) -> Result<Invoker<ObjectMethod<'a, 'obj>>> {
         let mid = mid.as_mid(self)?;
         let ci = unsafe { CallInfo::new(self.cls, mid, self.session.clone())? };
-        Ok(Invoker::<ObjectMethod>::new(ObjectMethod::new(self), ci))
+        Ok(Invoker::new(ObjectMethod::new(self), ci))
     }
 
     /// 初始化事件调用上下文
@@ -134,6 +134,6 @@ impl<'obj> Object<'obj> {
     ) -> Result<Invoker<ObjectEvent<'a, 'obj>>> {
         let mid = mid.as_eid(self)?;
         let ci = unsafe { CallInfo::new(self.cls, mid, self.session.clone())? };
-        Ok(Invoker::<ObjectEvent>::new(ObjectEvent::new(self), ci))
+        Ok(Invoker::new(ObjectEvent::new(self), ci))
     }
 }

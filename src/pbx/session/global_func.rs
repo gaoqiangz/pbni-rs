@@ -136,7 +136,7 @@ impl Session {
     ) -> Result<Invoker<GlobalFunction<'a>>> {
         let mid = mid.as_mid(self)?;
         let ci = unsafe { CallInfo::new(mid.cls, mid.mid, self.clone())? };
-        Ok(Invoker::<GlobalFunction>::new(GlobalFunction::new(mid.cls), ci))
+        Ok(Invoker::new(GlobalFunction::new(mid.cls), ci))
     }
 
     pub(crate) fn get_method_id(

@@ -46,10 +46,20 @@ impl<'a, 'obj> ObjectEvent<'a, 'obj> {
 /// 过程调用对象
 pub struct Invoker<T> {
     inner: T,
-    ci: CallInfo
+    ci: CallInfo,
+    frame: LocalFrame
 }
 
 impl<T> Invoker<T> {
+    pub fn new(inner: T, ci: CallInfo) -> Self {
+        let frame = LocalFrame::new(ci.session());
+        Invoker {
+            inner,
+            ci,
+            frame
+        }
+    }
+
     /// 获取指定参数
     pub fn arg(&self, idx: pbint) -> Value { self.ci.arg(idx) }
 
@@ -61,13 +71,6 @@ impl<T> Invoker<T> {
 }
 
 impl<'session> Invoker<GlobalFunction<'session>> {
-    pub(crate) fn new(inner: GlobalFunction<'session>, ci: CallInfo) -> Self {
-        Invoker {
-            inner,
-            ci
-        }
-    }
-
     /// 函数调用
     pub fn invoke(&self) -> Result<Value> {
         unsafe {
@@ -93,13 +96,6 @@ impl<'session> Invoker<GlobalFunction<'session>> {
 }
 
 impl<'a, 'obj> Invoker<ObjectMethod<'a, 'obj>> {
-    pub(crate) fn new(inner: ObjectMethod<'a, 'obj>, ci: CallInfo) -> Self {
-        Invoker {
-            inner,
-            ci
-        }
-    }
-
     /// 函数调用
     pub fn invoke(&self) -> Result<Value> {
         unsafe {
@@ -125,13 +121,6 @@ impl<'a, 'obj> Invoker<ObjectMethod<'a, 'obj>> {
 }
 
 impl<'a, 'obj> Invoker<ObjectEvent<'a, 'obj>> {
-    pub(crate) fn new(inner: ObjectEvent<'a, 'obj>, ci: CallInfo) -> Self {
-        Invoker {
-            inner,
-            ci
-        }
-    }
-
     /// 事件调用
     pub fn trigger(&self) -> Result<Value> {
         unsafe {
