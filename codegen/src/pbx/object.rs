@@ -94,7 +94,7 @@ pub fn gen_event(args: AttributeArgs, input: TokenStream) -> Result<TokenStream>
             ast.block = parse_quote! {
                 {
                     use ::pbni::pbx::__private::codegen::{FromValue,ToValue};
-                    let mut object = ::pbni::pbx::UserObject::get_object(self);
+                    let mut object = self.get_object();
                     let invoker = object.begin_invoke_event(::pbni::pbstr!(#name))?;
                     #(
                         ToValue::to_value(#fn_arg,&mut invoker.arg(#fn_arg_index))?;
@@ -108,7 +108,7 @@ pub fn gen_event(args: AttributeArgs, input: TokenStream) -> Result<TokenStream>
             ast.block = parse_quote! {
                 {
                     use ::pbni::pbx::__private::codegen::{FromValue,ToValue};
-                    let mut object = ::pbni::pbx::UserObject::get_object(self);
+                    let mut object = self.get_object();
                     let invoker = object.begin_invoke_event(::pbni::pbstr!(#name)).expect(concat!("begin invoke ",#name));
                     #(
                         ToValue::to_value(#fn_arg,&mut invoker.arg(#fn_arg_index)).expect(concat!("pass argument ",stringify!(#fn_arg)));

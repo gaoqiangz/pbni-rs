@@ -73,7 +73,7 @@ pub trait NonVisualObject: UserObject {
     {
         let mut obj = session.new_user_object(Self::CLASS_NAME)?;
         {
-            let obj = unsafe { obj.get_native_mut::<Self>()? };
+            let obj = obj.get_native_mut()?;
             modify(obj);
         }
         Ok(obj)
@@ -112,7 +112,7 @@ pub trait VisualObject: UserObject {
 #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
 #[repr(C)]
 pub struct UserObjectWrap<T: UserObject> {
-    object: T, //NOTE 必须在第一个字段
+    inner: T, //NOTE 必须在第一个字段
     pbsession: pbsession,
     pbobject: pbobject,
     alive: Arc<()>
@@ -120,9 +120,9 @@ pub struct UserObjectWrap<T: UserObject> {
 
 #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
 impl<T: UserObject> UserObjectWrap<T> {
-    pub fn new(object: T, pbsession: pbsession, pbobject: pbobject) -> Self {
+    pub fn new(inner: T, pbsession: pbsession, pbobject: pbobject) -> Self {
         UserObjectWrap {
-            object,
+            inner,
             pbsession,
             pbobject,
             alive: Arc::new(())
@@ -133,15 +133,14 @@ impl<T: UserObject> UserObjectWrap<T> {
 #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
 impl<T: UserObject> Deref for UserObjectWrap<T> {
     type Target = T;
-
     #[inline(always)]
-    fn deref(&self) -> &Self::Target { &self.object }
+    fn deref(&self) -> &Self::Target { &self.inner }
 }
 
 #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
 impl<T: UserObject> DerefMut for UserObjectWrap<T> {
     #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target { &mut self.object }
+    fn deref_mut(&mut self) -> &mut Self::Target { &mut self.inner }
 }
 
 /// PB用户对象存活状态

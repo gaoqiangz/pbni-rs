@@ -71,19 +71,21 @@ impl<'obj> Object<'obj> {
     /// let obj = obj.get_native_ref::<RustObject>().uwnrap();
     /// ```
     #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
-    pub unsafe fn get_native_ref<T: UserObject>(&self) -> Result<&'obj T> {
+    pub fn get_native_ref<T: UserObject>(&self) -> Result<&'obj T> {
         /*if !self.is_native() {
             return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
         }*/
-        let obj = ffi::pbsession_GetNativeInterface(self.session.as_ptr(), self.ptr);
-        if obj.is_none() {
-            return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
-        }
-        let ctx = ffi::GetSafeContext(obj.unwrap(), type_id::<T>());
-        if ctx.is_null() {
-            return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
-        } else {
-            Ok(&*(ctx as *const UserObjectWrap<T>))
+        unsafe {
+            let obj = ffi::pbsession_GetNativeInterface(self.session.as_ptr(), self.ptr);
+            if obj.is_none() {
+                return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
+            }
+            let ctx = ffi::GetSafeContext(obj.unwrap(), type_id::<T>());
+            if ctx.is_null() {
+                return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
+            } else {
+                Ok(&*(ctx as *const UserObjectWrap<T>))
+            }
         }
     }
 
@@ -102,20 +104,21 @@ impl<'obj> Object<'obj> {
     /// obj.set_var("is_test","rust").unwrap();
     /// ```
     #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
-    pub unsafe fn get_native_mut<T: UserObject>(&mut self) -> Result<&'obj mut T> {
+    pub fn get_native_mut<T: UserObject>(&mut self) -> Result<&'obj mut T> {
         /*if !self.is_native() {
             return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
         }*/
-
-        let obj = ffi::pbsession_GetNativeInterface(self.session.as_ptr(), self.ptr);
-        if obj.is_none() {
-            return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
-        }
-        let ctx = ffi::GetSafeContext(obj.unwrap(), type_id::<T>());
-        if ctx.is_null() {
-            return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
-        } else {
-            Ok(&mut *(ctx as *mut UserObjectWrap<T>))
+        unsafe {
+            let obj = ffi::pbsession_GetNativeInterface(self.session.as_ptr(), self.ptr);
+            if obj.is_none() {
+                return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
+            }
+            let ctx = ffi::GetSafeContext(obj.unwrap(), type_id::<T>());
+            if ctx.is_null() {
+                return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
+            } else {
+                Ok(&mut *(ctx as *mut UserObjectWrap<T>))
+            }
         }
     }
 

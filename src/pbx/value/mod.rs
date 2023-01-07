@@ -1,6 +1,7 @@
 use crate::{
     pbx::{bindings::*, *}, prelude::*
 };
+use std::borrow::Cow;
 
 pub mod object;
 pub mod array;
@@ -284,7 +285,7 @@ impl<'val, T: UserObject> FromValue<'val> for &'val T {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
         if let Some(val) = val {
             if let Some(obj) = val.try_get_object()? {
-                Ok(unsafe { obj.get_native_ref()? })
+                Ok(obj.get_native_ref()?)
             } else {
                 Err(PBXRESULT::E_VALUE_IS_NULL)
             }
@@ -299,7 +300,7 @@ impl<'val, T: UserObject> FromValue<'val> for &'val mut T {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
         if let Some(val) = val {
             if let Some(mut obj) = val.try_get_object()? {
-                Ok(unsafe { obj.get_native_mut()? })
+                Ok(obj.get_native_mut()?)
             } else {
                 Err(PBXRESULT::E_VALUE_IS_NULL)
             }
@@ -353,7 +354,22 @@ pub trait ToValue: Sized {
 impl ToValue for () {
     fn to_value(self, _: &mut Value) -> Result<()> { Ok(()) }
 }
-impl<T: AsPBStr> ToValue for T {
+impl ToValue for &PBStr {
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_str(self) }
+}
+impl ToValue for PBString {
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_str(self) }
+}
+impl ToValue for String {
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_str(self) }
+}
+impl ToValue for &str {
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_str(self) }
+}
+impl ToValue for Cow<'_, PBStr> {
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_str(self) }
+}
+impl ToValue for Cow<'_, str> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_str(self) }
 }
 impl ToValue for pbint {
@@ -424,6 +440,10 @@ impl ToValue for OwnedValue {
 }
 impl ToValue for &OwnedValue {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_value(&self.value()) }
+}
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+impl<T: UserObject> ToValue for &mut T {
+    fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_object(&self.get_object()) }
 }
 
 impl<T: ToValue> ToValue for Option<T> {
