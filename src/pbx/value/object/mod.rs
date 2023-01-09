@@ -18,9 +18,9 @@ pub struct Object<'obj> {
 }
 
 impl<'obj> Object<'obj> {
-    pub(crate) unsafe fn from_ptr(ptr: pbobject, session: Session) -> Object<'obj> {
+    pub(crate) unsafe fn from_raw(ptr: pbobject, session: Session) -> Object<'obj> {
         let group = Cell::new(None);
-        let cls = ffi::pbsession_GetClass(session.as_ptr(), ptr).unwrap();
+        let cls = ffi::pbsession_GetClass(session.as_raw(), ptr).unwrap();
         Object {
             ptr,
             group,
@@ -29,7 +29,7 @@ impl<'obj> Object<'obj> {
             _marker: PhantomData
         }
     }
-    pub(crate) fn as_ptr(&self) -> pbobject { self.ptr }
+    pub fn as_raw(&self) -> pbobject { self.ptr }
     pub(crate) fn get_group(&self) -> pbgroup {
         match self.group.get() {
             Some(group) => group,
@@ -41,6 +41,7 @@ impl<'obj> Object<'obj> {
         }
     }
     pub(crate) fn get_class(&self) -> pbclass { self.cls }
+    pub fn get_session(&self) -> Session { self.session }
     pub(crate) unsafe fn clone(&self) -> Object<'obj> {
         Object {
             ptr: self.ptr,
@@ -54,7 +55,7 @@ impl<'obj> Object<'obj> {
     /// 是否为原生对象 (由pbni-rs导出的对象)
     /// FIXME: 始终返回false?
     pub fn is_native(&self) -> bool {
-        unsafe { ffi::pbsession_IsNativeObject(self.session.as_ptr(), self.ptr).into() }
+        unsafe { ffi::pbsession_IsNativeObject(self.session.as_raw(), self.ptr).into() }
     }
 
     /// 获取原生对象的引用
@@ -76,7 +77,7 @@ impl<'obj> Object<'obj> {
             return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
         }*/
         unsafe {
-            let obj = ffi::pbsession_GetNativeInterface(self.session.as_ptr(), self.ptr);
+            let obj = ffi::pbsession_GetNativeInterface(self.session.as_raw(), self.ptr);
             if obj.is_none() {
                 return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
             }
@@ -109,7 +110,7 @@ impl<'obj> Object<'obj> {
             return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
         }*/
         unsafe {
-            let obj = ffi::pbsession_GetNativeInterface(self.session.as_ptr(), self.ptr);
+            let obj = ffi::pbsession_GetNativeInterface(self.session.as_raw(), self.ptr);
             if obj.is_none() {
                 return Err(PBXRESULT::E_MISMATCHED_DATA_TYPE);
             }
@@ -123,7 +124,7 @@ impl<'obj> Object<'obj> {
     }
 
     /// 共享对象
-    pub fn share(&self) -> SharedObject { unsafe { SharedObject::from_ptr(self.ptr, self.session.clone()) } }
+    pub fn share(&self) -> SharedObject { unsafe { SharedObject::from_raw(self.ptr, self.session.clone()) } }
 
     /// 转换为共享对象
     pub fn into_shared(self) -> SharedObject { self.into() }
@@ -136,20 +137,20 @@ pub struct SharedObject {
 }
 
 impl SharedObject {
-    pub(crate) unsafe fn from_ptr(ptr: pbobject, session: Session) -> SharedObject {
-        ffi::pbsession_AddGlobalRef(session.as_ptr(), ptr);
+    pub(crate) unsafe fn from_raw(ptr: pbobject, session: Session) -> SharedObject {
+        ffi::pbsession_AddGlobalRef(session.as_raw(), ptr);
         SharedObject {
-            obj: Object::from_ptr(ptr, session)
+            obj: Object::from_raw(ptr, session)
         }
     }
 }
 
 impl Drop for SharedObject {
-    fn drop(&mut self) { unsafe { ffi::pbsession_RemoveGlobalRef(self.obj.session.as_ptr(), self.obj.ptr) } }
+    fn drop(&mut self) { unsafe { ffi::pbsession_RemoveGlobalRef(self.obj.session.as_raw(), self.obj.ptr) } }
 }
 
 impl Clone for SharedObject {
-    fn clone(&self) -> Self { unsafe { Self::from_ptr(self.obj.ptr, self.obj.session.clone()) } }
+    fn clone(&self) -> Self { unsafe { Self::from_raw(self.obj.ptr, self.obj.session.clone()) } }
 }
 
 impl Deref for SharedObject {
@@ -162,5 +163,5 @@ impl DerefMut for SharedObject {
 }
 
 impl From<Object<'_>> for SharedObject {
-    fn from(obj: Object) -> Self { unsafe { Self::from_ptr(obj.ptr, obj.session) } }
+    fn from(obj: Object) -> Self { unsafe { Self::from_raw(obj.ptr, obj.session) } }
 }

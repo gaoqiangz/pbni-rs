@@ -19,7 +19,7 @@ pub struct Arguments<'args> {
 }
 
 impl<'args> Arguments<'args> {
-    pub(crate) unsafe fn from_ptr(ci: pbcallinfo, session: Session) -> Arguments<'args> {
+    pub(crate) unsafe fn from_raw(ci: pbcallinfo, session: Session) -> Arguments<'args> {
         let count = ffi::pbargs_GetCount(ci.as_ref().pArgs);
         Arguments {
             ci,
@@ -31,12 +31,12 @@ impl<'args> Arguments<'args> {
 
     /// 获取引用对象
     pub fn as_ref(&self) -> ArgumentsRef {
-        unsafe { ArgumentsRef::from_ptr(self.ci.as_ref().pArgs, self.session.clone()) }
+        unsafe { ArgumentsRef::from_raw(self.ci.as_ref().pArgs, self.session.clone()) }
     }
 
     /// 获取引用元素迭代器
     pub fn iter(&self) -> ArgumentsIter {
-        let args = unsafe { ArgumentsRef::from_ptr(self.ci.as_ref().pArgs, self.session.clone()) };
+        let args = unsafe { ArgumentsRef::from_raw(self.ci.as_ref().pArgs, self.session.clone()) };
         ArgumentsIter {
             args,
             idx: 0
@@ -64,7 +64,7 @@ impl<'args> Arguments<'args> {
         if index < 0 || index >= self.count {
             return Err(PBXRESULT::E_ARRAY_INDEX_OUTOF_BOUNDS);
         }
-        unsafe { Ok(Value::from_ptr(ffi::pbargs_GetAt(self.ci.as_ref().pArgs, index), self.session.clone())) }
+        unsafe { Ok(Value::from_raw(ffi::pbargs_GetAt(self.ci.as_ref().pArgs, index), self.session.clone())) }
     }
 
     /// 添加`int`类型参数
@@ -72,7 +72,7 @@ impl<'args> Arguments<'args> {
         let value = value.into();
         unsafe {
             let pbxr = ffi::pbsession_AddIntArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or_default(),
                 value.is_none().into()
@@ -89,7 +89,7 @@ impl<'args> Arguments<'args> {
         let value = value.into();
         unsafe {
             let pbxr = ffi::pbsession_AddUintArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or_default(),
                 value.is_none().into()
@@ -106,7 +106,7 @@ impl<'args> Arguments<'args> {
         let value = value.into();
         unsafe {
             let pbxr = ffi::pbsession_AddLongArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or_default(),
                 value.is_none().into()
@@ -123,7 +123,7 @@ impl<'args> Arguments<'args> {
         let value = value.into();
         unsafe {
             let pbxr = ffi::pbsession_AddUlongArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or_default(),
                 value.is_none().into()
@@ -140,7 +140,7 @@ impl<'args> Arguments<'args> {
         let value = value.into();
         unsafe {
             let pbxr = ffi::pbsession_AddLongLongArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or_default(),
                 value.is_none().into()
@@ -157,7 +157,7 @@ impl<'args> Arguments<'args> {
         let value = value.into();
         unsafe {
             let pbxr = ffi::pbsession_AddRealArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or_default(),
                 value.is_none().into()
@@ -174,7 +174,7 @@ impl<'args> Arguments<'args> {
         let value = value.into();
         unsafe {
             let pbxr = ffi::pbsession_AddDoubleArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or_default(),
                 value.is_none().into()
@@ -191,7 +191,7 @@ impl<'args> Arguments<'args> {
         unsafe {
             let value = value.into().map(|v| self.session.new_pbdec(v));
             let pbxr = ffi::pbsession_AddDecArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or(NonNull::new_unchecked(0 as _)),
                 value.is_none().into()
@@ -213,7 +213,7 @@ impl<'args> Arguments<'args> {
         unsafe {
             let value = value.map(|v| v.as_pbstr().as_ptr());
             let pbxr = ffi::pbsession_AddStringArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or(ptr::null()),
                 value.is_none().into()
@@ -230,7 +230,7 @@ impl<'args> Arguments<'args> {
         let value = value.into();
         unsafe {
             let pbxr = ffi::pbsession_AddBoolArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or_default().into(),
                 value.is_none().into()
@@ -253,7 +253,7 @@ impl<'args> Arguments<'args> {
         unsafe {
             let value = value.map(|v| self.session.new_pbblob(v));
             let pbxr = ffi::pbsession_AddBlobArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or(NonNull::new_unchecked(0 as _)),
                 value.is_none().into()
@@ -270,7 +270,7 @@ impl<'args> Arguments<'args> {
         unsafe {
             let value = value.into().map(|v| self.session.new_pbdate(v));
             let pbxr = ffi::pbsession_AddDateArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or(NonNull::new_unchecked(0 as _)),
                 value.is_none().into()
@@ -287,7 +287,7 @@ impl<'args> Arguments<'args> {
         unsafe {
             let value = value.into().map(|v| self.session.new_pbtime(v));
             let pbxr = ffi::pbsession_AddTimeArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or(NonNull::new_unchecked(0 as _)),
                 value.is_none().into()
@@ -304,7 +304,7 @@ impl<'args> Arguments<'args> {
         unsafe {
             let value = value.into().map(|v| self.session.new_pbdatetime(v));
             let pbxr = ffi::pbsession_AddDateTimeArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or(NonNull::new_unchecked(0 as _)),
                 value.is_none().into()
@@ -321,7 +321,7 @@ impl<'args> Arguments<'args> {
         let value = value.into();
         unsafe {
             let pbxr = ffi::pbsession_AddCharArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or_default(),
                 value.is_none().into()
@@ -336,9 +336,9 @@ impl<'args> Arguments<'args> {
     /// 添加对象类型参数
     pub fn add_object<'a, 'b: 'a>(&mut self, value: impl Into<Option<&'a Object<'b>>>) -> Result<()> {
         unsafe {
-            let value = value.into().map(|v| v.as_ptr());
+            let value = value.into().map(|v| v.as_raw());
             let pbxr = ffi::pbsession_AddObjectArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or(NonNull::new_unchecked(0 as _)),
                 value.is_none().into()
@@ -353,9 +353,9 @@ impl<'args> Arguments<'args> {
     /// 添加数组类型参数
     pub fn add_array<'a, 'b: 'a>(&mut self, value: impl Into<Option<&'a Array<'b>>>) -> Result<()> {
         unsafe {
-            let value = value.into().map(|v| v.as_ptr());
+            let value = value.into().map(|v| v.as_raw());
             let pbxr = ffi::pbsession_AddArrayArgument(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.ci,
                 value.unwrap_or(NonNull::new_unchecked(0 as _)),
                 value.is_none().into()
@@ -377,7 +377,7 @@ pub struct ArgumentsRef<'args> {
 }
 
 impl<'args> ArgumentsRef<'args> {
-    pub(crate) unsafe fn from_ptr(ptr: pbarguments, session: Session) -> ArgumentsRef<'args> {
+    pub(crate) unsafe fn from_raw(ptr: pbarguments, session: Session) -> ArgumentsRef<'args> {
         let count = ffi::pbargs_GetCount(ptr);
         ArgumentsRef {
             ptr,
@@ -397,7 +397,7 @@ impl<'args> ArgumentsRef<'args> {
 
     /// 获取引用元素迭代器
     pub fn iter(&self) -> ArgumentsIter {
-        let args = unsafe { ArgumentsRef::from_ptr(self.ptr, self.session.clone()) };
+        let args = unsafe { ArgumentsRef::from_raw(self.ptr, self.session.clone()) };
         ArgumentsIter {
             args,
             idx: 0
@@ -425,7 +425,7 @@ impl<'args> ArgumentsRef<'args> {
         if index < 0 || index >= self.count {
             return Err(PBXRESULT::E_ARRAY_INDEX_OUTOF_BOUNDS);
         }
-        unsafe { Ok(Value::from_ptr(ffi::pbargs_GetAt(self.ptr, index), self.session.clone())) }
+        unsafe { Ok(Value::from_raw(ffi::pbargs_GetAt(self.ptr, index), self.session.clone())) }
     }
 }
 
@@ -454,7 +454,7 @@ impl<'args> IntoIterator for Arguments<'args> {
     type IntoIter = ArgumentsIter<'args>;
 
     fn into_iter(self) -> Self::IntoIter {
-        let args = unsafe { ArgumentsRef::from_ptr(self.ci.as_ref().pArgs, self.session.clone()) };
+        let args = unsafe { ArgumentsRef::from_raw(self.ci.as_ref().pArgs, self.session.clone()) };
         ArgumentsIter {
             args,
             idx: 0

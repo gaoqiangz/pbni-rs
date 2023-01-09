@@ -17,8 +17,8 @@ pub struct Value<'val> {
 }
 
 impl<'val> Value<'val> {
-    pub(crate) unsafe fn from_ptr(ptr: POB_DATA, session: Session) -> Value<'val> {
-        let inner = ValueInner::from_ptr(ptr, session.as_ptr());
+    pub(crate) unsafe fn from_raw(ptr: POB_DATA, session: Session) -> Value<'val> {
+        let inner = ValueInner::from_ptr(ptr, session.as_raw());
         Value {
             inner,
             session,
@@ -33,7 +33,7 @@ impl<'val> Value<'val> {
             _marker: PhantomData
         }
     }
-    pub(crate) fn as_ptr(&self) -> POB_DATA { &*self.inner as *const OB_DATA as _ }
+    pub(crate) fn as_raw(&self) -> POB_DATA { &*self.inner as *const OB_DATA as _ }
     pub(crate) fn forget(mut self) { self.inner = ValueInner::LValue(ptr::null_mut()); }
 
     //pub(crate) fn get_class(&self) -> Option<pbclass> { unsafe { pbvalue_GetClass(self.ptr) } }
@@ -224,7 +224,7 @@ impl Value<'_> {
             } else {
                 API.ot_free_val_ptr(self.session.as_ptr(), self.as_ptr());
             }*/
-            API.ot_free_out_node(self.session.as_ptr(), self.as_ptr());
+            API.ot_free_out_node(self.session.as_raw(), self.as_raw());
         }
     }
 }

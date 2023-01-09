@@ -18,7 +18,7 @@ pub struct Array<'arr> {
 }
 
 impl<'arr> Array<'arr> {
-    pub(crate) unsafe fn from_ptr(ptr: OB_ARRAY_ID, is_object: bool, session: Session) -> Array<'arr> {
+    pub(crate) unsafe fn from_raw(ptr: OB_ARRAY_ID, is_object: bool, session: Session) -> Array<'arr> {
         let info = ArrayInfo::new(ptr, session.clone());
         let inner = ArrayInner::Borrowed(ptr);
         Array {
@@ -29,7 +29,7 @@ impl<'arr> Array<'arr> {
             _marker: PhantomData
         }
     }
-    pub(crate) unsafe fn take_ptr(ptr: OB_ARRAY_ID, is_object: bool, session: Session) -> Array<'arr> {
+    pub(crate) unsafe fn take_raw(ptr: OB_ARRAY_ID, is_object: bool, session: Session) -> Array<'arr> {
         let info = ArrayInfo::new(ptr, session.clone());
         let inner = ArrayInner::Owned(ptr);
         Array {
@@ -40,7 +40,7 @@ impl<'arr> Array<'arr> {
             _marker: PhantomData
         }
     }
-    pub(crate) fn as_ptr(&self) -> OB_ARRAY_ID { self.inner.as_ptr() }
+    pub(crate) fn as_raw(&self) -> OB_ARRAY_ID { self.inner.as_ptr() }
     pub(crate) fn forget(mut self) { self.inner = ArrayInner::Borrowed(ptr::null_mut()); }
 
     /// 获取数组信息
@@ -48,7 +48,7 @@ impl<'arr> Array<'arr> {
 
     /// 获取数组长度(仅一维数组有效)
     pub fn len(&self) -> pblong {
-        unsafe { API.ot_array_num_items(self.session.as_ptr(), self.as_ptr()) as pblong }
+        unsafe { API.ot_array_num_items(self.session.as_raw(), self.as_raw()) as pblong }
     }
 
     /// 增长动态数组长度
@@ -74,8 +74,8 @@ impl<'arr> Array<'arr> {
             return Err(PBRESULT::E_OUT_OF_MEMORY);
         }
         unsafe {
-            let arr_inst = &*(self.as_ptr() as POB_ARRAY_INST);
-            API.ob_dynarray_grow(self.session.as_ptr(), arr_inst.data as _, new_size, 1);
+            let arr_inst = &*(self.as_raw() as POB_ARRAY_INST);
+            API.ob_dynarray_grow(self.session.as_raw(), arr_inst.data as _, new_size, 1);
         }
         Ok(())
     }
@@ -105,8 +105,8 @@ impl<'arr> Array<'arr> {
 impl Clone for Array<'_> {
     fn clone(&self) -> Array<'static> {
         unsafe {
-            Array::from_ptr(
-                API.ot_copy_array(self.session.as_ptr(), self.as_ptr() as _) as _,
+            Array::from_raw(
+                API.ot_copy_array(self.session.as_raw(), self.as_raw() as _) as _,
                 self.is_object,
                 self.session.clone()
             )
@@ -118,8 +118,8 @@ impl Drop for Array<'_> {
     fn drop(&mut self) {
         if let ArrayInner::Owned(ptr) = &self.inner {
             unsafe {
-                API.ob_remove_array_data(self.session.as_ptr(), *ptr as _, 1);
-                API.ob_free_memory(self.session.as_ptr(), *ptr as _);
+                API.ob_remove_array_data(self.session.as_raw(), *ptr as _, 1);
+                API.ob_free_memory(self.session.as_raw(), *ptr as _);
             }
         }
     }

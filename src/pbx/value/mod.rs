@@ -18,14 +18,14 @@ pub struct Value<'val> {
 }
 
 impl<'val> Value<'val> {
-    pub(crate) unsafe fn from_ptr(ptr: pbvalue, session: Session) -> Value<'val> {
+    pub(crate) unsafe fn from_raw(ptr: pbvalue, session: Session) -> Value<'val> {
         Value {
             ptr,
             session,
             _marker: PhantomData
         }
     }
-    pub(crate) fn as_ptr(&self) -> pbvalue { self.ptr }
+    pub(crate) fn as_raw(&self) -> pbvalue { self.ptr }
 
     pub(crate) fn get_class(&self) -> Option<pbclass> { unsafe { ffi::pbvalue_GetClass(self.ptr) } }
 
@@ -56,8 +56,8 @@ impl<'val> Value<'val> {
     /// 拷贝并转移所有权,`self`将被消耗
     pub fn acquire(self) -> OwnedValue {
         unsafe {
-            let new_value = ffi::pbsession_AcquireValue(self.session.as_ptr(), self.ptr);
-            OwnedValue::from_ptr(new_value, self.session.clone())
+            let new_value = ffi::pbsession_AcquireValue(self.session.as_raw(), self.ptr);
+            OwnedValue::from_raw(new_value, self.session.clone())
         }
     }
 }
@@ -69,20 +69,20 @@ pub struct OwnedValue {
 }
 
 impl OwnedValue {
-    pub(crate) unsafe fn from_ptr(ptr: pbvalue, session: Session) -> OwnedValue {
+    pub(crate) unsafe fn from_raw(ptr: pbvalue, session: Session) -> OwnedValue {
         OwnedValue {
             ptr,
             session
         }
     }
-    pub(crate) fn as_ptr(&self) -> pbvalue { self.ptr }
+    pub(crate) fn as_raw(&self) -> pbvalue { self.ptr }
 
     /// 获取值的引用
-    pub fn value(&self) -> Value { unsafe { Value::from_ptr(self.ptr, self.session.clone()) } }
+    pub fn value(&self) -> Value { unsafe { Value::from_raw(self.ptr, self.session.clone()) } }
 }
 
 impl Drop for OwnedValue {
-    fn drop(&mut self) { unsafe { ffi::pbsession_ReleaseValue(self.session.as_ptr(), self.ptr) } }
+    fn drop(&mut self) { unsafe { ffi::pbsession_ReleaseValue(self.session.as_raw(), self.ptr) } }
 }
 
 /// 参数值提取

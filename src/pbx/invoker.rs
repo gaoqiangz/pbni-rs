@@ -76,7 +76,7 @@ impl<'session> Invoker<GlobalFunction<'session>> {
         unsafe {
             let session = self.ci.session().clone();
             let pbxr = ffi::pbsession_InvokeClassFunction(
-                session.as_ptr(),
+                session.as_raw(),
                 self.inner.cls,
                 self.ci.mid(),
                 self.ci.as_ptr()
@@ -101,8 +101,8 @@ impl<'a, 'obj> Invoker<ObjectMethod<'a, 'obj>> {
         unsafe {
             let session = self.ci.session().clone();
             let pbxr = ffi::pbsession_InvokeObjectFunction(
-                session.as_ptr(),
-                self.inner.obj.as_ptr(),
+                session.as_raw(),
+                self.inner.obj.as_raw(),
                 self.ci.mid(),
                 self.ci.as_ptr()
             );
@@ -126,8 +126,8 @@ impl<'a, 'obj> Invoker<ObjectEvent<'a, 'obj>> {
         unsafe {
             let session = self.ci.session().clone();
             let pbxr = ffi::pbsession_TriggerEvent(
-                session.as_ptr(),
-                self.inner.obj.as_ptr(),
+                session.as_raw(),
+                self.inner.obj.as_raw(),
                 self.ci.mid(),
                 self.ci.as_ptr()
             );

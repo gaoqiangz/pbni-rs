@@ -15,7 +15,7 @@ impl<'arr> Array<'arr> {
     pub fn try_get_item_type(&self, dim: impl AsArrayIndex) -> Result<ValueType> {
         let dim = dim.as_array_index();
         self.check_get_index(dim)?;
-        unsafe { Ok(ffi::pbsession_GetArrayItemType(self.session.as_ptr(), self.ptr, dim.as_ptr())) }
+        unsafe { Ok(ffi::pbsession_GetArrayItemType(self.session.as_raw(), self.ptr, dim.as_ptr())) }
     }
 
     /// 判断元素是否为对象类型
@@ -32,7 +32,7 @@ impl<'arr> Array<'arr> {
     pub fn try_is_item_null(&self, dim: impl AsArrayIndex) -> Result<bool> {
         let dim = dim.as_array_index();
         self.check_get_index(dim)?;
-        unsafe { Ok(ffi::pbsession_IsArrayItemNull(self.session.as_ptr(), self.ptr, dim.as_ptr()).into()) }
+        unsafe { Ok(ffi::pbsession_IsArrayItemNull(self.session.as_raw(), self.ptr, dim.as_ptr()).into()) }
     }
 
     /// 设置元素为NULL
@@ -59,7 +59,7 @@ impl<'arr> Array<'arr> {
     /// 索引越界时可能会出现未定义行为
     pub unsafe fn set_item_to_null_unchecked(&mut self, dim: impl AsArrayIndex) {
         let dim = dim.as_array_index();
-        ffi::pbsession_SetArrayItemToNull(self.session.as_ptr(), self.ptr, dim.as_ptr());
+        ffi::pbsession_SetArrayItemToNull(self.session.as_raw(), self.ptr, dim.as_ptr());
     }
 
     /// 拷贝元素的值
@@ -67,8 +67,8 @@ impl<'arr> Array<'arr> {
         let dim = dim.as_array_index();
         unsafe {
             let new_value =
-                ffi::pbsession_AcquireArrayItemValue(self.session.as_ptr(), self.ptr, dim.as_ptr());
-            OwnedValue::from_ptr(new_value, self.session.clone())
+                ffi::pbsession_AcquireArrayItemValue(self.session.as_raw(), self.ptr, dim.as_ptr());
+            OwnedValue::from_raw(new_value, self.session.clone())
         }
     }
 
@@ -185,7 +185,7 @@ macro_rules! impl_item {
             pub unsafe fn [<get_item_ $type_name _unchecked>](&self, dim: impl AsArrayIndex) -> Option<$type> {
                 let dim = dim.as_array_index();
                 let mut is_null = Default::default();
-                let v = ffi::[<pbsession_Get $type_name:camel ArrayItem>](self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
+                let v = ffi::[<pbsession_Get $type_name:camel ArrayItem>](self.session.as_raw(), self.ptr, dim.as_ptr(), &mut is_null);
                 if is_null == true {
                     None
                 } else {
@@ -210,7 +210,7 @@ macro_rules! impl_item {
             /// 索引越界或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_item_ $type_name _unchecked>](&mut self, dim: impl AsArrayIndex, value: $type) {
                 let dim = dim.as_array_index();
-                assert_eq!(ffi::[<pbsession_Set $type_name:camel ArrayItem>](self.session.as_ptr(), self.ptr, dim.as_ptr(), value.into()), PBXRESULT::OK);
+                assert_eq!(ffi::[<pbsession_Set $type_name:camel ArrayItem>](self.session.as_raw(), self.ptr, dim.as_ptr(), value.into()), PBXRESULT::OK);
             }
         }
     };
@@ -248,7 +248,7 @@ macro_rules! impl_item {
             pub unsafe fn [<get_item_ $type_name _unchecked>](&self, dim: impl AsArrayIndex) -> Option<$type> {
                 let dim = dim.as_array_index();
                 let mut is_null = Default::default();
-                let v = ffi::[<pbsession_Get $type_name:camel ArrayItem>](self.session.as_ptr(), self.ptr, dim.as_ptr(), &mut is_null);
+                let v = ffi::[<pbsession_Get $type_name:camel ArrayItem>](self.session.as_raw(), self.ptr, dim.as_ptr(), &mut is_null);
                 if is_null == true {
                     None
                 } else {
@@ -273,7 +273,7 @@ macro_rules! impl_item {
             /// 索引越界或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_item_ $type_name _unchecked>](&mut self, dim: impl AsArrayIndex, value: $type) {
                 let dim = dim.as_array_index();
-                assert_eq!(ffi::[<pbsession_Set $type_name:camel ArrayItem>](self.session.as_ptr(), self.ptr, dim.as_ptr(), impl_item!(@complex_set_val self, dim, value, $type_name)), PBXRESULT::OK);
+                assert_eq!(ffi::[<pbsession_Set $type_name:camel ArrayItem>](self.session.as_raw(), self.ptr, dim.as_ptr(), impl_item!(@complex_set_val self, dim, value, $type_name)), PBXRESULT::OK);
             }
         }
     };
@@ -284,10 +284,10 @@ macro_rules! impl_item {
         $self.session.get_string_unchecked($value).map(PBStr::to_ucstring)
     };
     (@complex_get_val $self: expr, $value: expr, object) => {
-        Some(Object::from_ptr($value, $self.session.clone()))
+        Some(Object::from_raw($value, $self.session.clone()))
     };
     (@complex_get_val $self: expr, $value: expr, any) => {
-        Some(Value::from_ptr($value, $self.session.clone()))
+        Some(Value::from_raw($value, $self.session.clone()))
     };
     (@complex_get_val $self: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {
@@ -298,10 +298,10 @@ macro_rules! impl_item {
         $value.as_pbstr().as_ptr()
     };
     (@complex_set_val $self: expr, $dim: expr, $value: expr, object) => {
-        $value.as_ptr()
+        $value.as_raw()
     };
     (@complex_set_val $self: expr, $dim: expr, $value: expr, any) => {
-        $value.as_ptr()
+        $value.as_raw()
     };
     (@complex_set_val $self: expr, $dim: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {

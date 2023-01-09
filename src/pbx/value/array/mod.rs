@@ -18,7 +18,7 @@ pub struct Array<'arr> {
 }
 
 impl<'arr> Array<'arr> {
-    pub(crate) unsafe fn from_ptr(ptr: pbarray, is_object: bool, session: Session) -> Array<'arr> {
+    pub(crate) unsafe fn from_raw(ptr: pbarray, is_object: bool, session: Session) -> Array<'arr> {
         let info = ArrayInfo::new(ptr, session.clone());
         Array {
             ptr,
@@ -28,13 +28,13 @@ impl<'arr> Array<'arr> {
             _marker: PhantomData
         }
     }
-    pub(crate) fn as_ptr(&self) -> pbarray { self.ptr }
+    pub(crate) fn as_raw(&self) -> pbarray { self.ptr }
 
     /// 获取数组信息
     pub fn info(&self) -> &ArrayInfo { &self.info }
 
     /// 获取数组长度(仅一维数组有效)
-    pub fn len(&self) -> pblong { unsafe { ffi::pbsession_GetArrayLength(self.session.as_ptr(), self.ptr) } }
+    pub fn len(&self) -> pblong { unsafe { ffi::pbsession_GetArrayLength(self.session.as_raw(), self.ptr) } }
 
     /// 获取元素迭代器,仅支持一维数组
     ///
@@ -66,7 +66,7 @@ pub struct ArrayInfo {
 
 impl ArrayInfo {
     pub(crate) unsafe fn new(arr: pbarray, session: Session) -> ArrayInfo {
-        let ptr = ffi::pbsession_GetArrayInfo(session.as_ptr(), arr);
+        let ptr = ffi::pbsession_GetArrayInfo(session.as_raw(), arr);
         ArrayInfo {
             ptr,
             session
@@ -101,7 +101,7 @@ impl ArrayInfo {
 impl Drop for ArrayInfo {
     fn drop(&mut self) {
         unsafe {
-            ffi::pbsession_ReleaseArrayInfo(self.session.as_ptr(), self.ptr);
+            ffi::pbsession_ReleaseArrayInfo(self.session.as_raw(), self.ptr);
         }
     }
 }

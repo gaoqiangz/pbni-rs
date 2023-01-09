@@ -16,7 +16,7 @@ impl CallInfo {
             returnValue: NonNull::dangling(),
             returnClass: NonNull::dangling()
         };
-        let pbxr = ffi::pbsession_InitCallInfo(session.as_ptr(), cls, mid, (&mut ci).into());
+        let pbxr = ffi::pbsession_InitCallInfo(session.as_raw(), cls, mid, (&mut ci).into());
         if pbxr != PBXRESULT::OK {
             return Err(pbxr);
         }
@@ -31,7 +31,7 @@ impl CallInfo {
 
     /// 获取取引用对象
     pub fn as_ref(&self) -> CallInfoRef {
-        unsafe { CallInfoRef::from_ptr((&self.ci).into(), self.session.clone()) }
+        unsafe { CallInfoRef::from_raw((&self.ci).into(), self.session.clone()) }
     }
 
     /// 获取关联的`Session`
@@ -49,19 +49,19 @@ impl CallInfo {
 
     /// 获取参数列表对象
     pub fn args(&self) -> Arguments {
-        unsafe { Arguments::from_ptr((&self.ci).into(), self.session.clone()) }
+        unsafe { Arguments::from_raw((&self.ci).into(), self.session.clone()) }
     }
 
     /// 获取返回值对象
     pub fn return_value(&self) -> Value {
-        unsafe { Value::from_ptr(self.ci.returnValue, self.session.clone()) }
+        unsafe { Value::from_raw(self.ci.returnValue, self.session.clone()) }
     }
 }
 
 impl Drop for CallInfo {
     fn drop(&mut self) {
         unsafe {
-            ffi::pbsession_FreeCallInfo(self.session.as_ptr(), (&self.ci).into());
+            ffi::pbsession_FreeCallInfo(self.session.as_raw(), (&self.ci).into());
         }
     }
 }
@@ -74,14 +74,14 @@ pub struct CallInfoRef<'ci> {
 }
 
 impl<'ci> CallInfoRef<'ci> {
-    pub(crate) unsafe fn from_ptr(ptr: pbcallinfo, session: Session) -> CallInfoRef<'ci> {
+    pub(crate) unsafe fn from_raw(ptr: pbcallinfo, session: Session) -> CallInfoRef<'ci> {
         CallInfoRef {
             ptr,
             session,
             _marker: PhantomData
         }
     }
-    pub(crate) fn as_ptr(&self) -> pbcallinfo { self.ptr }
+    pub(crate) fn as_raw(&self) -> pbcallinfo { self.ptr }
     pub(crate) fn clone(&self) -> CallInfoRef<'ci> {
         CallInfoRef {
             ptr: self.ptr,
@@ -105,12 +105,12 @@ impl<'ci> CallInfoRef<'ci> {
 
     /// 获取参数列表对象
     pub fn args(&self) -> ArgumentsRef<'ci> {
-        unsafe { ArgumentsRef::from_ptr(self.ptr.as_ref().pArgs, self.session.clone()) }
+        unsafe { ArgumentsRef::from_raw(self.ptr.as_ref().pArgs, self.session.clone()) }
     }
 
     /// 获取返回值对象
     pub fn return_value(&self) -> Value<'ci> {
-        unsafe { Value::from_ptr(self.ptr.as_ref().returnValue, self.session.clone()) }
+        unsafe { Value::from_raw(self.ptr.as_ref().returnValue, self.session.clone()) }
     }
 }
 
