@@ -20,7 +20,7 @@ pub struct Object<'obj> {
 impl<'obj> Object<'obj> {
     pub(crate) unsafe fn from_raw(ptr: pbobject, session: Session) -> Object<'obj> {
         let group = Cell::new(None);
-        let cls = ffi::pbsession_GetClass(session.as_raw(), ptr).unwrap();
+        let cls = ffi::pbsession_GetClass(session.as_raw(), ptr).expect("invalid object");
         Object {
             ptr,
             group,
@@ -36,7 +36,7 @@ impl<'obj> Object<'obj> {
             None => {
                 let group = self.session.get_group(self.cls);
                 self.group.set(group);
-                group.unwrap()
+                group.expect("invalid class")
             }
         }
     }
