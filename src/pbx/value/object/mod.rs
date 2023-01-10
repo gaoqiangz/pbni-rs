@@ -41,7 +41,20 @@ impl<'obj> Object<'obj> {
         }
     }
     pub(crate) fn get_class(&self) -> pbclass { self.cls }
+
+    pub fn get_class_name(&self) -> String {
+        unsafe {
+            let cls_name = ffi::pbsession_GetClassName(self.session.as_raw(), self.cls);
+            if !cls_name.is_null() {
+                PBStr::from_ptr_str(cls_name).to_string_lossy()
+            } else {
+                "".to_string()
+            }
+        }
+    }
+
     pub fn get_session(&self) -> Session { self.session }
+
     pub(crate) unsafe fn clone(&self) -> Object<'obj> {
         Object {
             ptr: self.ptr,
