@@ -146,6 +146,41 @@ impl_iter_item!(&'arr [u8], ValueType::Blob, get_item_blob_unchecked);
 impl_iter_item!(Object<'arr>, @object, get_item_object_unchecked);
 impl_iter_item!(Value<'arr>, ValueType::Any, get_item_any_unchecked);
 
+impl<'arr> ArrayIterItem<'arr> for String {
+    fn check_type(arr: &Array) -> bool { arr.info.value_type() == ValueType::String }
+    fn get_value(arr: &Array<'arr>, index: pblong) -> Option<Self> {
+        unsafe { arr.get_item_str_unchecked(index).map(|val| val.to_string_lossy()) }
+    }
+}
+
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+impl<'arr, T: UserObject> ArrayIterItem<'arr> for &'arr T {
+    fn check_type(arr: &Array) -> bool { arr.is_object }
+    fn get_value(arr: &Array<'arr>, index: pblong) -> Option<Self> {
+        unsafe {
+            if let Some(obj) = arr.get_item_object_unchecked(index) {
+                Some(obj.get_native_ref().expect("mismatched object"))
+            } else {
+                None
+            }
+        }
+    }
+}
+
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+impl<'arr, T: UserObject> ArrayIterItem<'arr> for &'arr mut T {
+    fn check_type(arr: &Array) -> bool { arr.is_object }
+    fn get_value(arr: &Array<'arr>, index: pblong) -> Option<Self> {
+        unsafe {
+            if let Some(mut obj) = arr.get_item_object_unchecked(index) {
+                Some(obj.get_native_mut().expect("mismatched object"))
+            } else {
+                None
+            }
+        }
+    }
+}
+
 /// 一维数组迭代器
 ///
 /// # Examples

@@ -10,6 +10,8 @@ mod impls;
 use array::Array;
 use object::Object;
 
+use self::array::ArrayIterItem;
+
 /// 值的引用
 pub struct Value<'val> {
     ptr: pbvalue,
@@ -252,15 +254,6 @@ impl<'val> FromValue<'val> for &'val [u8] {
         }
     }
 }
-impl FromValue<'_> for Vec<u8> {
-    fn from_value(val: Option<Value>) -> Result<Self> {
-        if let Some(val) = val {
-            val.try_get_blob()?.ok_or(PBXRESULT::E_VALUE_IS_NULL).map(Vec::from)
-        } else {
-            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
-        }
-    }
-}
 impl<'val> FromValue<'val> for Object<'val> {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
         if let Some(val) = val {
@@ -323,6 +316,25 @@ impl FromValue<'_> for OwnedValue {
     fn from_value(val: Option<Value>) -> Result<Self> {
         if let Some(val) = val {
             Ok(val.acquire())
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
+    }
+}
+
+impl<'val, T: FromValue<'val> + ArrayIterItem<'val>> FromValue<'val> for Vec<T> {
+    fn from_value(val: Option<Value<'val>>) -> Result<Self> {
+        if let Some(val) = val {
+            let arr = val.try_get_array()?.ok_or(PBXRESULT::E_VALUE_IS_NULL)?;
+            let mut rv = Vec::with_capacity(arr.len() as usize);
+            for item in arr.iter::<T>() {
+                if let Some(item) = item {
+                    rv.push(item);
+                } else {
+                    return Err(PBXRESULT::E_VALUE_IS_NULL);
+                }
+            }
+            Ok(rv)
         } else {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
