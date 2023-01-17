@@ -1,4 +1,6 @@
-use crate::pbni::{bindings::*, session::OwnedSession, *};
+use crate::{
+    pbx::{bindings::*, session::OwnedSession, *}, prelude::*
+};
 use libloading::Library;
 use std::{borrow::Cow, ffi::OsStr};
 
