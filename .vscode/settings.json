@@ -1,6 +1,5 @@
 {
     "files.associations": {
         "memory": "cpp"
-    },
-    "rust-analyzer.cargo.target": "x86_64-pc-windows-msvc" //解决RA `textDocument/hover`事件报`nonscalar layout for layout_scalar_valid_range type`异常
+    }
 }
