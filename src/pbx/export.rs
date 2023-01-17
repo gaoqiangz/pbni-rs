@@ -37,8 +37,8 @@ pub fn register_global_function<T: GlobalFunction>() {
 #[cfg(feature = "nonvisualobject")]
 pub fn register_nonvisualobject<T: NonVisualObject>() {
     fn new<T: NonVisualObject>(session: Session, object: Object) -> Result<bindings::pbuserobject> {
-        let pbobject = object.as_ptr();
-        let obj = Box::new(UserObjectWrap::new(T::new(session, object)?, session.as_ptr(), pbobject));
+        let pbobject = object.as_raw();
+        let obj = Box::new(UserObjectWrap::new(T::new(session, object)?, session.as_raw(), pbobject));
         unsafe {
             let om = NVOM::<UserObjectWrap<T>> {
                 ctx: NonNull::new_unchecked(Box::into_raw(obj)),
@@ -58,8 +58,8 @@ pub fn register_nonvisualobject<T: NonVisualObject>() {
 #[cfg(feature = "visualobject")]
 pub fn register_visualobject<T: VisualObject>() {
     fn new<T: VisualObject>(session: Session, object: Object) -> Result<bindings::pbuserobject> {
-        let pbobject = object.as_ptr();
-        let obj = Box::new(UserObjectWrap::new(T::new(session, object)?, session.as_ptr(), pbobject));
+        let pbobject = object.as_raw();
+        let obj = Box::new(UserObjectWrap::new(T::new(session, object)?, session.as_raw(), pbobject));
         unsafe {
             let om = VOM::<UserObjectWrap<T>> {
                 ctx: NonNull::new_unchecked(Box::into_raw(obj)),
@@ -95,7 +95,7 @@ mod handler {
         mid: MethodId,
         ci: pbcallinfo
     ) -> PBXRESULT {
-        let ci = CallInfoRef::from_ptr(ci, session);
+        let ci = CallInfoRef::from_raw(ci, session);
         <T as UserObject>::invoke(ctx.as_mut(), mid, &ci).into()
     }
 
@@ -161,7 +161,7 @@ mod export {
         let functionName = PBStr::from_ptr_str(functionName);
         let map = GLOBAL_FUNCTION_HANDLERS.read();
         if let Some(handler) = map.get(functionName) {
-            let ci = CallInfoRef::from_ptr(ci, session);
+            let ci = CallInfoRef::from_raw(ci, session);
             handler(ci).into()
         } else {
             PBXRESULT::E_NO_REGISTER_FUNCTION
@@ -179,7 +179,7 @@ mod export {
         let className = PBStr::from_ptr_str(className);
         let map = NVO_HANDLERS.read();
         if let Some(handler) = map.get(className) {
-            let object = Object::from_ptr(pbobj, session);
+            let object = Object::from_raw(pbobj, session);
             match handler(session, object) {
                 Ok(ptr) => {
                     *obj.as_mut() = ptr;
@@ -203,7 +203,7 @@ mod export {
         let className = PBStr::from_ptr_str(className);
         let map = VO_HANDLERS.read();
         if let Some(handler) = map.get(className) {
-            let object = Object::from_ptr(pbobj, session);
+            let object = Object::from_raw(pbobj, session);
             match handler(session, object) {
                 Ok(ptr) => {
                     *obj.as_mut() = ptr;

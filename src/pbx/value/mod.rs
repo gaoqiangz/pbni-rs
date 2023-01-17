@@ -10,6 +10,8 @@ mod impls;
 use array::Array;
 use object::Object;
 
+use self::array::ArrayIterItem;
+
 /// 值的引用
 pub struct Value<'val> {
     ptr: pbvalue,
@@ -18,14 +20,14 @@ pub struct Value<'val> {
 }
 
 impl<'val> Value<'val> {
-    pub(crate) unsafe fn from_ptr(ptr: pbvalue, session: Session) -> Value<'val> {
+    pub(crate) unsafe fn from_raw(ptr: pbvalue, session: Session) -> Value<'val> {
         Value {
             ptr,
             session,
             _marker: PhantomData
         }
     }
-    pub(crate) fn as_ptr(&self) -> pbvalue { self.ptr }
+    pub(crate) fn as_raw(&self) -> pbvalue { self.ptr }
 
     pub(crate) fn get_class(&self) -> Option<pbclass> { unsafe { ffi::pbvalue_GetClass(self.ptr) } }
 
@@ -56,8 +58,8 @@ impl<'val> Value<'val> {
     /// 拷贝并转移所有权,`self`将被消耗
     pub fn acquire(self) -> OwnedValue {
         unsafe {
-            let new_value = ffi::pbsession_AcquireValue(self.session.as_ptr(), self.ptr);
-            OwnedValue::from_ptr(new_value, self.session.clone())
+            let new_value = ffi::pbsession_AcquireValue(self.session.as_raw(), self.ptr);
+            OwnedValue::from_raw(new_value, self.session.clone())
         }
     }
 }
@@ -69,20 +71,20 @@ pub struct OwnedValue {
 }
 
 impl OwnedValue {
-    pub(crate) unsafe fn from_ptr(ptr: pbvalue, session: Session) -> OwnedValue {
+    pub(crate) unsafe fn from_raw(ptr: pbvalue, session: Session) -> OwnedValue {
         OwnedValue {
             ptr,
             session
         }
     }
-    pub(crate) fn as_ptr(&self) -> pbvalue { self.ptr }
+    pub(crate) fn as_raw(&self) -> pbvalue { self.ptr }
 
     /// 获取值的引用
-    pub fn value(&self) -> Value { unsafe { Value::from_ptr(self.ptr, self.session.clone()) } }
+    pub fn value(&self) -> Value { unsafe { Value::from_raw(self.ptr, self.session.clone()) } }
 }
 
 impl Drop for OwnedValue {
-    fn drop(&mut self) { unsafe { ffi::pbsession_ReleaseValue(self.session.as_ptr(), self.ptr) } }
+    fn drop(&mut self) { unsafe { ffi::pbsession_ReleaseValue(self.session.as_raw(), self.ptr) } }
 }
 
 /// 参数值提取
@@ -252,15 +254,6 @@ impl<'val> FromValue<'val> for &'val [u8] {
         }
     }
 }
-impl FromValue<'_> for Vec<u8> {
-    fn from_value(val: Option<Value>) -> Result<Self> {
-        if let Some(val) = val {
-            val.try_get_blob()?.ok_or(PBXRESULT::E_VALUE_IS_NULL).map(Vec::from)
-        } else {
-            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
-        }
-    }
-}
 impl<'val> FromValue<'val> for Object<'val> {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
         if let Some(val) = val {
@@ -323,6 +316,25 @@ impl FromValue<'_> for OwnedValue {
     fn from_value(val: Option<Value>) -> Result<Self> {
         if let Some(val) = val {
             Ok(val.acquire())
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
+    }
+}
+
+impl<'val, T: FromValue<'val> + ArrayIterItem<'val>> FromValue<'val> for Vec<T> {
+    fn from_value(val: Option<Value<'val>>) -> Result<Self> {
+        if let Some(val) = val {
+            let arr = val.try_get_array()?.ok_or(PBXRESULT::E_VALUE_IS_NULL)?;
+            let mut rv = Vec::with_capacity(arr.len() as usize);
+            for item in arr.iter::<T>() {
+                if let Some(item) = item {
+                    rv.push(item);
+                } else {
+                    return Err(PBXRESULT::E_VALUE_IS_NULL);
+                }
+            }
+            Ok(rv)
         } else {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }

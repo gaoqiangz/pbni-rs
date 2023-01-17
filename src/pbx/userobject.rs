@@ -34,7 +34,7 @@ pub trait UserObject: Sized + 'static {
     fn get_session(&self) -> Session {
         unsafe {
             let wrap = &*(self as *const Self as *const UserObjectWrap<Self>);
-            Session::from_ptr(wrap.pbsession)
+            Session::from_raw(wrap.pbsession)
         }
     }
 
@@ -43,7 +43,7 @@ pub trait UserObject: Sized + 'static {
     fn get_object(&mut self) -> Object {
         unsafe {
             let wrap = &*(self as *const Self as *const UserObjectWrap<Self>);
-            Object::from_ptr(wrap.pbobject, Session::from_ptr(wrap.pbsession))
+            Object::from_raw(wrap.pbobject, Session::from_raw(wrap.pbsession))
         }
     }
 

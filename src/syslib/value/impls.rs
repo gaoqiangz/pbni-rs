@@ -165,7 +165,7 @@ macro_rules! impl_value {
         PBString::from_ptr_str($value as _)
     };
     (@complex_get_val $self: expr, $value: expr, array) => {
-        Array::from_ptr($value as _, $self.is_object(), $self.session.clone())
+        Array::from_raw($value as _, $self.is_object(), $self.session.clone())
     };
     (@complex_get_val $self: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {
@@ -173,23 +173,23 @@ macro_rules! impl_value {
         }
     };
     (@complex_set_val $self: expr, $value: expr, $field_type: expr, longlong) => {
-        $self.set_ptr(API.ob_dup_longlong($self.session.as_ptr(), &$value as *const pblonglong as _) as _, $field_type);
+        $self.set_ptr(API.ob_dup_longlong($self.session.as_raw(), &$value as *const pblonglong as _) as _, $field_type);
     };
     (@complex_set_val $self: expr, $value: expr, $field_type: expr, double) => {
-        $self.set_ptr(API.ob_dup_double($self.session.as_ptr(), &$value as *const pbdouble as _) as _, $field_type);
+        $self.set_ptr(API.ob_dup_double($self.session.as_raw(), &$value as *const pbdouble as _) as _, $field_type);
     };
     (@complex_set_val $self: expr, $value: expr, $field_type: expr, str) => {
-        $self.set_ptr(API.ob_dup_string($self.session.as_ptr(), $value.as_pbstr().as_ptr() as _) as _, $field_type);
+        $self.set_ptr(API.ob_dup_string($self.session.as_raw(), $value.as_pbstr().as_ptr() as _) as _, $field_type);
     };
     (@complex_set_val $self: expr, $value: expr, $field_type: expr, array) => {
         {
-            $self.set_ptr($value.as_ptr() as _, $value.info().value_type() as OB_CLASS_ID);
+            $self.set_ptr($value.as_raw() as _, $value.info().value_type() as OB_CLASS_ID);
             $self.set_info_group(OB_GROUPTYPE::OB_ARRAY);
             $value.forget();
         }
     };
     (@complex_set_val $self: expr, $value: expr, $field_type: expr, value) => {
-        API.rtDataCopy($self.session.as_ptr(), $self.as_ptr(), $value.as_ptr(), true as BOOL);
+        API.rtDataCopy($self.session.as_raw(), $self.as_raw(), $value.as_raw(), true as BOOL);
     };
     (@complex_set_val $self: expr, $value: expr, $field_type: expr, $type_name: ty) => {
         ::paste::paste! {

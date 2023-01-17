@@ -16,12 +16,12 @@ pub struct Session {
 }
 
 impl Session {
-    pub(crate) unsafe fn from_ptr(ptr: pbsession) -> Session {
+    pub(crate) unsafe fn from_raw(ptr: pbsession) -> Session {
         Session {
             ptr
         }
     }
-    pub(crate) fn as_ptr(&self) -> pbsession { self.ptr }
+    pub fn as_raw(&self) -> pbsession { self.ptr }
 
     /// 判断是否有重启Session的请求 (在PowerScript中调用了`Restart`函数)
     pub fn restart_requested(&self) -> bool { unsafe { ffi::pbsession_RestartRequested(self.ptr).into() } }
@@ -97,7 +97,7 @@ impl Session {
         let mut ex = self.new_system_object(pbstr!("PBXRuntimeError"))?;
         unsafe {
             ex.set_field_str_unchecked(pbstr!("text"), exstr);
-            ffi::pbsession_ThrowException(self.ptr, ex.as_ptr());
+            ffi::pbsession_ThrowException(self.ptr, ex.as_raw());
         }
         Ok(())
     }
@@ -253,7 +253,7 @@ impl Session {
                 .ok_or(PBXRESULT::E_NO_SUCH_CLASS)?;
             let cls = self.find_class(group, cls_name).ok_or(PBXRESULT::E_NO_SUCH_CLASS)?;
             let ptr = ffi::pbsession_NewObject(self.ptr, cls);
-            Ok(Object::from_ptr(ptr, self.clone()))
+            Ok(Object::from_raw(ptr, self.clone()))
         }
     }
 
@@ -269,7 +269,7 @@ impl Session {
             let group = self.get_system_group();
             let cls = self.find_class(group, cls_name).ok_or(PBXRESULT::E_NO_SUCH_CLASS)?;
             let ptr = ffi::pbsession_NewObject(self.ptr, cls);
-            Ok(Object::from_ptr(ptr, self.clone()))
+            Ok(Object::from_raw(ptr, self.clone()))
         }
     }
 
@@ -308,7 +308,7 @@ impl Session {
         unsafe {
             let ptr = ffi::pbsession_NewUnboundedSimpleArray(self.ptr, item_type)
                 .ok_or(PBXRESULT::E_INVALID_ARGUMENT)?;
-            Ok(Array::from_ptr(ptr, false, self.clone()))
+            Ok(Array::from_raw(ptr, false, self.clone()))
         }
     }
 
@@ -356,7 +356,7 @@ impl Session {
             let ptr =
                 ffi::pbsession_NewBoundedSimpleArray(self.ptr, item_type, dims.len() as u16, bounds.as_ptr())
                     .ok_or(PBXRESULT::E_INVALID_ARGUMENT)?;
-            Ok(Array::from_ptr(ptr, false, self.clone()))
+            Ok(Array::from_raw(ptr, false, self.clone()))
         }
     }
 
@@ -428,7 +428,7 @@ impl Session {
         unsafe {
             let ptr =
                 ffi::pbsession_NewUnboundedObjectArray(self.ptr, cls).ok_or(PBXRESULT::E_INVALID_ARGUMENT)?;
-            Ok(Array::from_ptr(ptr, true, self.clone()))
+            Ok(Array::from_raw(ptr, true, self.clone()))
         }
     }
 
@@ -562,7 +562,7 @@ impl Session {
                 .collect();
             let ptr = ffi::pbsession_NewBoundedObjectArray(self.ptr, cls, dims.len() as u16, dims.as_ptr())
                 .ok_or(PBXRESULT::E_INVALID_ARGUMENT)?;
-            Ok(Array::from_ptr(ptr, true, self.clone()))
+            Ok(Array::from_raw(ptr, true, self.clone()))
         }
     }
 
@@ -717,7 +717,7 @@ pub struct OwnedSession<'vm> {
 impl<'vm> OwnedSession<'vm> {
     pub(crate) unsafe fn from_ptr(ptr: pbsession) -> OwnedSession<'vm> {
         OwnedSession {
-            session: Session::from_ptr(ptr),
+            session: Session::from_raw(ptr),
             _marker: PhantomData
         }
     }

@@ -18,7 +18,7 @@ pub struct Array<'arr> {
 }
 
 impl<'arr> Array<'arr> {
-    pub(crate) unsafe fn from_ptr(ptr: pbarray, is_object: bool, session: Session) -> Array<'arr> {
+    pub(crate) unsafe fn from_raw(ptr: pbarray, is_object: bool, session: Session) -> Array<'arr> {
         let info = ArrayInfo::new(ptr, session.clone());
         Array {
             ptr,
@@ -28,13 +28,13 @@ impl<'arr> Array<'arr> {
             _marker: PhantomData
         }
     }
-    pub(crate) fn as_ptr(&self) -> pbarray { self.ptr }
+    pub(crate) fn as_raw(&self) -> pbarray { self.ptr }
 
     /// 获取数组信息
     pub fn info(&self) -> &ArrayInfo { &self.info }
 
     /// 获取数组长度(仅一维数组有效)
-    pub fn len(&self) -> pblong { unsafe { ffi::pbsession_GetArrayLength(self.session.as_ptr(), self.ptr) } }
+    pub fn len(&self) -> pblong { unsafe { ffi::pbsession_GetArrayLength(self.session.as_raw(), self.ptr) } }
 
     /// 获取元素迭代器,仅支持一维数组
     ///
@@ -66,7 +66,7 @@ pub struct ArrayInfo {
 
 impl ArrayInfo {
     pub(crate) unsafe fn new(arr: pbarray, session: Session) -> ArrayInfo {
-        let ptr = ffi::pbsession_GetArrayInfo(session.as_ptr(), arr);
+        let ptr = ffi::pbsession_GetArrayInfo(session.as_raw(), arr);
         ArrayInfo {
             ptr,
             session
@@ -101,7 +101,7 @@ impl ArrayInfo {
 impl Drop for ArrayInfo {
     fn drop(&mut self) {
         unsafe {
-            ffi::pbsession_ReleaseArrayInfo(self.session.as_ptr(), self.ptr);
+            ffi::pbsession_ReleaseArrayInfo(self.session.as_raw(), self.ptr);
         }
     }
 }
@@ -145,6 +145,41 @@ impl_iter_item!(PBString, ValueType::String, get_item_string_unchecked);
 impl_iter_item!(&'arr [u8], ValueType::Blob, get_item_blob_unchecked);
 impl_iter_item!(Object<'arr>, @object, get_item_object_unchecked);
 impl_iter_item!(Value<'arr>, ValueType::Any, get_item_any_unchecked);
+
+impl<'arr> ArrayIterItem<'arr> for String {
+    fn check_type(arr: &Array) -> bool { arr.info.value_type() == ValueType::String }
+    fn get_value(arr: &Array<'arr>, index: pblong) -> Option<Self> {
+        unsafe { arr.get_item_str_unchecked(index).map(|val| val.to_string_lossy()) }
+    }
+}
+
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+impl<'arr, T: UserObject> ArrayIterItem<'arr> for &'arr T {
+    fn check_type(arr: &Array) -> bool { arr.is_object }
+    fn get_value(arr: &Array<'arr>, index: pblong) -> Option<Self> {
+        unsafe {
+            if let Some(obj) = arr.get_item_object_unchecked(index) {
+                Some(obj.get_native_ref().expect("mismatched object"))
+            } else {
+                None
+            }
+        }
+    }
+}
+
+#[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
+impl<'arr, T: UserObject> ArrayIterItem<'arr> for &'arr mut T {
+    fn check_type(arr: &Array) -> bool { arr.is_object }
+    fn get_value(arr: &Array<'arr>, index: pblong) -> Option<Self> {
+        unsafe {
+            if let Some(mut obj) = arr.get_item_object_unchecked(index) {
+                Some(obj.get_native_mut().expect("mismatched object"))
+            } else {
+                None
+            }
+        }
+    }
+}
 
 /// 一维数组迭代器
 ///

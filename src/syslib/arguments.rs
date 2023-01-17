@@ -378,8 +378,8 @@ pub struct ArgumentsRef<'args> {
 }
 
 impl<'args> ArgumentsRef<'args> {
-    pub(crate) unsafe fn from_ptr(session: Session, cnt: i32) -> ArgumentsRef<'args> {
-        let args = (0..cnt).map(|_| API.ot_get_next_evaled_arg_no_convert(session.as_ptr())).collect();
+    pub(crate) unsafe fn from_raw(session: Session, cnt: i32) -> ArgumentsRef<'args> {
+        let args = (0..cnt).map(|_| API.ot_get_next_evaled_arg_no_convert(session.as_raw())).collect();
         ArgumentsRef {
             args,
             session,
@@ -424,7 +424,7 @@ impl<'args> ArgumentsRef<'args> {
         if index < 0 || index as usize >= self.args.len() {
             return Err(PBRESULT::E_OUT_OF_BOUNDS);
         }
-        unsafe { Ok(Value::from_ptr(self.args[index as usize], self.session.clone())) }
+        unsafe { Ok(Value::from_raw(self.args[index as usize], self.session.clone())) }
     }
 }
 

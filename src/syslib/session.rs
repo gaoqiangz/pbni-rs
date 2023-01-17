@@ -13,12 +13,12 @@ pub struct Session {
 }
 
 impl Session {
-    pub(crate) unsafe fn from_ptr(ptr: POB_THIS) -> Session {
+    pub(crate) unsafe fn from_raw(ptr: POB_THIS) -> Session {
         Session {
             ptr
         }
     }
-    pub(crate) fn as_ptr(&self) -> POB_THIS { self.ptr }
+    pub(crate) fn as_raw(&self) -> POB_THIS { self.ptr }
 
     //TODO
     /// 判断是否有重启Session的请求 (在PowerScript中调用了`Restart`函数)
@@ -265,7 +265,7 @@ impl Session {
             if ptr.is_null() {
                 return Err(PBRESULT::E_INVALID_ARGUMENT);
             }
-            Ok(Array::take_ptr(ptr, false, self.clone()))
+            Ok(Array::take_raw(ptr, false, self.clone()))
         }
     }
 
@@ -326,7 +326,7 @@ impl Session {
             if ptr.is_null() {
                 return Err(PBRESULT::E_INVALID_ARGUMENT);
             }
-            Ok(Array::take_ptr(ptr, false, self.clone()))
+            Ok(Array::take_raw(ptr, false, self.clone()))
         }
     }
 

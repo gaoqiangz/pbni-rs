@@ -52,7 +52,7 @@ impl<'obj> Object<'obj> {
     /// }
     /// ```
     pub fn get_field_count(&self) -> pbulong {
-        unsafe { ffi::pbsession_GetNumOfFields(self.session.as_ptr(), self.cls) }
+        unsafe { ffi::pbsession_GetNumOfFields(self.session.as_raw(), self.cls) }
     }
 
     /// 查找实例变量ID
@@ -65,7 +65,7 @@ impl<'obj> Object<'obj> {
     /// ```
     pub fn get_field_id(&self, name: impl AsPBStr) -> Option<FieldId> {
         unsafe {
-            let fid = ffi::pbsession_GetFieldID(self.session.as_ptr(), self.cls, name.as_pbstr().as_ptr());
+            let fid = ffi::pbsession_GetFieldID(self.session.as_raw(), self.cls, name.as_pbstr().as_ptr());
             if fid.is_undefined() {
                 None
             } else {
@@ -89,7 +89,7 @@ impl<'obj> Object<'obj> {
     pub fn get_field_name(&self, fid: impl AsFieldId) -> &PBStr {
         unsafe {
             PBStr::from_ptr_str(ffi::pbsession_GetFieldName(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.cls,
                 fid.as_field_id(self)
             ))
@@ -121,7 +121,7 @@ impl<'obj> Object<'obj> {
     /// }
     /// ```
     pub fn get_field_type(&self, fid: impl AsFieldId) -> ValueType {
-        unsafe { ffi::pbsession_GetFieldType(self.session.as_ptr(), self.cls, fid.as_field_id(self)) }
+        unsafe { ffi::pbsession_GetFieldType(self.session.as_raw(), self.cls, fid.as_field_id(self)) }
     }
 
     /// 判断实例变量是否为NULL
@@ -130,7 +130,7 @@ impl<'obj> Object<'obj> {
     ///
     /// 访问不存在的变量时会触发Panic
     pub fn is_field_null(&self, fid: impl AsFieldId) -> bool {
-        unsafe { ffi::pbsession_IsFieldNull(self.session.as_ptr(), self.ptr, fid.as_field_id(self)).into() }
+        unsafe { ffi::pbsession_IsFieldNull(self.session.as_raw(), self.ptr, fid.as_field_id(self)).into() }
     }
 
     /// 判断实例变量类型是否为数组
@@ -139,7 +139,7 @@ impl<'obj> Object<'obj> {
     ///
     /// 访问不存在的变量时会触发Panic
     pub fn is_field_array(&self, fid: impl AsFieldId) -> bool {
-        unsafe { ffi::pbsession_IsFieldArray(self.session.as_ptr(), self.cls, fid.as_field_id(self)).into() }
+        unsafe { ffi::pbsession_IsFieldArray(self.session.as_raw(), self.cls, fid.as_field_id(self)).into() }
     }
 
     /// 判断实例变量类型是否为对象
@@ -148,7 +148,7 @@ impl<'obj> Object<'obj> {
     ///
     /// 访问不存在的变量时会触发Panic
     pub fn is_field_object(&self, fid: impl AsFieldId) -> bool {
-        unsafe { ffi::pbsession_IsFieldObject(self.session.as_ptr(), self.cls, fid.as_field_id(self)).into() }
+        unsafe { ffi::pbsession_IsFieldObject(self.session.as_raw(), self.cls, fid.as_field_id(self)).into() }
     }
 
     /// 设置实例变量的值为NULL
@@ -157,7 +157,7 @@ impl<'obj> Object<'obj> {
     ///
     /// 访问不存在的变量时会触发Panic
     pub fn set_field_to_null(&self, fid: impl AsFieldId) {
-        unsafe { ffi::pbsession_SetFieldToNull(self.session.as_ptr(), self.ptr, fid.as_field_id(self)) }
+        unsafe { ffi::pbsession_SetFieldToNull(self.session.as_raw(), self.ptr, fid.as_field_id(self)) }
     }
 
     /// 刷新实例变量关联的UI状态,如窗口的`title`变量修改后需要调用此函数以刷新UI
@@ -173,7 +173,7 @@ impl<'obj> Object<'obj> {
     /// object.update_field("title");
     /// ```
     pub fn update_field(&self, fid: impl AsFieldId) -> Result<()> {
-        unsafe { ffi::pbsession_UpdateField(self.session.as_ptr(), self.ptr, fid.as_field_id(self)).into() }
+        unsafe { ffi::pbsession_UpdateField(self.session.as_raw(), self.ptr, fid.as_field_id(self)).into() }
     }
 }
 
@@ -225,7 +225,7 @@ impl<'obj> Object<'obj> {
     pub fn get_shared_var_id(&self, name: impl AsPBStr) -> Option<FieldId> {
         unsafe {
             let fid = ffi::pbsession_GetSharedVarID(
-                self.session.as_ptr(),
+                self.session.as_raw(),
                 self.get_group(),
                 name.as_pbstr().as_ptr()
             );
@@ -263,7 +263,7 @@ impl<'obj> Object<'obj> {
     /// ```
     pub fn get_shared_var_type(&self, fid: impl AsSharedVarId) -> ValueType {
         unsafe {
-            ffi::pbsession_GetSharedVarType(self.session.as_ptr(), self.get_group(), fid.as_var_id(self))
+            ffi::pbsession_GetSharedVarType(self.session.as_raw(), self.get_group(), fid.as_var_id(self))
         }
     }
 
@@ -274,7 +274,7 @@ impl<'obj> Object<'obj> {
     /// 访问不存在的变量时会触发Panic
     pub fn is_shared_var_null(&self, fid: impl AsSharedVarId) -> bool {
         unsafe {
-            ffi::pbsession_IsSharedVarNull(self.session.as_ptr(), self.get_group(), fid.as_var_id(self))
+            ffi::pbsession_IsSharedVarNull(self.session.as_raw(), self.get_group(), fid.as_var_id(self))
                 .into()
         }
     }
@@ -286,7 +286,7 @@ impl<'obj> Object<'obj> {
     /// 访问不存在的变量时会触发Panic
     pub fn is_shared_var_array(&self, fid: impl AsSharedVarId) -> bool {
         unsafe {
-            ffi::pbsession_IsSharedVarArray(self.session.as_ptr(), self.get_group(), fid.as_var_id(self))
+            ffi::pbsession_IsSharedVarArray(self.session.as_raw(), self.get_group(), fid.as_var_id(self))
                 .into()
         }
     }
@@ -298,7 +298,7 @@ impl<'obj> Object<'obj> {
     /// 访问不存在的变量时会触发Panic
     pub fn is_shared_var_object(&self, fid: impl AsSharedVarId) -> bool {
         unsafe {
-            ffi::pbsession_IsSharedVarObject(self.session.as_ptr(), self.get_group(), fid.as_var_id(self))
+            ffi::pbsession_IsSharedVarObject(self.session.as_raw(), self.get_group(), fid.as_var_id(self))
                 .into()
         }
     }
@@ -310,7 +310,7 @@ impl<'obj> Object<'obj> {
     /// 访问不存在的变量时会触发Panic
     pub fn set_shared_var_to_null(&self, fid: impl AsFieldId) {
         unsafe {
-            ffi::pbsession_SetSharedVarToNull(self.session.as_ptr(), self.get_group(), fid.as_field_id(self))
+            ffi::pbsession_SetSharedVarToNull(self.session.as_raw(), self.get_group(), fid.as_field_id(self))
         }
     }
 }
@@ -353,7 +353,7 @@ macro_rules! impl_field {
             pub unsafe fn [<get_field_ $type_name _unchecked>](&self, fid: impl AsFieldId) -> Option<$type> {
                 let fid = fid.as_field_id(self);
                 let mut is_null = Default::default();
-                let v = ffi::[<pbsession_Get $type_name:camel Field>](self.session.as_ptr(), self.ptr, fid, &mut is_null);
+                let v = ffi::[<pbsession_Get $type_name:camel Field>](self.session.as_raw(), self.ptr, fid, &mut is_null);
                 if is_null == true {
                     None
                 } else {
@@ -369,7 +369,7 @@ macro_rules! impl_field {
             pub unsafe fn [<get_shared_var_ $type_name _unchecked>](&self, fid: impl AsSharedVarId) -> Option<$type> {
                 let fid = fid.as_var_id(self);
                 let mut is_null = Default::default();
-                let v = ffi::[<pbsession_Get $type_name:camel SharedVar>](self.session.as_ptr(), self.get_group(), fid, &mut is_null);
+                let v = ffi::[<pbsession_Get $type_name:camel SharedVar>](self.session.as_raw(), self.get_group(), fid, &mut is_null);
                 if is_null == true {
                     None
                 } else {
@@ -394,7 +394,7 @@ macro_rules! impl_field {
             /// 变量无效或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_field_ $type_name _unchecked>](&mut self, fid: impl AsFieldId, value: $type) {
                 let fid = fid.as_field_id(self);
-                assert_eq!(ffi::[<pbsession_Set $type_name:camel Field>](self.session.as_ptr(), self.ptr, fid, value.into()), PBXRESULT::OK);
+                assert_eq!(ffi::[<pbsession_Set $type_name:camel Field>](self.session.as_raw(), self.ptr, fid, value.into()), PBXRESULT::OK);
             }
 
             #[doc = "设置`" $type_name "`类型共享(静态)变量值,不检查类型"]
@@ -404,7 +404,7 @@ macro_rules! impl_field {
             /// 变量无效或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_shared_var_ $type_name _unchecked>](&mut self, fid: impl AsSharedVarId, value: $type) {
                 let fid = fid.as_var_id(self);
-                assert_eq!(ffi::[<pbsession_Set $type_name:camel SharedVar>](self.session.as_ptr(), self.get_group(), fid, value.into()), PBXRESULT::OK);
+                assert_eq!(ffi::[<pbsession_Set $type_name:camel SharedVar>](self.session.as_raw(), self.get_group(), fid, value.into()), PBXRESULT::OK);
             }
         }
     };
@@ -442,7 +442,7 @@ macro_rules! impl_field {
             pub unsafe fn [<get_field_ $type_name _unchecked>](&self, fid: impl AsFieldId) -> Option<$type> {
                 let fid = fid.as_field_id(self);
                 let mut is_null = Default::default();
-                let v = ffi::[<pbsession_Get $type_name:camel Field>](self.session.as_ptr(), self.ptr, fid, &mut is_null);
+                let v = ffi::[<pbsession_Get $type_name:camel Field>](self.session.as_raw(), self.ptr, fid, &mut is_null);
                 if is_null == true {
                     None
                 } else {
@@ -458,7 +458,7 @@ macro_rules! impl_field {
             pub unsafe fn [<get_shared_var_ $type_name _unchecked>](&self, fid: impl AsSharedVarId) -> Option<$type> {
                 let fid = fid.as_var_id(self);
                 let mut is_null = Default::default();
-                let v = ffi::[<pbsession_Get $type_name:camel SharedVar>](self.session.as_ptr(), self.get_group(), fid, &mut is_null);
+                let v = ffi::[<pbsession_Get $type_name:camel SharedVar>](self.session.as_raw(), self.get_group(), fid, &mut is_null);
                 if is_null == true {
                     None
                 } else {
@@ -483,7 +483,7 @@ macro_rules! impl_field {
             /// 变量无效或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_field_ $type_name _unchecked>](&mut self, fid: impl AsFieldId, value: $type) {
                 let fid = fid.as_field_id(self);
-                assert_eq!(ffi::[<pbsession_Set $type_name:camel Field>](self.session.as_ptr(), self.ptr, fid, impl_field!(@complex_set_val self, fid, value, $type_name)), PBXRESULT::OK);
+                assert_eq!(ffi::[<pbsession_Set $type_name:camel Field>](self.session.as_raw(), self.ptr, fid, impl_field!(@complex_set_val self, fid, value, $type_name)), PBXRESULT::OK);
             }
 
             #[doc = "设置`" $type_name "`类型共享(静态)变量值,不检查类型"]
@@ -493,7 +493,7 @@ macro_rules! impl_field {
             /// 变量无效或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_shared_var_ $type_name _unchecked>](&mut self, fid: impl AsSharedVarId, value: $type) {
                 let fid = fid.as_var_id(self);
-                assert_eq!(ffi::[<pbsession_Set $type_name:camel SharedVar>](self.session.as_ptr(), self.get_group(), fid, impl_field!(@complex_set_val self, fid, value, $type_name)), PBXRESULT::OK);
+                assert_eq!(ffi::[<pbsession_Set $type_name:camel SharedVar>](self.session.as_raw(), self.get_group(), fid, impl_field!(@complex_set_val self, fid, value, $type_name)), PBXRESULT::OK);
             }
         }
     };
@@ -505,14 +505,14 @@ macro_rules! impl_field {
     };
     (@complex_get_val $field_kind: ty, $self: expr, $fid: expr, $value: expr, array) => {
         ::paste::paste! {
-            Some(Array::from_ptr($value, $self.[<is_ $field_kind _object>]($fid), $self.session.clone()))
+            Some(Array::from_raw($value, $self.[<is_ $field_kind _object>]($fid), $self.session.clone()))
         }
     };
     (@complex_get_val $field_kind: ty, $self: expr, $fid: expr, $value: expr, object) => {
-        Some(Object::from_ptr($value, $self.session.clone()))
+        Some(Object::from_raw($value, $self.session.clone()))
     };
     (@complex_get_val $field_kind: ty, $self: expr, $fid: expr, $value: expr, any) => {
-        Some(Value::from_ptr($value, $self.session.clone()))
+        Some(Value::from_raw($value, $self.session.clone()))
     };
     (@complex_get_val $field_kind: ty, $self: expr, $fid: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {
@@ -523,10 +523,10 @@ macro_rules! impl_field {
         $value.as_pbstr().as_ptr()
     };
     (@complex_set_val $self: expr, $fid: expr, $value: expr, array) => {
-        $value.as_ptr()
+        $value.as_raw()
     };
     (@complex_set_val $self: expr, $fid: expr, $value: expr, object) => {
-        $value.as_ptr()
+        $value.as_raw()
     };
     (@complex_set_val $self: expr, $fid: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {

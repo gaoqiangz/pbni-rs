@@ -15,8 +15,8 @@ use rust_decimal::{prelude::FromPrimitive, Decimal};
 
 #[no_mangle]
 pub unsafe extern "stdcall" fn test_syslib(obthis: POB_THIS, arg_cnt: i32) -> DWORD {
-    let session = Session::from_ptr(obthis);
-    let args = ArgumentsRef::from_ptr(session.clone(), arg_cnt);
+    let session = Session::from_raw(obthis);
+    let args = ArgumentsRef::from_raw(session.clone(), arg_cnt);
 
     let mut str_val = args.get(0);
     let mut dec_val = args.get(1);
@@ -63,7 +63,7 @@ pub unsafe extern "stdcall" fn test_syslib(obthis: POB_THIS, arg_cnt: i32) -> DW
 
     arr_val.set_array(new_arr);
 
-    API.ot_set_return_val(obthis, rv.as_ptr());
+    API.ot_set_return_val(obthis, rv.as_raw());
     rv.forget();
 
     let mut new_arr = session.new_array(ValueType::String).unwrap();

@@ -131,10 +131,10 @@ macro_rules! impl_value {
         $self.session.get_string_unchecked($value).map(PBStr::to_ucstring)
     };
     (@complex_get_val $self: expr, $value: expr, array) => {
-        Some(Array::from_ptr($value, $self.is_object(), $self.session.clone()))
+        Some(Array::from_raw($value, $self.is_object(), $self.session.clone()))
     };
     (@complex_get_val $self: expr, $value: expr, object) => {
-        Some(Object::from_ptr($value, $self.session.clone()))
+        Some(Object::from_raw($value, $self.session.clone()))
     };
     (@complex_get_val $self: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {
@@ -145,13 +145,13 @@ macro_rules! impl_value {
         assert_eq!(ffi::pbvalue_SetStr($self.ptr, $value.as_pbstr().as_ptr()), PBXRESULT::OK);
     };
     (@complex_set_val $self: expr, $value: expr, array) => {
-        assert_eq!(ffi::pbvalue_SetArray($self.ptr, $value.as_ptr()), PBXRESULT::OK);
+        assert_eq!(ffi::pbvalue_SetArray($self.ptr, $value.as_raw()), PBXRESULT::OK);
     };
     (@complex_set_val $self: expr, $value: expr, object) => {
-        assert_eq!(ffi::pbvalue_SetObject($self.ptr, $value.as_ptr()), PBXRESULT::OK);
+        assert_eq!(ffi::pbvalue_SetObject($self.ptr, $value.as_raw()), PBXRESULT::OK);
     };
     (@complex_set_val $self: expr, $value: expr, value) => {
-        ffi::pbsession_SetValue($self.session.as_ptr(), $self.ptr, $value.ptr);
+        ffi::pbsession_SetValue($self.session.as_raw(), $self.ptr, $value.ptr);
     };
     (@complex_set_val $self: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {

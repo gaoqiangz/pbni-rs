@@ -263,13 +263,13 @@ macro_rules! impl_global_var {
         $self.get_string_unchecked($value).map(PBStr::to_ucstring)
     };
     (@complex_get_val $self: expr, $fid: expr, $value: expr, array) => {
-        Some(Array::from_ptr($value, $self.is_global_var_object($fid), $self.clone()))
+        Some(Array::from_raw($value, $self.is_global_var_object($fid), $self.clone()))
     };
     (@complex_get_val $self: expr, $fid: expr, $value: expr, object) => {
-        Some(Object::from_ptr($value, $self.clone()))
+        Some(Object::from_raw($value, $self.clone()))
     };
     (@complex_get_val $self: expr, $fid: expr, $value: expr, any) => {
-        Some(Value::from_ptr($value, $self.clone()))
+        Some(Value::from_raw($value, $self.clone()))
     };
     (@complex_get_val $self: expr, $fid: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {
@@ -280,10 +280,10 @@ macro_rules! impl_global_var {
         $value.as_pbstr().as_ptr()
     };
     (@complex_set_val $self: expr, $fid: expr, $value: expr, array) => {
-        $value.as_ptr()
+        $value.as_raw()
     };
     (@complex_set_val $self: expr, $fid: expr, $value: expr, object) => {
-        $value.as_ptr()
+        $value.as_raw()
     };
     (@complex_set_val $self: expr, $fid: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {
