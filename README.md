@@ -1,6 +1,6 @@
 # pbni-rs
 [![github](https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github)](https://github.com/gaoqiangz/pbni-rs) <br>
-[![crates.io](https://meritbadge.herokuapp.com/pbni-rs)](https://crates.io/crates/pbni-rs)
+[![crates.io](https://img.shields.io/crates/d/pbni-rs?label=crates.io)](https://crates.io/crates/pbni-rs)
 [![docs.rs](https://docs.rs/pbni-rs/badge.svg)](https://docs.rs/pbni-rs)
 [![version](https://img.shields.io/badge/rustc-1.51+-ab6000.svg)](https://blog.rust-lang.org/2021/03/25/Rust-1.51.0.html)
 ![BSD-2-Clause licensed](https://img.shields.io/crates/l/pbni-rs.svg)
