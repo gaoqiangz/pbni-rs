@@ -13,7 +13,7 @@ mod export;
 mod codegen;
 
 pub use arguments::{Arguments, ArgumentsRef};
-pub use bindings::PBXRESULT;
+pub use bindings::{pbobject, pbsession, PBXRESULT};
 pub use callinfo::{CallInfo, CallInfoRef};
 pub use codegen::{pbx_args, pbx_throw};
 pub use session::{LocalFrame, OwnedSession, Session};

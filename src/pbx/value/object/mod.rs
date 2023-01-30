@@ -18,7 +18,7 @@ pub struct Object<'obj> {
 }
 
 impl<'obj> Object<'obj> {
-    pub(crate) unsafe fn from_raw(ptr: pbobject, session: Session) -> Object<'obj> {
+    pub unsafe fn from_raw(ptr: pbobject, session: Session) -> Object<'obj> {
         let group = Cell::new(None);
         let cls = ffi::pbsession_GetClass(session.as_raw(), ptr).expect("invalid object");
         Object {
