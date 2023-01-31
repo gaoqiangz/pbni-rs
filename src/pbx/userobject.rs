@@ -64,19 +64,34 @@ pub trait NonVisualObject: UserObject {
     fn register() { crate::pbx::export::register_nonvisualobject::<Self>() }
 
     /// 创建PB对象
-    fn new_object<'a>(session: Session) -> Result<Object<'a>> { session.new_user_object(Self::CLASS_NAME) }
+    ///
+    /// # Panics
+    ///
+    /// 创建对象失败
+    fn new_object<'a>(session: Session) -> Object<'a> {
+        if let Ok(obj) = session.new_user_object(Self::CLASS_NAME) {
+            obj
+        } else {
+            panic!("Cannot create object '{}'", Self::CLASS_NAME.to_string_lossy())
+        }
+    }
 
     /// 创建PB对象并在`modify`回调中修改
-    fn new_object_modify<'a, F>(session: Session, modify: F) -> Result<Object<'a>>
+    ///
+    /// # Panics
+    ///
+    /// - 创建对象失败
+    /// - 获取native引用失败
+    fn new_object_modify<'a, F>(session: Session, modify: F) -> Object<'a>
     where
         F: FnOnce(&mut Self)
     {
-        let mut obj = session.new_user_object(Self::CLASS_NAME)?;
-        {
-            let obj = obj.get_native_mut()?;
-            modify(obj);
+        if let Ok(mut obj) = session.new_user_object(Self::CLASS_NAME) {
+            modify(obj.get_native_mut().expect("get_native_mut failed"));
+            obj
+        } else {
+            panic!("Cannot create object '{}'", Self::CLASS_NAME.to_string_lossy())
         }
-        Ok(obj)
     }
 }
 
