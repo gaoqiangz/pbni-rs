@@ -159,16 +159,17 @@ impl FromArg<'_> for Session {
 impl<'ci, T: FromValue<'ci>> FromArg<'ci> for T {
     fn from_arg(_: &CallInfoRef, args: &ArgumentsRef<'ci>, idx: &mut pbint, _: &mut bool) -> Result<Self> {
         *idx += 1;
-        #[cfg(feature = "unchecked")]
-        unsafe {
-            T::from_value_unchecked(args.get_unchecked(*idx))
-        }
-        #[cfg(not(feature = "unchecked"))]
-        T::from_value(if *idx < args.count() {
+        let arg = if *idx < args.count() {
             Some(args.try_get(*idx)?)
         } else {
             None
-        })
+        };
+        #[cfg(feature = "unchecked")]
+        unsafe {
+            T::from_value_unchecked(arg)
+        }
+        #[cfg(not(feature = "unchecked"))]
+        T::from_value(arg)
     }
 }
 

@@ -92,7 +92,7 @@ impl Drop for OwnedValue {
 /// 参数值提取
 pub trait FromValue<'val>: Sized {
     fn from_value(val: Option<Value<'val>>) -> Result<Self>;
-    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self>;
+    unsafe fn from_value_unchecked(val: Option<Value<'val>>) -> Result<Self>;
 }
 
 impl FromValue<'_> for () {
@@ -103,7 +103,7 @@ impl FromValue<'_> for () {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(_: Value) -> Result<Self> { Ok(()) }
+    unsafe fn from_value_unchecked(_: Option<Value>) -> Result<Self> { Ok(()) }
 }
 impl<'val> FromValue<'val> for &'val PBStr {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
@@ -113,8 +113,12 @@ impl<'val> FromValue<'val> for &'val PBStr {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
-        val.get_str_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value<'val>>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_str_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for PBString {
@@ -125,8 +129,12 @@ impl FromValue<'_> for PBString {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_string_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_string_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for String {
@@ -137,8 +145,12 @@ impl FromValue<'_> for String {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_string_unchecked().map(|v| v.to_string_lossy()).ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_string_unchecked().map(|v| v.to_string_lossy()).ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for pbint {
@@ -149,8 +161,12 @@ impl FromValue<'_> for pbint {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_int_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_int_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for pbuint {
@@ -161,8 +177,12 @@ impl FromValue<'_> for pbuint {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_uint_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_uint_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for pblong {
@@ -173,8 +193,12 @@ impl FromValue<'_> for pblong {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_long_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_long_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for pbulong {
@@ -185,8 +209,12 @@ impl FromValue<'_> for pbulong {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_ulong_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_ulong_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for pblonglong {
@@ -197,8 +225,12 @@ impl FromValue<'_> for pblonglong {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_longlong_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_longlong_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for pbdouble {
@@ -209,8 +241,12 @@ impl FromValue<'_> for pbdouble {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_double_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_double_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for pbreal {
@@ -221,8 +257,12 @@ impl FromValue<'_> for pbreal {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_real_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_real_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for Decimal {
@@ -233,8 +273,12 @@ impl FromValue<'_> for Decimal {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_dec_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_dec_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for NaiveDate {
@@ -245,8 +289,12 @@ impl FromValue<'_> for NaiveDate {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_date_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_date_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for NaiveTime {
@@ -257,8 +305,12 @@ impl FromValue<'_> for NaiveTime {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_time_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_time_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for NaiveDateTime {
@@ -269,8 +321,12 @@ impl FromValue<'_> for NaiveDateTime {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_datetime_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_datetime_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for pbbyte {
@@ -281,8 +337,12 @@ impl FromValue<'_> for pbbyte {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_byte_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_byte_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl FromValue<'_> for bool {
@@ -293,8 +353,12 @@ impl FromValue<'_> for bool {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
-        val.get_bool_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_bool_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl<'val> FromValue<'val> for &'val [u8] {
@@ -305,8 +369,12 @@ impl<'val> FromValue<'val> for &'val [u8] {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
-        val.get_blob_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value<'val>>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_blob_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl<'val> FromValue<'val> for Object<'val> {
@@ -317,8 +385,12 @@ impl<'val> FromValue<'val> for Object<'val> {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
-        val.get_object_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value<'val>>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_object_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 impl<'val> FromValue<'val> for Array<'val> {
@@ -329,8 +401,12 @@ impl<'val> FromValue<'val> for Array<'val> {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
-        val.get_array_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value<'val>>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_array_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 
@@ -347,10 +423,14 @@ impl<'val, T: UserObject> FromValue<'val> for &'val T {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
-        val.get_object_unchecked()
-            .map(|obj| obj.get_native_ref().expect("cannot get native object"))
-            .ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value<'val>>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_object_unchecked()
+                .map(|obj| obj.get_native_ref().expect("cannot get native object"))
+                .ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 
@@ -367,10 +447,14 @@ impl<'val, T: UserObject> FromValue<'val> for &'val mut T {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
-        val.get_object_unchecked()
-            .map(|mut obj| obj.get_native_mut().expect("cannot get native object"))
-            .ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    unsafe fn from_value_unchecked(val: Option<Value<'val>>) -> Result<Self> {
+        if let Some(val) = val {
+            val.get_object_unchecked()
+                .map(|mut obj| obj.get_native_mut().expect("cannot get native object"))
+                .ok_or(PBXRESULT::E_VALUE_IS_NULL)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
     }
 }
 
@@ -382,7 +466,13 @@ impl<'val> FromValue<'val> for Value<'val> {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> { Ok(val) }
+    unsafe fn from_value_unchecked(val: Option<Value<'val>>) -> Result<Self> {
+        if let Some(val) = val {
+            Ok(val)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
+    }
 }
 impl FromValue<'_> for OwnedValue {
     fn from_value(val: Option<Value>) -> Result<Self> {
@@ -392,7 +482,13 @@ impl FromValue<'_> for OwnedValue {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value) -> Result<Self> { Ok(val.acquire()) }
+    unsafe fn from_value_unchecked(val: Option<Value>) -> Result<Self> {
+        if let Some(val) = val {
+            Ok(val.acquire())
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
+        }
+    }
 }
 
 impl<'val, T: FromValue<'val> + ArrayIterItem<'val>> FromValue<'val> for Vec<T> {
@@ -412,17 +508,21 @@ impl<'val, T: FromValue<'val> + ArrayIterItem<'val>> FromValue<'val> for Vec<T> 
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
-    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
-        let arr = val.get_array_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)?;
-        let mut rv = Vec::with_capacity(arr.len() as usize);
-        for item in arr.iter::<T>() {
-            if let Some(item) = item {
-                rv.push(item);
-            } else {
-                return Err(PBXRESULT::E_VALUE_IS_NULL);
+    unsafe fn from_value_unchecked(val: Option<Value<'val>>) -> Result<Self> {
+        if let Some(val) = val {
+            let arr = val.get_array_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)?;
+            let mut rv = Vec::with_capacity(arr.len() as usize);
+            for item in arr.iter::<T>() {
+                if let Some(item) = item {
+                    rv.push(item);
+                } else {
+                    return Err(PBXRESULT::E_VALUE_IS_NULL);
+                }
             }
+            Ok(rv)
+        } else {
+            Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
-        Ok(rv)
     }
 }
 
@@ -436,7 +536,7 @@ impl<'val, T: FromValue<'val>> FromValue<'val> for Option<T> {
             }
         })
     }
-    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
+    unsafe fn from_value_unchecked(val: Option<Value<'val>>) -> Result<Self> {
         T::from_value_unchecked(val).map(Some).or_else(|e| {
             if e == PBXRESULT::E_INVOKE_WRONG_NUM_ARGS || e == PBXRESULT::E_VALUE_IS_NULL {
                 Ok(None)

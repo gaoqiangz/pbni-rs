@@ -104,7 +104,7 @@ pub fn gen_event(args: AttributeArgs, input: TokenStream) -> Result<TokenStream>
                                 ToValue::to_value_unchecked(#fn_arg,&mut args.get_unchecked(#fn_arg_index))?;
                             )*
                             let rv = invoker.trigger()?;
-                            FromValue::from_value_unchecked(rv)
+                            FromValue::from_value_unchecked(Some(rv))
                         }
                     }
                 };
@@ -140,7 +140,7 @@ pub fn gen_event(args: AttributeArgs, input: TokenStream) -> Result<TokenStream>
                                 ToValue::to_value_unchecked(#fn_arg,&mut args.get_unchecked(#fn_arg_index)).expect(concat!("passing argument ",stringify!(#fn_arg), " failed"));
                             )*
                             let rv = invoker.trigger().expect(concat!("invoke ",#name));
-                            FromValue::from_value_unchecked(rv).expect(concat!("mismatched return type ",#name))
+                            FromValue::from_value_unchecked(Some(rv)).expect(concat!("mismatched return type ",#name))
                         }
                     }
                 };
