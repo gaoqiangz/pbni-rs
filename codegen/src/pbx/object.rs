@@ -91,32 +91,76 @@ pub fn gen_event(args: AttributeArgs, input: TokenStream) -> Result<TokenStream>
 
         if rty_is_result {
             //返回值为Result<T>,传播错误值
-            ast.block = parse_quote! {
-                {
-                    use ::pbni::pbx::__private::codegen::{FromValue,ToValue};
-                    let mut object = self.get_object();
-                    let invoker = object.begin_invoke_event(::pbni::pbstr!(#name))?;
-                    #(
-                        ToValue::to_value(#fn_arg,&mut invoker.arg(#fn_arg_index))?;
-                    )*
-                    let rv = invoker.trigger()?;
-                    FromValue::from_value(Some(rv))
-                }
-            };
+            #[cfg(feature = "unchecked")]
+            {
+                ast.block = parse_quote! {
+                    {
+                        use ::pbni::pbx::__private::codegen::{FromValue,ToValue};
+                        let mut object = self.get_object();
+                        let invoker = object.begin_invoke_event(::pbni::pbstr!(#name))?;
+                        let args = invoker.args();
+                        unsafe {
+                            #(
+                                ToValue::to_value_unchecked(#fn_arg,&mut args.get_unchecked(#fn_arg_index))?;
+                            )*
+                            let rv = invoker.trigger()?;
+                            FromValue::from_value_unchecked(rv)
+                        }
+                    }
+                };
+            }
+            #[cfg(not(feature = "unchecked"))]
+            {
+                ast.block = parse_quote! {
+                    {
+                        use ::pbni::pbx::__private::codegen::{FromValue,ToValue};
+                        let mut object = self.get_object();
+                        let invoker = object.begin_invoke_event(::pbni::pbstr!(#name))?;
+                        let args = invoker.args();
+                        #(
+                            ToValue::to_value(#fn_arg,&mut args.try_get(#fn_arg_index)?)?;
+                        )*
+                        let rv = invoker.trigger()?;
+                        FromValue::from_value(Some(rv))
+                    }
+                };
+            }
         } else {
             //返回值T,不传播错误值,如果发生错误则Panic
-            ast.block = parse_quote! {
-                {
-                    use ::pbni::pbx::__private::codegen::{FromValue,ToValue};
-                    let mut object = self.get_object();
-                    let invoker = object.begin_invoke_event(::pbni::pbstr!(#name)).expect(concat!("begin invoke ",#name));
-                    #(
-                        ToValue::to_value(#fn_arg,&mut invoker.arg(#fn_arg_index)).expect(concat!("pass argument ",stringify!(#fn_arg)));
-                    )*
-                    let rv = invoker.trigger().expect(concat!("invoke ",#name));
-                    FromValue::from_value(Some(rv)).expect(concat!("mismatched return type ",#name))
-                }
-            };
+            #[cfg(feature = "unchecked")]
+            {
+                ast.block = parse_quote! {
+                    {
+                        use ::pbni::pbx::__private::codegen::{FromValue,ToValue};
+                        let mut object = self.get_object();
+                        let invoker = object.begin_invoke_event(::pbni::pbstr!(#name)).expect(concat!("begin invoke ",#name));
+                        let args = invoker.args();
+                        unsafe {
+                            #(
+                                ToValue::to_value_unchecked(#fn_arg,&mut args.get_unchecked(#fn_arg_index)).expect(concat!("passing argument ",stringify!(#fn_arg), " failed"));
+                            )*
+                            let rv = invoker.trigger().expect(concat!("invoke ",#name));
+                            FromValue::from_value_unchecked(rv).expect(concat!("mismatched return type ",#name))
+                        }
+                    }
+                };
+            }
+            #[cfg(not(feature = "unchecked"))]
+            {
+                ast.block = parse_quote! {
+                    {
+                        use ::pbni::pbx::__private::codegen::{FromValue,ToValue};
+                        let mut object = self.get_object();
+                        let invoker = object.begin_invoke_event(::pbni::pbstr!(#name)).expect(concat!("begin invoke ",#name));
+                        let args = invoker.args();
+                        #(
+                            ToValue::to_value(#fn_arg,&mut args.get(#fn_arg_index)).expect(concat!("passing argument ",stringify!(#fn_arg), " failed"));
+                        )*
+                        let rv = invoker.trigger().expect(concat!("invoke ",#name));
+                        FromValue::from_value(Some(rv)).expect(concat!("mismatched return type ",#name))
+                    }
+                };
+            }
         }
     }
 

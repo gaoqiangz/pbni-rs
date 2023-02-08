@@ -159,6 +159,11 @@ impl FromArg<'_> for Session {
 impl<'ci, T: FromValue<'ci>> FromArg<'ci> for T {
     fn from_arg(_: &CallInfoRef, args: &ArgumentsRef<'ci>, idx: &mut pbint, _: &mut bool) -> Result<Self> {
         *idx += 1;
+        #[cfg(feature = "unchecked")]
+        unsafe {
+            T::from_value_unchecked(args.get_unchecked(*idx))
+        }
+        #[cfg(not(feature = "unchecked"))]
         T::from_value(if *idx < args.count() {
             Some(args.try_get(*idx)?)
         } else {
@@ -182,6 +187,7 @@ mod m {
                     let mut idx = -1;
                     let mut complete = false;
                     let rv = ($($T::from_arg(ci,&args,&mut idx,&mut complete)?,)+);
+                    #[cfg(not(feature = "unchecked"))]
                     if !complete && idx + 1 < args.count() {
                         return Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS);
                     }

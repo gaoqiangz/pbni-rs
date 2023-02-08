@@ -64,7 +64,16 @@ impl<'args> Arguments<'args> {
         if index < 0 || index >= self.count {
             return Err(PBXRESULT::E_ARRAY_INDEX_OUTOF_BOUNDS);
         }
-        unsafe { Ok(Value::from_raw(ffi::pbargs_GetAt(self.ci.as_ref().pArgs, index), self.session.clone())) }
+        unsafe { Ok(self.get_unchecked(index)) }
+    }
+
+    /// 获取参数值
+    ///
+    /// # Safety
+    ///
+    /// 下标越界可能会出现未定义行为
+    pub unsafe fn get_unchecked(&self, index: pbint) -> Value<'args> {
+        Value::from_raw(ffi::pbargs_GetAt(self.ci.as_ref().pArgs, index), self.session.clone())
     }
 
     /// 添加`int`类型参数
@@ -425,7 +434,16 @@ impl<'args> ArgumentsRef<'args> {
         if index < 0 || index >= self.count {
             return Err(PBXRESULT::E_ARRAY_INDEX_OUTOF_BOUNDS);
         }
-        unsafe { Ok(Value::from_raw(ffi::pbargs_GetAt(self.ptr, index), self.session.clone())) }
+        unsafe { Ok(self.get_unchecked(index)) }
+    }
+
+    /// 获取参数值
+    ///
+    /// # Safety
+    ///
+    /// 下标越界可能会出现未定义行为
+    pub unsafe fn get_unchecked(&self, index: pbint) -> Value<'args> {
+        Value::from_raw(ffi::pbargs_GetAt(self.ptr, index), self.session.clone())
     }
 }
 

@@ -14,7 +14,15 @@ where
     R: ToValue
 {
     match T::from_callinfo(ci) {
-        Ok(param) => f.call(ctx, param).to_value(&mut ci.return_value()),
+        Ok(param) => {
+            let rv = f.call(ctx, param);
+            #[cfg(feature = "unchecked")]
+            unsafe {
+                rv.to_value_unchecked(&mut ci.return_value())
+            }
+            #[cfg(not(feature = "unchecked"))]
+            rv.to_value(&mut ci.return_value())
+        },
         Err(e) => {
             //发生NULL错误说明参数接收者不支持传NULL值,此时自动转义为返回NULL
             if e == PBXRESULT::E_VALUE_IS_NULL {

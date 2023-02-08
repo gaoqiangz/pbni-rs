@@ -67,6 +67,7 @@ global_function = ["pbni-codegen/global_function"]
 nonvisualobject = ["pbni-codegen/nonvisualobject"]
 visualobject = ["winapi", "pbni-codegen/visualobject"]
 vm = ["libloading"]
+unchecked = ["pbni-codegen/unchecked"]
 symbol_map = []
 
 [[example]]

@@ -90,6 +90,7 @@ impl Drop for OwnedValue {
 /// 参数值提取
 pub trait FromValue<'val>: Sized {
     fn from_value(val: Option<Value<'val>>) -> Result<Self>;
+    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self>;
 }
 
 impl FromValue<'_> for () {
@@ -100,6 +101,7 @@ impl FromValue<'_> for () {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(_: Value) -> Result<Self> { Ok(()) }
 }
 impl<'val> FromValue<'val> for &'val PBStr {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
@@ -108,6 +110,9 @@ impl<'val> FromValue<'val> for &'val PBStr {
         } else {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
+    }
+    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
+        val.get_str_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
     }
 }
 impl FromValue<'_> for PBString {
@@ -118,6 +123,9 @@ impl FromValue<'_> for PBString {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_string_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    }
 }
 impl FromValue<'_> for String {
     fn from_value(val: Option<Value>) -> Result<Self> {
@@ -126,6 +134,9 @@ impl FromValue<'_> for String {
         } else {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
+    }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_string_unchecked().map(|v| v.to_string_lossy()).ok_or(PBXRESULT::E_VALUE_IS_NULL)
     }
 }
 impl FromValue<'_> for pbint {
@@ -136,6 +147,9 @@ impl FromValue<'_> for pbint {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_int_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    }
 }
 impl FromValue<'_> for pbuint {
     fn from_value(val: Option<Value>) -> Result<Self> {
@@ -144,6 +158,9 @@ impl FromValue<'_> for pbuint {
         } else {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
+    }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_uint_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
     }
 }
 impl FromValue<'_> for pblong {
@@ -154,6 +171,9 @@ impl FromValue<'_> for pblong {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_long_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    }
 }
 impl FromValue<'_> for pbulong {
     fn from_value(val: Option<Value>) -> Result<Self> {
@@ -162,6 +182,9 @@ impl FromValue<'_> for pbulong {
         } else {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
+    }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_ulong_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
     }
 }
 impl FromValue<'_> for pblonglong {
@@ -172,6 +195,9 @@ impl FromValue<'_> for pblonglong {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_longlong_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    }
 }
 impl FromValue<'_> for pbdouble {
     fn from_value(val: Option<Value>) -> Result<Self> {
@@ -180,6 +206,9 @@ impl FromValue<'_> for pbdouble {
         } else {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
+    }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_double_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
     }
 }
 impl FromValue<'_> for pbreal {
@@ -190,6 +219,9 @@ impl FromValue<'_> for pbreal {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_real_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    }
 }
 impl FromValue<'_> for Decimal {
     fn from_value(val: Option<Value>) -> Result<Self> {
@@ -198,6 +230,9 @@ impl FromValue<'_> for Decimal {
         } else {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
+    }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_dec_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
     }
 }
 impl FromValue<'_> for NaiveDate {
@@ -208,6 +243,9 @@ impl FromValue<'_> for NaiveDate {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_date_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    }
 }
 impl FromValue<'_> for NaiveTime {
     fn from_value(val: Option<Value>) -> Result<Self> {
@@ -216,6 +254,9 @@ impl FromValue<'_> for NaiveTime {
         } else {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
+    }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_time_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
     }
 }
 impl FromValue<'_> for NaiveDateTime {
@@ -226,6 +267,9 @@ impl FromValue<'_> for NaiveDateTime {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_datetime_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    }
 }
 impl FromValue<'_> for pbbyte {
     fn from_value(val: Option<Value>) -> Result<Self> {
@@ -234,6 +278,9 @@ impl FromValue<'_> for pbbyte {
         } else {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
+    }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_byte_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
     }
 }
 impl FromValue<'_> for bool {
@@ -244,6 +291,9 @@ impl FromValue<'_> for bool {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> {
+        val.get_bool_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    }
 }
 impl<'val> FromValue<'val> for &'val [u8] {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
@@ -252,6 +302,9 @@ impl<'val> FromValue<'val> for &'val [u8] {
         } else {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
+    }
+    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
+        val.get_blob_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
     }
 }
 impl<'val> FromValue<'val> for Object<'val> {
@@ -262,6 +315,9 @@ impl<'val> FromValue<'val> for Object<'val> {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
+        val.get_object_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    }
 }
 impl<'val> FromValue<'val> for Array<'val> {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
@@ -270,6 +326,9 @@ impl<'val> FromValue<'val> for Array<'val> {
         } else {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
+    }
+    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
+        val.get_array_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)
     }
 }
 
@@ -286,6 +345,11 @@ impl<'val, T: UserObject> FromValue<'val> for &'val T {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
+        val.get_object_unchecked()
+            .map(|obj| obj.get_native_ref().expect("cannot get native object"))
+            .ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    }
 }
 
 #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
@@ -301,6 +365,11 @@ impl<'val, T: UserObject> FromValue<'val> for &'val mut T {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
+        val.get_object_unchecked()
+            .map(|mut obj| obj.get_native_mut().expect("cannot get native object"))
+            .ok_or(PBXRESULT::E_VALUE_IS_NULL)
+    }
 }
 
 impl<'val> FromValue<'val> for Value<'val> {
@@ -311,6 +380,7 @@ impl<'val> FromValue<'val> for Value<'val> {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> { Ok(val) }
 }
 impl FromValue<'_> for OwnedValue {
     fn from_value(val: Option<Value>) -> Result<Self> {
@@ -320,6 +390,7 @@ impl FromValue<'_> for OwnedValue {
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(val: Value) -> Result<Self> { Ok(val.acquire()) }
 }
 
 impl<'val, T: FromValue<'val> + ArrayIterItem<'val>> FromValue<'val> for Vec<T> {
@@ -339,11 +410,32 @@ impl<'val, T: FromValue<'val> + ArrayIterItem<'val>> FromValue<'val> for Vec<T> 
             Err(PBXRESULT::E_INVOKE_WRONG_NUM_ARGS)
         }
     }
+    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
+        let arr = val.get_array_unchecked().ok_or(PBXRESULT::E_VALUE_IS_NULL)?;
+        let mut rv = Vec::with_capacity(arr.len() as usize);
+        for item in arr.iter::<T>() {
+            if let Some(item) = item {
+                rv.push(item);
+            } else {
+                return Err(PBXRESULT::E_VALUE_IS_NULL);
+            }
+        }
+        Ok(rv)
+    }
 }
 
 impl<'val, T: FromValue<'val>> FromValue<'val> for Option<T> {
     fn from_value(val: Option<Value<'val>>) -> Result<Self> {
         T::from_value(val).map(Some).or_else(|e| {
+            if e == PBXRESULT::E_INVOKE_WRONG_NUM_ARGS || e == PBXRESULT::E_VALUE_IS_NULL {
+                Ok(None)
+            } else {
+                Err(e)
+            }
+        })
+    }
+    unsafe fn from_value_unchecked(val: Value<'val>) -> Result<Self> {
+        T::from_value_unchecked(val).map(Some).or_else(|e| {
             if e == PBXRESULT::E_INVOKE_WRONG_NUM_ARGS || e == PBXRESULT::E_VALUE_IS_NULL {
                 Ok(None)
             } else {
@@ -361,101 +453,223 @@ impl<T> FromValueOwned for T where T: for<'val> FromValue<'val> {}
 /// 设置参数值
 pub trait ToValue: Sized {
     fn to_value(self, val: &mut Value) -> Result<()>;
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()>;
 }
 
 impl ToValue for () {
     fn to_value(self, _: &mut Value) -> Result<()> { Ok(()) }
+    unsafe fn to_value_unchecked(self, _: &mut Value) -> Result<()> { Ok(()) }
 }
 impl ToValue for &PBStr {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_str(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_str_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for PBString {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_str(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_str_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for String {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_str(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_str_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for &str {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_str(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_str_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for Cow<'_, PBStr> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_str(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_str_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for Cow<'_, str> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_str(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_str_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for pbint {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_int(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_int_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for pbuint {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_uint(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_uint_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for pblong {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_long(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_long_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for pbulong {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_ulong(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_ulong_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for pblonglong {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_longlong(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_longlong_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for pbdouble {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_double(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_double_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for pbreal {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_real(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_real_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for Decimal {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_dec(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_dec_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for NaiveDate {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_date(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_date_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for NaiveTime {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_time(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_time_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for NaiveDateTime {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_datetime(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_datetime_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for pbbyte {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_byte(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_byte_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for bool {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_bool(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_bool_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for &[u8] {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_blob(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_blob_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for Vec<u8> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_blob(self.as_slice()) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_blob_unchecked(self.as_slice());
+        Ok(())
+    }
 }
 impl ToValue for Object<'_> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_object(&self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_object_unchecked(&self);
+        Ok(())
+    }
 }
 impl ToValue for &Object<'_> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_object(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_object_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for Array<'_> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_array(&self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_array_unchecked(&self);
+        Ok(())
+    }
 }
 impl ToValue for &Array<'_> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_array(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_array_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for Value<'_> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_value(&self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_value_unchecked(&self);
+        Ok(())
+    }
 }
 impl ToValue for &Value<'_> {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_value(self) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_value_unchecked(self);
+        Ok(())
+    }
 }
 impl ToValue for OwnedValue {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_value(&self.value()) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_value_unchecked(&self.value());
+        Ok(())
+    }
 }
 impl ToValue for &OwnedValue {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_value(&self.value()) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_value_unchecked(&self.value());
+        Ok(())
+    }
 }
 #[cfg(any(feature = "nonvisualobject", feature = "visualobject"))]
 impl<T: UserObject> ToValue for &mut T {
     fn to_value(self, val: &mut Value) -> Result<()> { val.try_set_object(&self.get_object()) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        val.set_object_unchecked(&self.get_object());
+        Ok(())
+    }
 }
 
 impl<T: ToValue> ToValue for Option<T> {
@@ -467,7 +681,16 @@ impl<T: ToValue> ToValue for Option<T> {
             Ok(())
         }
     }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> {
+        if let Some(v) = self {
+            T::to_value_unchecked(v, val)
+        } else {
+            val.set_to_null();
+            Ok(())
+        }
+    }
 }
 impl<T: ToValue> ToValue for Result<T> {
     fn to_value(self, val: &mut Value) -> Result<()> { T::to_value(self?, val) }
+    unsafe fn to_value_unchecked(self, val: &mut Value) -> Result<()> { T::to_value_unchecked(self?, val) }
 }
