@@ -599,7 +599,7 @@ impl Session {
                 dt.month() as pbint,
                 dt.day() as pbint
             );
-            assert!(pbxr == PBXRESULT::OK);
+            assert_eq!(pbxr, PBXRESULT::OK);
             pbdt
         }
     }
@@ -613,7 +613,7 @@ impl Session {
                 tm.minute() as pbint,
                 tm.second() as pbdouble + tm.nanosecond() as pbdouble / 1000_000_000.0
             );
-            assert!(pbxr == PBXRESULT::OK);
+            assert_eq!(pbxr, PBXRESULT::OK);
             pbtm
         }
     }
@@ -630,7 +630,7 @@ impl Session {
                 dtt.minute() as pbint,
                 dtt.second() as pbdouble + dtt.nanosecond() as pbdouble / 1000_000_000.0
             );
-            assert!(pbxr == PBXRESULT::OK);
+            assert_eq!(pbxr, PBXRESULT::OK);
             pbdtt
         }
     }
@@ -639,7 +639,7 @@ impl Session {
         let mut month = 0;
         let mut day = 0;
         let pbxr = ffi::pbsession_SplitDate(self.ptr, pbdt, &mut year, &mut month, &mut day);
-        assert!(pbxr == PBXRESULT::OK);
+        debug_assert_eq!(pbxr, PBXRESULT::OK);
         NaiveDate::from_ymd_opt(year as i32, month as u32, day as u32).unwrap()
     }
     pub(crate) unsafe fn get_time_unchecked(&self, pbtm: pbtime) -> NaiveTime {
@@ -647,7 +647,7 @@ impl Session {
         let mut minute = 0;
         let mut second = 0.0;
         let pbxr = ffi::pbsession_SplitTime(self.ptr, pbtm, &mut hour, &mut minute, &mut second);
-        assert!(pbxr == PBXRESULT::OK);
+        debug_assert_eq!(pbxr, PBXRESULT::OK);
         NaiveTime::from_hms_nano_opt(
             hour as u32,
             minute as u32,
@@ -673,7 +673,7 @@ impl Session {
             &mut minute,
             &mut second
         );
-        assert!(pbxr == PBXRESULT::OK);
+        debug_assert_eq!(pbxr, PBXRESULT::OK);
         NaiveDateTime::new(
             NaiveDate::from_ymd_opt(year as i32, month as u32, day as u32).unwrap(),
             NaiveTime::from_hms_nano_opt(
@@ -694,7 +694,7 @@ impl Session {
             let dec = PBString::from_str_unchecked(dec.to_string());
             let pbdec = ffi::pbsession_NewDecimal(self.ptr);
             let pbxr = ffi::pbsession_SetDecimal(self.ptr, pbdec, dec.as_ptr());
-            assert!(pbxr == PBXRESULT::OK);
+            assert_eq!(pbxr, PBXRESULT::OK);
             pbdec
         }
     }

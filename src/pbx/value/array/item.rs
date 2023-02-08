@@ -210,7 +210,7 @@ macro_rules! impl_item {
             /// 索引越界或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_item_ $type_name _unchecked>](&mut self, dim: impl AsArrayIndex, value: $type) {
                 let dim = dim.as_array_index();
-                assert_eq!(ffi::[<pbsession_Set $type_name:camel ArrayItem>](self.session.as_raw(), self.ptr, dim.as_ptr(), value.into()), PBXRESULT::OK);
+                debug_assert_eq!(ffi::[<pbsession_Set $type_name:camel ArrayItem>](self.session.as_raw(), self.ptr, dim.as_ptr(), value.into()), PBXRESULT::OK);
             }
         }
     };
@@ -273,7 +273,7 @@ macro_rules! impl_item {
             /// 索引越界或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_item_ $type_name _unchecked>](&mut self, dim: impl AsArrayIndex, value: $type) {
                 let dim = dim.as_array_index();
-                assert_eq!(ffi::[<pbsession_Set $type_name:camel ArrayItem>](self.session.as_raw(), self.ptr, dim.as_ptr(), impl_item!(@complex_set_val self, dim, value, $type_name)), PBXRESULT::OK);
+                debug_assert_eq!(ffi::[<pbsession_Set $type_name:camel ArrayItem>](self.session.as_raw(), self.ptr, dim.as_ptr(), impl_item!(@complex_set_val self, dim, value, $type_name)), PBXRESULT::OK);
             }
         }
     };

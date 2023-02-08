@@ -53,7 +53,9 @@ impl<'val> Value<'val> {
     pub fn is_readonly(&self) -> bool { unsafe { ffi::pbvalue_IsReadOnly(self.ptr).into() } }
 
     /// 设置值为NULL
-    pub fn set_to_null(&mut self) { unsafe { assert_eq!(ffi::pbvalue_SetToNull(self.ptr), PBXRESULT::OK) } }
+    pub fn set_to_null(&mut self) {
+        unsafe { debug_assert_eq!(ffi::pbvalue_SetToNull(self.ptr), PBXRESULT::OK) }
+    }
 
     /// 拷贝并转移所有权,`self`将被消耗
     pub fn acquire(self) -> OwnedValue {

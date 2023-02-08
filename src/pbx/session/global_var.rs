@@ -189,7 +189,7 @@ macro_rules! impl_global_var {
             /// 变量无效或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_global_var_ $type_name _unchecked>](&mut self, fid: impl AsGlobalVarId, value: $type) {
                 let fid = fid.as_var_id(self);
-                assert_eq!(ffi::[<pbsession_Set $type_name:camel GlobalVar>](self.ptr, fid, value.into()), PBXRESULT::OK);
+                debug_assert_eq!(ffi::[<pbsession_Set $type_name:camel GlobalVar>](self.ptr, fid, value.into()), PBXRESULT::OK);
             }
         }
     };
@@ -252,7 +252,7 @@ macro_rules! impl_global_var {
             /// 变量无效或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_global_var_ $type_name _unchecked>](&mut self, fid: impl AsGlobalVarId, value: $type) {
                 let fid = fid.as_var_id(self);
-                assert_eq!(ffi::[<pbsession_Set $type_name:camel GlobalVar>](self.ptr, fid, impl_global_var!(@complex_set_val self, fid, value, $type_name)), PBXRESULT::OK);
+                debug_assert_eq!(ffi::[<pbsession_Set $type_name:camel GlobalVar>](self.ptr, fid, impl_global_var!(@complex_set_val self, fid, value, $type_name)), PBXRESULT::OK);
             }
         }
     };
