@@ -60,7 +60,8 @@ macro_rules! impl_value {
             ///
             /// 类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_ $type_name _unchecked>](&mut self, value: $type) {
-                debug_assert_eq!(ffi::[<pbvalue_Set $type_name:camel>](self.ptr, value.into()), PBXRESULT::OK);
+                let pbxr = ffi::[<pbvalue_Set $type_name:camel>](self.ptr, value.into());
+                debug_assert_eq!(pbxr, PBXRESULT::OK);
             }
         }
     };
@@ -142,21 +143,25 @@ macro_rules! impl_value {
         }
     };
     (@complex_set_val $self: expr, $value: expr, str) => {
-        debug_assert_eq!(ffi::pbvalue_SetStr($self.ptr, $value.as_pbstr().as_ptr()), PBXRESULT::OK);
+        let pbxr = ffi::pbvalue_SetStr($self.ptr, $value.as_pbstr().as_ptr());
+        debug_assert_eq!(pbxr, PBXRESULT::OK);
     };
     (@complex_set_val $self: expr, $value: expr, array) => {
-        debug_assert_eq!(ffi::pbvalue_SetArray($self.ptr, $value.as_raw()), PBXRESULT::OK);
+        let pbxr = ffi::pbvalue_SetArray($self.ptr, $value.as_raw());
+        debug_assert_eq!(pbxr, PBXRESULT::OK);
     };
     (@complex_set_val $self: expr, $value: expr, object) => {
-        debug_assert_eq!(ffi::pbvalue_SetObject($self.ptr, $value.as_raw()), PBXRESULT::OK);
+        let pbxr = ffi::pbvalue_SetObject($self.ptr, $value.as_raw());
+        debug_assert_eq!(pbxr, PBXRESULT::OK);
     };
     (@complex_set_val $self: expr, $value: expr, value) => {
         ffi::pbsession_SetValue($self.session.as_raw(), $self.ptr, $value.ptr);
     };
     (@complex_set_val $self: expr, $value: expr, $type_name: ty) => {
         ::paste::paste! {
-            debug_assert_eq!(ffi::[<pbvalue_Set $type_name:camel>]($self.ptr, $self.session.[<new_pb $type_name>]($value)), PBXRESULT::OK);
+            let pbxr = ffi::[<pbvalue_Set $type_name:camel>]($self.ptr, $self.session.[<new_pb $type_name>]($value));
         }
+        debug_assert_eq!(pbxr, PBXRESULT::OK);
     };
 
     /*

@@ -394,7 +394,8 @@ macro_rules! impl_field {
             /// 变量无效或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_field_ $type_name _unchecked>](&mut self, fid: impl AsFieldId, value: $type) {
                 let fid = fid.as_field_id(self);
-                debug_assert_eq!(ffi::[<pbsession_Set $type_name:camel Field>](self.session.as_raw(), self.ptr, fid, value.into()), PBXRESULT::OK);
+                let pbxr = ffi::[<pbsession_Set $type_name:camel Field>](self.session.as_raw(), self.ptr, fid, value.into());
+                debug_assert_eq!(pbxr, PBXRESULT::OK);
             }
 
             #[doc = "设置`" $type_name "`类型共享(静态)变量值,不检查类型"]
@@ -404,7 +405,8 @@ macro_rules! impl_field {
             /// 变量无效或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_shared_var_ $type_name _unchecked>](&mut self, fid: impl AsSharedVarId, value: $type) {
                 let fid = fid.as_var_id(self);
-                debug_assert_eq!(ffi::[<pbsession_Set $type_name:camel SharedVar>](self.session.as_raw(), self.get_group(), fid, value.into()), PBXRESULT::OK);
+                let pbxr = ffi::[<pbsession_Set $type_name:camel SharedVar>](self.session.as_raw(), self.get_group(), fid, value.into());
+                debug_assert_eq!(pbxr, PBXRESULT::OK);
             }
         }
     };
@@ -483,7 +485,8 @@ macro_rules! impl_field {
             /// 变量无效或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_field_ $type_name _unchecked>](&mut self, fid: impl AsFieldId, value: $type) {
                 let fid = fid.as_field_id(self);
-                debug_assert_eq!(ffi::[<pbsession_Set $type_name:camel Field>](self.session.as_raw(), self.ptr, fid, impl_field!(@complex_set_val self, fid, value, $type_name)), PBXRESULT::OK);
+                let pbxr = ffi::[<pbsession_Set $type_name:camel Field>](self.session.as_raw(), self.ptr, fid, impl_field!(@complex_set_val self, fid, value, $type_name));
+                debug_assert_eq!(pbxr, PBXRESULT::OK);
             }
 
             #[doc = "设置`" $type_name "`类型共享(静态)变量值,不检查类型"]
@@ -493,7 +496,8 @@ macro_rules! impl_field {
             /// 变量无效或类型不兼容时可能会出现未定义行为
             pub unsafe fn [<set_shared_var_ $type_name _unchecked>](&mut self, fid: impl AsSharedVarId, value: $type) {
                 let fid = fid.as_var_id(self);
-                debug_assert_eq!(ffi::[<pbsession_Set $type_name:camel SharedVar>](self.session.as_raw(), self.get_group(), fid, impl_field!(@complex_set_val self, fid, value, $type_name)), PBXRESULT::OK);
+                let pbxr = ffi::[<pbsession_Set $type_name:camel SharedVar>](self.session.as_raw(), self.get_group(), fid, impl_field!(@complex_set_val self, fid, value, $type_name));
+                debug_assert_eq!(pbxr, PBXRESULT::OK);
             }
         }
     };

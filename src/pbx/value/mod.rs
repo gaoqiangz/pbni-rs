@@ -54,7 +54,8 @@ impl<'val> Value<'val> {
 
     /// 设置值为NULL
     pub fn set_to_null(&mut self) {
-        unsafe { debug_assert_eq!(ffi::pbvalue_SetToNull(self.ptr), PBXRESULT::OK) }
+        let pbxr = unsafe { ffi::pbvalue_SetToNull(self.ptr) };
+        debug_assert_eq!(pbxr, PBXRESULT::OK);
     }
 
     /// 拷贝并转移所有权,`self`将被消耗
