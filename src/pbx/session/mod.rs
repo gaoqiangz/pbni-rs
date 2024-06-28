@@ -572,7 +572,6 @@ impl Session {
 
     pub(crate) fn new_pbblob(&self, bin: impl AsRef<[u8]>) -> pbblob {
         let bin = bin.as_ref();
-        assert!(!bin.is_empty());
         unsafe { ffi::pbsession_NewBlob(self.ptr, bin.as_ptr() as _, bin.len() as pblong) }
     }
     pub(crate) unsafe fn get_blob_unchecked<'a>(&self, pbbin: pbblob) -> &'a [u8] {

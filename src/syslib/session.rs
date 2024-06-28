@@ -543,7 +543,6 @@ impl Session {
 
     pub(crate) fn new_pbblob(&self, bin: impl AsRef<[u8]>) -> PSH_BINARY {
         let bin = bin.as_ref();
-        assert!(!bin.is_empty());
         unsafe {
             let blb = API.ob_alloc_blob(self.ptr, bin.len() as ULONG);
             ptr::copy_nonoverlapping(bin.as_ptr(), blb as *mut u8, bin.len());
