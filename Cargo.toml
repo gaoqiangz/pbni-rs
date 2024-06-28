@@ -1,6 +1,6 @@
 [package]
 name = "pbni-rs"
-version = "0.1.14"
+version = "0.1.15"
 authors = ["gaoqiangz <gaoqiangz@msn.com>"]
 edition = "2018"
 keywords = ["pb", "powerbuilder", "pbni", "ffi"]
@@ -9,7 +9,15 @@ description = "PBNI for Rust"
 documentation = "https://docs.rs/pbni-rs"
 repository = "https://github.com/gaoqiangz/pbni-rs"
 license = "BSD-2-Clause"
-include = ["/build.rs", "/Cargo.toml", "/LICENSE", "/README.md", "/cpp/**", "/src/**", "/examples/**"]
+include = [
+    "/build.rs",
+    "/Cargo.toml",
+    "/LICENSE",
+    "/README.md",
+    "/cpp/**",
+    "/src/**",
+    "/examples/**",
+]
 
 [package.metadata.docs.rs]
 all-features = true
@@ -20,11 +28,7 @@ name = "pbni"
 crate-type = ["rlib", "cdylib"]
 
 [workspace]
-members = [
-    ".",
-    "codegen",
-    "pbrs",
-]
+members = [".", "codegen", "pbrs"]
 
 [patch.crates-io]
 pbni-rs = { path = "." }
@@ -32,19 +36,23 @@ pbni-codegen = { path = "codegen" }
 
 [dependencies]
 libc = "0.2.80"
-widestring = { version = "0.4.3"}
+widestring = { version = "0.4.3" }
 const-utf16 = "0.2.1"
 chrono = "0.4.19"
 rust_decimal = "1.10.3"
 
 # feature: global_function, nonvisualobject, visualobject
-pbni-codegen = { version = "0.1.0", optional = true}
+pbni-codegen = { version = "0.1.0", optional = true }
 
 # feature: pbni
-static_init = { version = "1.0.1", optional = true}
+static_init = { version = "1.0.1", optional = true }
 
 # feature: syslib, visualobject
-winapi = { version = "0.3.9", features = ["windef","corecrt","psapi"], optional = true }
+winapi = { version = "0.3.9", features = [
+    "windef",
+    "corecrt",
+    "psapi",
+], optional = true }
 
 # feature: syslib, vm
 libloading = { version = "0.7.0", optional = true }
