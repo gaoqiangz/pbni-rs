@@ -1,3 +1,4 @@
+#![feature(proc_macro_span)]
 #![allow(unused_imports)]
 #![allow(dead_code)]
 

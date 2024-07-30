@@ -1,8 +1,8 @@
 use proc_macro::TokenStream;
-use proc_macro2::TokenStream as TokenStream2;
+use proc_macro2::{Span, TokenStream as TokenStream2};
 use quote::{format_ident, quote, ToTokens};
 use syn::{
-    parse, parse_quote, Attribute, AttributeArgs, Error, FnArg, Ident, ImplItem, ImplItemMethod, Index, ItemImpl, Lit, Meta, NestedMeta, Pat, Result, ReturnType, Type
+    parse, parse_quote, spanned::Spanned, Attribute, AttributeArgs, Error, FnArg, Ident, ImplItem, ImplItemMethod, Index, ItemImpl, Lit, Meta, NestedMeta, Pat, Result, ReturnType, Type
 };
 
 /// 生成不可视对象代码
@@ -180,11 +180,15 @@ fn gen_object(
     let inherit = inherit.map(|name| Ident::new(&name, ident.span()));
 
     let mut method_ident = Vec::new();
+    let mut method_line = Vec::new();
+    let mut method_column = Vec::new();
     let mut method_name = Vec::new();
     let mut method_idx = Vec::<Index>::new();
     let mut method_idx_offset = Vec::<Index>::new();
     let mut method_overload = Vec::<Index>::new();
     let mut event_ident = Vec::new();
+    let mut event_line = Vec::new();
+    let mut event_column = Vec::new();
     let mut event_idx = Vec::<Index>::new();
     let mut event_idx_offset = Vec::<Index>::new();
     let mut overload_cc = 0;
@@ -194,15 +198,21 @@ fn gen_object(
         let mut overload = 0;
         match item {
             Item::Method(method) => {
+                let span = method.ident.span().unwrap();
                 method_name.push(method.attr_args.name.unwrap_or(method.ident.to_string()));
                 method_ident.push(method.ident);
+                method_line.push(span.line());
+                method_column.push(span.column());
                 method_idx.push(idx.into());
                 method_idx_offset.push(overload_cc.into());
                 method_overload.push(method.attr_args.overload.into());
                 overload = method.attr_args.overload;
             },
             Item::Event(event) => {
+                let span = event.ident.span().unwrap();
                 event_ident.push(event.ident);
+                event_line.push(span.line());
+                event_column.push(span.column());
                 event_idx.push(idx.into());
                 event_idx_offset.push(overload_cc.into());
             }
@@ -211,12 +221,18 @@ fn gen_object(
         last_method_idx = (idx + overload_cc + overload + 1).into();
     }
     let new_impl = if let Some(ctor) = block.ctor {
+        let span = ctor.span().unwrap();
+        let line = span.line();
+        let column = span.column();
         quote! {
-            ::pbni::pbx::__private::codegen::safe_invoke_ctor(session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::#ctor(session, ctx))
+            ::pbni::pbx::__private::codegen::safe_invoke_ctor(session,stringify!(#ctor),::std::any::type_name::<#ident>(),file!(),#line as _,#column as _,||#ident::#ctor(session, ctx))
         }
     } else {
+        let span = ident.span().unwrap();
+        let line = span.line();
+        let column = span.column();
         quote! {
-            ::pbni::pbx::__private::codegen::safe_invoke_ctor(session,concat!(stringify!(#ident),"::default"),::std::any::type_name::<#ident>(),file!(),line!(),column!(),||#ident::default())
+            ::pbni::pbx::__private::codegen::safe_invoke_ctor(session,concat!(stringify!(#ident),"::default"),::std::any::type_name::<#ident>(),file!(),#line as _,#column as _,||#ident::default())
         }
     };
     let invoke_impl = if let Some(inherit) = &inherit {
@@ -232,7 +248,7 @@ fn gen_object(
                         ci.session(),
                         #method_name,
                         concat!(module_path!(),"::",stringify!(#ident),"::",stringify!(#method_ident)),
-                        file!(),line!(),column!(),
+                        file!(),#method_line as _,#method_column as _,
                         ::std::panic::AssertUnwindSafe(||::pbni::pbx::__private::codegen::method_factory_call(#ident::#method_ident, this, &ci))
                     ).map(|_|None);
                 }
@@ -253,7 +269,7 @@ fn gen_object(
                         ci.session(),
                         #method_name,
                         concat!(module_path!(),"::",stringify!(#ident),"::",stringify!(#method_ident)),
-                        file!(),line!(),column!(),
+                        file!(),#method_line as _,#method_column as _,
                         ::std::panic::AssertUnwindSafe(||::pbni::pbx::__private::codegen::method_factory_call(#ident::#method_ident, this, ci))
                     ).map(|_|None);
                 }
