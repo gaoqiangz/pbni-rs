@@ -1,5 +1,5 @@
 use crate::{
-    pbx::{bindings::*, session::OwnedSession, *}, prelude::*
+    pbx::{bindings::*, *}, prelude::*
 };
 use libloading::Library;
 use std::{borrow::Cow, ffi::OsStr};
