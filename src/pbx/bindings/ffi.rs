@@ -52,7 +52,7 @@ extern "C" {
     pub fn pbsession_PopLocalFrame(session: pbsession);
 
     pub fn pbsession_HasExceptionThrown(session: pbsession) -> pbboolean;
-    pub fn pbsession_GetException(session: pbsession) -> pbobject;
+    pub fn pbsession_GetException(session: pbsession) -> Option<pbobject>;
     pub fn pbsession_ClearException(session: pbsession);
     pub fn pbsession_ThrowException(session: pbsession, ex: pbobject);
 

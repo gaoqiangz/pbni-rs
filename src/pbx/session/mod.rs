@@ -77,6 +77,25 @@ impl Session {
     /// 检查当前是否有异常未处理
     pub fn has_exception(&self) -> bool { unsafe { ffi::pbsession_HasExceptionThrown(self.ptr).into() } }
 
+    /// 获取当前异常消息
+    pub fn get_exception_info(&self) -> Option<PBString> {
+        if !self.has_exception() {
+            return None;
+        }
+        unsafe {
+            match ffi::pbsession_GetException(self.ptr) {
+                Some(ex) => {
+                    if let Some(ex) = Object::try_from_raw(ex, self.clone()) {
+                        ex.get_field_string("text")
+                    } else {
+                        None
+                    }
+                },
+                None => None
+            }
+        }
+    }
+
     /// 清除异常
     pub fn clear_exception(&self) {
         unsafe {

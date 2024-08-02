@@ -29,6 +29,20 @@ impl<'obj> Object<'obj> {
             _marker: PhantomData
         }
     }
+    pub unsafe fn try_from_raw(ptr: pbobject, session: Session) -> Option<Object<'obj>> {
+        if let Some(cls) = ffi::pbsession_GetClass(session.as_raw(), ptr) {
+            let group = Cell::new(None);
+            Some(Object {
+                ptr,
+                group,
+                cls,
+                session,
+                _marker: PhantomData
+            })
+        } else {
+            None
+        }
+    }
     pub fn as_raw(&self) -> pbobject { self.ptr }
     pub(crate) fn get_group(&self) -> pbgroup {
         match self.group.get() {

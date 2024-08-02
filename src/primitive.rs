@@ -1,3 +1,5 @@
+#![allow(non_camel_case_types)]
+
 use std::{borrow::Cow, mem::transmute, ops::Deref};
 use widestring::{WideCStr, WideCString, WideChar};
 

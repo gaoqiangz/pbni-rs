@@ -139,8 +139,18 @@ pub fn gen_event(args: AttributeArgs, input: TokenStream) -> Result<TokenStream>
                             #(
                                 ToValue::to_value_unchecked(#fn_arg,&mut args.get_unchecked(#fn_arg_index)).expect(concat!("passing argument ",stringify!(#fn_arg), " failed"));
                             )*
-                            let rv = invoker.trigger().expect(concat!("invoke ",#name));
-                            FromValue::from_value_unchecked(Some(rv)).expect(concat!("mismatched return type ",#name))
+                            match invoker.trigger() {
+                                Ok(rv) => {
+                                    FromValue::from_value_unchecked(Some(rv)).expect(concat!("mismatched return type ",#name))
+                                },
+                                Err(e) => {
+                                    if let Some(e) = self.get_session().get_exception_info() {
+                                        panic!("invoke {}: {}",#name,e.to_string_lossy());
+                                    } else {
+                                        panic!("invoke {}: {:?}",#name,e);
+                                    }
+                                }
+                            }
                         }
                     }
                 };
@@ -156,8 +166,18 @@ pub fn gen_event(args: AttributeArgs, input: TokenStream) -> Result<TokenStream>
                         #(
                             ToValue::to_value(#fn_arg,&mut args.get(#fn_arg_index)).expect(concat!("passing argument ",stringify!(#fn_arg), " failed"));
                         )*
-                        let rv = invoker.trigger().expect(concat!("invoke ",#name));
-                        FromValue::from_value(Some(rv)).expect(concat!("mismatched return type ",#name))
+                        match invoker.trigger() {
+                            Ok(rv) => {
+                                FromValue::from_value(Some(rv)).expect(concat!("mismatched return type ",#name))
+                            },
+                            Err(e) => {
+                                if let Some(e) = self.get_session().get_exception_info() {
+                                    panic!("invoke {}: {}",#name,e.to_string_lossy());
+                                } else {
+                                    panic!("invoke {}: {:?}",#name,e);
+                                }
+                            }
+                        }
                     }
                 };
             }

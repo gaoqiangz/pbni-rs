@@ -1,3 +1,5 @@
+#![allow(non_camel_case_types)]
+
 use crate::{pbx::session::Session, primitive::*};
 pub use std::{marker::PhantomData, ptr::NonNull};
 #[cfg(feature = "visualobject")]
